@@ -1,1 +1,176 @@
 /* You can add global styles to this file, and also import other style files */
+/* src/styles.scss */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+
+@import 'swiper/scss';
+// @import "swiper/scss/effect-fade";
+@import 'swiper/scss/navigation';
+@import 'swiper/scss/pagination';
+
+
+.h4 {
+  @apply block font-sans text-2xl antialiased font-semibold leading-snug tracking-normal text-gray-900;
+}
+.h6 {
+  @apply block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-gray-900
+}
+
+.text {
+  @apply block mt-1 font-sans text-base antialiased font-normal leading-relaxed text-gray-700
+}
+
+.a {
+  @apply font-medium text-blue-600;
+
+  &:hover {
+      @apply underline
+  }
+}
+
+label {
+    @apply text-base;
+  }
+input[type='password'],
+input[type='text'] {
+    @apply h-14 font-thin px-4 rounded-md border border-gray-200 transition-all;
+}
+input[type='password']:focus,
+input[type='text']:focus {
+    @apply outline-2 outline-solid outline-offset-0 outline-fuchsia-500;
+}
+
+  button {
+      @apply h-14 font-normal px-4 rounded-md transition-all;
+  }
+  button.flat {
+    @apply bg-gray-100 text-gray-600;
+  }
+  button.flat:focus {
+    @apply outline-2 outline-solid outline-offset-0 outline-fuchsia-500;
+  }
+  button:hover {
+    @apply shadow-lg shadow-gray-900/20;
+  }
+  button:active {
+    @apply opacity-[0.85] shadow-none;
+  }
+  button:disabled {
+    @apply pointer-events-none opacity-50 shadow-none;
+  }
+
+  
+  /*
+  .checkbox {
+    @apply inline-flex items-center justify-center;
+  }
+  .checkbox .ripple {
+    @apply relative w-12 h-12 rounded-full flex items-center justify-center cursor-pointer mr-2;
+  }
+  .checkbox input:focus + .ripple,
+  .checkbox:hover input + .ripple {
+    @apply bg-gray-100;
+  }
+  .checkbox input {
+    @apply sr-only;
+  }
+  .checkbox input:checked + .ripple{
+    @apply bg-fuchsia-100;
+  }
+  .checkbox input:checked + .ripple:after {
+    @apply opacity-100;
+  }
+  .checkbox input:checked + .ripple:before{
+    @apply border-fuchsia-500;
+  }
+  .checkbox .ripple:before {
+    @apply content-space relative w-6 h-6 border-2 border-gray-500 rounded-md;
+  }
+  .checkbox .ripple:after {
+    @apply content-check absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-fuchsia-500 font-semibold opacity-0;
+  }
+  
+  
+  
+  
+  .radio {
+    @apply inline-flex items-center justify-center;
+  }
+  .radio .ripple {
+    @apply relative w-12 h-12 rounded-full flex items-center justify-center cursor-pointer mr-2;
+  }
+  .radio input:focus + .ripple,
+  .radio:hover input + .ripple {
+    @apply bg-gray-100;
+  }
+  .radio input {
+    @apply sr-only;
+  }
+  .radio input:checked + .ripple{
+    @apply bg-fuchsia-100;
+  }
+  .radio input:checked + .ripple:after {
+    @apply opacity-100;
+  }
+  .radio input:checked + .ripple:before{
+    @apply border-fuchsia-500;
+  }
+  .radio .ripple:before {
+    @apply content-space relative w-6 h-6 border-2 border-gray-500 rounded-full;
+  }
+  .radio .ripple:after {
+    @apply content-space w-2 h-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-fuchsia-500 font-semibold rounded-full opacity-0;
+  }
+  */
+  
+ /*
+  peer relative h-5 w-5 cursor-pointer appearance-none rounded-md 
+  border border-blue-gray-200 transition-all 
+  
+  before:content[''] before:absolute before:top-2/4 before:left-2/4 before:block 
+  before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 
+  before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity 
+  
+  checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 
+  
+  hover:before:opacity-10
+ */
+  .checkbox .input {
+    @apply relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-gray-200 transition-all;
+  }
+  .checkbox .input:hover:before {
+    @apply opacity-10;
+  }
+  .checkbox .input:checked {
+    @apply border-pink-500 bg-pink-200;
+  }
+  .checkbox .input:before {
+    @apply content-space absolute top-2/4 left-2/4 block h-12 w-12 -translate-y-2/4 -translate-x-2/4 rounded-full bg-gray-500 opacity-0 transition-opacity;
+  }
+  .checkbox .input:checked:before {
+    @apply bg-pink-400;
+  }
+  // .checkbox .input:checked:before {
+  //   @apply bg-gray-900;
+  // }
+  .checkbox .input:after {
+    @apply content-check absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-fuchsia-500 font-semibold opacity-0;
+  }
+  .checkbox .input:checked:after {
+    @apply opacity-100;
+  }
+  
+  .select {
+    @apply h-14 appearance-none rounded-md border border-gray-200 bg-transparent px-4 py-2.5 font-sans text-sm font-normal outline outline-0 transition-all;
+  }
+  .select:disabled {
+    @apply border-0 bg-gray-50;
+  }
+  .select:placeholder-shown {
+    @apply border;
+  }
+  .select:focus {
+    @apply outline-2 outline-offset-0 outline-fuchsia-500;
+  }
