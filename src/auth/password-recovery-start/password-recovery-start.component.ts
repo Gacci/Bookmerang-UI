@@ -1,15 +1,14 @@
-// import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 
 import { HttpRequest } from '../../interfaces/http-request.interface';
 
+import { changePasswordGroup, startPasswordRecoveryGroup, verifyRequestTokenGroup } from '../form-groups';
 
 @Component({
   selector: 'password-recovery-start',
@@ -29,31 +28,16 @@ export class PasswordRecoveryStartComponent {
   protected expiresInSeconds: number = 0;
   protected timerExpiredId: any;
 
-  private validators = {
-    email: [ Validators.required, Validators.email, Validators.pattern(/^.+@([a-z]+\.)?[a-z]+\.[a-z]{2,3}$/) ],
-    token: [ Validators.required, Validators.pattern(/[A-Z0-9]{6}/) ]
-  };
-  
-  
+  protected startPasswordRecoveryGroup = startPasswordRecoveryGroup();
 
-  protected startPasswordRecoveryGroup: FormGroup = new FormGroup({
-    email: new FormControl(null, this.validators.email)
-  });
+  protected verifyRequestTokenGroup = verifyRequestTokenGroup();
 
-  protected verifyRequestTokenGroup: FormGroup = new FormGroup({
-    token: new FormControl(null, this.validators.token)
-  });
+  protected changePasswordGroup = changePasswordGroup();
 
-  protected changePasswordGroup: FormGroup = new FormGroup({
-    password: new FormControl(null, [ Validators.required ]),
-    confirmed: new FormControl(null, [ Validators.required ]),
-    token: new FormControl(null, this.validators.token),
-    email: new FormControl(null, this.validators.email)
-  });
-
-  constructor(private http: HttpClient, private fb: FormBuilder) {
-    this.changePasswordGroup.addValidators(passwordMatchValidator('password', 'confirmed'));
-    // this.fb.group({});
+  constructor(private readonly auth: AuthService ) {
+    this.changePasswordGroup.addValidators(
+      passwordMatchValidator('password', 'confirmed')
+    );
   }
 
   runExpiresInCountdown() {
@@ -73,7 +57,7 @@ export class PasswordRecoveryStartComponent {
 
   handleStartRecovery() {
     this.resetPasswordRequest = { sent: true };
-    this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/start', this.startPasswordRecoveryGroup.value)
+    this.auth.startPasswordRecovery(this.startPasswordRecoveryGroup.value)
       .subscribe({
         next: (response) => {
           this.runExpiresInCountdown();
@@ -94,7 +78,7 @@ export class PasswordRecoveryStartComponent {
 
   handleResendRecoveryCode() {
     this.resendPasswordRequest = { sent: true };
-    this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/resend-request', this.startPasswordRecoveryGroup.value)
+    this.auth.resendRecoveryCode(this.startPasswordRecoveryGroup.value)
       .subscribe({
         next: (response) => {
           this.runExpiresInCountdown();
@@ -109,9 +93,8 @@ export class PasswordRecoveryStartComponent {
   }
 
   handleVerifyRequestCode() {
-    console.log('justo.jonathan@gmail.com')
     this.verifyCodeRequest = { sent: true };
-    this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/verify', { ...this.startPasswordRecoveryGroup.value, ...this.verifyRequestTokenGroup.value })
+    this.auth.verifyRecoveryCode({ ...this.startPasswordRecoveryGroup.value, ...this.verifyRequestTokenGroup.value })
       .subscribe({
         next: (response: any) => {
           console.log(
@@ -137,7 +120,7 @@ export class PasswordRecoveryStartComponent {
 
   handleChangePassword() {
     this.verifyCodeRequest = { sent: true };
-    this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/reset', { ...this.startPasswordRecoveryGroup.value, ...this.changePasswordGroup.value })
+    this.auth.requestPasswordChange({ ...this.startPasswordRecoveryGroup.value, ...this.changePasswordGroup.value })
       .subscribe({
         next: (response) => {
           

@@ -1,9 +1,13 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { HttpRequest } from '../../interfaces/http-request.interface';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
+import { AuthService } from '../../services/auth.service';
+import { HttpRequest } from '../../interfaces/http-request.interface';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
+
+import { signInGroup } from '../form-groups';
+
 
 @Component({
   selector: 'sign-in',
@@ -15,17 +19,13 @@ import { SpinnerComponent } from '../../components/spinner/spinner.component';
 export class SignInComponent {
   protected request: HttpRequest = {};
 
-  protected signInGroup = new FormGroup({
-    email: new FormControl(null, [ Validators.required, Validators.email, Validators.pattern(/^.+@([a-z]+\.)?[a-z]+\.[a-z]{2,3}$/) ]),
-    password: new FormControl(null, [ Validators.required ]),
-    remember: new FormControl(false, [ ])
-  });
+  protected signInGroup = signInGroup();
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly auth: AuthService) {}
 
   handleSignIn() {
     this.request = { sent: true };
-    this.http.post('http://127.0.0.1:3000/auth/login', this.signInGroup.value)
+    this.auth.login(this.signInGroup.value)
       .subscribe({
         next: (response) => {
           console.log(response)

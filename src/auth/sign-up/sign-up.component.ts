@@ -1,11 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
+import { AuthService } from '../../services/auth.service';
 import { HttpRequest } from '../../interfaces/http-request.interface';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
-import { CommonModule } from '@angular/common';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
+
+import { signUpGroup } from '../form-groups';
 
 @Component({
   selector: 'sign-up',
@@ -17,20 +19,15 @@ import { passwordMatchValidator } from '../../validators/password-match.validato
 export class SignUpComponent {
   protected request: HttpRequest = {};
 
-  protected signUpGroup = new FormGroup({
-    email: new FormControl(null, [ Validators.required, Validators.email, Validators.pattern(/^.+@([a-z]+\.)?[a-z]+\.[a-z]{2,3}$/) ]),
-    password: new FormControl(null, [ Validators.required ]),
-    confirmed: new FormControl(null, [ Validators.required ]),
-    agree: new FormControl(false, [ Validators.required, Validators.requiredTrue ])
-  });
+  protected signUpGroup = signUpGroup();
 
-  constructor(private readonly http: HttpClient) {
+  constructor(private readonly auth: AuthService) {
     this.signUpGroup.addValidators(passwordMatchValidator('password', 'confirmed'))
   }
 
   handleSignUp() {
     this.request = { sent: true };
-    this.http.post('http://127.0.0.1:3000/auth/register', this.signUpGroup.value)
+    this.auth.register(this.signUpGroup.value)
       .subscribe({
         next: (response) => {
           console.log(response)
