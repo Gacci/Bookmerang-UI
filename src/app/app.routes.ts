@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 // import { SigningComponent } from '../../src/components/signing/signing.component';
 
-import { SignInComponent } from '../../src/components/sign-in/sign-in.component';
-import { SignUpComponent } from '../../src/components/sign-up/sign-up.component';
+import { SignInComponent } from '../auth/sign-in/sign-in.component';
+import { SignUpComponent } from '../auth/sign-up/sign-up.component';
 
-import { PasswordRecoveryStartComponent } from '../../src/components/password-recovery-start/password-recovery-start.component';
+import { PasswordRecoveryStartComponent } from '../auth/password-recovery-start/password-recovery-start.component';
 
 export const routes: Routes = [{
     component: PasswordRecoveryStartComponent,
@@ -16,7 +16,7 @@ export const routes: Routes = [{
     component: SignInComponent,
     path: 'sign-in'   
 },  { 
-    path: '', 
+    path: '*', 
     pathMatch: 'full',
     redirectTo: '/'
 }];

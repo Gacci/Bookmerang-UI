@@ -1,27 +1,20 @@
+// import { BrowserModule } from '@angular/platform-browser';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
-import { ReactiveFormsModule } from "@angular/forms";
-
-import { InputMaskModule } from '@ngneat/input-mask';
-// import { SwiperModule } from 'swiper/angular';
-
-import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    // BrowserAnimationsModule, 
+    // BrowserModule,
     CommonModule, 
-    InputMaskModule,
-    NgxMaskDirective,
-    NgxMaskPipe,
-    ReactiveFormsModule,
+    // ReactiveFormsModule,
     RouterOutlet, 
   ],
   providers: [
-    provideNgxMask()
+    // provideNgxMask(),
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
