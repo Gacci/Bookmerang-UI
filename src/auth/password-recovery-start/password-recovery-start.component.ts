@@ -8,7 +8,11 @@ import { passwordMatchValidator } from '../../validators/password-match.validato
 
 import { HttpRequest } from '../../interfaces/http-request.interface';
 
-import { changePasswordGroup, startPasswordRecoveryGroup, verifyRequestTokenGroup } from '../form-groups';
+import {
+  changePasswordGroup,
+  startPasswordRecoveryGroup,
+  verifyRequestTokenGroup,
+} from '../form-groups';
 
 @Component({
   selector: 'password-recovery-start',
@@ -16,14 +20,13 @@ import { changePasswordGroup, startPasswordRecoveryGroup, verifyRequestTokenGrou
   templateUrl: './password-recovery-start.component.html',
   styleUrl: './password-recovery-start.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent]
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
 })
 export class PasswordRecoveryStartComponent {
   protected resetPasswordRequest: HttpRequest = {};
   protected resendPasswordRequest: HttpRequest = {};
   protected verifyCodeRequest: HttpRequest = {};
   protected changePasswordRequest: HttpRequest = {};
-  
 
   protected expiresInSeconds: number = 0;
   protected timerExpiredId: any;
@@ -34,13 +37,13 @@ export class PasswordRecoveryStartComponent {
 
   protected changePasswordGroup = changePasswordGroup();
 
-  constructor(private readonly auth: AuthService ) {
+  constructor(private readonly auth: AuthService) {
     this.changePasswordGroup.addValidators(
-      passwordMatchValidator('password', 'confirmed')
+      passwordMatchValidator('password', 'confirmed'),
     );
   }
 
-  runExpiresInCountdown() {
+  startExpiresInCountdown() {
     this.expiresInSeconds = 60;
     if (this.timerExpiredId) {
       clearInterval(this.timerExpiredId);
@@ -54,53 +57,57 @@ export class PasswordRecoveryStartComponent {
     }, 1000);
   }
 
-
   handleStartRecovery() {
     this.resetPasswordRequest = { sent: true };
-    this.auth.startPasswordRecovery(this.startPasswordRecoveryGroup.value)
+    this.auth
+      .startPasswordRecovery(this.startPasswordRecoveryGroup.value)
       .subscribe({
         next: (response) => {
-          this.runExpiresInCountdown();
+          this.startExpiresInCountdown();
         },
         error: (e) => {
           this.resetPasswordRequest.done = true;
         },
         complete: () => {
           this.resetPasswordRequest.done = true;
-        }
+        },
       });
 
     // const elem = <any>this.swiper.nativeElement;
 
     // console.log(elem.swiper.slideTo(1))
-    
   }
 
   handleResendRecoveryCode() {
     this.resendPasswordRequest = { sent: true };
-    this.auth.resendRecoveryCode(this.startPasswordRecoveryGroup.value)
+    this.auth
+      .resendPasswordRecoveryCode(this.startPasswordRecoveryGroup.value)
       .subscribe({
         next: (response) => {
-          this.runExpiresInCountdown();
+          this.startExpiresInCountdown();
         },
         error: (e) => {
           this.resendPasswordRequest.done = true;
         },
         complete: () => {
           this.resendPasswordRequest.done = true;
-        }
+        },
       });
   }
 
   handleVerifyRequestCode() {
     this.verifyCodeRequest = { sent: true };
-    this.auth.verifyRecoveryCode({ ...this.startPasswordRecoveryGroup.value, ...this.verifyRequestTokenGroup.value })
+    this.auth
+      .verifyPasswordRecoveryCode({
+        ...this.startPasswordRecoveryGroup.value,
+        ...this.verifyRequestTokenGroup.value,
+      })
       .subscribe({
         next: (response: any) => {
           this.expiresInSeconds = 0;
-          this.changePasswordGroup.patchValue({ 
+          this.changePasswordGroup.patchValue({
             ...this.startPasswordRecoveryGroup.value,
-            token: response.token
+            token: response.token,
           });
         },
         error: (e) => {
@@ -108,23 +115,25 @@ export class PasswordRecoveryStartComponent {
         },
         complete: () => {
           this.verifyCodeRequest.done = true;
-        }
+        },
       });
   }
 
   handleChangePassword() {
     this.verifyCodeRequest = { sent: true };
-    this.auth.requestPasswordChange({ ...this.startPasswordRecoveryGroup.value, ...this.changePasswordGroup.value })
+    this.auth
+      .requestPasswordChange({
+        ...this.startPasswordRecoveryGroup.value,
+        ...this.changePasswordGroup.value,
+      })
       .subscribe({
-        next: (response) => {
-          
-        },
+        next: (response) => {},
         error: (e) => {
           this.verifyCodeRequest.done = true;
         },
         complete: () => {
           this.verifyCodeRequest.done = true;
-        }
+        },
       });
   }
 }

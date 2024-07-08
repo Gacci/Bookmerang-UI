@@ -1,49 +1,68 @@
 <!-- src/app/sign-in/sign-in.component.html -->
-<div class="relative inline-flex flex-col text-gray-700 bg-transparent shadow-lg p-14 rounded-xl bg-clip-border">
-    <h4 class="h4">
-      Sign In
-    </h4>
-    <p class="text">
-      Welcome back! Enter your details to sign in.
-    </p>
-    <form class="max-w-screen-lg mt-8 mb-2 w-80 sm:w-96" [formGroup]="signInGroup" (ngSubmit)="handleSignIn()">
-      <div class="flex flex-col gap-4 mb-1">
-        <h6 class="h6 -mb-4">Email</h6>
-        <div class="relative">
-          <input class="w-full" type="text" placeholder="jonh.smith@cougars.csusm.edu" formControlName="email"/>
-        </div>
-  
-        <h6 class="h6 -mb-4">Password</h6>
-        <div class="relative">
-          <input class="w-full" type="password" placeholder="********" formControlName="password"/>
-        </div>
+<div
+  class="relative inline-flex flex-col text-gray-700 bg-transparent shadow-lg p-14 rounded-xl bg-clip-border"
+>
+  <h4 class="h4">Sign In</h4>
+  <p class="text">Welcome back! Enter your details to sign in.</p>
+  <form
+    class="max-w-screen-lg mt-8 mb-2 w-80 sm:w-96"
+    [formGroup]="signInGroup"
+    (ngSubmit)="handleSignIn()"
+  >
+    <div class="flex flex-col gap-4 mb-1">
+      <h6 class="h6 -mb-4">Email</h6>
+      <div class="relative">
+        <input
+          class="w-full"
+          type="text"
+          placeholder="jonh.smith@cougars.csusm.edu"
+          formControlName="email"
+        />
       </div>
-  
-      <div class="inline-flex items-center">
-        <label class="checkbox relative -ml-2.5 flex cursor-pointer items-center rounded-full p-3">
-          <input type="checkbox" class="input" formControlName="remember"/>
-        </label>
-  
-        <label class="mt-px font-light text-gray-700 cursor-pointer select-none" htmlFor="remember">
-          <p class="flex items-center font-sans antialiased font-normal leading-normal text-sm text-gray-700">
-            Remember me
-          </p>
-        </label>
-      </div>
-      <button
-        class="mt-6 w-full select-none bg-pink-500 font-bold text-white"
-        type="submit"
-        [disabled]="signInGroup.invalid">
-        Sign in
 
-        <status-spinner *ngIf="request.sent && !request.done"></status-spinner>
-      </button>
-      <p class="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-center text-gray-700">
-        Don't have an account?
-        <a href="sign-up" class="a font-medium">
-          Sign Up
-        </a>
-      </p>
-    </form>
-  </div>
-  
+      <h6 class="h6 -mb-4">Password</h6>
+      <div class="relative">
+        <input
+          class="w-full"
+          type="password"
+          placeholder="********"
+          formControlName="password"
+        />
+      </div>
+    </div>
+
+    <div class="inline-flex items-center">
+      <label
+        class="checkbox relative -ml-2.5 flex cursor-pointer items-center rounded-full p-3"
+      >
+        <input type="checkbox" class="input" formControlName="remember" />
+      </label>
+
+      <label
+        class="mt-px font-light text-gray-700 cursor-pointer select-none"
+        htmlFor="remember"
+      >
+        <p
+          class="flex items-center font-sans antialiased font-normal leading-normal text-sm text-gray-700"
+        >
+          Remember me
+        </p>
+      </label>
+    </div>
+    <button
+      class="mt-6 w-full select-none bg-pink-500 font-bold text-white"
+      type="submit"
+      [disabled]="signInGroup.invalid"
+    >
+      Sign in
+
+      <status-spinner *ngIf="request.sent && !request.done"></status-spinner>
+    </button>
+    <p
+      class="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-center text-gray-700"
+    >
+      Don't have an account?
+      <a href="sign-up" class="a font-medium"> Sign Up </a>
+    </p>
+  </form>
+</div>

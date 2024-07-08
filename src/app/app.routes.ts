@@ -6,17 +6,22 @@ import { SignUpComponent } from '../auth/sign-up/sign-up.component';
 
 import { PasswordRecoveryStartComponent } from '../auth/password-recovery-start/password-recovery-start.component';
 
-export const routes: Routes = [{
+export const routes: Routes = [
+  {
     component: PasswordRecoveryStartComponent,
-    path: 'password/recovery/start'    
-}, {
+    path: 'password/recovery/start',
+  },
+  {
     component: SignUpComponent,
-    path: 'sign-up'
-}, {
+    path: 'sign-up',
+  },
+  {
     component: SignInComponent,
-    path: 'sign-in'   
-},  { 
-    path: '*', 
+    path: 'sign-in',
+  },
+  {
+    path: '*',
     pathMatch: 'full',
-    redirectTo: '/'
-}];
+    redirectTo: '/',
+  },
+];

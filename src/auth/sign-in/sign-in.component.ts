@@ -8,13 +8,12 @@ import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 import { signInGroup } from '../form-groups';
 
-
 @Component({
   selector: 'sign-in',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
   templateUrl: './sign-in.component.html',
-  styleUrl: './sign-in.component.scss'
+  styleUrl: './sign-in.component.scss',
 })
 export class SignInComponent {
   protected request: HttpRequest = {};
@@ -25,17 +24,16 @@ export class SignInComponent {
 
   handleSignIn() {
     this.request = { sent: true };
-    this.auth.login(this.signInGroup.value)
-      .subscribe({
-        next: (response) => {
-          console.log(response)
-        },
-        error: (e) => {
-          this.request.done = true;
-        },
-        complete: () => {
-          this.request.done = true;
-        }
-      });
+    this.auth.login(this.signInGroup.value).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (e) => {
+        this.request.done = true;
+      },
+      complete: () => {
+        this.request.done = true;
+      },
+    });
   }
 }

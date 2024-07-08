@@ -4,7 +4,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { jwtAuthInterceptor } from './jwt-auth.interceptor';
 
 describe('jwtAuthInterceptor', () => {
-  const interceptor: HttpInterceptorFn = (req, next) => 
+  const interceptor: HttpInterceptorFn = (req, next) =>
     TestBed.runInInjectionContext(() => jwtAuthInterceptor(req, next));
 
   beforeEach(() => {

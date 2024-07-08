@@ -7,17 +7,17 @@ import { CommonModule } from '@angular/common';
   selector: 'app-root',
   standalone: true,
   imports: [
-    // BrowserAnimationsModule, 
+    // BrowserAnimationsModule,
     // BrowserModule,
-    CommonModule, 
+    CommonModule,
     // ReactiveFormsModule,
-    RouterOutlet, 
+    RouterOutlet,
   ],
   providers: [
     // provideNgxMask(),
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'frontend';

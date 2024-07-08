@@ -8,10 +8,9 @@ describe('PasswordRecoveryStartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PasswordRecoveryStartComponent]
-    })
-    .compileComponents();
-    
+      imports: [PasswordRecoveryStartComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(PasswordRecoveryStartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

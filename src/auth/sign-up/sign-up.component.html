@@ -1,55 +1,137 @@
-<div class="relative inline-flex flex-col text-gray-700 bg-transparent shadow-lg p-14 rounded-xl bg-clip-border">
-    <h4 class="h4">
-      Sign Up
-    </h4>
-    <p class="text">
-      Nice to meet you! Enter your details to register.
+<div
+  class="relative inline-flex flex-col text-gray-700 bg-transparent shadow-lg p-14 rounded-xl bg-clip-border"
+>
+  <h4 class="h4">Sign Up</h4>
+  <p class="text">Nice to meet you! Enter your details to register.</p>
+  <form
+    class="max-w-screen-lg mt-8 mb-2 w-80 sm:w-96"
+    [formGroup]="signUpGroup"
+    (ngSubmit)="handleSignUp()"
+  >
+    <div class="flex flex-col gap-4 mb-1">
+      <h6 class="h6 -mb-4">Email</h6>
+      <div class="relative">
+        <input
+          class="w-full"
+          type="text"
+          placeholder="john.smith@cougars.csusm.com"
+          formControlName="email"
+        />
+      </div>
+
+      <h6 class="h6 -mb-4">Choose Password</h6>
+      <div class="relative">
+        <input
+          class="w-full"
+          type="password"
+          placeholder="********"
+          formControlName="password"
+        />
+      </div>
+
+      <h6 class="h6 -mb-4">Confirm Password</h6>
+      <div class="relative">
+        <input
+          class="w-full"
+          type="password"
+          placeholder="********"
+          formControlName="confirmed"
+        />
+      </div>
+    </div>
+
+    <div class="inline-flex items-center">
+      <label
+        class="checkbox relative -ml-2.5 flex cursor-pointer items-center rounded-full p-3"
+      >
+        <input type="checkbox" class="input" formControlName="agree" />
+      </label>
+
+      <label
+        class="mt-px font-light text-gray-700 cursor-pointer select-none"
+        htmlFor="remember"
+      >
+        <p
+          class="flex items-center font-sans antialiased font-normal leading-normal text-sm text-gray-700"
+        >
+          I agree the
+          <a href="#" class="a font-medium transition-colors">
+            &nbsp;Terms and Conditions
+          </a>
+        </p>
+      </label>
+    </div>
+    <button
+      class="mt-6 w-full select-none bg-pink-500 font-bold text-white"
+      type="submit"
+      [disabled]="signUpGroup.invalid"
+    >
+      Sign up
+
+      <status-spinner
+        *ngIf="createAccountRequest.sent && !createAccountRequest.done"
+      ></status-spinner>
+    </button>
+    <p
+      class="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-center text-gray-700"
+    >
+      Already have an account?
+      <a href="sign-in" class="a font-medium"> Sign In </a>
     </p>
-    <form class="max-w-screen-lg mt-8 mb-2 w-80 sm:w-96" [formGroup]="signUpGroup" (ngSubmit)="handleSignUp()">
+  </form>
+</div>
+
+<div
+  class="relative inline-flex flex-col text-gray-700 bg-transparent shadow-lg rounded-xl bg-clip-border"
+>
+  <div class="w-120 p-16">
+    <h4 class="h4">Get Your Code</h4>
+    <p class="text">
+      Please enter the <strong>6 digit</strong> code that send to your email.
+      <ng-template *ngIf="expiresInSeconds"
+        >Code will expore in
+        <strong>{{ expiresInSeconds }}s</strong></ng-template
+      >
+    </p>
+
+    <form
+      class="mt-8 mb-2"
+      [formGroup]="verifyRegisterCodeGroup"
+      (ngSubmit)="handleVerifyRegisterCode()"
+    >
       <div class="flex flex-col gap-4 mb-1">
-        <h6 class="h6 -mb-4">Email</h6>
+        <!-- <h6 class="h6 -mb-4">Email</h6> -->
         <div class="relative">
-          <input class="w-full" type="text" placeholder="john.smith@cougars.csusm.com" formControlName="email"/>
-        </div>
-  
-        <h6 class="h6 -mb-4">Choose Password</h6>
-        <div class="relative">
-          <input class="w-full" type="password" placeholder="********" formControlName="password"/>
-        </div>
-  
-        <h6 class="h6 -mb-4">Confirm Password</h6>
-        <div class="relative">
-          <input class="w-full" type="password" placeholder="********" formControlName="confirmed"/>
+          <input
+            class="w-full text-lg tracking-widest-5xl !font-bold"
+            type="text"
+            formControlName="token"
+          />
         </div>
       </div>
-  
-      <div class="inline-flex items-center">
-        <label class="checkbox relative -ml-2.5 flex cursor-pointer items-center rounded-full p-3">
-          <input type="checkbox" class="input" formControlName="agree" />
-        </label>
-  
-        <label class="mt-px font-light text-gray-700 cursor-pointer select-none" htmlFor="remember">
-          <p class="flex items-center font-sans antialiased font-normal leading-normal text-sm text-gray-700">
-            I agree the
-            <a href="#" class="a font-medium transition-colors">
-              &nbsp;Terms and Conditions
-            </a>
-          </p>
-        </label>
-      </div>
+
+      <p
+        class="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-center text-gray-700"
+      >
+        Didn't receieve a code?
+        <a class="a font-medium" (click)="handleResendVerifyRegisterCode()">
+          Resend
+        </a>
+      </p>
+
       <button
         class="mt-6 w-full select-none bg-pink-500 font-bold text-white"
         type="submit"
-        [disabled]="signUpGroup.invalid">
-        Sign up
+        [disabled]="!expiresInSeconds || verifyRegisterCodeGroup.invalid"
+      >
+        Verify & Continue
 
-        <status-spinner *ngIf="request.sent && !request.done"></status-spinner>
+        <status-spinner
+          *ngIf="
+            resendCreateAccountRequest.sent && !resendCreateAccountRequest.done
+          "
+        ></status-spinner>
       </button>
-      <p class="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-center text-gray-700">
-        Already have an account?
-        <a href="sign-in" class="a font-medium">
-          Sign In
-        </a>
-      </p>
     </form>
-  </div> 
+  </div>
+</div>

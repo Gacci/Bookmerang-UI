@@ -6,7 +6,7 @@ import { jwtAuthInterceptor } from '../interceptors/jwt-auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes), 
-    provideHttpClient(withInterceptors([jwtAuthInterceptor]))
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([jwtAuthInterceptor])),
   ],
 };

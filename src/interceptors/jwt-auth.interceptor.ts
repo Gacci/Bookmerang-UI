@@ -2,7 +2,6 @@ import { inject } from '@angular/core';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
 
-
 export const jwtAuthInterceptor: HttpInterceptorFn = (request, next) => {
   const service = inject(AuthService);
   const jwtAuthToken = service.getJwtTokens();
@@ -10,11 +9,10 @@ export const jwtAuthInterceptor: HttpInterceptorFn = (request, next) => {
   if (jwtAuthToken) {
     request = request.clone({
       setHeaders: {
-        Authorization: `Bearer ${jwtAuthToken}`
-      }
+        Authorization: `Bearer ${jwtAuthToken}`,
+      },
     });
   }
 
   return next(request);
 };
-
