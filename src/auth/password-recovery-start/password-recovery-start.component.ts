@@ -97,13 +97,7 @@ export class PasswordRecoveryStartComponent {
     this.auth.verifyRecoveryCode({ ...this.startPasswordRecoveryGroup.value, ...this.verifyRequestTokenGroup.value })
       .subscribe({
         next: (response: any) => {
-          console.log(
-            { 
-              ...this.startPasswordRecoveryGroup.value,
-              token: response.token
-            }
-          );
-
+          this.expiresInSeconds = 0;
           this.changePasswordGroup.patchValue({ 
             ...this.startPasswordRecoveryGroup.value,
             token: response.token
