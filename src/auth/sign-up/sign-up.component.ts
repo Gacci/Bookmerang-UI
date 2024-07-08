@@ -83,7 +83,7 @@ export class SignUpComponent {
 
   handleVerifyRegisterCode() {
     this.auth
-      .verifyCreateAccountCode(this.verifyRegisterCodeGroup.value)
+      .verifyCreateAccountCode({ ...this.signUpGroup.value, ...this.verifyRegisterCodeGroup.value})
       .subscribe({
         next: (response) => {
           console.log(response);
