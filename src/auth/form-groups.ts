@@ -38,10 +38,7 @@ export const signUpGroup = () =>
     email: new FormControl(null, email),
     password: new FormControl(null, password),
     confirmed: new FormControl(null, password),
-    agree: new FormControl(false, [
-      Validators.required,
-      Validators.requiredTrue,
-    ]),
+    agree: new FormControl(false, [Validators.required, Validators.requiredTrue]),
   });
 
 export const verifyRegisterCodeGroup = () =>

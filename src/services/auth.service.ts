@@ -20,44 +20,26 @@ export class AuthService {
   }
 
   resendPasswordRecoveryCode(payload: any) {
-    return this.http.post(
-      'http://127.0.0.1:3000/auth/passwords/recovery/resend-request',
-      payload,
-    );
+    return this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/resend-request', payload);
   }
 
   startPasswordRecovery(payload: any) {
-    return this.http.post(
-      'http://127.0.0.1:3000/auth/passwords/recovery/start',
-      payload,
-    );
+    return this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/start', payload);
   }
 
   requestPasswordChange(payload: any) {
-    return this.http.post(
-      'http://127.0.0.1:3000/auth/passwords/recovery/reset',
-      payload,
-    );
+    return this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/reset', payload);
   }
 
   verifyPasswordRecoveryCode(payload: any) {
-    return this.http.post(
-      'http://127.0.0.1:3000/auth/passwords/recovery/verify',
-      payload,
-    );
+    return this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/verify', payload);
   }
 
   resendCreateAccountCode(payload: any) {
-    return this.http.post(
-      'http://127.0.0.1:3000/auth/accounts/verify/resend',
-      payload,
-    );
+    return this.http.post('http://127.0.0.1:3000/auth/accounts/verify/resend', payload);
   }
   verifyCreateAccountCode(payload: any) {
-    return this.http.post(
-      'http://127.0.0.1:3000/auth/accounts/verify',
-      payload,
-    );
+    return this.http.post('http://127.0.0.1:3000/auth/accounts/verify', payload);
   }
 
   private storeJwtTokens(tokens: any) {

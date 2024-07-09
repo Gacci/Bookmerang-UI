@@ -7,11 +7,12 @@ import { HttpRequest } from '../../interfaces/http-request.interface';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 import { signInGroup } from '../form-groups';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'sign-in',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, SpinnerComponent],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
 })

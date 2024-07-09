@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
 import { HttpRequest } from '../../interfaces/http-request.interface';
@@ -8,15 +9,27 @@ import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 
 import { signUpGroup, verifyRegisterCodeGroup } from '../form-groups';
+import Swiper from 'swiper';
+import { SwiperContainer } from 'swiper/element';
+import { SwiperOptions } from 'swiper/types';
+
 
 @Component({
   selector: 'sign-up',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, SpinnerComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
 })
 export class SignUpComponent {
+  @ViewChild('swiper', { read: ElementRef<SwiperContainer> })
+  swiperRefElem!: ElementRef<SwiperContainer>;
+
+  private swiper!: Swiper;
+
+  config: SwiperOptions = {};
+  
   protected createAccountRequest: HttpRequest = {};
   protected resendCreateAccountRequest: HttpRequest = {};
   protected verifyCreateAccountRequest: HttpRequest = {};
@@ -29,9 +42,7 @@ export class SignUpComponent {
   protected timerExpiredId: any;
 
   constructor(private readonly auth: AuthService) {
-    this.signUpGroup.addValidators(
-      passwordMatchValidator('password', 'confirmed'),
-    );
+    this.signUpGroup.addValidators(passwordMatchValidator('password', 'confirmed'));
   }
 
   startExpiresInCountdown() {
@@ -65,28 +76,27 @@ export class SignUpComponent {
   }
 
   handleResendVerifyRegisterCode() {
-    this.auth
-      .resendCreateAccountCode({ email: this.signUpGroup.controls.email.value })
-      .subscribe({
-        next: (response) => {
-          console.log(response);
-          this.startExpiresInCountdown();
-        },
-        error: (e) => {
-          this.resendCreateAccountRequest.done = true;
-        },
-        complete: () => {
-          this.resendCreateAccountRequest.done = true;
-        },
-      });
+    this.auth.resendCreateAccountCode({ email: this.signUpGroup.controls.email.value }).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.startExpiresInCountdown();
+      },
+      error: (e) => {
+        this.resendCreateAccountRequest.done = true;
+      },
+      complete: () => {
+        this.resendCreateAccountRequest.done = true;
+      },
+    });
   }
 
   handleVerifyRegisterCode() {
     this.auth
-      .verifyCreateAccountCode({ ...this.signUpGroup.value, ...this.verifyRegisterCodeGroup.value})
+      .verifyCreateAccountCode({ ...this.signUpGroup.value, ...this.verifyRegisterCodeGroup.value })
       .subscribe({
         next: (response) => {
           console.log(response);
+          this.expiresInSeconds = 0;
         },
         error: (e) => {
           this.verifyCreateAccountRequest.done = true;

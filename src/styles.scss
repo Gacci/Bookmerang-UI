@@ -5,10 +5,10 @@
 @import "tailwindcss/utilities";
 
 
-// @import 'swiper/scss';
-// // @import "swiper/scss/effect-fade";
-// @import 'swiper/scss/navigation';
-// @import 'swiper/scss/pagination';
+@import 'swiper/scss';
+@import "swiper/scss/effect-fade";
+@import 'swiper/scss/navigation';
+@import 'swiper/scss/pagination';
 
 
 .h4 {
@@ -23,45 +23,62 @@
 }
 
 .a {
-  @apply font-medium text-blue-600;
+  @apply text-blue-600 cursor-pointer;
 
   &:hover {
-      @apply underline
+      @apply underline;
+  }
+
+  &.mini {
+    @apply text-sm;
+  }
+
+  &.muted {
+    @apply text-gray-500;
+  }
+  &.muted:hover {
+    @apply text-blue-600;
   }
 }
 
+
+
 label {
     @apply text-base;
-  }
+}
 input[type='password'],
 input[type='text'] {
     @apply h-14 font-thin px-4 rounded-md border border-gray-200 transition-all;
 }
 input[type='password']:focus,
 input[type='text']:focus {
-    @apply outline-2 outline-solid outline-offset-0 outline-fuchsia-500;
+    @apply outline-2 outline-solid outline-offset-0 outline-blue-600;
 }
 
-  button {
-      @apply h-14 font-normal px-4 rounded-md transition-all;
-  }
-  button.flat {
-    @apply bg-gray-100 text-gray-600;
-  }
-  button.flat:focus {
-    @apply outline-2 outline-solid outline-offset-0 outline-fuchsia-500;
-  }
-  button:hover {
-    @apply shadow-lg shadow-gray-900/20;
-  }
-  button:active {
-    @apply opacity-[0.85] shadow-none;
-  }
-  button:disabled {
-    @apply pointer-events-none opacity-50 shadow-none;
-  }
+button {
+    @apply h-14 font-normal px-4 rounded-md transition-all;
+}
+button.btn-blue-600 {
+  @apply bg-blue-600 text-white;
+}
+button.flat {
+  @apply bg-gray-100 text-gray-600;
+}
+button.flat:focus {
+  @apply outline-2 outline-solid outline-offset-0 outline-blue-600;
+}
+button:hover {
+  @apply shadow-lg shadow-gray-900/20;
+}
+button:active {
+  @apply opacity-[0.85] shadow-none;
+}
+button:disabled {
+  @apply pointer-events-none opacity-50 shadow-none;
+}
 
-  
+
+
   /*
   .checkbox {
     @apply inline-flex items-center justify-center;
@@ -144,13 +161,13 @@ input[type='text']:focus {
     @apply opacity-10;
   }
   .checkbox .input:checked {
-    @apply border-pink-500 bg-pink-200;
+    @apply border-indigo-500 bg-indigo-200;
   }
   .checkbox .input:before {
     @apply content-space absolute top-2/4 left-2/4 block h-12 w-12 -translate-y-2/4 -translate-x-2/4 rounded-full bg-gray-500 opacity-0 transition-opacity;
   }
   .checkbox .input:checked:before {
-    @apply bg-pink-400;
+    @apply bg-indigo-400;
   }
   // .checkbox .input:checked:before {
   //   @apply bg-gray-900;
