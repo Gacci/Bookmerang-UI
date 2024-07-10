@@ -29,6 +29,10 @@
       @apply underline;
   }
 
+  &:focus {
+    @apply outline-1 outline-offset-2 outline-solid outline-blue-500 rounded-sm;
+  }
+
   &.mini {
     @apply text-sm;
   }
@@ -52,7 +56,7 @@ input[type='text'] {
 }
 input[type='password']:focus,
 input[type='text']:focus {
-    @apply outline-2 outline-solid outline-offset-0 outline-blue-600;
+    @apply outline-4 outline-solid outline-offset-0 outline-blue-200;
 }
 
 button {
@@ -65,7 +69,7 @@ button.flat {
   @apply bg-gray-100 text-gray-600;
 }
 button.flat:focus {
-  @apply outline-2 outline-solid outline-offset-0 outline-blue-600;
+  @apply outline-2 outline-solid outline-offset-0 outline-blue-200;
 }
 button:hover {
   @apply shadow-lg shadow-gray-900/20;
@@ -161,19 +165,19 @@ button:disabled {
     @apply opacity-10;
   }
   .checkbox .input:checked {
-    @apply border-indigo-500 bg-indigo-200;
+    @apply border-blue-500 bg-blue-200;
   }
   .checkbox .input:before {
     @apply content-space absolute top-2/4 left-2/4 block h-12 w-12 -translate-y-2/4 -translate-x-2/4 rounded-full bg-gray-500 opacity-0 transition-opacity;
   }
   .checkbox .input:checked:before {
-    @apply bg-indigo-400;
+    @apply bg-blue-400;
   }
   // .checkbox .input:checked:before {
   //   @apply bg-gray-900;
   // }
   .checkbox .input:after {
-    @apply content-check absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-fuchsia-500 font-semibold opacity-0;
+    @apply content-check absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-blue-500 font-semibold opacity-0;
   }
   .checkbox .input:checked:after {
     @apply opacity-100;
