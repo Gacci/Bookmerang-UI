@@ -12,12 +12,13 @@ import { signUpGroup, verifyRegisterCodeGroup } from '../form-groups';
 import Swiper from 'swiper';
 import { SwiperContainer } from 'swiper/element';
 import { SwiperOptions } from 'swiper/types';
+import { PasswordCheckerComponent } from '../../components/password-checker/password-checker.component';
 
 
 @Component({
   selector: 'sign-up',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, SpinnerComponent],
+  imports: [CommonModule, PasswordCheckerComponent, ReactiveFormsModule, RouterModule, SpinnerComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
@@ -105,5 +106,12 @@ export class SignUpComponent {
           this.verifyCreateAccountRequest.done = true;
         },
       });
+  }
+
+  get password() {
+    return this.signUpGroup.controls.password;
+  }
+  get confirmed() {
+    return this.signUpGroup.controls.confirmed;
   }
 }

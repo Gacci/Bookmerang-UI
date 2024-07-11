@@ -32,32 +32,29 @@
         <div class="relative mt-4">
           <h6 class="h6">Choose Password</h6>
           <input class="w-full" type="password" placeholder="********" formControlName="password" />
+          <password-checker class="password-checker" [input]="password.value"></password-checker>
         </div>
   
         
         <div class="relative mt-4">
           <h6 class="h6">Confirm Password</h6>
           <input class="w-full" type="password" placeholder="********" formControlName="confirmed" />
+          <password-checker class="password-checker" [input]="confirmed.value"></password-checker>
         </div>
       </div>
   
-      <div class="inline-flex items-center">
+      <!-- <div class="inline-flex items-center">
         <label class="checkbox relative -ml-2.5 flex cursor-pointer items-center rounded-full p-3">
           <input type="checkbox" class="input" formControlName="agree" />
-        </label>
-  
-        <label class="mt-px font-light text-gray-700 cursor-pointer select-none" htmlFor="remember">
-          <p
-            class="flex items-center font-sans antialiased font-normal leading-normal text-sm text-gray-700"
-          >
-            I agree the
-            <a href="#" class="a font-medium transition-colors"> &nbsp;Terms and Conditions </a>
+
+          <p class="flex items-center font-sans antialiased font-normal leading-normal text-sm text-gray-700">
+            I agree the<a href="#" class="a font-medium transition-colors">&nbsp;Terms and Conditions.</a>
           </p>
-        </label>
-      </div>
+        </label>        
+      </div> -->
   
       <button
-        class="w-full btn-blue-600 my-4"
+        class="w-full btn-blue-600 mt-4"
         type="submit"
         [disabled]="signUpGroup.invalid"
       >
@@ -67,8 +64,12 @@
           *ngIf="createAccountRequest.sent && !createAccountRequest.done"
         ></status-spinner>
       </button>
-  
-  
+
+      <div class="block text-sm text-center mt-4">  
+          <span class="text-gray-500">We respect your privacy. By clicking "Create account" you agree to the</span>
+          <a href="#" class="a font-medium transition-colors">&nbsp;Terms and Conditions.</a>
+      </div>
+      
       <div class="text-center mt-6">
         <span class="text-sm text-gray-500">Already have an account?</span>
         <a class="a text-sm" [routerLink]="['/sign-in']"> Sign in </a>

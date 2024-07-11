@@ -5,3 +5,10 @@
 .swiper {
     @apply w-128 relative inline-flex flex-col text-gray-700 bg-transparent shadow-lg rounded-xl bg-clip-border;
 }
+
+input[type='password']:focus + .password-checker {
+    @apply block;
+}
+.password-checker {
+    @apply absolute w-full bottom-full left-0 z-10 hidden;
+}

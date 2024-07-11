@@ -25,6 +25,9 @@ module.exports = {
         '.content-check': {
           content: "'\\2713'"
         },
+        '.content-error': {
+          content: "'\\2715'"
+        },
         '.outline-solid': {
           'outline-style': "solid"
         },

@@ -27,17 +27,17 @@
     </div>
 
 
-    <div class="flex items-center justify-between">
+    <!-- <div class="flex items-center justify-between">
       <label class="checkbox relative -ml-2.5 flex cursor-pointer items-center rounded-full p-3">
         <input type="checkbox" class="input" formControlName="remember" />
 
-        <p class="flex items-center font-sans antialiased font-normal leading-normal ml-2 text-sm text-gray-700">
+        <p class="flex items-center font-sans antialiased font-normal leading-normal text-sm text-gray-700">
           Remember me
         </p>
       </label>
 
       <a class="a text-sm" [routerLink]="['/password/recovery/start']"> Forgot password? </a>
-    </div>
+    </div> -->
 
     <button
       class="w-full btn-blue-600 my-4"
@@ -49,9 +49,13 @@
       <status-spinner *ngIf="request.sent && !request.done"></status-spinner>
     </button>
 
-    <div class="text-center mt-6">
+    <div class="text-center m-6">
       <span class="text-sm text-gray-500">Don't have an account?</span>
       <a class="a text-sm" [routerLink]="['/sign-up']"> Sign up </a>
     </div>   
+
+    <div class="text-center">
+      <a class="a text-sm" [routerLink]="['/password/recovery/start']"> Forgot password? </a>
+    </div>
   </form>
 </div>
