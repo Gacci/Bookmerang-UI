@@ -30,7 +30,7 @@ export const signInGroup = () =>
   new FormGroup({
     email: new FormControl(null, email),
     password: new FormControl(null, password),
-    remember: new FormControl(false, []),
+    // remember: new FormControl(false, []),
   });
 
 export const signUpGroup = () =>

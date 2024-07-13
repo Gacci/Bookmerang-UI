@@ -12,7 +12,11 @@ import { AuthService } from '../../services/auth.service';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 
+import { CodeOnly } from '../../interfaces/code-only.interface';
+import { EmailOnly } from '../../interfaces/email-only.interface';
 import { HttpRequest } from '../../interfaces/http-request.interface';
+import { Registration } from '../../interfaces/registration.interface';
+
 
 import {
   changePasswordGroup,
@@ -23,6 +27,9 @@ import {
 import { Swiper, SwiperOptions } from 'swiper/types';
 import { SwiperContainer } from 'swiper/element';
 import { RouterModule } from '@angular/router';
+
+
+
 
 @Component({
   selector: 'password-recovery-start',
@@ -60,7 +67,6 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.swiper = <any>this.swiperRefElem.nativeElement.swiper;
-    console.log(this.swiper);
   }
 
   startExpiresInCountdown() {
@@ -79,12 +85,12 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
 
   handleStartRecovery() {
     this.resetPasswordRequest = { sent: true };
-    this.auth.startPasswordRecovery(this.startPasswordRecoveryGroup.value).subscribe({
+    this.auth.startPasswordRecovery(<EmailOnly>this.startPasswordRecoveryGroup.value).subscribe({
       next: (response) => {
         this.swiper.slideNext();
         this.startExpiresInCountdown();
       },
-      error: (e) => {
+      error: () => {
         this.resetPasswordRequest.done = true;
       },
       complete: () => {
@@ -95,7 +101,7 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
 
   handleResendRecoveryCode() {
     this.resendPasswordRequest = { sent: true };
-    this.auth.resendPasswordRecoveryCode(this.startPasswordRecoveryGroup.value).subscribe({
+    this.auth.resendPasswordRecoveryCode(<EmailOnly>this.startPasswordRecoveryGroup.value).subscribe({
       next: (response) => {
         this.startExpiresInCountdown();
       },
@@ -111,7 +117,7 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   handleVerifyRequestCode() {
     this.verifyCodeRequest = { sent: true };
     this.auth
-      .verifyPasswordRecoveryCode({
+      .verifyPasswordRecoveryCode(<EmailOnly & CodeOnly> {
         ...this.startPasswordRecoveryGroup.value,
         ...this.verifyRequestTokenGroup.value,
       })
@@ -124,7 +130,7 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
             token: response.token,
           });
         },
-        error: (e) => {
+        error: () => {
           this.verifyCodeRequest.done = true;
         },
         complete: () => {
@@ -136,15 +142,15 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   handleChangePassword() {
     this.verifyCodeRequest = { sent: true };
     this.auth
-      .requestPasswordChange({
+      .requestPasswordChange(<Registration & CodeOnly>{
         ...this.startPasswordRecoveryGroup.value,
         ...this.changePasswordGroup.value,
       })
       .subscribe({
-        next: (response) => {
+        next: () => {
           this.swiper.slideNext();
         },
-        error: (e) => {
+        error: () => {
           this.verifyCodeRequest.done = true;
         },
         complete: () => {
@@ -155,11 +161,6 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
 
 
   get email() {
-    console.log(
-      this.startPasswordRecoveryGroup.controls.email.dirty,
-      this.startPasswordRecoveryGroup.controls.email.touched,
-      this.startPasswordRecoveryGroup.controls.email.invalid
-    );
     return this.startPasswordRecoveryGroup.controls.email;
   }
 }

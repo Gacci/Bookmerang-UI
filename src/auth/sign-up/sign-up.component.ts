@@ -3,16 +3,26 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild } from '@angul
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import Swiper from 'swiper';
+import { SwiperContainer } from 'swiper/element';
+import { SwiperOptions } from 'swiper/types';
+
 import { AuthService } from '../../services/auth.service';
 import { HttpRequest } from '../../interfaces/http-request.interface';
+
+
+import { PasswordCheckerComponent } from '../../components/password-checker/password-checker.component';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 
 import { signUpGroup, verifyRegisterCodeGroup } from '../form-groups';
-import Swiper from 'swiper';
-import { SwiperContainer } from 'swiper/element';
-import { SwiperOptions } from 'swiper/types';
-import { PasswordCheckerComponent } from '../../components/password-checker/password-checker.component';
+
+
+type Registration = {
+  email: string | null;
+  password: string | null;
+  confirmed: string | null
+}
 
 
 @Component({
@@ -62,12 +72,12 @@ export class SignUpComponent {
 
   handleSignUp() {
     this.createAccountRequest = { sent: true };
-    this.auth.register(this.signUpGroup.value).subscribe({
+    this.auth.register(<Registration>this.signUpGroup.value).subscribe({
       next: (response) => {
         console.log(response);
         this.startExpiresInCountdown();
       },
-      error: (e) => {
+      error: () => {
         this.createAccountRequest.done = true;
       },
       complete: () => {
@@ -82,7 +92,7 @@ export class SignUpComponent {
         console.log(response);
         this.startExpiresInCountdown();
       },
-      error: (e) => {
+      error: () => {
         this.resendCreateAccountRequest.done = true;
       },
       complete: () => {
@@ -99,7 +109,7 @@ export class SignUpComponent {
           console.log(response);
           this.expiresInSeconds = 0;
         },
-        error: (e) => {
+        error: () => {
           this.verifyCreateAccountRequest.done = true;
         },
         complete: () => {
@@ -108,6 +118,9 @@ export class SignUpComponent {
       });
   }
 
+  get email() {
+    return this.signUpGroup.controls.email;
+  }
   get password() {
     return this.signUpGroup.controls.password;
   }

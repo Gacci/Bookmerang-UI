@@ -15,8 +15,10 @@
       <input
         class="w-full"
         type="text"
+        autocomplete="username"
         placeholder="jonh.smith@cougars.csusm.edu"
         formControlName="email"
+        [class.error-on]="email.invalid && email.dirty"
       />
     </div>
 
@@ -24,6 +26,7 @@
     <div class="relative mt-4">
       <h6 class="h6">Password</h6>
       <input class="w-full" type="password" placeholder="********" formControlName="password" />
+      <!-- <password-strength class="mt-2" [password]="password.value"></password-strength> -->
     </div>
 
 
@@ -40,7 +43,7 @@
     </div> -->
 
     <button
-      class="w-full btn-blue-600 my-4"
+      class="relative w-full btn-blue-600 my-4"
       type="submit"
       [disabled]="signInGroup.invalid"
     >

@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 export class PasswordCheckerComponent {
   @Input()
-  set input(value: string | null) {
+  set input(value: string | null | undefined) {
     console.log(value);
     this.validatePassword(value ?? '');
   }
