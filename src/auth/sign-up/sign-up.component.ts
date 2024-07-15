@@ -1,28 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Data, RouterModule } from '@angular/router';
 
 import Swiper from 'swiper';
 import { SwiperContainer } from 'swiper/element';
 import { SwiperOptions } from 'swiper/types';
 
 import { AuthService } from '../../services/auth.service';
+import { EmailOnly } from '../../interfaces/email-only.interface';
 import { HttpRequest } from '../../interfaces/http-request.interface';
-
+import { Registration } from '../../interfaces/registration.interface';
 
 import { PasswordCheckerComponent } from '../../components/password-checker/password-checker.component';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
+
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 
 import { signUpGroup, verifyRegisterCodeGroup } from '../form-groups';
 
-
-type Registration = {
-  email: string | null;
-  password: string | null;
-  confirmed: string | null
-}
 
 
 @Component({
@@ -32,6 +28,7 @@ type Registration = {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
+  providers: []
 })
 export class SignUpComponent {
   @ViewChild('swiper', { read: ElementRef<SwiperContainer> })
@@ -53,7 +50,9 @@ export class SignUpComponent {
   protected timerExpiredId: any;
 
   constructor(private readonly auth: AuthService) {
-    this.signUpGroup.addValidators(passwordMatchValidator('password', 'confirmed'));
+    this.signUpGroup.addValidators(
+      passwordMatchValidator('password', 'confirmed')
+    );
   }
 
   startExpiresInCountdown() {
@@ -74,10 +73,9 @@ export class SignUpComponent {
     this.createAccountRequest = { sent: true };
     this.auth.register(<Registration>this.signUpGroup.value).subscribe({
       next: (response) => {
-        console.log(response);
         this.startExpiresInCountdown();
       },
-      error: () => {
+      error: (res) => {
         this.createAccountRequest.done = true;
       },
       complete: () => {
@@ -87,7 +85,7 @@ export class SignUpComponent {
   }
 
   handleResendVerifyRegisterCode() {
-    this.auth.resendCreateAccountCode({ email: this.signUpGroup.controls.email.value }).subscribe({
+    this.auth.resendCreateAccountCode(<EmailOnly>{ email: this.email.value }).subscribe({
       next: (response) => {
         console.log(response);
         this.startExpiresInCountdown();
