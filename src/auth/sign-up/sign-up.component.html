@@ -18,7 +18,7 @@
     >
       <div class="flex flex-col">
         
-        <div class="relative mt-4">
+        <div class="input-box mt-2">
           <h6 class="h6">Email</h6>
           <input
             class="w-full"
@@ -29,23 +29,62 @@
             [class.error-on]="email.invalid && email.dirty"
           />
    
-          <!-- <small class="form-error" [class.error-on]="email.touched && email.invalid && email.errors?.['required']">
+          <small class="input-error"
+            *ngIf="(email.invalid && email.value) && (email.dirty || email.touched)">
             Please type a valid email
-          </small> -->
+          </small>
         </div>
   
         
-        <div class="relative mt-4">
+        <div class="input-box mt-2">
           <h6 class="h6">Choose Password</h6>
-          <input class="w-full" type="password" placeholder="********" formControlName="password" />
-          <password-checker class="password-checker" [input]="password.value"></password-checker>
+          <input 
+            class="w-full" 
+            type="password" 
+            autocomplete="password"
+            placeholder="********" 
+            formControlName="password" 
+            [class.error-on]="password.invalid && password.dirty && !!password.value"/>
+
+          <password-checker 
+            class="password-checker"
+            [input]="password.value"></password-checker>
+          
+          <ng-container *ngIf="(password.dirty || password.touched) && (password.value && password.invalid)">
+            <small class="input-error"
+              *ngIf="password.hasError('pattern') && !password.hasError('passwordMismatch')">
+              Password does not meet requirements
+            </small>
+            <small class="input-error"
+              *ngIf="confirmed.value && !password.hasError('pattern') && password.hasError('passwordMismatch')">
+              Passwords don't match
+            </small>
+          </ng-container>
         </div>
   
         
-        <div class="relative mt-4">
+        <div class="input-box mt-2">
           <h6 class="h6">Confirm Password</h6>
-          <input class="w-full" type="password" placeholder="********" formControlName="confirmed" />
-          <password-checker class="password-checker" [input]="confirmed.value"></password-checker>
+          <input class="w-full" 
+            type="password" 
+            autocomplete="password"
+            placeholder="********" 
+            formControlName="confirmed" 
+            [class.error-on]="confirmed.invalid && confirmed.dirty && !!confirmed.value"/>
+
+          <password-checker class="password-checker" 
+            [input]="confirmed.value"></password-checker>
+
+          <ng-container *ngIf="(confirmed.dirty || confirmed.touched) && (confirmed.value && confirmed.invalid)">
+            <small class="input-error"
+              *ngIf="confirmed.hasError('pattern') && !confirmed.hasError('passwordMismatch')">
+              Password does not meet requirements
+            </small>
+            <small class="input-error"
+              *ngIf="password.value && !confirmed.hasError('pattern') && confirmed.hasError('passwordMismatch')">
+              Passwords don't match
+            </small>
+          </ng-container>
         </div>
       </div>
   

@@ -5,11 +5,14 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
+
+import { PasswordCheckerComponent } from '../../components/password-checker/password-checker.component';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
+
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 
 import { CodeOnly } from '../../interfaces/code-only.interface';
@@ -37,7 +40,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './password-recovery-start.component.html',
   styleUrl: './password-recovery-start.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, SpinnerComponent],
+  imports: [CommonModule, PasswordCheckerComponent, ReactiveFormsModule, RouterModule, SpinnerComponent],
 })
 export class PasswordRecoveryStartComponent implements AfterViewInit {
   @ViewChild('swiper', { read: ElementRef<SwiperContainer> })
@@ -45,7 +48,9 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
 
   private swiper!: Swiper;
 
-  config: SwiperOptions = {};
+  config: SwiperOptions = {
+    autoHeight: true,
+  };
 
   protected resetPasswordRequest: HttpRequest = {};
   protected resendPasswordRequest: HttpRequest = {};
@@ -147,20 +152,42 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
         ...this.changePasswordGroup.value,
       })
       .subscribe({
-        next: () => {
-          this.swiper.slideNext();
+        next: (response) => {
+          this.disableGroupControls(this.changePasswordGroup)
+          this.disableGroupControls(this.startPasswordRecoveryGroup);
+          this.disableGroupControls(this.verifyRequestTokenGroup);
+          // this.swiper.slideNext();
         },
         error: () => {
-          this.verifyCodeRequest.done = true;
+          // this.verifyCodeRequest.done = true;
         },
         complete: () => {
-          this.verifyCodeRequest.done = true;
+          // this.verifyCodeRequest.done = true;
         },
       });
   }
 
 
+  private disableGroupControls(group: FormGroup) {
+    Object.keys(group.controls)
+      .map(key => group.controls[key])
+      .forEach(ctrl => {
+        ctrl.disable();
+        ctrl.markAsPristine();
+        ctrl.markAsUntouched();
+        ctrl.reset();
+      })
+  }
+
   get email() {
     return this.startPasswordRecoveryGroup.controls.email;
+  }
+
+  get password() {
+    return this.changePasswordGroup.controls.password;
+  }
+
+  get confirmed() {
+    return this.changePasswordGroup.controls.confirmed;
   }
 }

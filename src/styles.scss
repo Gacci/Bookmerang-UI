@@ -52,20 +52,6 @@ a {
 }
 
 
-form {
-  .msg-error {
-    @apply text-red-500 font-extralight opacity-0;
-  
-    &.error-on {
-      @apply opacity-100;
-    }
-  }
-  input[type='text'].error-on, 
-  input[type='text'].error-on:focus {
-    @apply outline-2 outline-offset-2 outline-solid outline-red-500;
-  }
-}
-
 
 label {
     @apply text-base;
@@ -78,6 +64,13 @@ input[type='password']:focus,
 input[type='text']:focus {
     @apply outline-4 outline-solid outline-offset-0 outline-blue-200;
 }
+
+input[type='text']
+input[type='password'] {
+  @apply bg-blue-50;
+}
+
+
 
 button {
     @apply h-12 font-normal px-4 rounded-md transition-all;
@@ -103,6 +96,23 @@ button:disabled {
 
 
 
+
+form {
+  .input-box {
+    @apply relative pb-5;
+  }
+
+  .input-error {
+    @apply absolute bottom-0 left-0 text-red-500 font-normal;
+  }
+
+  input[type='text'].error-on, 
+  input[type='text'].error-on:focus,
+  input[type='password'].error-on, 
+  input[type='password'].error-on:focus {
+    @apply outline-2 outline-offset-1 outline-solid outline-red-500;
+  }
+}
   /*
   .checkbox {
     @apply inline-flex items-center justify-center;

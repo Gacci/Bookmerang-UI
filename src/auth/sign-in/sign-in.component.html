@@ -10,7 +10,7 @@
     (ngSubmit)="handleSignIn()"
   >
 
-    <div class="relative mt-4">
+    <div class="input-box mt-2">
       <h6 class="h6">Email</h6>
       <input
         class="w-full"
@@ -18,12 +18,16 @@
         autocomplete="username"
         placeholder="jonh.smith@cougars.csusm.edu"
         formControlName="email"
-        [class.error-on]="email.invalid && email.dirty"
+        [class.error-on]="email.invalid && email.dirty && email.value"
       />
+      <small class="input-error"
+        *ngIf="(email.invalid && email.value) && (email.dirty || email.touched)">
+        Please type a valid email
+      </small>
     </div>
 
     
-    <div class="relative mt-4">
+    <div class="input-box pb-6 mt-2">
       <h6 class="h6">Password</h6>
       <input class="w-full" type="password" placeholder="********" formControlName="password" />
       <!-- <password-strength class="mt-2" [password]="password.value"></password-strength> -->
