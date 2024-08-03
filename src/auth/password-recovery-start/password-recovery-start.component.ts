@@ -51,7 +51,7 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   private swiper!: Swiper;
 
   config: SwiperOptions = {
-    autoHeight: true,
+    autoHeight: true
   };
 
   protected resetPasswordRequest: HttpRequest = {};
@@ -76,6 +76,7 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.swiper = <any>this.swiperRefElem.nativeElement.swiper;
+    this.swiper.update();
   }
 
   startExpiresInCountdown() {

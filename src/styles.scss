@@ -225,3 +225,21 @@ form {
   .select:focus {
     @apply outline-2 outline-offset-0 outline-fuchsia-500;
   }
+
+
+
+// text-gray-500
+.alert-success,
+.alert-info,
+.alert-error {
+  @apply text-sm p-4 rounded-md;
+}
+.alert-success {
+  @apply text-green-500 bg-green-100;
+}
+.alert-info {
+  @apply text-blue-500 bg-blue-100;
+}
+.alert-error {
+  @apply text-red-500 bg-red-100;
+}
