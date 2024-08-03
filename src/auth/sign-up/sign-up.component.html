@@ -6,89 +6,135 @@
   no-swiping="true"
   a11y="false"
 >
+  <swiper-slide class="bg-white swiper-no-swiping">
+    <div class="px-16 py-12">
+      <h4 class="h4 text-center">Sign Up</h4>
+      <p class="text-gray-500 text-sm text-center">
+        Nice to meet you! Enter your details to register.
+      </p>
+      <form
+        class="max-w-screen-lg mt-8"
+        [formGroup]="signUpGroup"
+        (ngSubmit)="handleSignUp()"
+      >
+        <div class="flex flex-col">
+          <div class="input-box mt-2">
+            <h6 class="h6">Email</h6>
+            <input
+              class="w-full"
+              type="text"
+              autocomplete="username"
+              placeholder="john.smith@cougars.csusm.com"
+              formControlName="email"
+              [class.error-on]="email.invalid && email.dirty"
+            />
 
-<swiper-slide class="bg-white swiper-no-swiping">
-  <div class="px-16 py-12">
-    <h4 class="h4 text-center">Sign Up</h4>
-    <p class="text-gray-500 text-sm text-center">Nice to meet you! Enter your details to register.</p>
-    <form
-      class="max-w-screen-lg mt-8"
-      [formGroup]="signUpGroup"
-      (ngSubmit)="handleSignUp()"
-    >
-      <div class="flex flex-col">
-        
-        <div class="input-box mt-2">
-          <h6 class="h6">Email</h6>
-          <input
-            class="w-full"
-            type="text"
-            autocomplete="username"
-            placeholder="john.smith@cougars.csusm.com"
-            formControlName="email"
-            [class.error-on]="email.invalid && email.dirty"
-          />
-   
-          <small class="input-error"
-            *ngIf="(email.invalid && email.value) && (email.dirty || email.touched)">
-            Please type a valid email
-          </small>
+            <small
+              class="input-error"
+              *ngIf="
+                email.invalid && email.value && (email.dirty || email.touched)
+              "
+            >
+              Please type a valid email
+            </small>
+          </div>
+
+          <div class="input-box mt-2">
+            <h6 class="h6">Choose Password</h6>
+            <input
+              class="w-full"
+              type="password"
+              autocomplete="password"
+              placeholder="********"
+              formControlName="password"
+              [class.error-on]="
+                password.invalid && password.dirty && !!password.value
+              "
+            />
+
+            <password-checker
+              class="password-checker"
+              [input]="password.value"
+            ></password-checker>
+
+            <ng-container
+              *ngIf="
+                (password.dirty || password.touched) &&
+                password.value &&
+                password.invalid
+              "
+            >
+              <small
+                class="input-error"
+                *ngIf="
+                  password.hasError('pattern') &&
+                  !password.hasError('passwordMismatch')
+                "
+              >
+                Password does not meet requirements
+              </small>
+              <small
+                class="input-error"
+                *ngIf="
+                  confirmed.value &&
+                  !password.hasError('pattern') &&
+                  password.hasError('passwordMismatch')
+                "
+              >
+                Passwords don't match
+              </small>
+            </ng-container>
+          </div>
+
+          <div class="input-box mt-2">
+            <h6 class="h6">Confirm Password</h6>
+            <input
+              class="w-full"
+              type="password"
+              autocomplete="password"
+              placeholder="********"
+              formControlName="confirmed"
+              [class.error-on]="
+                confirmed.invalid && confirmed.dirty && !!confirmed.value
+              "
+            />
+
+            <password-checker
+              class="password-checker"
+              [input]="confirmed.value"
+            ></password-checker>
+
+            <ng-container
+              *ngIf="
+                (confirmed.dirty || confirmed.touched) &&
+                confirmed.value &&
+                confirmed.invalid
+              "
+            >
+              <small
+                class="input-error"
+                *ngIf="
+                  confirmed.hasError('pattern') &&
+                  !confirmed.hasError('passwordMismatch')
+                "
+              >
+                Password does not meet requirements
+              </small>
+              <small
+                class="input-error"
+                *ngIf="
+                  password.value &&
+                  !confirmed.hasError('pattern') &&
+                  confirmed.hasError('passwordMismatch')
+                "
+              >
+                Passwords don't match
+              </small>
+            </ng-container>
+          </div>
         </div>
-  
-        
-        <div class="input-box mt-2">
-          <h6 class="h6">Choose Password</h6>
-          <input 
-            class="w-full" 
-            type="password" 
-            autocomplete="password"
-            placeholder="********" 
-            formControlName="password" 
-            [class.error-on]="password.invalid && password.dirty && !!password.value"/>
 
-          <password-checker 
-            class="password-checker"
-            [input]="password.value"></password-checker>
-          
-          <ng-container *ngIf="(password.dirty || password.touched) && (password.value && password.invalid)">
-            <small class="input-error"
-              *ngIf="password.hasError('pattern') && !password.hasError('passwordMismatch')">
-              Password does not meet requirements
-            </small>
-            <small class="input-error"
-              *ngIf="confirmed.value && !password.hasError('pattern') && password.hasError('passwordMismatch')">
-              Passwords don't match
-            </small>
-          </ng-container>
-        </div>
-  
-        
-        <div class="input-box mt-2">
-          <h6 class="h6">Confirm Password</h6>
-          <input class="w-full" 
-            type="password" 
-            autocomplete="password"
-            placeholder="********" 
-            formControlName="confirmed" 
-            [class.error-on]="confirmed.invalid && confirmed.dirty && !!confirmed.value"/>
-
-          <password-checker class="password-checker" 
-            [input]="confirmed.value"></password-checker>
-
-          <ng-container *ngIf="(confirmed.dirty || confirmed.touched) && (confirmed.value && confirmed.invalid)">
-            <small class="input-error"
-              *ngIf="confirmed.hasError('pattern') && !confirmed.hasError('passwordMismatch')">
-              Password does not meet requirements
-            </small>
-            <small class="input-error"
-              *ngIf="password.value && !confirmed.hasError('pattern') && confirmed.hasError('passwordMismatch')">
-              Passwords don't match
-            </small>
-          </ng-container>
-        </div>
-      </div>
-  
-      <!-- <div class="inline-flex items-center">
+        <!-- <div class="inline-flex items-center">
         <label class="checkbox relative -ml-2.5 flex cursor-pointer items-center rounded-full p-3">
           <input type="checkbox" class="input" formControlName="agree" />
 
@@ -97,86 +143,106 @@
           </p>
         </label>        
       </div> -->
-  
-      <button
-        class="relative w-full btn-blue-600 mt-4"
-        type="submit"
-        [disabled]="signUpGroup.invalid"
-      >
-        Sign up
-  
-        <status-spinner
-          *ngIf="createAccountRequest.sent && !createAccountRequest.done"
-        ></status-spinner>
-      </button>
 
-      <div class="block text-sm text-center mt-4">  
-          <span class="text-gray-500">We respect your privacy. By clicking "Create account" you agree to the</span>
+        <button
+          class="relative w-full btn-blue-600 mt-4"
+          type="submit"
+          [disabled]="signUpGroup.invalid"
+        >
+          Sign up
+
+          <status-spinner
+            *ngIf="createAccountRequest.sent && !createAccountRequest.done"
+          ></status-spinner>
+        </button>
+
+        <div class="block text-sm text-center mt-4">
+          <span class="text-gray-500"
+            >We respect your privacy. By clicking "Create account" you agree to
+            the</span
+          >
           <a href="#" class="transition-colors">&nbsp;Terms and Conditions.</a>
-      </div>
-      
-      <div class="text-center mt-6">
-        <span class="text-sm text-gray-500">Already have an account?</span>
-        <a class="a text-sm" [routerLink]="['/sign-in']"> Sign in </a>
-      </div>
-  
-    </form>
-  </div>
-</swiper-slide>
+        </div>
 
+        <div class="text-center mt-6">
+          <span class="text-sm text-gray-500">Already have an account?</span>
+          <a class="a text-sm" [routerLink]="['/sign-in']"> Sign in </a>
+        </div>
+      </form>
+    </div>
+  </swiper-slide>
 
-
-<swiper-slide class="bg-white swiper-no-swiping">
-  <div class="px-16 py-12">
-    <svg class="w-12 h-12 p-3 mx-auto my-8 border border-gray-300 rounded-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M23 6V18C23 19.6523 21.6523 21 20 21H4C2.34772 21 1 19.6523 1 18V6C1 4.34315 2.34315 3 4 3H20C21.6569 3 23 4.34315 23 6ZM3.10658 5.55395C3.27196 5.22692 3.61204 5 4 5H20C20.388 5 20.728 5.22692 20.8934 5.55395L12 11.7793L3.10658 5.55395ZM3 7.92066L10.8531 13.4178C11.5417 13.8999 12.4583 13.8999 13.1469 13.4178L21 7.92066V18C21 18.5477 20.5477 19 20 19H4C3.45228 19 3 18.5477 3 18V7.92066Z" fill="#000000"/>
-    </svg>
-
-    <h4 class="h4 text-center">Get Your Code</h4>
-    <p class="text-gray-500 text-sm text-center">
-      Please enter the <strong class="text-gray-600">6 digit</strong> code that send to your email.
-      <ng-template *ngIf="expiresInSeconds"
-        >Code will expore in <strong>{{ expiresInSeconds }}s</strong></ng-template
+  <swiper-slide class="bg-white swiper-no-swiping">
+    <div class="px-16 py-12">
+      <svg
+        class="w-12 h-12 p-3 mx-auto my-8 border border-gray-300 rounded-md"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
       >
-    </p>
-
-
-    <form
-      class="mt-8"
-      [formGroup]="verifyRegisterCodeGroup"
-      (ngSubmit)="handleVerifyRegisterCode()"
-    >
-
-      <div class="relative mb-4">
-        <input
-          class="w-full text-lg tracking-widest-5xl !font-bold"
-          type="text"
-          formControlName="token"
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M23 6V18C23 19.6523 21.6523 21 20 21H4C2.34772 21 1 19.6523 1 18V6C1 4.34315 2.34315 3 4 3H20C21.6569 3 23 4.34315 23 6ZM3.10658 5.55395C3.27196 5.22692 3.61204 5 4 5H20C20.388 5 20.728 5.22692 20.8934 5.55395L12 11.7793L3.10658 5.55395ZM3 7.92066L10.8531 13.4178C11.5417 13.8999 12.4583 13.8999 13.1469 13.4178L21 7.92066V18C21 18.5477 20.5477 19 20 19H4C3.45228 19 3 18.5477 3 18V7.92066Z"
+          fill="#000000"
         />
-      </div>
+      </svg>
 
-      <button
-        class="w-full btn-blue-600"
-        type="submit"
-        [disabled]="!expiresInSeconds || verifyRegisterCodeGroup.invalid"
+      <h4 class="h4 text-center">Get Your Code</h4>
+      <p class="text-gray-500 text-sm text-center">
+        Please enter the <strong class="text-gray-600">6 digit</strong> code
+        that send to your email.
+        <ng-template *ngIf="expiresInSeconds"
+          >Code will expore in
+          <strong>{{ expiresInSeconds }}s</strong></ng-template
+        >
+      </p>
+
+      <form
+        class="mt-8"
+        [formGroup]="verifyRegisterCodeGroup"
+        (ngSubmit)="handleVerifyRegisterCode()"
       >
-        Verify & Continue
+        <div class="relative mb-4">
+          <input
+            class="w-full text-lg tracking-widest-5xl !font-bold"
+            type="text"
+            formControlName="token"
+          />
+        </div>
 
-        <status-spinner
-          *ngIf="resendCreateAccountRequest.sent && !resendCreateAccountRequest.done"
-        ></status-spinner>
-      </button>
+        <button
+          class="w-full btn-blue-600"
+          type="submit"
+          [disabled]="!expiresInSeconds || verifyRegisterCodeGroup.invalid"
+        >
+          Verify & Continue
 
-      <div class="text-center mt-6">
-        <span class="text-sm text-gray-500">Didn't receieve a code?</span>
-        <a class="a text-sm" tabindex="0" (click)="handleResendVerifyRegisterCode()"> Resend </a>
-      </div>
+          <status-spinner
+            *ngIf="
+              resendCreateAccountRequest.sent &&
+              !resendCreateAccountRequest.done
+            "
+          ></status-spinner>
+        </button>
 
+        <div class="text-center mt-6">
+          <span class="text-sm text-gray-500">Didn't receieve a code?</span>
+          <a
+            class="a text-sm"
+            tabindex="0"
+            (click)="handleResendVerifyRegisterCode()"
+          >
+            Resend
+          </a>
+        </div>
 
-      <div class="text-center mt-6">
-        <a class="a mini muted" [routerLink]="['/sign-in']">&leftarrow; Back to Login</a>
-      </div>   
-    </form>
-  </div>
+        <div class="text-center mt-6">
+          <a class="a mini muted" [routerLink]="['/sign-in']"
+            >&leftarrow; Back to Login</a
+          >
+        </div>
+      </form>
+    </div>
   </swiper-slide>
 </swiper-container>

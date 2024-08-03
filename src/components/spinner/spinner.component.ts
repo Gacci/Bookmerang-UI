@@ -6,15 +6,19 @@ import { Component, HostBinding, Input } from '@angular/core';
   imports: [],
   styles: [
     `
-    :host{
-      @apply absolute inline-block w-full h-full top-0 left-0;
-    }
-    .bg-semi-black-50 {
-      @apply bg-black bg-opacity-50;
-    }`
+      :host {
+        @apply absolute inline-block w-full h-full top-0 left-0;
+      }
+      .bg-semi-black-50 {
+        @apply bg-black bg-opacity-50;
+      }
+    `,
   ],
   template: `
-    <div role="status" class="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2">
+    <div
+      role="status"
+      class="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2"
+    >
       <svg
         aria-hidden="true"
         class="w-8 h-8 text-gray-200 animate-spin fill-blue-600"
@@ -43,8 +47,8 @@ export class SpinnerComponent {
     this._backdrop = color;
   }
 
-  @HostBinding('class') 
-    get className(): string {
-      return this._backdrop;
-    }
+  @HostBinding('class')
+  get className(): string {
+    return this._backdrop;
+  }
 }

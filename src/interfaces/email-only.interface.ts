@@ -1,3 +1,3 @@
 export interface EmailOnly {
-    email: string | null;
+  email: string | null;
 }

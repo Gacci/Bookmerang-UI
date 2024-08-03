@@ -7,7 +7,6 @@ import { Credentials } from '../interfaces/credentials.interface';
 import { EmailOnly } from '../interfaces/email-only.interface';
 import { Registration } from '../interfaces/registration.interface';
 
-
 const JWT_TOKENS = '__tcn';
 
 @Injectable({
@@ -23,9 +22,7 @@ export class AuthService {
   login(payload: Credentials) {
     return this.http
       .post('http://127.0.0.1:3000/auth/login', payload)
-      .pipe(
-        tap((response: Data) => this.storeJwtTokens(response))
-      );
+      .pipe(tap((response: Data) => this.storeJwtTokens(response)));
   }
 
   logout() {
@@ -33,33 +30,50 @@ export class AuthService {
   }
 
   revokeTokens(payload: Data) {
-    return this.http.post('http://127.0.0.1:3000/auth/tokens/revoke', payload)
-      .pipe(
-        tap(() => this.removeJwtTokens())
-      );
+    return this.http
+      .post('http://127.0.0.1:3000/auth/tokens/revoke', payload)
+      .pipe(tap(() => this.removeJwtTokens()));
   }
 
   resendPasswordRecoveryCode(payload: Data) {
-    return this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/resend-request', payload);
+    return this.http.post(
+      'http://127.0.0.1:3000/auth/passwords/recovery/resend-request',
+      payload,
+    );
   }
 
   startPasswordRecovery(payload: EmailOnly) {
-    return this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/start', payload);
+    return this.http.post(
+      'http://127.0.0.1:3000/auth/passwords/recovery/start',
+      payload,
+    );
   }
 
   requestPasswordChange(payload: Data) {
-    return this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/reset', payload);
+    return this.http.post(
+      'http://127.0.0.1:3000/auth/passwords/recovery/reset',
+      payload,
+    );
   }
 
   verifyPasswordRecoveryCode(payload: Data) {
-    return this.http.post('http://127.0.0.1:3000/auth/passwords/recovery/verify', payload);
+    return this.http.post(
+      'http://127.0.0.1:3000/auth/passwords/recovery/verify',
+      payload,
+    );
   }
 
   resendCreateAccountCode(payload: Data) {
-    return this.http.post('http://127.0.0.1:3000/auth/accounts/verify/resend', payload);
+    return this.http.post(
+      'http://127.0.0.1:3000/auth/accounts/verify/resend',
+      payload,
+    );
   }
   verifyCreateAccountCode(payload: Data) {
-    return this.http.post('http://127.0.0.1:3000/auth/accounts/verify', payload);
+    return this.http.post(
+      'http://127.0.0.1:3000/auth/accounts/verify',
+      payload,
+    );
   }
 
   getJwtTokens() {

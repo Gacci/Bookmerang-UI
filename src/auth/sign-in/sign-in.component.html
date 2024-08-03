@@ -1,38 +1,42 @@
 <!-- src/app/sign-in/sign-in.component.html -->
-<div
-  class="container px-16 py-12"
->
+<div class="container px-16 py-12">
   <h4 class="h4 text-center">Sign In</h4>
-  <p class="text-gray-500 text-sm text-center">Welcome back! Enter your details to sign in.</p>
+  <p class="text-gray-500 text-sm text-center">
+    Welcome back! Enter your details to sign in.
+  </p>
   <form
     class="max-w-screen-lg mt-8"
     [formGroup]="signInGroup"
     (ngSubmit)="handleSignIn()"
   >
-
     <div class="input-box mt-2">
       <h6 class="h6">Email</h6>
       <input
         class="w-full"
         type="text"
-        autocomplete="username"
+        autocomplete="email"
         placeholder="jonh.smith@cougars.csusm.edu"
         formControlName="email"
         [class.error-on]="email.invalid && email.dirty && email.value"
       />
-      <small class="input-error"
-        *ngIf="(email.invalid && email.value) && (email.dirty || email.touched)">
+      <small
+        class="input-error"
+        *ngIf="email.invalid && email.value && (email.dirty || email.touched)"
+      >
         Please type a valid email
       </small>
     </div>
 
-    
     <div class="input-box pb-6 mt-2">
       <h6 class="h6">Password</h6>
-      <input class="w-full" type="password" placeholder="********" formControlName="password" />
+      <input
+        class="w-full"
+        type="password"
+        placeholder="********"
+        formControlName="password"
+      />
       <!-- <password-strength class="mt-2" [password]="password.value"></password-strength> -->
     </div>
-
 
     <!-- <div class="flex items-center justify-between">
       <label class="checkbox relative -ml-2.5 flex cursor-pointer items-center rounded-full p-3">
@@ -59,10 +63,12 @@
     <div class="text-center m-6">
       <span class="text-sm text-gray-500">Don't have an account?</span>
       <a class="a text-sm" [routerLink]="['/sign-up']"> Sign up </a>
-    </div>   
+    </div>
 
     <div class="text-center">
-      <a class="a text-sm" [routerLink]="['/password/recovery/start']"> Forgot password? </a>
+      <a class="a text-sm" [routerLink]="['/password/recovery/start']">
+        Forgot password?
+      </a>
     </div>
   </form>
 </div>

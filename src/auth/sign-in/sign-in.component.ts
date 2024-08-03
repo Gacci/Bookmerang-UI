@@ -12,12 +12,14 @@ import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { signInGroup } from '../form-groups';
 import { PasswordStrengthComponent } from '../../components/password-strength/password-strength.component';
 
-
-
-
-
 @Component({
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, PasswordStrengthComponent, SpinnerComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    PasswordStrengthComponent,
+    SpinnerComponent,
+  ],
   selector: 'sign-in',
   standalone: true,
   templateUrl: './sign-in.component.html',
@@ -28,10 +30,12 @@ export class SignInComponent {
 
   protected signInGroup = signInGroup();
 
-  constructor(private readonly auth: AuthService, 
-              private readonly router: Router) {
-                console.log(this.password.value)
-              }
+  constructor(
+    private readonly auth: AuthService,
+    private readonly router: Router,
+  ) {
+    console.log(this.password.value);
+  }
 
   handleSignIn() {
     this.request = { sent: true };

@@ -1,3 +1,3 @@
 export interface CodeOnly {
-    token: string | null;
+  token: string | null;
 }

@@ -20,7 +20,6 @@ import { EmailOnly } from '../../interfaces/email-only.interface';
 import { HttpRequest } from '../../interfaces/http-request.interface';
 import { Registration } from '../../interfaces/registration.interface';
 
-
 import {
   changePasswordGroup,
   startPasswordRecoveryGroup,
@@ -31,16 +30,19 @@ import { Swiper, SwiperOptions } from 'swiper/types';
 import { SwiperContainer } from 'swiper/element';
 import { RouterModule } from '@angular/router';
 
-
-
-
 @Component({
   selector: 'password-recovery-start',
   standalone: true,
   templateUrl: './password-recovery-start.component.html',
   styleUrl: './password-recovery-start.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [CommonModule, PasswordCheckerComponent, ReactiveFormsModule, RouterModule, SpinnerComponent],
+  imports: [
+    CommonModule,
+    PasswordCheckerComponent,
+    ReactiveFormsModule,
+    RouterModule,
+    SpinnerComponent,
+  ],
 })
 export class PasswordRecoveryStartComponent implements AfterViewInit {
   @ViewChild('swiper', { read: ElementRef<SwiperContainer> })
@@ -67,7 +69,9 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   protected changePasswordGroup = changePasswordGroup();
 
   constructor(private readonly auth: AuthService) {
-    this.changePasswordGroup.addValidators(passwordMatchValidator('password', 'confirmed'));
+    this.changePasswordGroup.addValidators(
+      passwordMatchValidator('password', 'confirmed'),
+    );
   }
 
   ngAfterViewInit(): void {
@@ -90,39 +94,46 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
 
   handleStartRecovery() {
     this.resetPasswordRequest = { sent: true };
-    this.auth.startPasswordRecovery(<EmailOnly>this.startPasswordRecoveryGroup.value).subscribe({
-      next: (response) => {
-        this.swiper.slideNext();
-        this.startExpiresInCountdown();
-      },
-      error: () => {
-        this.resetPasswordRequest.done = true;
-      },
-      complete: () => {
-        this.resetPasswordRequest.done = true;
-      },
-    });
+    this.auth
+      .startPasswordRecovery(<EmailOnly>this.startPasswordRecoveryGroup.value)
+      .subscribe({
+        next: (response) => {
+          this.startExpiresInCountdown();
+          this.swiper.slideNext();
+          console.log(this.expiresInSeconds);
+        },
+        error: () => {
+          this.resetPasswordRequest.done = true;
+        },
+        complete: () => {
+          this.resetPasswordRequest.done = true;
+        },
+      });
   }
 
   handleResendRecoveryCode() {
     this.resendPasswordRequest = { sent: true };
-    this.auth.resendPasswordRecoveryCode(<EmailOnly>this.startPasswordRecoveryGroup.value).subscribe({
-      next: (response) => {
-        this.startExpiresInCountdown();
-      },
-      error: (e) => {
-        this.resendPasswordRequest.done = true;
-      },
-      complete: () => {
-        this.resendPasswordRequest.done = true;
-      },
-    });
+    this.auth
+      .resendPasswordRecoveryCode(
+        <EmailOnly>this.startPasswordRecoveryGroup.value,
+      )
+      .subscribe({
+        next: (response) => {
+          this.startExpiresInCountdown();
+        },
+        error: (e) => {
+          this.resendPasswordRequest.done = true;
+        },
+        complete: () => {
+          this.resendPasswordRequest.done = true;
+        },
+      });
   }
 
   handleVerifyRequestCode() {
     this.verifyCodeRequest = { sent: true };
     this.auth
-      .verifyPasswordRecoveryCode(<EmailOnly & CodeOnly> {
+      .verifyPasswordRecoveryCode(<EmailOnly & CodeOnly>{
         ...this.startPasswordRecoveryGroup.value,
         ...this.verifyRequestTokenGroup.value,
       })
@@ -153,10 +164,10 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
       })
       .subscribe({
         next: (response) => {
-          this.disableGroupControls(this.changePasswordGroup)
+          this.disableGroupControls(this.changePasswordGroup);
           this.disableGroupControls(this.startPasswordRecoveryGroup);
           this.disableGroupControls(this.verifyRequestTokenGroup);
-          // this.swiper.slideNext();
+          this.swiper.slideNext();
         },
         error: () => {
           // this.verifyCodeRequest.done = true;
@@ -167,16 +178,15 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
       });
   }
 
-
   private disableGroupControls(group: FormGroup) {
     Object.keys(group.controls)
-      .map(key => group.controls[key])
-      .forEach(ctrl => {
+      .map((key) => group.controls[key])
+      .forEach((ctrl) => {
         ctrl.disable();
         ctrl.markAsPristine();
         ctrl.markAsUntouched();
         ctrl.reset();
-      })
+      });
   }
 
   get email() {
