@@ -25,14 +25,14 @@ h6 {
   @apply block mt-1 font-sans text-base antialiased font-normal leading-relaxed text-gray-700
 }
 
-a, p, small, span {
+a, p, small, span, .a-like {
   @apply font-extralight ;
 }
-a {
-  @apply text-blue-600 cursor-pointer;
+a, .a-like {
+  @apply w-auto h-auto text-blue-600 cursor-pointer px-1 py-0;
 
   &:hover {
-      @apply underline;
+      @apply underline shadow-none;
   }
 
   &:focus {

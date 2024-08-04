@@ -33,15 +33,12 @@ export class SignInComponent {
   constructor(
     private readonly auth: AuthService,
     private readonly router: Router,
-  ) {
-    console.log(this.password.value);
-  }
+  ) {}
 
   handleSignIn() {
     this.request = { sent: true };
     this.auth.login(<Credentials>this.signInGroup.value).subscribe({
-      next: (response) => {
-        console.log(response);
+      next: () => {
         this.router.navigateByUrl('/');
       },
       error: () => {

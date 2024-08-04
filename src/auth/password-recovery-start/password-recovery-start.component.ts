@@ -51,7 +51,7 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   private swiper!: Swiper;
 
   config: SwiperOptions = {
-    autoHeight: true
+    autoHeight: true,
   };
 
   protected resetPasswordRequest: HttpRequest = {};
@@ -60,7 +60,7 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   protected changePasswordRequest: HttpRequest = {};
 
   protected expiresInSeconds: number = 0;
-  protected timerExpiredId: any;
+  protected timerExpiredId!: ReturnType<typeof setTimeout>;
 
   protected startPasswordRecoveryGroup = startPasswordRecoveryGroup();
 
@@ -75,7 +75,7 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.swiper = <any>this.swiperRefElem.nativeElement.swiper;
+    this.swiper = <Swiper>(<unknown>this.swiperRefElem.nativeElement.swiper);
     this.swiper.update();
   }
 
@@ -98,10 +98,9 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
     this.auth
       .startPasswordRecovery(<EmailOnly>this.startPasswordRecoveryGroup.value)
       .subscribe({
-        next: (response) => {
+        next: () => {
           this.startExpiresInCountdown();
           this.swiper.slideNext();
-          console.log(this.expiresInSeconds);
         },
         error: () => {
           this.resetPasswordRequest.done = true;
@@ -119,10 +118,10 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
         <EmailOnly>this.startPasswordRecoveryGroup.value,
       )
       .subscribe({
-        next: (response) => {
+        next: () => {
           this.startExpiresInCountdown();
         },
-        error: (e) => {
+        error: () => {
           this.resendPasswordRequest.done = true;
         },
         complete: () => {
@@ -164,7 +163,7 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
         ...this.changePasswordGroup.value,
       })
       .subscribe({
-        next: (response) => {
+        next: () => {
           this.disableGroupControls(this.changePasswordGroup);
           this.disableGroupControls(this.startPasswordRecoveryGroup);
           this.disableGroupControls(this.verifyRequestTokenGroup);
@@ -200,5 +199,17 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
 
   get confirmed() {
     return this.changePasswordGroup.controls.confirmed;
+  }
+
+  get maskedEmail() {
+    const value = <string>(this.email.value ?? '');
+    if ( !value ) {
+      return undefined;
+    }
+
+    const pos = value.indexOf('@');
+    return value.split('')
+      .map((chr, index) => index >= 3 && index < (pos - 2) ? '*' : chr )
+      .join('');
   }
 }

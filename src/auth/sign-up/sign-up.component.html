@@ -52,10 +52,10 @@
               "
             />
 
-            <password-checker
+            <!-- <password-checker
               class="password-checker"
               [input]="password.value"
-            ></password-checker>
+            ></password-checker> -->
 
             <ng-container
               *ngIf="
@@ -99,10 +99,10 @@
               "
             />
 
-            <password-checker
+            <!-- <password-checker
               class="password-checker"
               [input]="confirmed.value"
-            ></password-checker>
+            ></password-checker> -->
 
             <ng-container
               *ngIf="
@@ -228,13 +228,13 @@
 
         <div class="text-center mt-6">
           <span class="text-sm text-gray-500">Didn't receieve a code?</span>
-          <a
-            class="a text-sm"
-            tabindex="0"
+          <button
+            class="a-like text-sm"
+            type="button"
             (click)="handleResendVerifyRegisterCode()"
           >
             Resend
-          </a>
+          </button>
         </div>
 
         <div class="text-center mt-6">

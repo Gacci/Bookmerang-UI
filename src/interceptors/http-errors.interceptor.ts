@@ -9,12 +9,12 @@ import {
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
-import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
+import { HotToastService } from '@ngneat/hot-toast';
 
 // protected toastElemRef!: CreateHotToastRef<any>;
 
 export const httpErrorsInterceptor: HttpInterceptorFn = (
-  req: HttpRequest<any>,
+  req: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ) => {
   // const router = inject(Router);
@@ -22,7 +22,10 @@ export const httpErrorsInterceptor: HttpInterceptorFn = (
   return next(req).pipe(
     catchError(({ error: response }: HttpErrorResponse) => {
       if (!(response.error instanceof ErrorEvent)) {
-        console.log(alerts.error(response.message));
+        alerts.error(response.message, {
+          className: 'text-xs',
+          position: 'bottom-center',
+        });
       }
 
       return throwError(() => new Error(response.message));

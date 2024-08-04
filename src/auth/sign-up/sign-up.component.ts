@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Data, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import Swiper from 'swiper';
 import { SwiperContainer } from 'swiper/element';
@@ -56,7 +56,7 @@ export class SignUpComponent {
   protected verifyRegisterCodeGroup = verifyRegisterCodeGroup();
 
   protected expiresInSeconds: number = 0;
-  protected timerExpiredId: any;
+  protected timerExpiredId!: ReturnType<typeof setTimeout>;
 
   constructor(private readonly auth: AuthService) {
     this.signUpGroup.addValidators(
@@ -81,10 +81,10 @@ export class SignUpComponent {
   handleSignUp() {
     this.createAccountRequest = { sent: true };
     this.auth.register(<Registration>this.signUpGroup.value).subscribe({
-      next: (response) => {
+      next: () => {
         this.startExpiresInCountdown();
       },
-      error: (res) => {
+      error: () => {
         this.createAccountRequest.done = true;
       },
       complete: () => {
@@ -97,8 +97,7 @@ export class SignUpComponent {
     this.auth
       .resendCreateAccountCode(<EmailOnly>{ email: this.email.value })
       .subscribe({
-        next: (response) => {
-          console.log(response);
+        next: () => {
           this.startExpiresInCountdown();
         },
         error: () => {

@@ -9,7 +9,7 @@ import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 export const jwtAuthInterceptor: HttpInterceptorFn = (
-  request: HttpRequest<any>,
+  request: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ) => {
   const service = inject(AuthService);
