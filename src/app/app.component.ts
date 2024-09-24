@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MarketingComponent } from '../components/marketing/marketing.component';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
     // BrowserModule,
     CommonModule,
     // ReactiveFormsModule,
+    MarketingComponent,
     RouterOutlet,
   ],
   providers: [
