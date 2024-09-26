@@ -1,39 +1,74 @@
 .post-card {
-    @apply block mx-auto my-8 shadow-md w-96;
+    @apply relative block w-128 mx-auto my-8 shadow-md bg-white rounded-md;
 }
 .post-card-header {
     @apply px-4 py-2;
 }
 .post-card-user-pic{
-    @apply w-10 h-10 rounded-full;
+    @apply w-11 h-11 rounded-full;
 }
 .post-card-user-name {
-    @apply font-bold text-gray-700;
+    @apply font-bold text-gray-700 text-ellipsis whitespace-nowrap overflow-hidden;
 }
 .post-card-main {
-    @apply flex items-center space-x-2 justify-between;
+    @apply flex items-center justify-between space-x-2;
 }
 .post-card-titling *,
 .post-card-info * {
     @apply block
 }
+.post-card-info {
+    @apply w-28 text-right;
+}
 .post-card-titling {
-    @apply grow;
+    @apply grow pr-4;
 }
 .post-card-price{
     @apply text-green-600 font-bold;
 }
+.post-card-type {
+    @apply whitespace-nowrap;
+}
+
 
 .post-card-body {
-    @apply bg-gray-100 overflow-hidden;
+    @apply border-y overflow-hidden;
 }
-.post-card-cover{
-    @apply w-60 mx-auto my-10;
+
+
+.post-card-book{
+    @apply w-64 mx-auto my-10;
+
+    .post-card-book-title {
+        @apply block leading-5 font-medium text-gray-700;
+    }
+    .post-card-book-isbn {
+        @apply block my-1;
+    }
+}
+
+
+.post-card-book-cover-box {
+    @apply relative z-0;
+
+    .post-card-book-cover {
+        @apply absolute top-0 left-0 w-full h-full;
+    }
+    &::before {
+        @apply content-space block pt-[120%];
+    }
 }
 
 .post-card-footer{
     @apply px-8 py-4;
 }
 .post-card-desc {
-    @apply text-xs text-gray-600;
+    @apply text-gray-500;
+}
+
+
+
+
+.feed {
+    @apply w-screen h-screen overflow-scroll;
 }

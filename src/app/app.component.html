@@ -55,62 +55,60 @@
   </p>
 </marketing-block> -->
 
+<app-navigation (onEnterKeyUp)="onSearch($event)"></app-navigation>
 
-<div class="post-card">
-  <div class="post-card-header">
-    <div class="post-card-main">
-      <img class="post-card-user-pic" src="https://pictures.abebooks.com/isbn/9780745647791-us.jpg">
-      <div class="post-card-titling">
-        <span class="post-card-user-name">justo.jonathan&#64;gmail.com</span>
-        <span>Sep 24, 2024</span>
-      </div>
-      <div class="post-card-info">
-        <span class="post-card-price">$94.99</span>
-        <span class="post-card-type">Like New</span>
-      </div>
-    </div>
-  </div>
-  <div class="post-card-body">
-    <img class="post-card-cover" src="https://pictures.abebooks.com/isbn/9781285774770-us.jpg">
-  </div>
-  <div class="post-card-footer">
-    <div class="post-card-desc">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
-      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in 
-      voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat 
-      non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </div>
+<div class="fixed top-0 right-0 bottom-0 left-0 bg-gray-50 bg-opacity-50 z-10" *ngIf="isLoadingNext">
+  <div role="status" class="absolute top-1/2 left-1/2 -transform-x-1/2 -transform-y-1/2">
+    <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+      <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+  </svg>
+    <span class="sr-only">Loading...</span>
   </div>
 </div>
 
+<div class="feed"
+  infiniteScroll
+  [infiniteScrollUpDistance]="1"
+  [infiniteScrollDistance]="0.5"
+  [infiniteScrollThrottle]="500"
+  [immediateCheck]="true"
+  [infiniteScrollDisabled]="isLoadingNext"
+  [scrollWindow]="false"
+  (scrolled)="onScrollDown()"
+  (scrolledUp)="onScrollUp()">
 
-<div class="post-card">
-  <div class="post-card-header">
-    <div class="post-card-main">
-      <img class="post-card-user-pic" src="https://pictures.abebooks.com/isbn/9780745647791-us.jpg">
-      <div class="post-card-titling">
-        <span class="post-card-user-name">justo.jonathan&#64;gmail.com</span>
-        <span>Sep 24, 2024</span>
-      </div>
-      <div class="post-card-info">
-        <span class="post-card-price">$94.99</span>
-        <span class="post-card-type">Like New</span>
+  
+  <div class="post-card" *ngFor="let post of posts">
+    <div class="post-card-header">
+      <div class="post-card-main">
+        <img class="post-card-user-pic" src="https://pictures.abebooks.com/isbn/9780745647791-us.jpg">
+        <div class="post-card-titling">
+          <span class="post-card-user-name">{{ post.user.email }}</span>
+          <span class="post-card-date-time">{{ post.postedOn | date:'MMM d, Y HH:mm' }}</span>
+        </div>
+        <div class="post-card-info">
+          <span class="post-card-price">${{ post.price }}</span>
+          <span class="post-card-type">{{ post.state }}</span>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="post-card-body">
-    <img class="post-card-cover" src="https://pictures.abebooks.com/isbn/9780134813813-us.jpg">
-  </div>
-  <div class="post-card-footer">
-    <div class="post-card-desc">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
-      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in 
-      voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat 
-      non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    <div class="post-card-body">
+      <div class="post-card-book">
+        <div class="post-card-book-cover-box ratio-2/3">
+          <img class="post-card-book-cover" [src]="post.book.thumbnail">
+        </div>
+        <span class="post-card-book-title">{{ post.book.title }} {{ post.book.subtitle }}</span>
+        <span class="post-card-book-isbn">{{ post.book.isbn13 }}</span>
+      </div>
+    </div>
+    <div class="post-card-footer">
+      <p class="post-card-desc" *ngIf="post.notes">
+        {{ post.notes }}
+      </p>
     </div>
   </div>
+  
 </div>
 
 <router-outlet />

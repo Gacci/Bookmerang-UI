@@ -17,7 +17,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    function({ addUtilities }) {
+    function({ addUtilities, addComponents }) {
       const newUtilities = {
         '.content-space': {
           content: "'\\0020'",
@@ -39,10 +39,16 @@ module.exports = {
         },
         '.w-128': {
           'width': "32rem"
+        },
+        '.pt-1\\/2': {
+          'padding-top': '50%'
         }
       }
 
       addUtilities(newUtilities, ['before', 'after'])
+      addComponents({
+
+      });
     }
   ],
 }
