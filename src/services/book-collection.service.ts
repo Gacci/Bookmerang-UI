@@ -6,13 +6,13 @@ import { Data } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
-export class BookPostOfferService {
+export class BookCollectionService {
 
   constructor(private http: HttpClient) { }
 
   search(params: Data) {
-    console.log('BookPostOfferService', params);
+    console.log('BookService', params);
 
-    return this.http.get('http://127.0.0.1:3000/books/markets/search', { params })
+    return this.http.get('http://127.0.0.1:3000/books/collections/search', { params })
   }
 }

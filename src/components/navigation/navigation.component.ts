@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+import * as ISBN from 'isbn3';
+
+type SearchEvent = {
+  type: 'isbn' | 'keyword',
+  value: string,
+};
 
 @Component({
   selector: 'app-navigation',
@@ -12,14 +19,29 @@ import { BrowserModule } from '@angular/platform-browser';
   styleUrl: './navigation.component.scss'
 })
 export class NavigationComponent {
-  @Output()
-    protected onEnterKeyUp: EventEmitter<Event> = new EventEmitter<Event>();
-
-  constructor() {
+  constructor(private router: Router) {
     console.log('NavigationComponent');
   }
 
   handleEnterKeyUp(e: Event) {
-    console.log(e);
+    const input = <HTMLInputElement>e.target;
+    const value = input.value
+      ?.replace(/^\s+|\s+$/, '');
+    
+    if ( !value ) {
+      return;
+    }
+
+    const json = value.length === 10 
+      || value.length === 13 
+      ? ISBN.parse(value) 
+      : undefined;
+
+
+      
+    if ( json?.isValid ) {
+      console.log(json);
+      this.router.navigate(['books', 'markets', <string>json.isbn13]);
+    }
   }
 }

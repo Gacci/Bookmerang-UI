@@ -60,27 +60,29 @@ label {
 
 
 
-button {
+button.btn {
     @apply h-12 font-normal px-4 rounded-md transition-all;
+
+    button.btn-blue-600 {
+      @apply bg-blue-600 text-white;
+    }
+    button.flat {
+      @apply bg-gray-100 text-gray-600;
+    }
+    button.flat:focus {
+      @apply outline-2 outline-solid outline-offset-0 outline-blue-100;
+    }
+    button:hover {
+      @apply shadow-lg shadow-gray-900/20;
+    }
+    button:active {
+      @apply opacity-[0.85] shadow-none;
+    }
+    button:disabled {
+      @apply pointer-events-none opacity-50 shadow-none;
+    }
 }
-button.btn-blue-600 {
-  @apply bg-blue-600 text-white;
-}
-button.flat {
-  @apply bg-gray-100 text-gray-600;
-}
-button.flat:focus {
-  @apply outline-2 outline-solid outline-offset-0 outline-blue-100;
-}
-button:hover {
-  @apply shadow-lg shadow-gray-900/20;
-}
-button:active {
-  @apply opacity-[0.85] shadow-none;
-}
-button:disabled {
-  @apply pointer-events-none opacity-50 shadow-none;
-}
+
 
 
 

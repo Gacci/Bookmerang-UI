@@ -1,0 +1,19 @@
+<app-navigation></app-navigation>
+
+<loading-overlay *ngIf="isLoadingNext"></loading-overlay>
+<div class="feed"
+  infiniteScroll
+  [infiniteScrollUpDistance]="1"
+  [infiniteScrollDistance]="0.5"
+  [infiniteScrollThrottle]="500"
+  [immediateCheck]="true"
+  [infiniteScrollDisabled]="isLoadingNext"
+  [scrollWindow]="false"
+  (scrolled)="onScrollDown()"
+  (scrolledUp)="onScrollUp()">
+
+  
+  <book-post-card *ngFor="let post of data" 
+    [post]="post"></book-post-card>
+  
+</div>
