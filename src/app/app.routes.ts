@@ -5,13 +5,13 @@ import { PasswordRecoveryStartComponent } from '../auth/password-recovery-start/
 import { SignInComponent } from '../auth/sign-in/sign-in.component';
 import { SignUpComponent } from '../auth/sign-up/sign-up.component';
 
-import { BookMarketsComponent } from './book-markets/book-markets.component';
 import { HomeComponent } from '../home/home.component';
-import { InventoryComponent } from '../components/inventory/inventory.component';
-// import { BooksComponent } from './books/books.component';
+import { BooksCollectionsComponent } from '../books-collections/books-collections.component';
+import { BooksInventoriesComponent } from '../books-inventories/books-inventories.component';
+import { BooksMarketsComponent } from '../books-markets/books-markets.component';
 
 import { BookPostResolver } from '../resolvers/book-post-resolver.service';
-
+import { BooksCollectionResolver } from '../resolvers/books-collection-resolver.service';
 
 export const routes: Routes = [
   {
@@ -30,34 +30,35 @@ export const routes: Routes = [
     component: HomeComponent,
     path: 'home',
     resolve: {
-      posts: BookPostResolver
-    }
+      posts: BookPostResolver,
+    },
   },
-  // {
-  //   component: BooksComponent,
-  //   path: 'books/collections/:userId',
-  //   resolve: {
-  //     posts: BookPostResolver
-  //   }
-  // },
   {
-    component: InventoryComponent,
-    path: 'books/inventory/:userId',
+    component: BooksCollectionsComponent,
+    path: 'books/collections',
     resolve: {
-      posts: BookPostResolver
-    }
+      books: BooksCollectionResolver,
+    },
+    runGuardsAndResolvers: 'always',
   },
   {
-    component: BookMarketsComponent,
+    component: BooksInventoriesComponent,
+    path: 'books/inventories/:userId',
+    resolve: {
+      posts: BookPostResolver,
+    },
+  },
+  {
+    component: BooksMarketsComponent,
     path: 'books/markets/:isbn13',
     // runGuardsAndResolvers: 'always'
     resolve: {
-      posts: BookPostResolver
-    }
+      posts: BookPostResolver,
+    },
   },
   {
     path: '**',
     pathMatch: 'full',
-    redirectTo: 'home'
+    redirectTo: 'home',
   },
 ];

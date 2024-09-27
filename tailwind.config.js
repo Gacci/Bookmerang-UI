@@ -19,13 +19,13 @@ module.exports = {
   plugins: [
     function({ addUtilities, addComponents }) {
       const newUtilities = {
-        '.content-space': {
+        '.content-space::before': {
           content: "'\\0020'",
         },
-        '.content-check': {
+        '.content-check::before': {
           content: "'\\2713'"
         },
-        '.content-error': {
+        '.content-error::before': {
           content: "'\\2715'"
         },
         '.outline-solid': {
@@ -42,6 +42,11 @@ module.exports = {
         },
         '.pt-1\\/2': {
           'padding-top': '50%'
+        },
+        '.aspect-2\\/3::before': {
+          'content': "'\\0020'",
+          'display': "block",
+          'padding-top': "120%"
         }
       }
 

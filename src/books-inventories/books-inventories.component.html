@@ -2,8 +2,6 @@
 
 <loading-overlay *ngIf="isLoadingNext"></loading-overlay>
 
-
-
 <!-- <form class="max-w-md mx-auto">   
     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
     <div class="relative">
@@ -17,8 +15,8 @@
     </div>
 </form> -->
 
-
-<div class="inventory"
+<div
+  class="inventory"
   infiniteScroll
   [infiniteScrollUpDistance]="1"
   [infiniteScrollDistance]="0.5"
@@ -27,10 +25,7 @@
   [infiniteScrollDisabled]="isLoadingNext"
   [scrollWindow]="false"
   (scrolled)="onScrollDown()"
-  (scrolledUp)="onScrollUp()">
-
-  
-  <book-post-card *ngFor="let post of data" 
-    [post]="post"></book-post-card>
-  
+  (scrolledUp)="onScrollUp()"
+>
+  <book-post-card *ngFor="let post of data" [post]="post"></book-post-card>
 </div>

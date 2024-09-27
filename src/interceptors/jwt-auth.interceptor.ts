@@ -18,7 +18,8 @@ export const jwtAuthInterceptor: HttpInterceptorFn = (
   if (jwtAuthToken) {
     request = request.clone({
       setHeaders: {
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnN0aXR1dGlvbnMiOlsxODQwXSwiZW1haWwiOiJqdXN0by5qb25hdGhhbkBnbWFpbC5jb20iLCJpYXQiOjE3MjcxNDMzNzcsImlzcyI6Imh0dHA6Ly9ib29rbWVyYW5nLmNvbSIsImp0aSI6IjZFQjJFNzg0RDFCNkEzOURCNTUyOEFFNDAyMEFGNDY5Iiwicm9sZXMiOltdLCJzdWIiOjEsImV4cCI6MTcyNzQwMjU3N30.bm8c6qveWxiweglmtQuVBAUyh1H3WwmQwXVJX42Obpk'
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnN0aXR1dGlvbnMiOlsxODQwXSwiZW1haWwiOiJqdXN0by5qb25hdGhhbkBnbWFpbC5jb20iLCJpYXQiOjE3Mjc0MDMzMzEsImlzcyI6Imh0dHA6Ly9ib29rbWVyYW5nLmNvbSIsImp0aSI6IkQ1MjI1NzlEOUE2NDMxQjhGN0M0M0RBRkJBMTQ5MjY5Iiwicm9sZXMiOltdLCJzdWIiOjEsImV4cCI6MTcyNzY2MjUzMX0.6F25cdSyYLlGIEXoV2HaLYG5pjdvHaj9CmUWy51PPPk',
         // Authorization: `Bearer ${jwtAuthToken}`,
       },
     });

@@ -9,9 +9,12 @@ import { httpErrorsInterceptor } from '../interceptors/http-errors.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, withInMemoryScrolling({
-      scrollPositionRestoration: 'top', // enable position restoration
-    })),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top', // enable position restoration
+      }),
+    ),
     provideHotToastConfig({
       visibleToasts: 1,
       style: {},

@@ -203,13 +203,14 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
 
   get maskedEmail() {
     const value = <string>(this.email.value ?? '');
-    if ( !value ) {
+    if (!value) {
       return undefined;
     }
 
     const pos = value.indexOf('@');
-    return value.split('')
-      .map((chr, index) => index >= 3 && index < (pos - 2) ? '*' : chr )
+    return value
+      .split('')
+      .map((chr, index) => (index >= 3 && index < pos - 2 ? '*' : chr))
       .join('');
   }
 }

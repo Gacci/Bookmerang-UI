@@ -1,39 +1,42 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Data, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
-import { BookPostOfferService } from '../services/book-post-offer.service';
-
-import { BookPostCardComponent } from '../components/book-post-card/book-post-card.component';
+import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 import { LoadingOverlayComponent } from '../components/loading-overlay/loading-overlay.component';
 import { NavigationComponent } from '../components/navigation/navigation.component';
-import { InfiniteScrollView } from '../classes/infinite-scroll-view';
+import { BookCollectionService } from '../services/book-collection.service';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-collection',
   standalone: true,
   imports: [
     CommonModule,
-    InfiniteScrollDirective,
-    RouterOutlet,
-    BookPostCardComponent,
+
     LoadingOverlayComponent,
     NavigationComponent,
+    RouterModule,
+
+    InfiniteScrollDirective,
   ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  templateUrl: './books-collections.component.html',
+  styleUrl: './books-collections.component.scss',
 })
-export class HomeComponent extends InfiniteScrollView<Data> {
+export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   private route = inject(ActivatedRoute);
 
-  private bookMarketService = inject(BookPostOfferService);
+  private bookMarketService = inject(BookCollectionService);
 
   ngOnInit(): void {
     this.pageNumber += 1;
     this.route.data.subscribe((data: any) => {
-      this.data = data.posts;
+      this.data = data.books.data;
+      console.log('subscribe: ', this.data);
+    });
+    this.route.params.subscribe((params: any) => {
+      // this.params = { userId: params.userId };
     });
   }
 
@@ -56,15 +59,14 @@ export class HomeComponent extends InfiniteScrollView<Data> {
         this.hasNextPage = !(data.length % this.pageSize);
         this.pageNumber += 1;
         this.isLoadingNext = false;
+
+        console.log(data);
       },
       error: (e) => {},
       complete: () => {},
     });
   }
-
-  override onScrollUp() {
-    console.log('Scrolling up');
-  }
+  override onScrollUp(): void {}
 
   async pause(delay: number) {
     return new Promise((resolve) => setTimeout(resolve, delay));

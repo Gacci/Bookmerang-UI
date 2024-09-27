@@ -4,15 +4,24 @@ import { Injectable } from '@angular/core';
 import { Data } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BookPostOfferService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   search(params: Data) {
     console.log('BookPostOfferService', params);
 
-    return this.http.get('http://127.0.0.1:3000/books/markets/search', { params })
+    return this.http.get('http://127.0.0.1:3000/books/markets/search', {
+      params,
+    });
+  }
+
+  metrics(isbn13: string) {
+    console.log('BookPostOfferService', isbn13);
+
+    return this.http.get('http://127.0.0.1:3000/books/markets/metrics', {
+      params: { isbn13 },
+    });
   }
 }
