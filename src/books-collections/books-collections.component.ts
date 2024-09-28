@@ -31,13 +31,8 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
   ngOnInit(): void {
     this.pageNumber += 1;
-    this.route.data.subscribe((data: any) => {
-      this.data = data.books.data;
-      console.log('subscribe: ', this.data);
-    });
-    this.route.params.subscribe((params: any) => {
-      // this.params = { userId: params.userId };
-    });
+    this.route.data.subscribe((data: any) => this.data = data.books.data);
+    this.route.queryParams.subscribe((params: any) => this.params = { title: params.title });
   }
 
   override async onScrollDown() {
@@ -54,13 +49,13 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
     await this.pause(1000);
     this.bookMarketService.search(params).subscribe({
-      next: (data: any) => {
-        this.data = this.data.concat(data);
-        this.hasNextPage = !(data.length % this.pageSize);
+      next: (response: any) => {
+        this.data = this.data.concat(response.data);
+        this.hasNextPage = !(this.data.length % this.pageSize);
         this.pageNumber += 1;
         this.isLoadingNext = false;
 
-        console.log(data);
+        console.log(this.data);
       },
       error: (e) => {},
       complete: () => {},

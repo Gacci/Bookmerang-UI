@@ -60,25 +60,27 @@ label {
 
 
 
-button.btn {
-    @apply h-12 font-normal px-4 rounded-md transition-all;
+button {
+    .btn {
+      @apply h-12 font-normal px-4 rounded-md transition-all;
+    }
 
-    button.btn-blue-600 {
+    .btn.btn-blue-600 {
       @apply bg-blue-600 text-white;
     }
-    button.flat {
+    .btn.flat {
       @apply bg-gray-100 text-gray-600;
     }
-    button.flat:focus {
+    .btn.flat:focus {
       @apply outline-2 outline-solid outline-offset-0 outline-blue-100;
     }
-    button:hover {
+    .btn:hover {
       @apply shadow-lg shadow-gray-900/20;
     }
-    button:active {
+    .btn:active {
       @apply opacity-[0.85] shadow-none;
     }
-    button:disabled {
+    .btn:disabled {
       @apply pointer-events-none opacity-50 shadow-none;
     }
 }

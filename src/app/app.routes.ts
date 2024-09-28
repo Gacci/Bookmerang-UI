@@ -12,6 +12,8 @@ import { BooksMarketsComponent } from '../books-markets/books-markets.component'
 
 import { BookPostResolver } from '../resolvers/book-post-resolver.service';
 import { BooksCollectionResolver } from '../resolvers/books-collection-resolver.service';
+import { BookResolverService } from '../resolvers/book-resolver.service';
+import { BookPostComponent } from '../book-post/book-post.component';
 
 export const routes: Routes = [
   {
@@ -51,9 +53,17 @@ export const routes: Routes = [
   {
     component: BooksMarketsComponent,
     path: 'books/markets/:isbn13',
-    // runGuardsAndResolvers: 'always'
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     resolve: {
       posts: BookPostResolver,
+      book: BookResolverService
+    },
+  },
+  {
+    component: BookPostComponent,
+    path: 'books/markets/post/:isbn13',
+    resolve: {
+      book: BookResolverService
     },
   },
   {

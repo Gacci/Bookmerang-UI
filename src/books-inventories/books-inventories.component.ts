@@ -33,12 +33,8 @@ export class BooksInventoriesComponent extends InfiniteScrollView<Data> {
 
   ngOnInit(): void {
     this.pageNumber += 1;
-    this.route.data.subscribe((data: any) => {
-      this.data = data.posts;
-    });
-    this.route.params.subscribe((params: any) => {
-      this.params = { userId: params.userId };
-    });
+    this.route.data.subscribe((data: any) => (this.data = data.posts));
+    this.route.params.subscribe((params: any) => (this.params = { userId: params.userId }));
   }
 
   override onScrollUp() {

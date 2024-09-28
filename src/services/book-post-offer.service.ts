@@ -10,7 +10,7 @@ export class BookPostOfferService {
   constructor(private http: HttpClient) {}
 
   search(params: Data) {
-    console.log('BookPostOfferService', params);
+    console.log('BookPostOfferService.search', params);
 
     return this.http.get('http://127.0.0.1:3000/books/markets/search', {
       params,
@@ -18,7 +18,7 @@ export class BookPostOfferService {
   }
 
   metrics(isbn13: string) {
-    console.log('BookPostOfferService', isbn13);
+    console.log('BookPostOfferService.metrics', isbn13);
 
     return this.http.get('http://127.0.0.1:3000/books/markets/metrics', {
       params: { isbn13 },

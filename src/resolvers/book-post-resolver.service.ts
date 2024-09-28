@@ -19,9 +19,14 @@ export class BookPostResolver implements Resolve<any> {
     state: RouterStateSnapshot,
   ): Observable<any> {
     console.log(route.params);
+    console.log(route.queryParams);
+
+    const params: any = { ...route.params, ...route.queryParams };
     return this.bookPostOfferService.search({
-      ...(route.params['isbn13'] ? { isbn13: [route.params['isbn13']] } : {}),
-      ...(route.params['userId'] ? { userId: [+route.params['userId']] } : {}),
+  
+      ...(params.isbn13 ? { isbn13: [ params.isbn13 ] } : {}),
+      ...(params.userId ? { userId: [ +params.userId ] } : {}),
+      ...(params.state ? { state: [].concat(params.state) } : {})
     });
   }
 }
