@@ -19,8 +19,6 @@ export const appConfig: ApplicationConfig = {
       visibleToasts: 1,
       style: {},
     }),
-    provideHttpClient(
-      withInterceptors([jwtAuthInterceptor, httpErrorsInterceptor]),
-    ),
+    provideHttpClient(withInterceptors([jwtAuthInterceptor, httpErrorsInterceptor])),
   ],
 };

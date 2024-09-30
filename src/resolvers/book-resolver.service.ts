@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { BookCollectionService } from '../services/book-collection.service';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BookResolverService {
   constructor(private bookCollectionService: BookCollectionService) {}

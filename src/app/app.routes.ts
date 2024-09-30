@@ -56,14 +56,14 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     resolve: {
       posts: BookPostResolver,
-      book: BookResolverService
+      book: BookResolverService,
     },
   },
   {
     component: BookPostComponent,
     path: 'books/markets/post/:isbn13',
     resolve: {
-      book: BookResolverService
+      book: BookResolverService,
     },
   },
   {

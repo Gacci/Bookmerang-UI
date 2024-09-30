@@ -1,0 +1,75 @@
+.post-card {
+    @apply relative block w-128 mx-auto my-8 shadow-md bg-white rounded-md;
+  }
+  .post-card-header {
+    @apply px-4 py-2;
+  }
+  .post-card-user-pic {
+    @apply w-11 h-11 rounded-full;
+  }
+  .post-card-user-name {
+    @apply font-bold text-gray-700 text-ellipsis whitespace-nowrap overflow-hidden;
+  }
+  .post-card-main {
+    @apply flex items-center justify-between space-x-2;
+  }
+  .post-card-titling {
+    @apply grow pr-4;
+  }
+  .post-card-titling * {
+    @apply block;
+  }
+  .post-card-info {
+    @apply flex justify-between items-center p-4 border-b;
+
+    .post-card-info-left {
+      @apply flex space-x-2;
+    }
+
+    .post-card-price {
+      @apply font-bold text-green-600;
+    }
+    .post-card-type {
+      @apply font-bold text-gray-600 whitespace-nowrap;
+    }
+  }
+  .post-card-body {
+    @apply border-y overflow-hidden;
+  }
+  .post-card-book {
+    @apply w-64 mx-auto my-10;
+
+    .post-card-book-title {
+      @apply block leading-5 font-medium text-blue-700;
+    }
+    .post-card-book-isbn {
+      @apply block my-1;
+    }
+  }
+  .post-card-book-cover-box {
+    @apply relative block z-0 aspect-2/3;
+
+    .post-card-book-cover {
+      @apply absolute top-0 left-0 w-full h-full;
+    }
+    &:hover {
+      @apply opacity-75;
+    }
+  }
+  .post-card-chat,
+  .post-card-sell {
+    @apply p-2 mx-1 bg-gray-100 rounded-full align-middle;
+
+    &:hover {
+      @apply bg-gray-200;
+    }
+  }
+  .post-card-trade{
+    @apply p-2 mx-1 bg-green-100 rounded-full align-middle inline-block;
+  }
+  .post-card-footer {
+    @apply px-8 py-4;
+  }
+  .post-card-desc {
+    @apply text-gray-500;
+  }

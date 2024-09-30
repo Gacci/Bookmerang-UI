@@ -60,27 +60,27 @@ label {
 
 
 
-button {
-    .btn {
-      @apply h-12 font-normal px-4 rounded-md transition-all;
-    }
+button.btn {
+    @apply h-12 font-normal px-4 rounded-md transition-all;
 
-    .btn.btn-blue-600 {
+
+    &.btn-blue-600 {
       @apply bg-blue-600 text-white;
     }
-    .btn.flat {
+    &.flat {
       @apply bg-gray-100 text-gray-600;
     }
-    .btn.flat:focus {
+    &.flat:focus {
       @apply outline-2 outline-solid outline-offset-0 outline-blue-100;
     }
-    .btn:hover {
-      @apply shadow-lg shadow-gray-900/20;
+    &:hover {
+      // @apply shadow-lg shadow-gray-900/20;
+      @apply bg-blue-700  duration-300
     }
-    .btn:active {
+    &:active {
       @apply opacity-[0.85] shadow-none;
     }
-    .btn:disabled {
+    &:disabled {
       @apply pointer-events-none opacity-50 shadow-none;
     }
 }
@@ -220,17 +220,26 @@ form {
   }
   
   .select {
-    @apply h-14 appearance-none rounded-md border border-gray-200 bg-transparent px-4 py-2.5 font-sans text-sm font-normal outline outline-0 transition-all;
+    @apply h-14 appearance-none rounded-md border border-gray-200 bg-transparent pl-4 pr-12 py-2.5 font-sans text-sm font-normal outline outline-0 transition-all;
+  
+    /* Add a background arrow */
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-chevron-down'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 1rem center;
+    background-size: 1.5rem;
+    background-color: transparent;
   }
+  
   .select:disabled {
     @apply border-0 bg-gray-50;
   }
+  
   .select:placeholder-shown {
     @apply border;
   }
+  
   .select:focus {
-    @apply outline-2 outline-offset-0 outline-fuchsia-500;
+    @apply outline-2 outline-offset-0 outline-blue-500;
   }
+  
 
 
 

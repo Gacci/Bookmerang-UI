@@ -1,0 +1,137 @@
+<div class="post-card">
+  <div class="post-card-header">
+    <div class="post-card-main">
+      <img
+        class="post-card-user-pic"
+        src="https://pictures.abebooks.com/isbn/9780745647791-us.jpg"
+      />
+      <div class="post-card-titling">
+        <a
+          class="post-card-user-name"
+          [routerLink]="['/', 'books', 'inventories', post.userId]"
+          >{{ post.user.firstName }} {{ post.user.lastName }}</a
+        >
+        <span class="post-card-date-time">{{
+          post.postedOn | date: 'MMM d, Y HH:mm'
+        }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="post-card-body">
+    <div class="post-card-book">
+      <a
+        class="post-card-book-cover-box"
+        [routerLink]="['/', 'books', 'markets', post.book.isbn13]"
+      >
+        <img class="post-card-book-cover" [src]="post.book.thumbnail" />
+      </a>
+      <a
+        class="post-card-book-title"
+        [routerLink]="['/', 'books', 'markets', post.book.isbn13]"
+        >{{ post.book.title }} {{ post.book.subtitle }}</a
+      >
+      <span class="post-card-book-isbn">{{ post.book.isbn13 }}</span>
+    </div>
+  </div>
+  <div class="post-card-info">
+    <div class="post-card-info-left">
+      <span class="post-card-price">{{ post.price | currency: 'USD' }}</span>
+      <span class="post-card-type">{{ post.state }}</span>
+    </div>
+    <div class="post-card-info-right">
+      <!-- *ngIf="post.tradeable" -->
+      <div class="post-card-trade">
+        <svg class="size-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" fill-rule="evenodd">
+            <g transform="rotate(110 4.339 30.802)">
+              <polygon
+                fill="#80D25B"
+                points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
+              />
+              <path
+                fill="#22BA8E"
+                d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
+              />
+            </g>
+            <g transform="scale(1 -1) rotate(-70 -11.107 -40.767)">
+              <polygon
+                fill="#80D25B"
+                points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
+              />
+              <path
+                fill="#22BA8E"
+                d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
+              />
+            </g>
+            <g transform="scale(1 -1) rotate(54 55.492 16.03)">
+              <polygon
+                fill="#80D25B"
+                points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
+              />
+              <path
+                fill="#22BA8E"
+                d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
+              />
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <button class="post-card-sell">
+        <svg
+          class="size-6"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+      </button>
+
+      <button class="post-card-chat">
+        <svg
+          class="size-6"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="post-card-footer">
+    <div *ngIf="post.notes">
+      <div class="flex justify-between">
+        <p class="animation" [ngClass]="{ hidden: !post.isNotesOpen }">
+          {{ post.notes }}
+        </p>
+
+        <p
+          class="animation overflow-hidden whitespace-nowrap text-ellipsis"
+          [ngClass]="{ hidden: post.isNotesOpen }"
+        >
+          {{ post.notes }}
+        </p>
+        <span
+          class="whitespace-nowrap text-blue-600 cursor-pointer hover:underline"
+          *ngIf="!post.isNotesOpen"
+          (click)="post.isNotesOpen = !post.isNotesOpen"
+          >See more</span
+        >
+      </div>
+    </div>
+  </div>
+</div>

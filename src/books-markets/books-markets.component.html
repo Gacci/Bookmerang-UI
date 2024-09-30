@@ -189,10 +189,6 @@
   </div>
 </aside> -->
 
-
-
-
-
 <!-- <aside
   class="fixed top-0 left-0 z-0 w-1/4 h-screen transition-transform -translate-x-full sm:translate-x-0"
   aria-label="Sidebar"
@@ -308,205 +304,463 @@
   class="fixed bottom-0 left-0 z-0 w-1/4 h-[calc(100%-70px)] transition-transform -translate-x-full sm:translate-x-0"
   aria-label="Sidebar"
 >
-    <form class="m-4" [formGroup]="filters" (ngSubmit)="onSubmit($event)">
-        <div formGroupName="state">
-            <h3 class="mb-4 font-semibold text-gray-900 ">Technology</h3>
-            <ul class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg ">
-                <li class="w-full border-b border-gray-200 rounded-t-lg ">
-                    <div class="flex items-center ps-3">
-                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                            id="new" 
-                            type="checkbox" 
-                            value="new"
-                            formControlName="new">
-                        <label for="new" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 ">New</label>
-                    </div>
-                </li>
-                <li class="w-full border-b border-gray-200 rounded-t-lg ">
-                    <div class="flex items-center ps-3">
-                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                            type="checkbox" 
-                            id="like-new"
-                            value="like-new"
-                            formControlName="likeNew">
-                        <label for="like-new" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 ">Like New</label>
-                    </div>
-                </li>
-                <li class="w-full border-b border-gray-200 rounded-t-lg ">
-                    <div class="flex items-center ps-3">
-                        <input 
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 "
-                            type="checkbox" 
-                            id="very-good"
-                            value="very-good"
-                            formControlName="veryGood">
-                        <label for="very-good" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 ">Very Good</label>
-                    </div>
-                </li>
-                <li class="w-full border-b border-gray-200 rounded-t-lg ">
-                    <div class="flex items-center ps-3">
-                        <input 
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                            type="checkbox" 
-                            id="good"
-                            value="good" 
-                            formControlName="good">
-                        <label for="good" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 ">Good</label>
-                    </div>
-                </li>
-                <li class="w-full border-gray-200 rounded-t-lg ">
-                    <div class="flex items-center ps-3">
-                        <input 
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 "
-                            type="checkbox" 
-                            id="acceptable"
-                            value="acceptable" 
-                            formControlName="acceptable" >
-                        <label for="acceptable" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 ">Acceptable</label>
-                    </div>
-                </li>
-            </ul>
-        </div>
+  <form class="m-4" [formGroup]="filters" (ngSubmit)="onSubmit($event)">
+    <div formGroupName="state">
+      <h3 class="mb-4 font-semibold text-gray-900">Technology</h3>
+      <ul
+        class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg"
+      >
+        <li class="w-full border-b border-gray-200 rounded-t-lg">
+          <div class="flex items-center ps-3">
+            <input
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              id="new"
+              type="checkbox"
+              value="new"
+              formControlName="new"
+            />
+            <label
+              for="new"
+              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+              >New</label
+            >
+          </div>
+        </li>
+        <li class="w-full border-b border-gray-200 rounded-t-lg">
+          <div class="flex items-center ps-3">
+            <input
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              type="checkbox"
+              id="like-new"
+              value="like-new"
+              formControlName="likeNew"
+            />
+            <label
+              for="like-new"
+              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+              >Like New</label
+            >
+          </div>
+        </li>
+        <li class="w-full border-b border-gray-200 rounded-t-lg">
+          <div class="flex items-center ps-3">
+            <input
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              type="checkbox"
+              id="very-good"
+              value="very-good"
+              formControlName="veryGood"
+            />
+            <label
+              for="very-good"
+              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+              >Very Good</label
+            >
+          </div>
+        </li>
+        <li class="w-full border-b border-gray-200 rounded-t-lg">
+          <div class="flex items-center ps-3">
+            <input
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              type="checkbox"
+              id="good"
+              value="good"
+              formControlName="good"
+            />
+            <label
+              for="good"
+              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+              >Good</label
+            >
+          </div>
+        </li>
+        <li class="w-full border-gray-200 rounded-t-lg">
+          <div class="flex items-center ps-3">
+            <input
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              type="checkbox"
+              id="acceptable"
+              value="acceptable"
+              formControlName="acceptable"
+            />
+            <label
+              for="acceptable"
+              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+              >Acceptable</label
+            >
+          </div>
+        </li>
+      </ul>
+    </div>
 
-        
-        <div class="my-4">
-            <label class="inline-flex items-center mb-5 cursor-pointer">
-                <input type="checkbox" value="" class="sr-only peer">
-                <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle me</span>
-            </label>
-        </div>
+    <div class="my-4">
+      <label class="inline-flex items-center mb-5 cursor-pointer">
+        <input type="checkbox" value="" class="sr-only peer" />
+        <div
+          class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+        ></div>
+        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >Toggle me</span
+        >
+      </label>
+    </div>
 
-        <div class="mt-6">
-            <button class="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">Filter</button>
-        </div>
-    </form>
+    <div class="mt-6">
+      <button class="relative w-full btn btn-blue-600 mt-8" type="submit">
+        Filter
+      </button>
+    </div>
+  </form>
 </aside>
 
-
 <div class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
-    <div class="flex flex-col md:flex-row">
-      <!-- Book Cover -->
-      <div class="md:w-1/3 mb-4 md:mb-0">
-        <img class="w-full rounded-lg shadow-md" [alt]="book.title"  src="{{ book.thumbnail }}" >
-        <div class="mt-6">
-            <a class="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
-                [routerLink]="['/', 'books', 'markets', 'post', book.isbn13]">Sell my copy</a>
-        </div>
-      </div>
-      
-      <!-- Book Information -->
-      <div class="md:w-2/3 md:pl-8">
-        <h1 class="text-3xl font-semibold text-gray-800">{{ book.title }} {{ book.subtitle ?? '' }}</h1>
-        <p class="mt-2 text-lg text-gray-600" *ngIf="book.authors">By <span class="font-medium">{{ book.authors }}</span></p>
-        <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn13">ISBN: <span class="font-medium">{{ book.isbn13 }}</span></p>
-        
-        <div class="mt-4">
-          <h2 class="text-xl font-medium text-gray-700">Details</h2>
-          <ul class="mt-2 text-gray-600 space-y-1">
-            <li><span class="font-medium" *ngIf="book.publishers">Publisher:</span> {{ book.publishers }}</li>
-            <li><span class="font-medium" *ngIf="book.published">Publication Date:</span> {{ book.published }}</li>
-            <li><span class="font-medium" *ngIf="book.pages">Pages:</span> {{ book.pages }}</li>
-            <li><span class="font-medium" *ngIf="book.language">Language:</span> {{ book.language }}</li>
-          </ul>
-        </div>
+  <div class="flex flex-col md:flex-row">
+    <!-- Book Cover -->
+    <div class="md:w-1/3 mb-4 md:mb-0">
+      <img
+        class="w-full rounded-lg shadow-md"
+        [alt]="book.title"
+        src="{{ book.thumbnail }}"
+      />
+      <div class="mt-6">
+        <a
+          class="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+          [routerLink]="['/', 'books', 'markets', 'post', book.isbn13]"
+          >Sell my copy</a
+        >
       </div>
     </div>
 
-    <div class="relative my-8">
-        <h5 class="py-1 text-xl font-medium text-gray-700">Book details</h5>
-        <div class="overflow-x-auto border-y">
-            <ul class="flex text-center my-4">
-                <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.isbn13">
-                  <span class="text-sm">ISBN-10</span>
-                  <svg class="size-2/6 block mx-auto mt-3 mb-1" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.99023 8.56V16.56C1.99023 17.6209 2.41166 18.6383 3.1618 19.3884C3.91195 20.1386 4.92937 20.56 5.99023 20.56H17.9902C19.0511 20.56 20.0685 20.1386 20.8187 19.3884C21.5688 18.6383 21.9902 17.6209 21.9902 16.56V8.56C21.9902 7.49913 21.5688 6.48171 20.8187 5.73157C20.0685 4.98142 19.0511 4.56 17.9902 4.56H5.99023C4.92937 4.56 3.91195 4.98142 3.1618 5.73157C2.41166 6.48171 1.99023 7.49913 1.99023 8.56Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M5.99023 8.56V16.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M8.99023 12.56V16.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M8.99023 8.56V9.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M14.9902 8.56V16.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 16.5V16.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 8.56V13.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M17.9902 13.56V16.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M17.9902 8.56V10.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  <span class="text-sm font-bold">{{ book.isbn10 }}</span>
-                </li>
-                <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.isbn13">
-                  <span class="text-sm">ISBN-10</span>
-                  <svg class="size-2/6 block mx-auto mt-3 mb-1" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1.99023 8.56V16.56C1.99023 17.6209 2.41166 18.6383 3.1618 19.3884C3.91195 20.1386 4.92937 20.56 5.99023 20.56H17.9902C19.0511 20.56 20.0685 20.1386 20.8187 19.3884C21.5688 18.6383 21.9902 17.6209 21.9902 16.56V8.56C21.9902 7.49913 21.5688 6.48171 20.8187 5.73157C20.0685 4.98142 19.0511 4.56 17.9902 4.56H5.99023C4.92937 4.56 3.91195 4.98142 3.1618 5.73157C2.41166 6.48171 1.99023 7.49913 1.99023 8.56Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M5.99023 8.56V16.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M8.99023 12.56V16.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M8.99023 8.56V9.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M14.9902 8.56V16.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 16.5V16.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 8.56V13.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M17.9902 13.56V16.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M17.9902 8.56V10.56" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  <span class="text-sm font-bold">{{ book.isbn13 }}</span>
-                </li>
-                <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.publishers">
-                  <span class="text-sm">Publisher</span>
-                  <svg class="size-2/6 block mx-auto mt-3 mb-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5528 1.10557C11.8343 0.964809 12.1657 0.964809 12.4472 1.10557L22.4472 6.10557C22.862 6.31298 23.0798 6.77838 22.9732 7.22975C22.8667 7.68112 22.4638 8 22 8H1.99998C1.5362 8 1.13328 7.68112 1.02673 7.22975C0.920172 6.77838 1.13795 6.31298 1.55276 6.10557L11.5528 1.10557ZM6.23604 6H17.7639L12 3.11803L6.23604 6ZM5.99998 9C6.55226 9 6.99998 9.44772 6.99998 10V15C6.99998 15.5523 6.55226 16 5.99998 16C5.44769 16 4.99998 15.5523 4.99998 15V10C4.99998 9.44772 5.44769 9 5.99998 9ZM9.99998 9C10.5523 9 11 9.44772 11 10V15C11 15.5523 10.5523 16 9.99998 16C9.44769 16 8.99998 15.5523 8.99998 15V10C8.99998 9.44772 9.44769 9 9.99998 9ZM14 9C14.5523 9 15 9.44772 15 10V15C15 15.5523 14.5523 16 14 16C13.4477 16 13 15.5523 13 15V10C13 9.44772 13.4477 9 14 9ZM18 9C18.5523 9 19 9.44772 19 10V15C19 15.5523 18.5523 16 18 16C17.4477 16 17 15.5523 17 15V10C17 9.44772 17.4477 9 18 9ZM2.99998 18C2.99998 17.4477 3.44769 17 3.99998 17H20C20.5523 17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H3.99998C3.44769 19 2.99998 18.5523 2.99998 18ZM0.999976 21C0.999976 20.4477 1.44769 20 1.99998 20H22C22.5523 20 23 20.4477 23 21C23 21.5523 22.5523 22 22 22H1.99998C1.44769 22 0.999976 21.5523 0.999976 21Z" fill="#000000"/>
-                  </svg>
-                  <span class="text-sm font-bold">{{ book.publishers }}</span>
-                </li>
-                <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.published">
-                  <span class="text-sm">Publication date</span>
-                  <svg class="size-2/6 block mx-auto mt-3 mb-1"  viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 4V2.5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M17 4V2.5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M9 14.5L10.5 13V17" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M13 16V14C13 13.4477 13.4477 13 14 13C14.5523 13 15 13.4477 15 14V16C15 16.5523 14.5523 17 14 17C13.4477 17 13 16.5523 13 16Z" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M21.5 9H16.625H10.75M2 9H5.875" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12V14C22 17.7712 22 19.6569 20.8284 20.8284C20.1752 21.4816 19.3001 21.7706 18 21.8985" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
-                  </svg>
-                  <span class="text-sm font-bold">{{ book.published | date:'MMM dd, YYYY' }}</span>
-                </li>
-                <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.language">
-                  <span class="text-sm">Language</span>
-                  <svg class="size-2/5 block mx-auto mt-3 mb-1"  viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M14.6921 5H9.30807C8.15914 5.00635 7.0598 5.46885 6.25189 6.28576C5.44398 7.10268 4.99368 8.20708 5.00007 9.356V14.644C4.99368 15.7929 5.44398 16.8973 6.25189 17.7142C7.0598 18.5311 8.15914 18.9937 9.30807 19H14.6921C15.841 18.9937 16.9403 18.5311 17.7482 17.7142C18.5562 16.8973 19.0064 15.7929 19.0001 14.644V9.356C19.0064 8.20708 18.5562 7.10268 17.7482 6.28576C16.9403 5.46885 15.841 5.00635 14.6921 5Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M8.00012 9C7.58591 9 7.25012 9.33579 7.25012 9.75C7.25012 10.1642 7.58591 10.5 8.00012 10.5V9ZM12.0001 10.5C12.4143 10.5 12.7501 10.1642 12.7501 9.75C12.7501 9.33579 12.4143 9 12.0001 9V10.5ZM11.2501 9.75C11.2501 10.1642 11.5859 10.5 12.0001 10.5C12.4143 10.5 12.7501 10.1642 12.7501 9.75H11.2501ZM12.7501 8C12.7501 7.58579 12.4143 7.25 12.0001 7.25C11.5859 7.25 11.2501 7.58579 11.2501 8H12.7501ZM12.0001 9C11.5859 9 11.2501 9.33579 11.2501 9.75C11.2501 10.1642 11.5859 10.5 12.0001 10.5V9ZM15.5001 10.5C15.9143 10.5 16.2501 10.1642 16.2501 9.75C16.2501 9.33579 15.9143 9 15.5001 9V10.5ZM15.5001 9C15.0859 9 14.7501 9.33579 14.7501 9.75C14.7501 10.1642 15.0859 10.5 15.5001 10.5V9ZM16.0001 10.5C16.4143 10.5 16.7501 10.1642 16.7501 9.75C16.7501 9.33579 16.4143 9 16.0001 9V10.5ZM16.1138 10.1811C16.3519 9.84222 16.2702 9.37443 15.9313 9.13631C15.5923 8.8982 15.1246 8.97992 14.8864 9.31885L16.1138 10.1811ZM11.2737 13.2783C10.9579 13.5464 10.9193 14.0197 11.1874 14.3354C11.4555 14.6512 11.9288 14.6898 12.2445 14.4217L11.2737 13.2783ZM9.29973 14.9003C8.96852 15.149 8.90167 15.6192 9.15041 15.9504C9.39916 16.2816 9.8693 16.3485 10.2005 16.0997L9.29973 14.9003ZM12.2569 14.407C12.5667 14.1321 12.595 13.6581 12.3201 13.3483C12.0453 13.0384 11.5712 13.0101 11.2614 13.285L12.2569 14.407ZM11.1691 14.3091C11.4249 14.6349 11.8963 14.6917 12.2222 14.436C12.548 14.1802 12.6048 13.7088 12.3491 13.3829L11.1691 14.3091ZM11.186 11.4467C11.0185 11.0678 10.5756 10.8966 10.1968 11.0641C9.81796 11.2316 9.64667 11.6745 9.8142 12.0533L11.186 11.4467ZM12.3609 13.4024C12.1137 13.07 11.6439 13.001 11.3115 13.2482C10.9792 13.4954 10.9101 13.9652 11.1573 14.2976L12.3609 13.4024ZM13.8953 16.6608C14.2602 16.8567 14.7149 16.7198 14.9109 16.3548C15.1068 15.9899 14.9699 15.5352 14.605 15.3392L13.8953 16.6608ZM8.00012 10.5H12.0001V9H8.00012V10.5ZM12.7501 9.75V8H11.2501V9.75H12.7501ZM12.0001 10.5H15.5001V9H12.0001V10.5ZM15.5001 10.5H16.0001V9H15.5001V10.5ZM14.8864 9.31885C13.8552 10.7867 12.6412 12.1172 11.2737 13.2783L12.2445 14.4217C13.7091 13.1782 15.0093 11.7532 16.1138 10.1811L14.8864 9.31885ZM10.2005 16.0997C10.7113 15.7161 11.4531 15.1201 12.2569 14.407L11.2614 13.285C10.4871 13.9719 9.77692 14.5419 9.29973 14.9003L10.2005 16.0997ZM12.3491 13.3829C11.8824 12.7884 11.4917 12.1379 11.186 11.4467L9.8142 12.0533C10.1703 12.8586 10.6255 13.6164 11.1691 14.3091L12.3491 13.3829ZM11.1573 14.2976C11.8855 15.2767 12.8203 16.0835 13.8953 16.6608L14.605 15.3392C13.7239 14.8661 12.9578 14.2048 12.3609 13.4024L11.1573 14.2976Z" fill="#000000"/>
-                  </svg>
-                  <span class="text-sm font-bold">{{ book.language }}</span>
-                </li>
-                <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.dimensions">
-                  <span class="text-sm">Dimensions</span>
-                  <svg class="size-2/6 block mx-auto mt-3 mb-1" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M3.00014 2.73895C3.00014 2.94698 2.76087 3.06401 2.59666 2.93628L1.00386 1.69744C0.875177 1.59735 0.875177 1.40286 1.00386 1.30277L2.59666 0.063928C2.76087 -0.0637944 3.00014 0.0532293 3.00014 0.261266V1.00012H9.00009V0.261296C9.00009 0.0532591 9.23936 -0.0637646 9.40358 0.0639578L10.9964 1.3028C11.1251 1.40289 11.1251 1.59738 10.9964 1.69747L9.40358 2.93631C9.23936 3.06404 9.00009 2.94701 9.00009 2.73898V2.00012H3.00014V2.73895ZM9.50002 4.99998H2.50002C2.22388 4.99998 2.00002 5.22384 2.00002 5.49998V12.5C2.00002 12.7761 2.22388 13 2.50002 13H9.50002C9.77616 13 10 12.7761 10 12.5V5.49998C10 5.22384 9.77616 4.99998 9.50002 4.99998ZM2.50002 3.99998C1.67159 3.99998 1.00002 4.67156 1.00002 5.49998V12.5C1.00002 13.3284 1.67159 14 2.50002 14H9.50002C10.3284 14 11 13.3284 11 12.5V5.49998C11 4.67156 10.3284 3.99998 9.50002 3.99998H2.50002ZM14.7389 6.00001H14V12H14.7389C14.9469 12 15.064 12.2393 14.9362 12.4035L13.6974 13.9963C13.5973 14.125 13.4028 14.125 13.3027 13.9963L12.0639 12.4035C11.9362 12.2393 12.0532 12 12.2612 12H13V6.00001H12.2612C12.0532 6.00001 11.9361 5.76074 12.0639 5.59653L13.3027 4.00373C13.4028 3.87505 13.5973 3.87505 13.6974 4.00374L14.9362 5.59653C15.0639 5.76074 14.9469 6.00001 14.7389 6.00001Z"
-                      fill="#000000"
-                    />
-                  </svg>
-                  <span class="text-sm font-bold">{{ book.dimensions }}</span>
-                </li>
-                <li class="w-44 flex-shrink-0 px-1" *ngIf="book.pages">
-                  <span class="text-sm">Print lenght</span>
-                  <svg class="size-2/6 block mx-auto mt-3 mb-1"  viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
-                    <g fill="none" fill-rule="evenodd" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 3)">
-                      <path d="m11.5.5h-7c-1.1045695 0-2 .8954305-2 2v9c0 1.1045695.8954305 2 2 2h7c1.1045695 0 2-.8954305 2-2v-9c0-1.1045695-.8954305-2-2-2z"/>
-                      <path d="m2.5 2.5c-1.1045695 0-2 .8954305-2 2v8c0 1.6568542 1.34314575 3 3 3h6c1.1045695 0 2-.8954305 2-2"/>
-                    </g>
-                  </svg>
-                  <span class="text-sm font-bold">{{ book.pages }}</span>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <!-- Book Information -->
+    <div class="md:w-2/3 md:pl-8">
+      <h1 class="text-3xl font-semibold text-gray-800">
+        {{ book.title }} {{ book.subtitle ?? '' }}
+      </h1>
+      <p class="mt-2 text-lg text-gray-600" *ngIf="book.authors">
+        By <span class="font-medium">{{ book.authors }}</span>
+      </p>
+      <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn13">
+        ISBN: <span class="font-medium">{{ book.isbn13 }}</span>
+      </p>
 
-    <div class="">
-        <h2 class="text-xl font-medium text-gray-700">Description</h2>
-        <p class="mt-2 text-gray-600">{{ book.notes ?? 'N/A' }}</p>
+      <div class="mt-4">
+        <h2 class="text-xl font-medium text-gray-700">Details</h2>
+        <ul class="mt-2 text-gray-600 space-y-1">
+          <li>
+            <span class="font-medium" *ngIf="book.publishers">Publisher:</span>
+            {{ book.publishers }}
+          </li>
+          <li>
+            <span class="font-medium" *ngIf="book.published">Publication Date:</span>
+            {{ book.published }}
+          </li>
+          <li>
+            <span class="font-medium" *ngIf="book.pages">Pages:</span>
+            {{ book.pages }}
+          </li>
+          <li>
+            <span class="font-medium" *ngIf="book.language">Language:</span>
+            {{ book.language }}
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
+
+  <div class="relative my-8">
+    <h5 class="py-1 text-xl font-medium text-gray-700">Book details</h5>
+    <div class="overflow-x-auto border-y">
+      <ul class="flex text-center my-4">
+        <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.isbn13">
+          <span class="text-sm">ISBN-10</span>
+          <svg
+            class="size-2/6 block mx-auto mt-3 mb-1"
+            viewBox="-0.5 0 25 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1.99023 8.56V16.56C1.99023 17.6209 2.41166 18.6383 3.1618 19.3884C3.91195 20.1386 4.92937 20.56 5.99023 20.56H17.9902C19.0511 20.56 20.0685 20.1386 20.8187 19.3884C21.5688 18.6383 21.9902 17.6209 21.9902 16.56V8.56C21.9902 7.49913 21.5688 6.48171 20.8187 5.73157C20.0685 4.98142 19.0511 4.56 17.9902 4.56H5.99023C4.92937 4.56 3.91195 4.98142 3.1618 5.73157C2.41166 6.48171 1.99023 7.49913 1.99023 8.56Z"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M5.99023 8.56V16.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M8.99023 12.56V16.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M8.99023 8.56V9.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M14.9902 8.56V16.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 16.5V16.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 8.56V13.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M17.9902 13.56V16.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M17.9902 8.56V10.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span class="text-sm font-bold">{{ book.isbn10 }}</span>
+        </li>
+        <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.isbn13">
+          <span class="text-sm">ISBN-10</span>
+          <svg
+            class="size-2/6 block mx-auto mt-3 mb-1"
+            viewBox="-0.5 0 25 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1.99023 8.56V16.56C1.99023 17.6209 2.41166 18.6383 3.1618 19.3884C3.91195 20.1386 4.92937 20.56 5.99023 20.56H17.9902C19.0511 20.56 20.0685 20.1386 20.8187 19.3884C21.5688 18.6383 21.9902 17.6209 21.9902 16.56V8.56C21.9902 7.49913 21.5688 6.48171 20.8187 5.73157C20.0685 4.98142 19.0511 4.56 17.9902 4.56H5.99023C4.92937 4.56 3.91195 4.98142 3.1618 5.73157C2.41166 6.48171 1.99023 7.49913 1.99023 8.56Z"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M5.99023 8.56V16.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M8.99023 12.56V16.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M8.99023 8.56V9.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M14.9902 8.56V16.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 16.5V16.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M12 8.56V13.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M17.9902 13.56V16.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M17.9902 8.56V10.56"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span class="text-sm font-bold">{{ book.isbn13 }}</span>
+        </li>
+        <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.publishers">
+          <span class="text-sm">Publisher</span>
+          <svg
+            class="size-2/6 block mx-auto mt-3 mb-1"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M11.5528 1.10557C11.8343 0.964809 12.1657 0.964809 12.4472 1.10557L22.4472 6.10557C22.862 6.31298 23.0798 6.77838 22.9732 7.22975C22.8667 7.68112 22.4638 8 22 8H1.99998C1.5362 8 1.13328 7.68112 1.02673 7.22975C0.920172 6.77838 1.13795 6.31298 1.55276 6.10557L11.5528 1.10557ZM6.23604 6H17.7639L12 3.11803L6.23604 6ZM5.99998 9C6.55226 9 6.99998 9.44772 6.99998 10V15C6.99998 15.5523 6.55226 16 5.99998 16C5.44769 16 4.99998 15.5523 4.99998 15V10C4.99998 9.44772 5.44769 9 5.99998 9ZM9.99998 9C10.5523 9 11 9.44772 11 10V15C11 15.5523 10.5523 16 9.99998 16C9.44769 16 8.99998 15.5523 8.99998 15V10C8.99998 9.44772 9.44769 9 9.99998 9ZM14 9C14.5523 9 15 9.44772 15 10V15C15 15.5523 14.5523 16 14 16C13.4477 16 13 15.5523 13 15V10C13 9.44772 13.4477 9 14 9ZM18 9C18.5523 9 19 9.44772 19 10V15C19 15.5523 18.5523 16 18 16C17.4477 16 17 15.5523 17 15V10C17 9.44772 17.4477 9 18 9ZM2.99998 18C2.99998 17.4477 3.44769 17 3.99998 17H20C20.5523 17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H3.99998C3.44769 19 2.99998 18.5523 2.99998 18ZM0.999976 21C0.999976 20.4477 1.44769 20 1.99998 20H22C22.5523 20 23 20.4477 23 21C23 21.5523 22.5523 22 22 22H1.99998C1.44769 22 0.999976 21.5523 0.999976 21Z"
+              fill="#000000"
+            />
+          </svg>
+          <span class="text-sm font-bold">{{ book.publishers }}</span>
+        </li>
+        <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.published">
+          <span class="text-sm">Publication date</span>
+          <svg
+            class="size-2/6 block mx-auto mt-3 mb-1"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 4V2.5"
+              stroke="#1C274C"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M17 4V2.5"
+              stroke="#1C274C"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M9 14.5L10.5 13V17"
+              stroke="#1C274C"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M13 16V14C13 13.4477 13.4477 13 14 13C14.5523 13 15 13.4477 15 14V16C15 16.5523 14.5523 17 14 17C13.4477 17 13 16.5523 13 16Z"
+              stroke="#1C274C"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M21.5 9H16.625H10.75M2 9H5.875"
+              stroke="#1C274C"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12V14C22 17.7712 22 19.6569 20.8284 20.8284C20.1752 21.4816 19.3001 21.7706 18 21.8985"
+              stroke="#1C274C"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span class="text-sm font-bold">{{
+            book.published | date: 'MMM dd, YYYY'
+          }}</span>
+        </li>
+        <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.language">
+          <span class="text-sm">Language</span>
+          <svg
+            class="size-2/5 block mx-auto mt-3 mb-1"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M14.6921 5H9.30807C8.15914 5.00635 7.0598 5.46885 6.25189 6.28576C5.44398 7.10268 4.99368 8.20708 5.00007 9.356V14.644C4.99368 15.7929 5.44398 16.8973 6.25189 17.7142C7.0598 18.5311 8.15914 18.9937 9.30807 19H14.6921C15.841 18.9937 16.9403 18.5311 17.7482 17.7142C18.5562 16.8973 19.0064 15.7929 19.0001 14.644V9.356C19.0064 8.20708 18.5562 7.10268 17.7482 6.28576C16.9403 5.46885 15.841 5.00635 14.6921 5Z"
+              stroke="#000000"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M8.00012 9C7.58591 9 7.25012 9.33579 7.25012 9.75C7.25012 10.1642 7.58591 10.5 8.00012 10.5V9ZM12.0001 10.5C12.4143 10.5 12.7501 10.1642 12.7501 9.75C12.7501 9.33579 12.4143 9 12.0001 9V10.5ZM11.2501 9.75C11.2501 10.1642 11.5859 10.5 12.0001 10.5C12.4143 10.5 12.7501 10.1642 12.7501 9.75H11.2501ZM12.7501 8C12.7501 7.58579 12.4143 7.25 12.0001 7.25C11.5859 7.25 11.2501 7.58579 11.2501 8H12.7501ZM12.0001 9C11.5859 9 11.2501 9.33579 11.2501 9.75C11.2501 10.1642 11.5859 10.5 12.0001 10.5V9ZM15.5001 10.5C15.9143 10.5 16.2501 10.1642 16.2501 9.75C16.2501 9.33579 15.9143 9 15.5001 9V10.5ZM15.5001 9C15.0859 9 14.7501 9.33579 14.7501 9.75C14.7501 10.1642 15.0859 10.5 15.5001 10.5V9ZM16.0001 10.5C16.4143 10.5 16.7501 10.1642 16.7501 9.75C16.7501 9.33579 16.4143 9 16.0001 9V10.5ZM16.1138 10.1811C16.3519 9.84222 16.2702 9.37443 15.9313 9.13631C15.5923 8.8982 15.1246 8.97992 14.8864 9.31885L16.1138 10.1811ZM11.2737 13.2783C10.9579 13.5464 10.9193 14.0197 11.1874 14.3354C11.4555 14.6512 11.9288 14.6898 12.2445 14.4217L11.2737 13.2783ZM9.29973 14.9003C8.96852 15.149 8.90167 15.6192 9.15041 15.9504C9.39916 16.2816 9.8693 16.3485 10.2005 16.0997L9.29973 14.9003ZM12.2569 14.407C12.5667 14.1321 12.595 13.6581 12.3201 13.3483C12.0453 13.0384 11.5712 13.0101 11.2614 13.285L12.2569 14.407ZM11.1691 14.3091C11.4249 14.6349 11.8963 14.6917 12.2222 14.436C12.548 14.1802 12.6048 13.7088 12.3491 13.3829L11.1691 14.3091ZM11.186 11.4467C11.0185 11.0678 10.5756 10.8966 10.1968 11.0641C9.81796 11.2316 9.64667 11.6745 9.8142 12.0533L11.186 11.4467ZM12.3609 13.4024C12.1137 13.07 11.6439 13.001 11.3115 13.2482C10.9792 13.4954 10.9101 13.9652 11.1573 14.2976L12.3609 13.4024ZM13.8953 16.6608C14.2602 16.8567 14.7149 16.7198 14.9109 16.3548C15.1068 15.9899 14.9699 15.5352 14.605 15.3392L13.8953 16.6608ZM8.00012 10.5H12.0001V9H8.00012V10.5ZM12.7501 9.75V8H11.2501V9.75H12.7501ZM12.0001 10.5H15.5001V9H12.0001V10.5ZM15.5001 10.5H16.0001V9H15.5001V10.5ZM14.8864 9.31885C13.8552 10.7867 12.6412 12.1172 11.2737 13.2783L12.2445 14.4217C13.7091 13.1782 15.0093 11.7532 16.1138 10.1811L14.8864 9.31885ZM10.2005 16.0997C10.7113 15.7161 11.4531 15.1201 12.2569 14.407L11.2614 13.285C10.4871 13.9719 9.77692 14.5419 9.29973 14.9003L10.2005 16.0997ZM12.3491 13.3829C11.8824 12.7884 11.4917 12.1379 11.186 11.4467L9.8142 12.0533C10.1703 12.8586 10.6255 13.6164 11.1691 14.3091L12.3491 13.3829ZM11.1573 14.2976C11.8855 15.2767 12.8203 16.0835 13.8953 16.6608L14.605 15.3392C13.7239 14.8661 12.9578 14.2048 12.3609 13.4024L11.1573 14.2976Z"
+              fill="#000000"
+            />
+          </svg>
+          <span class="text-sm font-bold">{{ book.language }}</span>
+        </li>
+        <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.dimensions">
+          <span class="text-sm">Dimensions</span>
+          <svg
+            class="size-2/6 block mx-auto mt-3 mb-1"
+            viewBox="0 0 15 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M3.00014 2.73895C3.00014 2.94698 2.76087 3.06401 2.59666 2.93628L1.00386 1.69744C0.875177 1.59735 0.875177 1.40286 1.00386 1.30277L2.59666 0.063928C2.76087 -0.0637944 3.00014 0.0532293 3.00014 0.261266V1.00012H9.00009V0.261296C9.00009 0.0532591 9.23936 -0.0637646 9.40358 0.0639578L10.9964 1.3028C11.1251 1.40289 11.1251 1.59738 10.9964 1.69747L9.40358 2.93631C9.23936 3.06404 9.00009 2.94701 9.00009 2.73898V2.00012H3.00014V2.73895ZM9.50002 4.99998H2.50002C2.22388 4.99998 2.00002 5.22384 2.00002 5.49998V12.5C2.00002 12.7761 2.22388 13 2.50002 13H9.50002C9.77616 13 10 12.7761 10 12.5V5.49998C10 5.22384 9.77616 4.99998 9.50002 4.99998ZM2.50002 3.99998C1.67159 3.99998 1.00002 4.67156 1.00002 5.49998V12.5C1.00002 13.3284 1.67159 14 2.50002 14H9.50002C10.3284 14 11 13.3284 11 12.5V5.49998C11 4.67156 10.3284 3.99998 9.50002 3.99998H2.50002ZM14.7389 6.00001H14V12H14.7389C14.9469 12 15.064 12.2393 14.9362 12.4035L13.6974 13.9963C13.5973 14.125 13.4028 14.125 13.3027 13.9963L12.0639 12.4035C11.9362 12.2393 12.0532 12 12.2612 12H13V6.00001H12.2612C12.0532 6.00001 11.9361 5.76074 12.0639 5.59653L13.3027 4.00373C13.4028 3.87505 13.5973 3.87505 13.6974 4.00374L14.9362 5.59653C15.0639 5.76074 14.9469 6.00001 14.7389 6.00001Z"
+              fill="#000000"
+            />
+          </svg>
+          <span class="text-sm font-bold">{{ book.dimensions }}</span>
+        </li>
+        <li class="w-44 flex-shrink-0 px-1" *ngIf="book.pages">
+          <span class="text-sm">Print lenght</span>
+          <svg
+            class="size-2/6 block mx-auto mt-3 mb-1"
+            viewBox="0 0 21 21"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g
+              fill="none"
+              fill-rule="evenodd"
+              stroke="#000000"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              transform="translate(4 3)"
+            >
+              <path
+                d="m11.5.5h-7c-1.1045695 0-2 .8954305-2 2v9c0 1.1045695.8954305 2 2 2h7c1.1045695 0 2-.8954305 2-2v-9c0-1.1045695-.8954305-2-2-2z"
+              />
+              <path
+                d="m2.5 2.5c-1.1045695 0-2 .8954305-2 2v8c0 1.6568542 1.34314575 3 3 3h6c1.1045695 0 2-.8954305 2-2"
+              />
+            </g>
+          </svg>
+          <span class="text-sm font-bold">{{ book.pages }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="">
+    <h2 class="text-xl font-medium text-gray-700">Description</h2>
+    <p class="mt-2 text-gray-600">{{ book.notes ?? 'N/A' }}</p>
+  </div>
 </div>
-
-
 
 <div
   class="market"
@@ -523,122 +777,11 @@
   <book-post-card *ngFor="let post of data" [post]="post"></book-post-card>
 </div>
 
-<!-- Modal toggle -->
-<button
-  class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-  type="button"
-  data-modal-target="timeline-modal"
-  data-modal-toggle="timeline-modal"
->
-  Toggle modal
-</button>
-
 <!-- Main modal -->
 <div
   class="overflow-y-auto overflow-x-hidden fixed bottom-0 right-0 max-h-full w-1/4 h-[calc(100%-70px)]"
   aria-hidden="true"
   tabindex="-1"
 >
-  <div class="relative p-4 w-full max-w-md max-h-full">
-    <!-- Modal content -->
-    <div class="relative bg-white">
-      <!-- Modal header -->
-      <div
-        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
-      >
-        <h3 class="text-lg font-semibold text-gray-900">Changelog</h3>
-        <button
-          type="button"
-          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center"
-          data-modal-toggle="timeline-modal"
-        >
-          <svg
-            class="w-3 h-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 14"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-            />
-          </svg>
-          <span class="sr-only">Close modal</span>
-        </button>
-      </div>
-
-      <!-- Modal body -->
-      <div class="p-4 md:p-5">
-        <ol class="relative border-s border-gray-200 ms-3.5 mb-4 md:mb-5">
-          <li class="mb-6 ms-8" *ngFor="let metric of metrics.sale">
-            <span
-              class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3.5 ring-8 ring-white"
-            >
-                <svg class="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                    <g fill="none" fill-rule="evenodd">
-                    <path fill="#80D25B" d="M42.1561026,48.217237 C50.904695,48.217237 59.3530187,39.6818331 59.3530187,30.9332407 C59.3530187,22.1846483 45.1894084,-1.74228695 45.1894084,-1.74228695 C45.1894084,-1.74228695 28.1191741,20.3680678 27.0857195,29.7665352 C26.0522649,39.1650025 33.4075102,48.217237 42.1561026,48.217237 Z" transform="rotate(36 43.17 23.237)"/>
-                    <path stroke="#22BA8E" stroke-linecap="round" stroke-width="3" d="M49.7607359,15.8672252 C49.7607359,15.8672252 35.1835686,24.8145106 29.8825517,41.2933444 C24.5815349,57.7721783 8.88191352,55.9007026 8.88191352,55.9007026"/>
-                    <polyline stroke="#22BA8E" stroke-linecap="round" stroke-width="2" points="41.946 36.659 32.202 36.245 27.486 27.936"/>
-                    <polyline stroke="#22BA8E" stroke-linecap="round" stroke-width="2" points="44.938 27.965 38.294 26.606 36.16 21.188"/>
-                    </g>
-                </svg>
-            </span>
-            <h5
-              class="flex items-start mb-1 text-base font-semibold text-gray-900"
-            >
-              {{ metric.state }}
-              <span
-                class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-3 py-0.5 rounded-full ms-3"
-              >
-                {{ metric._count }}
-              </span>
-            </h5>
-            <span
-              class="block mb-3 text-sm font-normal leading-none text-gray-500"
-              >{{ metric.range }}</span
-            >
-          </li>
-          <li class="ms-8">
-            <span
-              class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3.5 ring-8 ring-white"
-            >
-            <svg class="w-6 h-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fill-rule="evenodd">
-                  <g transform="rotate(110 4.339 30.802)">
-                    <polygon fill="#80D25B" points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"/>
-                    <path fill="#22BA8E" d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"/>
-                  </g>
-                  <g transform="scale(1 -1) rotate(-70 -11.107 -40.767)">
-                    <polygon fill="#80D25B" points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"/>
-                    <path fill="#22BA8E" d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"/>
-                  </g>
-                  <g transform="scale(1 -1) rotate(54 55.492 16.03)">
-                    <polygon fill="#80D25B" points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"/>
-                    <path fill="#22BA8E" d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"/>
-                  </g>
-                </g>
-              </svg>
-            </span>
-            <h5
-              class="flex items-start mb-1 text-base font-semibold text-green-600"
-            >
-              Tradeable
-              <span
-                class="bg-green-100 text-green-600 text-sm font-medium mr-2 px-3 py-0.5 rounded-full ms-3"
-              >
-                0
-              </span>
-            </h5>
-            <span class="block mb-3 text-xs font-normal text-gray-500">
-                Trade Smart, Save Big: Swap Your Textbooks for Sustainable Savings! Reduce Waste, Reuse Knowledge, and Keep Both Your Wallet and the Planet Happy!
-            </span>
-          </li>
-        </ol>
-      </div>
-    </div>
-  </div>
+  <books-pricing [isbn13]="params.isbn13"></books-pricing>
 </div>

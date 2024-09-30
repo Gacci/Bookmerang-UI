@@ -11,7 +11,7 @@ export abstract class InfiniteScrollView<T> {
 
   protected hasNextPage: boolean = true;
 
-  protected params: Data = {};
+  protected params: any = {};
 
   abstract onScrollDown(): void;
 

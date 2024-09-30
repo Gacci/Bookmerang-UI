@@ -1,126 +1,327 @@
+<app-navigation></app-navigation>
 
-  <div class="w-full max-w-lg bg-white shadow-md rounded-lg p-6">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Book Condition Form</h1>
-    
-    <form>
-      <!-- Notes -->
-      <div class="mb-4">
-        <label for="notes" class="block text-gray-700 font-semibold mb-2">Notes</label>
-        <textarea id="notes" name="notes" maxlength="256" placeholder="Enter any additional notes" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
-      </div>
+<!-- <loading-overlay></loading-overlay> -->
 
-      <!-- Tradeable -->
-      <div class="mb-4">
-        <label for="tradeable" class="block text-gray-700 font-semibold mb-2">Tradeable</label>
-        <div class="flex items-center space-x-4">
-          <label class="inline-flex items-center">
-            <input type="radio" name="tradeable" value="1" class="form-radio text-indigo-600">
-            <span class="ml-2 text-gray-700">Yes</span>
-          </label>
-          <label class="inline-flex items-center">
-            <input type="radio" name="tradeable" value="0" class="form-radio text-indigo-600">
-            <span class="ml-2 text-gray-700">No</span>
+<div class="w-full max-w-3xl bg-white shadow-lg rounded-lg mx-auto p-16">
+  <h1 class="text-3xl font-semibold text-gray-800 mb-6">Book Condition Form</h1>
+
+  <form [formGroup]="payload" (ngSubmit)="onSubmit($event)">
+    <div>
+      <label for="price" class="block text-gray-700 font-medium mb-2"
+        >Selling Price</label
+      >
+      <div class="flex space-x-8">
+        <!-- Price -->
+        <div class="mb-6 lg:w-1/2">
+          <input
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            type="text"
+            placeholder="Enter price"
+            formControlName="price"
+          />
+
+          <!-- <p class="text-sm text-gray-500 mb-2">
+                    Specify the price if the book is for sale. Leave blank if not applicable.
+                </p> -->
+        </div>
+
+        <!-- Tradeable -->
+        <div class="mb-6 py-2">
+          <label class="inline-flex items-center cursor-pointer">
+            <input
+              class="sr-only peer"
+              type="checkbox"
+              value="1"
+              formControlName="tradeable"
+            />
+            <div
+              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+            ></div>
+            <p class="text-sm text-gray-500 ml-2">
+              Are you open to trading this book?
+            </p>
           </label>
         </div>
       </div>
+    </div>
 
-      <!-- Price -->
-      <div class="mb-4">
-        <label for="price" class="block text-gray-700 font-semibold mb-2">Price</label>
-        <input type="number" id="price" name="price" step="0.01" placeholder="Enter price" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-      </div>
+    <!-- State -->
+    <div class="mb-8">
+      <label class="block text-gray-700 font-medium mb-2">Overall Condition</label>
+      <ul class="flex flex-col">
+        <li
+          class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+        >
+          <div class="relative flex items-start w-full">
+            <div class="flex items-center h-5">
+              <input
+                class="border-gray-200 rounded-full disabled:opacity-50"
+                id="new"
+                name="state"
+                type="radio"
+                value="NEW"
+                formControlName="state"
+              />
+            </div>
+            <label for="new" class="ms-3 block w-full text-sm text-gray-600">
+              New - Perfect condition, as if just purchased
+            </label>
+          </div>
+        </li>
 
-      <!-- State -->
-      <div class="mb-4">
-        <label for="state" class="block text-gray-700 font-semibold mb-2">State</label>
-        <select id="state" name="state" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="">Select state</option>
-          <option value="NEW">New</option>
-          <option value="LIKE_NEW">Like New</option>
-          <option value="VERY_GOOD">Very Good</option>
-          <option value="GOOD">Good</option>
-          <option value="ACCEPTABLE">Acceptable</option>
-        </select>
-      </div>
+        <li
+          class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+        >
+          <div class="relative flex items-start w-full">
+            <div class="flex items-center h-5">
+              <input
+                class="border-gray-200 rounded-full disabled:opacity-50"
+                id="like-new"
+                name="state"
+                type="radio"
+                value="LIKE_NEW"
+                formControlName="state"
+              />
+            </div>
+            <label for="like-new" class="ms-3 block w-full text-sm text-gray-600">
+              Like New - Minimal wear, barely used
+            </label>
+          </div>
+        </li>
 
-      <!-- Binding -->
-      <div class="mb-4">
-        <label for="binding" class="block text-gray-700 font-semibold mb-2">Binding</label>
-        <select id="binding" name="binding" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="">Select binding</option>
-          <option value="BROKEN">Broken</option>
-          <option value="DAMAGED">Damaged</option>
-          <option value="INTACT">Intact</option>
-          <option value="WEAK">Weak</option>
-        </select>
-      </div>
+        <li
+          class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+        >
+          <div class="relative flex items-start w-full">
+            <div class="flex items-center h-5">
+              <input
+                class="border-gray-200 rounded-full disabled:opacity-50"
+                id="very-good"
+                name="state"
+                type="radio"
+                value="VERY_GOOD"
+                formControlName="state"
+              />
+            </div>
+            <label for="very-good" class="ms-3 block w-full text-sm text-gray-600">
+              Very Good - Minor signs of use, but overall excellent
+            </label>
+          </div>
+        </li>
 
-      <!-- Cover -->
-      <div class="mb-4">
-        <label for="cover" class="block text-gray-700 font-semibold mb-2">Cover</label>
-        <select id="cover" name="cover" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="">Select cover condition</option>
-          <option value="CREASED">Creased</option>
-          <option value="CUT">Cut</option>
-          <option value="DISCOLORED">Discolored</option>
-          <option value="FADED">Faded</option>
-          <option value="INTACT">Intact</option>
-          <option value="RIPPED">Ripped</option>
-          <option value="SCRATCHED">Scratched</option>
-          <option value="STAINED">Stained</option>
-        </select>
-      </div>
+        <li
+          class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+        >
+          <div class="relative flex items-start w-full">
+            <div class="flex items-center h-5">
+              <input
+                class="border-gray-200 rounded-full disabled:opacity-50"
+                id="good"
+                name="state"
+                type="radio"
+                value="GOOD"
+                formControlName="state"
+              />
+            </div>
+            <label for="good" class="ms-3 block w-full text-sm text-gray-600">
+              Good - Noticeable wear but still in decent shape
+            </label>
+          </div>
+        </li>
 
-      <!-- Pages -->
-      <div class="mb-4">
-        <label for="pages" class="block text-gray-700 font-semibold mb-2">Pages</label>
-        <select id="pages" name="pages" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="">Select page condition</option>
-          <option value="CREASED">Creased</option>
-          <option value="FOLDED">Folded</option>
-          <option value="INTACT">Intact</option>
-          <option value="MARKED">Marked</option>
-          <option value="STAINED">Stained</option>
-          <option value="TORN">Torn</option>
-          <option value="WARPED">Warped</option>
-          <option value="YELLOWED">Yellowed</option>
-        </select>
-      </div>
+        <li
+          class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+        >
+          <div class="relative flex items-start w-full">
+            <div class="flex items-center h-5">
+              <input
+                class="border-gray-200 rounded-full disabled:opacity-50"
+                id="acceptable"
+                name="state"
+                type="radio"
+                value="ACCEPTABLE"
+                formControlName="state"
+              />
+            </div>
+            <label for="acceptable" class="ms-3 block w-full text-sm text-gray-600">
+              Acceptable
+            </label>
+          </div>
+        </li>
+      </ul>
 
-      <!-- Markings -->
-      <div class="mb-4">
-        <label for="markings" class="block text-gray-700 font-semibold mb-2">Markings</label>
-        <select id="markings" name="markings" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="">Select markings</option>
-          <option value="EXTENSIVE">Extensive</option>
-          <option value="HIGHLIGHTER">Highlighter</option>
-          <option value="MINIMAL">Minimal</option>
-          <option value="NONE">None</option>
-          <option value="PEN">Pen</option>
-          <option value="PENCIL">Pencil</option>
-        </select>
-      </div>
+      <!-- <p class="text-sm text-gray-500 mb-2">Select the general condition of the book.</p> -->
+    </div>
 
-      <!-- Extras -->
-      <div class="mb-4">
-        <label for="extras" class="block text-gray-700 font-semibold mb-2">Extras</label>
-        <div class="flex items-center space-x-4">
-          <label class="inline-flex items-center">
-            <input type="checkbox" name="extras" value="ACCESS_CODE" class="form-checkbox text-indigo-600">
-            <span class="ml-2 text-gray-700">Access Code</span>
-          </label>
-          <label class="inline-flex items-center">
-            <input type="checkbox" name="extras" value="CD" class="form-checkbox text-indigo-600">
-            <span class="ml-2 text-gray-700">CD</span>
-          </label>
+    <!-- Binding -->
+    <div class="mb-8">
+      <label class="block text-gray-700 font-medium mb-2">Binding Condition</label>
+      <select class="select" formControlName="binding">
+        <option disabled value="SELECT">-- Select ---</option>
+        <option value="INTACT">Intact - Good condition, fully functional</option>
+        <option value="BROKEN">
+          Broken - Damaged binding, difficult to keep together
+        </option>
+        <option value="WEAK">
+          Weak - Slightly loose but holds the pages together
+        </option>
+        <option value="DAMAGED">Damaged - Noticeably weakened but intact</option>
+      </select>
+
+      <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the book’s binding.</p> -->
+    </div>
+
+    <!-- Cover -->
+    <div class="mb-8">
+      <label class="block text-gray-700 font-medium mb-2">Cover Condition</label>
+      <select class="select" formControlName="cover">
+        <option disabled value="SELECT">-- Select ---</option>
+        <option value="CREASED">Creased - Visible creases or folds</option>
+        <option value="CUT">Cut - Physically cut or torn cover</option>
+        <option value="DISCOLORED">
+          Discolored - Noticeable discoloration present
+        </option>
+        <option value="FADED">Faded - Colors have faded from wear</option>
+        <option value="INTACT">Intact - No significant issues</option>
+        <option value="RIPPED">Ripped - Tears or rips in the cover</option>
+        <option value="SCRATCHED">Scratched - Visible scratches on the cover</option>
+        <option value="STAINED">Stained - Visible stains or marks</option>
+      </select>
+
+      <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the book’s cover.</p> -->
+    </div>
+
+    <!-- Pages -->
+    <div class="mb-8">
+      <label class="block text-gray-700 font-medium mb-2">Pages Condition</label>
+      <select class="select" formControlName="pages">
+        <option disabled value="SELECT">-- Select ---</option>
+        <option value="CREASED">Creased - Pages have visible folds</option>
+        <option value="FOLDED">Folded - Some pages are bent</option>
+        <option value="INTACT">Intact - No significant damage</option>
+        <option value="TORN">Torn - Pages are ripped or torn</option>
+      </select>
+
+      <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the pages inside the book.</p> -->
+    </div>
+
+    <!-- Markings -->
+    <div class="mb-8">
+      <label class="block text-gray-700 font-medium mb-2">Markings</label>
+      <select class="select" formControlName="markings">
+        <option disabled value="SELECT">-- Select ---</option>
+        <option value="HIGHLIGHTING">
+          Highlighting - Pages have been highlighted
+        </option>
+        <option value="MINIMAL">Minimal - Barely any markings</option>
+        <option value="NONE">None - No markings present</option>
+        <option value="PEN">Pen - Some pages have pen markings</option>
+        <option value="PENCIL">Pencil - Some pages have pencil markings</option>
+      </select>
+
+      <!-- <p class="text-sm text-gray-500 mb-2">Select the type of markings found inside the book.</p> -->
+    </div>
+
+    <!-- Notes -->
+    <div class="mb-8">
+      <label class="block text-gray-700 font-medium mb-2" for="notes"
+        >Additional Notes</label
+      >
+      <textarea
+        class="w-full h-48 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        id="notes"
+        name="notes"
+        maxlength="516"
+        placeholder="Add notes here..."
+        formControlName="notes"
+      ></textarea>
+
+      <!-- <p class="text-gray-500 mb-2">Share any relevant details about the book's condition.</p> -->
+    </div>
+
+    <!-- Media -->
+    <div class="flex items-center justify-center w-full">
+      <label
+        for="dropzone"
+        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+      >
+        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+          <svg
+            class="w-8 h-8 mb-4 text-gray-500"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 16"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+            />
+          </svg>
+          <p class="mb-2 text-sm text-gray-500">
+            <span class="font-semibold">Click to upload</span> or drag and drop
+          </p>
+          <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
         </div>
-      </div>
+        <input
+          id="dropzone"
+          type="file"
+          class="hidden"
+          accept="image/png, image/jpeg"
+          multiple
+          formControlName="images"
+          (change)="onInputChange($event)"
+        />
+      </label>
+    </div>
+    <div class="h-96 py-8 bg-gray-50 rounded-lg text-center my-2 overflow-auto">
+      <div
+        class="relative inline-block m-2 group"
+        *ngFor="let image of selectedBase64Images; trackBy: trackBy"
+      >
+        <!-- Image with opacity on hover -->
+        <img
+          class="h-32 w-32 object-cover rounded-lg group-hover:bg-black group-hover:opacity-50 transition-opacity duration-200"
+          [src]="image.data"
+        />
 
-      <div class="mt-6">
-        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          Submit
+        <!-- Black overlay on hover -->
+        <div
+          class="absolute rounded-lg inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-200"
+        ></div>
+
+        <!-- Button visible only on hover -->
+        <button
+          class="absolute bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 px-3 py-0.5 text-xs text-red-500 bg-red-100 rounded-full z-10"
+          type="button"
+          (click)="onRemoveThumbnail(image.id)"
+        >
+          Delete
         </button>
       </div>
-    </form>
-  </div>
+    </div>
 
+    <!-- Submit Button -->
+    <button
+      type="submit"
+      class="w-full btn btn-blue-600"
+    >
+      Submit
+    </button>
+  </form>
+</div>
+
+<!-- Main modal -->
+<div
+  class="overflow-y-auto overflow-x-hidden fixed bottom-0 right-0 max-h-full w-1/4 h-[calc(100%-70px)]"
+  aria-hidden="true"
+  tabindex="-1"
+>
+  <books-pricing
+    [isbn13]="book.isbn13"
+    (loaded)="onMetricsLoaded($event)"
+  ></books-pricing>
+</div>
