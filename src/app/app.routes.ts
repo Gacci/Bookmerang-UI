@@ -52,8 +52,8 @@ export const routes: Routes = [
   },
   {
     component: BooksMarketsComponent,
-    path: 'books/markets/:isbn13',
-    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    path: 'books/markets',
+    runGuardsAndResolvers: 'always',
     resolve: {
       posts: BookPostResolver,
       book: BookResolverService,
@@ -61,7 +61,7 @@ export const routes: Routes = [
   },
   {
     component: BookPostComponent,
-    path: 'books/markets/post/:isbn13',
+    path: 'books/markets/:isbn13',
     resolve: {
       book: BookResolverService,
     },

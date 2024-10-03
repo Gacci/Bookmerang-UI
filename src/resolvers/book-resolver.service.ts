@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { Observable } from 'rxjs';
 import { BookCollectionService } from '../services/book-collection.service';
 @Injectable({
@@ -13,6 +16,7 @@ export class BookResolverService {
     state: RouterStateSnapshot,
   ): Observable<any> {
     console.log('BooksCollectionResolver', route.queryParams);
-    return this.bookCollectionService.read(route.params['isbn13']);
+    const params: any = { ...route.params, ...route.queryParams };
+    return this.bookCollectionService.read(params.isbn13);
   }
 }

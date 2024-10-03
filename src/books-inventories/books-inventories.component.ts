@@ -9,7 +9,7 @@ import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 import { LoadingOverlayComponent } from '../components/loading-overlay/loading-overlay.component';
 import { NavigationComponent } from '../components/navigation/navigation.component';
 
-import { BookPostOfferService } from '../services/book-post-offer.service';
+import { BookMarketService } from '../services/book-market.service';
 
 @Component({
   selector: 'app-inventory',
@@ -29,7 +29,7 @@ import { BookPostOfferService } from '../services/book-post-offer.service';
 export class BooksInventoriesComponent extends InfiniteScrollView<Data> {
   private route = inject(ActivatedRoute);
 
-  private bookMarketService = inject(BookPostOfferService);
+  private bookMarketService = inject(BookMarketService);
 
   ngOnInit(): void {
     this.pageNumber += 1;

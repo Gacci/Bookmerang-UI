@@ -59,7 +59,9 @@ export class SignUpComponent {
   protected timerExpiredId!: ReturnType<typeof setTimeout>;
 
   constructor(private readonly auth: AuthService) {
-    this.signUpGroup.addValidators(passwordMatchValidator('password', 'confirmed'));
+    this.signUpGroup.addValidators(
+      passwordMatchValidator('password', 'confirmed'),
+    );
   }
 
   startExpiresInCountdown() {

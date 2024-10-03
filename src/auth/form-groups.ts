@@ -5,7 +5,10 @@ export const email = [
   Validators.email,
   Validators.pattern(/^.+@([a-z]+\.)?[a-z]+\.[a-z]{2,3}$/),
 ];
-export const token = [Validators.required, Validators.pattern(/[A-Z0-9]{6}/)];
+export const token = [
+  Validators.required,
+  Validators.pattern(/[A-Z0-9]{6}/),
+];
 export const password = [
   Validators.required /*, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)*/,
 ];

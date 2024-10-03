@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
-import { BookPostOfferService } from '../services/book-post-offer.service';
+import { BookMarketService } from '../services/book-market.service';
 
 import { BookPostCardComponent } from '../components/book-post-card/book-post-card.component';
 import { LoadingOverlayComponent } from '../components/loading-overlay/loading-overlay.component';
@@ -28,7 +28,7 @@ import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 export class HomeComponent extends InfiniteScrollView<Data> {
   private route = inject(ActivatedRoute);
 
-  private bookMarketService = inject(BookPostOfferService);
+  private bookMarketService = inject(BookMarketService);
 
   ngOnInit(): void {
     this.pageNumber += 1;

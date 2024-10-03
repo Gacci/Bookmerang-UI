@@ -1,12 +1,14 @@
-<div class="relative p-4 w-full max-w-md max-h-full">
+<div class="relative p-4 w-full h-full z-10 bg-white">
   <!-- Modal content -->
   <div class="relative bg-white" *ngIf="!loading">
     <!-- Modal header -->
-    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+    <div
+      class="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
+    >
       <h3 class="text-lg font-semibold text-gray-900">Changelog</h3>
       <button
         type="button"
-        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center"
+        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center xl:hidden"
         data-modal-toggle="timeline-modal"
       >
         <svg
@@ -67,7 +69,9 @@
               </g>
             </svg>
           </span>
-          <h5 class="flex items-start mb-1 text-base font-semibold text-gray-900">
+          <h5
+            class="flex items-start mb-1 text-base font-semibold text-gray-900"
+          >
             {{ metric.state }}
             <span
               class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-3 py-0.5 rounded-full ms-3"
@@ -75,9 +79,10 @@
               {{ metric._count }}
             </span>
           </h5>
-          <span class="block mb-3 text-sm font-normal leading-none text-gray-500">{{
-            metric.range
-          }}</span>
+          <span
+            class="block mb-3 text-sm font-normal leading-none text-gray-500"
+            >{{ metric.range }}</span
+          >
         </li>
         <li class="ms-8">
           <span
@@ -122,7 +127,9 @@
               </g>
             </svg>
           </span>
-          <h5 class="flex items-start mb-1 text-base font-semibold text-green-600">
+          <h5
+            class="flex items-start mb-1 text-base font-semibold text-green-600"
+          >
             Tradeable
             <span
               class="bg-green-100 text-green-600 text-sm font-medium mr-2 px-3 py-0.5 rounded-full ms-3"
@@ -131,9 +138,9 @@
             </span>
           </h5>
           <span class="block mb-3 text-xs font-normal text-gray-500">
-            Trade Smart, Save Big: Swap Your Textbooks for Sustainable Savings!
-            Reduce Waste, Reuse Knowledge, and Keep Both Your Wallet and the Planet
-            Happy!
+            Trade Smart, Save Big: Swap Your Textbooks for Sustainable
+            Savings! Reduce Waste, Reuse Knowledge, and Keep Both Your
+            Wallet and the Planet Happy!
           </span>
         </li>
       </ol>
@@ -144,34 +151,66 @@
     <div class="max-w-lg mx-auto">
       <div role="status" class="my-7 animate-pulse">
         <div class="h-2.5 bg-gray-300 rounded-full w-48 mb-4"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[460px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[500px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[380px] mb-2.5"></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[460px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[500px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[380px] mb-2.5"
+        ></div>
         <div class="h-2 bg-gray-200 rounded-full max-w-[460px]"></div>
         <span class="sr-only">Loading...</span>
       </div>
       <div role="status" class="my-6 animate-pulse">
-        <div class="h-2 bg-gray-200 rounded-full max-w-[460px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[460px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[500px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[380px] mb-2.5"></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[460px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[460px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[500px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[380px] mb-2.5"
+        ></div>
         <div class="h-2 bg-gray-200 rounded-full max-w-[460px]"></div>
         <span class="sr-only">Loading...</span>
       </div>
       <div role="status" class="my-6 animate-pulse">
-        <div class="h-2 bg-gray-200 rounded-full max-w-[460px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[460px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"
+        ></div>
         <span class="sr-only">Loading...</span>
       </div>
       <div role="status" class="my-7 animate-pulse">
         <div class="h-2.5 bg-gray-300 rounded-full w-48 mb-4"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[460px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[500px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full max-w-[380px] mb-2.5"></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[460px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[500px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[450px] mb-2.5"
+        ></div>
+        <div
+          class="h-2 bg-gray-200 rounded-full max-w-[380px] mb-2.5"
+        ></div>
         <div class="h-2 bg-gray-200 rounded-full max-w-[460px]"></div>
         <span class="sr-only">Loading...</span>
       </div>

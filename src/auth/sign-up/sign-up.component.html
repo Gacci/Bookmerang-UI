@@ -31,7 +31,11 @@
 
             <small
               class="input-error"
-              *ngIf="email.invalid && email.value && (email.dirty || email.touched)"
+              *ngIf="
+                email.invalid &&
+                email.value &&
+                (email.dirty || email.touched)
+              "
             >
               Please type a valid email
             </small>
@@ -156,14 +160,18 @@
 
         <div class="block text-sm text-center mt-4">
           <span class="text-gray-500"
-            >We respect your privacy. By clicking "Create account" you agree to
-            the</span
+            >We respect your privacy. By clicking "Create account" you
+            agree to the</span
           >
-          <a href="#" class="transition-colors">&nbsp;Terms and Conditions.</a>
+          <a href="#" class="transition-colors"
+            >&nbsp;Terms and Conditions.</a
+          >
         </div>
 
         <div class="text-center mt-6">
-          <span class="text-sm text-gray-500">Already have an account?</span>
+          <span class="text-sm text-gray-500"
+            >Already have an account?</span
+          >
           <a class="a text-sm" [routerLink]="['/sign-in']"> Sign in </a>
         </div>
       </form>
@@ -188,10 +196,12 @@
 
       <h4 class="h4 text-center">Get Your Code</h4>
       <p class="text-gray-500 text-sm text-center">
-        Please enter the <strong class="text-gray-600">6 digit</strong> code that
-        send to your email.
+        Please enter the
+        <strong class="text-gray-600">6 digit</strong> code that send to
+        your email.
         <ng-template *ngIf="expiresInSeconds"
-          >Code will expore in <strong>{{ expiresInSeconds }}s</strong></ng-template
+          >Code will expore in
+          <strong>{{ expiresInSeconds }}s</strong></ng-template
         >
       </p>
 
@@ -217,13 +227,16 @@
 
           <status-spinner
             *ngIf="
-              resendCreateAccountRequest.sent && !resendCreateAccountRequest.done
+              resendCreateAccountRequest.sent &&
+              !resendCreateAccountRequest.done
             "
           ></status-spinner>
         </button>
 
         <div class="text-center mt-6">
-          <span class="text-sm text-gray-500">Didn't receieve a code?</span>
+          <span class="text-sm text-gray-500"
+            >Didn't receieve a code?</span
+          >
           <button
             class="a-like text-sm"
             type="button"

@@ -75,7 +75,9 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.swiper = <Swiper>(<unknown>this.swiperRefElem.nativeElement.swiper);
+    this.swiper = <Swiper>(
+      (<unknown>this.swiperRefElem.nativeElement.swiper)
+    );
     this.swiper.update();
   }
 
@@ -96,7 +98,9 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   handleStartRecovery() {
     this.resetPasswordRequest = { sent: true };
     this.auth
-      .startPasswordRecovery(<EmailOnly>this.startPasswordRecoveryGroup.value)
+      .startPasswordRecovery(
+        <EmailOnly>this.startPasswordRecoveryGroup.value,
+      )
       .subscribe({
         next: () => {
           this.startExpiresInCountdown();
@@ -114,7 +118,9 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   handleResendRecoveryCode() {
     this.resendPasswordRequest = { sent: true };
     this.auth
-      .resendPasswordRecoveryCode(<EmailOnly>this.startPasswordRecoveryGroup.value)
+      .resendPasswordRecoveryCode(
+        <EmailOnly>this.startPasswordRecoveryGroup.value,
+      )
       .subscribe({
         next: () => {
           this.startExpiresInCountdown();

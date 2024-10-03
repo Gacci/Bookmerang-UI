@@ -70,7 +70,10 @@ export class AuthService {
     );
   }
   verifyCreateAccountCode(payload: Data) {
-    return this.http.post('http://127.0.0.1:3000/auth/accounts/verify', payload);
+    return this.http.post(
+      'http://127.0.0.1:3000/auth/accounts/verify',
+      payload,
+    );
   }
 
   getJwtTokens() {

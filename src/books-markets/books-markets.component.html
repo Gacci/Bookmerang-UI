@@ -399,7 +399,8 @@
         <div
           class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
         ></div>
-        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+        <span
+          class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
           >Toggle me</span
         >
       </label>
@@ -425,7 +426,7 @@
       <div class="mt-6">
         <a
           class="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
-          [routerLink]="['/', 'books', 'markets', 'post', book.isbn13]"
+          [routerLink]="['/', 'books', 'markets', book.isbn13]"
           >Sell my copy</a
         >
       </div>
@@ -447,11 +448,15 @@
         <h2 class="text-xl font-medium text-gray-700">Details</h2>
         <ul class="mt-2 text-gray-600 space-y-1">
           <li>
-            <span class="font-medium" *ngIf="book.publishers">Publisher:</span>
+            <span class="font-medium" *ngIf="book.publishers"
+              >Publisher:</span
+            >
             {{ book.publishers }}
           </li>
           <li>
-            <span class="font-medium" *ngIf="book.published">Publication Date:</span>
+            <span class="font-medium" *ngIf="book.published"
+              >Publication Date:</span
+            >
             {{ book.published }}
           </li>
           <li>
@@ -459,7 +464,9 @@
             {{ book.pages }}
           </li>
           <li>
-            <span class="font-medium" *ngIf="book.language">Language:</span>
+            <span class="font-medium" *ngIf="book.language"
+              >Language:</span
+            >
             {{ book.language }}
           </li>
         </ul>
@@ -619,7 +626,10 @@
           </svg>
           <span class="text-sm font-bold">{{ book.isbn13 }}</span>
         </li>
-        <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.publishers">
+        <li
+          class="w-44 flex-shrink-0 border-r px-1"
+          *ngIf="book.publishers"
+        >
           <span class="text-sm">Publisher</span>
           <svg
             class="size-2/6 block mx-auto mt-3 mb-1"
@@ -636,7 +646,10 @@
           </svg>
           <span class="text-sm font-bold">{{ book.publishers }}</span>
         </li>
-        <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.published">
+        <li
+          class="w-44 flex-shrink-0 border-r px-1"
+          *ngIf="book.published"
+        >
           <span class="text-sm">Publication date</span>
           <svg
             class="size-2/6 block mx-auto mt-3 mb-1"
@@ -710,7 +723,10 @@
           </svg>
           <span class="text-sm font-bold">{{ book.language }}</span>
         </li>
-        <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.dimensions">
+        <li
+          class="w-44 flex-shrink-0 border-r px-1"
+          *ngIf="book.dimensions"
+        >
           <span class="text-sm">Dimensions</span>
           <svg
             class="size-2/6 block mx-auto mt-3 mb-1"
@@ -779,9 +795,9 @@
 
 <!-- Main modal -->
 <div
-  class="overflow-y-auto overflow-x-hidden fixed bottom-0 right-0 max-h-full w-1/4 h-[calc(100%-70px)]"
+  class="fixed bottom-0 right-0 w-full xl:w-1/4 h-[calc(100%-70px)] overflow-x-auto overflow-y-hidden transition"
   aria-hidden="true"
   tabindex="-1"
 >
-  <books-pricing [isbn13]="params.isbn13"></books-pricing>
+  <books-pricing [isbn13]="params.isbn13" (visibility)="pricingViewState = !pricingViewState"></books-pricing>
 </div>

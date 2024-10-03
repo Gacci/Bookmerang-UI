@@ -1,4 +1,8 @@
-import { HttpRequest, HttpInterceptorFn, HttpHandlerFn } from '@angular/common/http';
+import {
+  HttpRequest,
+  HttpInterceptorFn,
+  HttpHandlerFn,
+} from '@angular/common/http';
 import { inject } from '@angular/core';
 import { throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
@@ -15,7 +19,7 @@ export const jwtAuthInterceptor: HttpInterceptorFn = (
     request = request.clone({
       setHeaders: {
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnN0aXR1dGlvbnMiOlsxODQwXSwiZW1haWwiOiJqdXN0by5qb25hdGhhbkBnbWFpbC5jb20iLCJpYXQiOjE3Mjc2NjYyMTQsImlzcyI6Imh0dHA6Ly9ib29rbWVyYW5nLmNvbSIsImp0aSI6IjQ0NDI3NDc3RjdBNEFBRkMzRDA0MjA5NUEzNTkxOTkyIiwicm9sZXMiOltdLCJzdWIiOjEsImV4cCI6MTcyNzkyNTQxNH0.OVTyWWn-YEZWziNtm24KBwg8ofCARRcJhQmqttJHxlQ'
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnN0aXR1dGlvbnMiOlsxODQwXSwiZW1haWwiOiJqdXN0by5qb25hdGhhbkBnbWFpbC5jb20iLCJpYXQiOjE3Mjc5MjkyNjcsImlzcyI6Imh0dHA6Ly9ib29rbWVyYW5nLmNvbSIsImp0aSI6IjNEOUVFNEE0MzlEM0ZBODQ1RUIyQzY3QzE2MEUzQjE4Iiwicm9sZXMiOltdLCJzdWIiOjEsImV4cCI6MTcyODE4ODQ2N30._v4WXS9DcP_tx0xt2DbiGbea-QguOMAiHxrXhkwkdKk'
         // Authorization: `Bearer ${jwtAuthToken}`,
       },
     });

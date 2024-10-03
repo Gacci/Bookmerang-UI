@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Data } from '@angular/router';
@@ -6,8 +6,12 @@ import { Data } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
-export class BookPostOfferService {
+export class BookMarketService {
   constructor(private http: HttpClient) {}
+
+  create(body: any) {
+    return this.http.post('http://127.0.0.1:3000/books/markets', body);
+  }
 
   search(params: Data) {
     console.log('BookPostOfferService.search', params);

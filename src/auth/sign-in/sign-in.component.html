@@ -21,7 +21,9 @@
       />
       <small
         class="input-error"
-        *ngIf="email.invalid && email.value && (email.dirty || email.touched)"
+        *ngIf="
+          email.invalid && email.value && (email.dirty || email.touched)
+        "
       >
         Please type a valid email
       </small>
@@ -57,7 +59,9 @@
     >
       Sign in
 
-      <status-spinner *ngIf="request.sent && !request.done"></status-spinner>
+      <status-spinner
+        *ngIf="request.sent && !request.done"
+      ></status-spinner>
     </button>
 
     <div class="text-center m-6">

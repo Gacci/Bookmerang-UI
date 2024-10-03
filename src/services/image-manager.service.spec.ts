@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BookService } from './book.service';
+import { ImageManagerService } from './image-manager.service';
 
-describe('BookService', () => {
-  let service: BookService;
+describe('ImageManagerService', () => {
+  let service: ImageManagerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BookService);
+    service = TestBed.inject(ImageManagerService);
   });
 
   it('should be created', () => {

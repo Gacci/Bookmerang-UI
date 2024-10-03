@@ -31,7 +31,9 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
   ngOnInit(): void {
     this.pageNumber += 1;
-    this.route.data.subscribe((data: any) => (this.data = data.books.data));
+    this.route.data.subscribe(
+      (data: any) => (this.data = data.books.data),
+    );
     this.route.queryParams.subscribe(
       (params: any) => (this.params = { title: params.title }),
     );

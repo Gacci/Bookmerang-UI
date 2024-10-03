@@ -21,13 +21,15 @@
     <div class="post-card-book">
       <a
         class="post-card-book-cover-box"
-        [routerLink]="['/', 'books', 'markets', post.book.isbn13]"
+        [queryParams]="{ isbn13: post.book.isbn13 }"
+        [routerLink]="['/', 'books', 'markets']"
       >
         <img class="post-card-book-cover" [src]="post.book.thumbnail" />
       </a>
       <a
         class="post-card-book-title"
-        [routerLink]="['/', 'books', 'markets', post.book.isbn13]"
+        [queryParams]="{ isbn13: post.book.isbn13 }"
+        [routerLink]="['/', 'books', 'markets']"
         >{{ post.book.title }} {{ post.book.subtitle }}</a
       >
       <span class="post-card-book-isbn">{{ post.book.isbn13 }}</span>
@@ -35,13 +37,19 @@
   </div>
   <div class="post-card-info">
     <div class="post-card-info-left">
-      <span class="post-card-price">{{ post.price | currency: 'USD' }}</span>
+      <span class="post-card-price">{{
+        post.price | currency: 'USD'
+      }}</span>
       <span class="post-card-type">{{ post.state }}</span>
     </div>
     <div class="post-card-info-right">
       <!-- *ngIf="post.tradeable" -->
       <div class="post-card-trade">
-        <svg class="size-6" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          class="size-6"
+          viewBox="0 0 64 64"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <g fill="none" fill-rule="evenodd">
             <g transform="rotate(110 4.339 30.802)">
               <polygon

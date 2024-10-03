@@ -1,7 +1,11 @@
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
@@ -10,7 +14,7 @@ import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 import { LoadingOverlayComponent } from '../components/loading-overlay/loading-overlay.component';
 import { NavigationComponent } from '../components/navigation/navigation.component';
 
-import { BookPostOfferService } from '../services/book-post-offer.service';
+import { BookMarketService } from '../services/book-market.service';
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 
 @Component({
@@ -36,13 +40,15 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
 
   private router = inject(Router);
 
-  private bookMarketService = inject(BookPostOfferService);
+  private bookMarketService = inject(BookMarketService);
 
-  protected isLoadingMetrics: boolean = true;
+  protected isLoadingMetrics!: boolean;
 
-  protected metrics: any = { trade: {}, sale: [] };
+  protected metrics!: any;
 
-  protected book: any = {};
+  protected book!: any;
+
+  protected pricingViewState!: boolean;
 
   protected filters: FormGroup<any> = new FormGroup({
     state: new FormGroup({
@@ -55,19 +61,22 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
   });
 
   ngOnInit(): void {
-    this.pageNumber += 1;
-    this.route.params.subscribe(
-      (params: any) => (this.params = { isbn13: params.isbn13 }),
-    );
+    // this.book = {};
+    // this.isLoadingMetrics = true;
+    // this.metrics = { trade: {}, sale: [] };
+    // this.pageNumber += 1;
+
 
     this.route.data.subscribe((data: any) => {
-      this.data = data.posts;
       this.book = data.book;
+      this.data = data.posts;
+      this.hasNextPage = !(data.posts?.length % this.pageSize);
     });
 
     this.route.queryParams.subscribe({
       next: (query: any) => {
         console.log('BooksMarkets.QueryParams: ', query);
+        this.params = { isbn13: query.isbn13 };
         this.filters.patchValue(
           query.state
             ? {
@@ -86,20 +95,34 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
   }
 
   override async onScrollDown() {
+    const params = {
+      ...this.params,
+      state: this.filters.value.state
+      ? [
+          ...(this.filters.value.state.new ? ['NEW'] : []),
+          ...(this.filters.value.state.likeNew ? ['LIKE_NEW'] : []),
+          ...(this.filters.value.state.veryGood ? ['VERY_GOOD'] : []),
+          ...(this.filters.value.state.good ? ['GOOD'] : []),
+          ...(this.filters.value.state.acceptable ? ['ACCEPTABLE'] : []),
+        ]
+      : [],
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize,
+    };
+    console.log(this);
+  
     if (this.isLoadingNext || !this.hasNextPage) {
       return;
     }
 
+  
     this.isLoadingNext = true;
-    const params = {
-      ...this.params,
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize,
-    };
+
 
     await this.pause(1000);
     this.bookMarketService.search(params).subscribe({
       next: (data: any) => {
+        console.log(data.length % this.pageSize);
         this.data = this.data.concat(data);
         this.hasNextPage = !(data.length % this.pageSize);
         this.pageNumber += 1;
@@ -135,9 +158,14 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
         : [],
     };
 
-    console.log(this.book, body, ['/', 'books', 'markets', this.book.isbn13]);
-    this.router.navigate(['books', 'markets', this.book.isbn13], {
-      queryParams: body,
+    console.log(this.book, body, [
+      '/',
+      'books',
+      'markets',
+      this.book.isbn13,
+    ]);
+    this.router.navigate(['books', 'markets'], {
+      queryParams: { ...body, isbn13: this.book.isbn13 },
     });
   }
 }
