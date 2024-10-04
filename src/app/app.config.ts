@@ -19,16 +19,16 @@ export const appConfig: ApplicationConfig = {
         onSameUrlNavigation: 'reload' // Ensures component reloads on same URL navigation
       })
     ),
-    provideHotToastConfig({
-      visibleToasts: 1,
-      style: {}
-    }),
     provideHttpClient(
       withInterceptors([
         loadingOverlayInterceptor,
         jwtAuthInterceptor,
         httpErrorsInterceptor
       ])
-    )
+    ),
+    provideHotToastConfig({
+      visibleToasts: 1,
+      style: {}
+    })
   ]
 };

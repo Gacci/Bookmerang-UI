@@ -33,7 +33,9 @@ export class NavigationComponent {
       value.length === 10 || value.length === 13 ? ISBN.parse(value) : undefined;
 
     if (json?.isValid) {
-      this.router.navigate(['books', 'markets', <string>json.isbn13]);
+      this.router.navigate(['books', 'markets'], {
+        queryParams: { isbn13: <string>json.isbn13 }
+      });
     } else {
       this.router.navigate(['books', 'collections'], {
         queryParams: { title: value }
