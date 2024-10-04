@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   styleUrl: './book-post-card.component.scss',
-  templateUrl: './book-post-card.component.html',
+  templateUrl: './book-post-card.component.html'
 })
 export class BookPostCardComponent {
   @Input()

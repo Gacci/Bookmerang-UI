@@ -23,7 +23,7 @@ import { Component, HostBinding, Input } from '@angular/core';
       .bg-semi-black-50 {
         @apply bg-black bg-opacity-50;
       }
-    `,
+    `
   ],
   template: `
     <div role="status">
@@ -47,7 +47,7 @@ import { Component, HostBinding, Input } from '@angular/core';
       </svg>
       <span class="sr-only">Loading...</span>
     </div>
-  `,
+  `
 })
 export class SpinnerComponent {
   private _backdrop: string = 'bg-semi-black-50';
@@ -59,10 +59,9 @@ export class SpinnerComponent {
 
   @HostBinding('class')
   get className(): string {
-    return [
-      this._backdrop,
-      !this.inline ? 'back-dropped' : 'no-back-drop',
-    ].join(' ');
+    return [this._backdrop, !this.inline ? 'back-dropped' : 'no-back-drop'].join(
+      ' '
+    );
   }
 
   @Input()

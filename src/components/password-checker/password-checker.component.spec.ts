@@ -8,7 +8,7 @@ describe('PasswordCheckerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PasswordCheckerComponent],
+      imports: [PasswordCheckerComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PasswordCheckerComponent);

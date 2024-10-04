@@ -10,7 +10,7 @@ import { Registration } from '../interfaces/registration.interface';
 const JWT_TOKENS = '__tcn';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
   constructor(private readonly http: HttpClient) {}
@@ -38,42 +38,39 @@ export class AuthService {
   resendPasswordRecoveryCode(payload: Data) {
     return this.http.post(
       'http://127.0.0.1:3000/auth/passwords/recovery/resend-request',
-      payload,
+      payload
     );
   }
 
   startPasswordRecovery(payload: EmailOnly) {
     return this.http.post(
       'http://127.0.0.1:3000/auth/passwords/recovery/start',
-      payload,
+      payload
     );
   }
 
   requestPasswordChange(payload: Data) {
     return this.http.post(
       'http://127.0.0.1:3000/auth/passwords/recovery/reset',
-      payload,
+      payload
     );
   }
 
   verifyPasswordRecoveryCode(payload: Data) {
     return this.http.post(
       'http://127.0.0.1:3000/auth/passwords/recovery/verify',
-      payload,
+      payload
     );
   }
 
   resendCreateAccountCode(payload: Data) {
     return this.http.post(
       'http://127.0.0.1:3000/auth/accounts/verify/resend',
-      payload,
+      payload
     );
   }
   verifyCreateAccountCode(payload: Data) {
-    return this.http.post(
-      'http://127.0.0.1:3000/auth/accounts/verify',
-      payload,
-    );
+    return this.http.post('http://127.0.0.1:3000/auth/accounts/verify', payload);
   }
 
   getJwtTokens() {

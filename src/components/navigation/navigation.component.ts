@@ -14,7 +14,7 @@ type SearchEvent = {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './navigation.component.html',
-  styleUrl: './navigation.component.scss',
+  styleUrl: './navigation.component.scss'
 })
 export class NavigationComponent {
   constructor(private router: Router) {
@@ -30,15 +30,13 @@ export class NavigationComponent {
     }
 
     const json =
-      value.length === 10 || value.length === 13
-        ? ISBN.parse(value)
-        : undefined;
+      value.length === 10 || value.length === 13 ? ISBN.parse(value) : undefined;
 
     if (json?.isValid) {
       this.router.navigate(['books', 'markets', <string>json.isbn13]);
     } else {
       this.router.navigate(['books', 'collections'], {
-        queryParams: { title: value },
+        queryParams: { title: value }
       });
     }
   }

@@ -5,11 +5,10 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
 
 import { NavigationComponent } from '../components/navigation/navigation.component';
-import { LoadingOverlayComponent } from '../components/loading-overlay/loading-overlay.component';
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 import { StringService } from '../services/string.service';
 
@@ -31,12 +30,11 @@ type FileBox = {
   imports: [
     BooksPricingComponent,
     CommonModule,
-    LoadingOverlayComponent,
     NavigationComponent,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './book-post.component.html',
-  styleUrl: './book-post.component.scss',
+  styleUrl: './book-post.component.scss'
 })
 export class BookPostComponent {
   protected book: any = {};
@@ -51,29 +49,21 @@ export class BookPostComponent {
     price: new FormControl(99, [Validators.required, Validators.min(1)]),
     state: new FormControl('LIKE_NEW', [Validators.required]),
     tradeable: new FormControl<boolean>(false),
-    binding: new FormControl('INTACT', [
-      selectionValidator({ not: ['SELECT'] }),
-    ]),
-    cover: new FormControl('INTACT', [
-      selectionValidator({ not: ['SELECT'] }),
-    ]),
-    pages: new FormControl('INTACT', [
-      selectionValidator({ not: ['SELECT'] }),
-    ]),
-    markings: new FormControl('NONE', [
-      selectionValidator({ not: ['SELECT'] }),
-    ]),
+    binding: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
+    cover: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
+    pages: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
+    markings: new FormControl('NONE', [selectionValidator({ not: ['SELECT'] })]),
     notes: new FormControl(null, [Validators.required]),
     images: new FormControl(null, [Validators.min(1)]),
     isbn13: new FormControl(null),
-    institutionId: new FormControl([0]),
+    institutionId: new FormControl([0])
   });
 
   constructor(
     private route: ActivatedRoute,
     private bookMarketService: BookMarketService,
     private imageManagerService: ImageManagerService,
-    private strings: StringService,
+    private strings: StringService
   ) {}
 
   ngOnInit(): void {
@@ -81,28 +71,28 @@ export class BookPostComponent {
       this.book = data.book;
       this.payload.patchValue({
         isbn13: this.book.isbn13,
-        institutionId: [1840],
+        institutionId: [1840]
       });
     });
 
     this.payload.controls.state.valueChanges.subscribe(
-      this.updateRecommendedSellingPrice.bind(this),
+      this.updateRecommendedSellingPrice.bind(this)
     );
 
     this.payload.controls.binding.valueChanges.subscribe(
-      this.updateRecommendedSellingPrice.bind(this),
+      this.updateRecommendedSellingPrice.bind(this)
     );
 
     this.payload.controls.cover.valueChanges.subscribe(
-      this.updateRecommendedSellingPrice.bind(this),
+      this.updateRecommendedSellingPrice.bind(this)
     );
 
     this.payload.controls.pages.valueChanges.subscribe(
-      this.updateRecommendedSellingPrice.bind(this),
+      this.updateRecommendedSellingPrice.bind(this)
     );
 
     this.payload.controls.markings.valueChanges.subscribe(
-      this.updateRecommendedSellingPrice.bind(this),
+      this.updateRecommendedSellingPrice.bind(this)
     );
   }
 
@@ -124,10 +114,10 @@ export class BookPostComponent {
             (box: FileBox) =>
               box.file.size === file.size &&
               box.base64.length === base64.length &&
-              box.base64 === base64,
+              box.base64 === base64
           ),
           id: this.strings.getPseudoUUIDv4(),
-          isTooBig: file.size > 2 * 1024 * 1024,
+          isTooBig: file.size > 2 * 1024 * 1024
         });
       };
 
@@ -158,7 +148,7 @@ export class BookPostComponent {
       error: (e) => {
         console.log(e);
       },
-      complete: () => {},
+      complete: () => {}
     });
   }
 
@@ -170,9 +160,9 @@ export class BookPostComponent {
     this.metrics = metrics.reduce(
       (groups: any, metric: any) => ({
         ...groups,
-        [metric.state]: metric,
+        [metric.state]: metric
       }),
-      {},
+      {}
     );
   }
 
@@ -189,7 +179,7 @@ export class BookPostComponent {
     this.recommendedSellingPriceRange = this.createPriceRange(
       this.payload.value,
       pricing._min,
-      pricing._max,
+      pricing._max
     );
 
     console.log(this.recommendedSellingPriceRange);
@@ -198,7 +188,7 @@ export class BookPostComponent {
   private createPriceRange(
     item: any,
     minPrice: number | null,
-    maxPrice: number | null,
+    maxPrice: number | null
   ) {
     const adjustments: any = {
       // Base adjustments for each state
@@ -207,14 +197,14 @@ export class BookPostComponent {
         LIKE_NEW: 0.3, // Increase by 30%
         VERY_GOOD: 0.2, // Increase by 20%
         GOOD: 0.1, // Increase by 10%
-        ACCEPTABLE: 0, // No increase
+        ACCEPTABLE: 0 // No increase
       },
       // Additional adjustments for binding
       binding: {
         INTACT: 0, // No change
         WEAK: -0.05, // Decrease by 5%
         DAMAGED: -0.1, // Decrease by 10%
-        BROKEN: -0.2, // Decrease by 20%
+        BROKEN: -0.2 // Decrease by 20%
       },
       // Additional adjustments for cover condition
       cover: {
@@ -225,7 +215,7 @@ export class BookPostComponent {
         DISCOLORED: -0.1, // Decrease by 10%
         SCRATCHED: -0.05, // Decrease by 5%
         CUT: -0.1, // Decrease by 10%
-        STAINED: -0.15, // Decrease by 15%
+        STAINED: -0.15 // Decrease by 15%
       },
       // Additional adjustments for pages condition
       pages: {
@@ -236,7 +226,7 @@ export class BookPostComponent {
         CREASED: -0.1, // Decrease by 10%
         TORN: -0.15, // Decrease by 15%
         WARPED: -0.1, // Decrease by 10%
-        STAINED: -0.15, // Decrease by 15%
+        STAINED: -0.15 // Decrease by 15%
       },
       // Additional adjustments for markings
       markings: {
@@ -245,13 +235,13 @@ export class BookPostComponent {
         PENCIL: -0.1, // Decrease by 10%
         HIGHLIGHTER: -0.1, // Decrease by 10%
         PEN: -0.15, // Decrease by 15%
-        EXTENSIVE: -0.2, // Decrease by 20%
+        EXTENSIVE: -0.2 // Decrease by 20%
       },
       // Additional adjustments for extras
       extras: {
         ACCESS_CODE: 0.05, // Increase by 5%
-        CD: 0.05, // Increase by 5%
-      },
+        CD: 0.05 // Increase by 5%
+      }
     };
 
     // Calculate total adjustment factor based on characteristics
@@ -274,25 +264,25 @@ export class BookPostComponent {
       const maxAdjusted = maxPrice * (1 + totalAdjustment);
       calculatedPrice = {
         minPrice: parseFloat(minAdjusted.toFixed(2)), // Round min price to two decimal places
-        maxPrice: parseFloat(maxAdjusted.toFixed(2)), // Round max price to two decimal places
+        maxPrice: parseFloat(maxAdjusted.toFixed(2)) // Round max price to two decimal places
       };
     } else if (minPrice !== null) {
       // Only min price is available
       calculatedPrice = {
         minPrice: parseFloat(minPrice.toFixed(2)), // Round min price to two decimal places
-        maxPrice: minPrice * (1 + totalAdjustment), // Calculate max based on min
+        maxPrice: minPrice * (1 + totalAdjustment) // Calculate max based on min
       };
     } else if (maxPrice !== null) {
       // Only max price is available
       calculatedPrice = {
         minPrice: maxPrice * (1 + totalAdjustment), // Calculate min based on max
-        maxPrice: parseFloat(maxPrice.toFixed(2)), // Round max price to two decimal places
+        maxPrice: parseFloat(maxPrice.toFixed(2)) // Round max price to two decimal places
       };
     } else {
       // If neither min nor max price is provided
       return {
         minPrice: null,
-        maxPrice: null,
+        maxPrice: null
       };
     }
 

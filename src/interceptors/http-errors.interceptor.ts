@@ -3,7 +3,7 @@ import {
   HttpInterceptorFn,
   HttpRequest,
   HttpHandlerFn,
-  HttpErrorResponse,
+  HttpErrorResponse
 } from '@angular/common/http';
 // import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 
 export const httpErrorsInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
-  next: HttpHandlerFn,
+  next: HttpHandlerFn
 ) => {
   // const router = inject(Router);
   const alerts = inject(HotToastService);
@@ -24,11 +24,11 @@ export const httpErrorsInterceptor: HttpInterceptorFn = (
       if (!(response.error instanceof ErrorEvent)) {
         alerts.error(response.message, {
           className: 'text-xs',
-          position: 'bottom-center',
+          position: 'bottom-center'
         });
       }
 
       return throwError(() => new Error(response.message));
-    }),
+    })
   );
 };

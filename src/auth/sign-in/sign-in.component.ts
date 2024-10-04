@@ -18,12 +18,12 @@ import { PasswordStrengthComponent } from '../../components/password-strength/pa
     ReactiveFormsModule,
     RouterModule,
     PasswordStrengthComponent,
-    SpinnerComponent,
+    SpinnerComponent
   ],
   selector: 'sign-in',
   standalone: true,
   templateUrl: './sign-in.component.html',
-  styleUrl: './sign-in.component.scss',
+  styleUrl: './sign-in.component.scss'
 })
 export class SignInComponent {
   protected request: HttpRequest = {};
@@ -32,7 +32,7 @@ export class SignInComponent {
 
   constructor(
     private readonly auth: AuthService,
-    private readonly router: Router,
+    private readonly router: Router
   ) {}
 
   handleSignIn() {
@@ -46,7 +46,7 @@ export class SignInComponent {
       },
       complete: () => {
         this.request.done = true;
-      },
+      }
     });
   }
 

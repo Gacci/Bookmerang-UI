@@ -9,7 +9,7 @@ import { IResult, PasswordMeter } from 'password-meter';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './password-strength.component.html',
-  styleUrl: './password-strength.component.scss',
+  styleUrl: './password-strength.component.scss'
 })
 export class PasswordStrengthComponent {
   private checker!: PasswordMeter;

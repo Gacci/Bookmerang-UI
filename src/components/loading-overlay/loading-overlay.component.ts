@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
+import { LoadingOverlayService } from '../../services/loading-overlay.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'loading-overlay',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   styles: `
     :host {
-      @apply block fixed top-0 right-0 bottom-0 left-0 bg-gray-50 bg-opacity-50 z-10;
+      @apply fixed top-0 right-0 bottom-0 left-0 bg-gray-50 bg-opacity-50 z-10;
     }
   `,
   template: `
@@ -32,6 +34,15 @@ import { Component } from '@angular/core';
       </svg>
       <span class="sr-only">Loading...</span>
     </div>
-  `,
+  `
 })
-export class LoadingOverlayComponent {}
+export class LoadingOverlayComponent {
+  // Dynamically bind CSS class to show/hide the overlay
+  @HostBinding('class.hidden') isHidden!: boolean;
+
+  constructor(public loadingOverlayService: LoadingOverlayService) {
+    this.loadingOverlayService.$isLoading.subscribe((isHidden: boolean) => {
+      this.isHidden = !isHidden;
+    });
+  }
+}

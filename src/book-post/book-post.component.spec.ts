@@ -8,7 +8,7 @@ describe('BookPostComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BookPostComponent],
+      imports: [BookPostComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(BookPostComponent);

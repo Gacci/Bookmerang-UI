@@ -7,9 +7,9 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { BookMarketService } from '../services/book-market.service';
 
 import { BookPostCardComponent } from '../components/book-post-card/book-post-card.component';
-import { LoadingOverlayComponent } from '../components/loading-overlay/loading-overlay.component';
 import { NavigationComponent } from '../components/navigation/navigation.component';
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
+import { LoadingOverlayService } from '../services/loading-overlay.service';
 
 @Component({
   selector: 'app-home',
@@ -19,19 +19,24 @@ import { InfiniteScrollView } from '../classes/infinite-scroll-view';
     InfiniteScrollDirective,
     RouterOutlet,
     BookPostCardComponent,
-    LoadingOverlayComponent,
-    NavigationComponent,
+    NavigationComponent
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  styleUrl: './home.component.scss'
 })
 export class HomeComponent extends InfiniteScrollView<Data> {
   private route = inject(ActivatedRoute);
 
   private bookMarketService = inject(BookMarketService);
 
+  private loadingOverlayService = inject(LoadingOverlayService);
+
   ngOnInit(): void {
     this.pageNumber += 1;
+    this.loadingOverlayService.$isLoading.subscribe(
+      (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
+    );
+
     this.route.data.subscribe((data: any) => (this.data = data.posts));
   }
 
@@ -40,14 +45,12 @@ export class HomeComponent extends InfiniteScrollView<Data> {
       return;
     }
 
-    this.isLoadingNext = true;
     const params = {
       ...this.params,
       pageNumber: this.pageNumber,
-      pageSize: this.pageSize,
+      pageSize: this.pageSize
     };
 
-    await this.pause(1000);
     this.bookMarketService.search(params).subscribe({
       next: (data: any) => {
         this.data = this.data.concat(data);
@@ -56,15 +59,11 @@ export class HomeComponent extends InfiniteScrollView<Data> {
         this.isLoadingNext = false;
       },
       error: (e) => {},
-      complete: () => {},
+      complete: () => {}
     });
   }
 
   override onScrollUp() {
     console.log('Scrolling up');
-  }
-
-  async pause(delay: number) {
-    return new Promise((resolve) => setTimeout(resolve, delay));
   }
 }

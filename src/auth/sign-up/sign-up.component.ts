@@ -3,7 +3,7 @@ import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -32,12 +32,12 @@ import { signUpGroup, verifyRegisterCodeGroup } from '../form-groups';
     PasswordCheckerComponent,
     ReactiveFormsModule,
     RouterModule,
-    SpinnerComponent,
+    SpinnerComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
-  providers: [],
+  providers: []
 })
 export class SignUpComponent {
   @ViewChild('swiper', { read: ElementRef<SwiperContainer> })
@@ -59,9 +59,7 @@ export class SignUpComponent {
   protected timerExpiredId!: ReturnType<typeof setTimeout>;
 
   constructor(private readonly auth: AuthService) {
-    this.signUpGroup.addValidators(
-      passwordMatchValidator('password', 'confirmed'),
-    );
+    this.signUpGroup.addValidators(passwordMatchValidator('password', 'confirmed'));
   }
 
   startExpiresInCountdown() {
@@ -89,7 +87,7 @@ export class SignUpComponent {
       },
       complete: () => {
         this.createAccountRequest.done = true;
-      },
+      }
     });
   }
 
@@ -105,7 +103,7 @@ export class SignUpComponent {
         },
         complete: () => {
           this.resendCreateAccountRequest.done = true;
-        },
+        }
       });
   }
 
@@ -113,7 +111,7 @@ export class SignUpComponent {
     this.auth
       .verifyCreateAccountCode({
         ...this.signUpGroup.value,
-        ...this.verifyRegisterCodeGroup.value,
+        ...this.verifyRegisterCodeGroup.value
       })
       .subscribe({
         next: (response) => {
@@ -125,7 +123,7 @@ export class SignUpComponent {
         },
         complete: () => {
           this.verifyCreateAccountRequest.done = true;
-        },
+        }
       });
   }
 

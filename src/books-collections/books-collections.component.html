@@ -1,6 +1,5 @@
 <app-navigation></app-navigation>
 
-<loading-overlay *ngIf="isLoadingNext"></loading-overlay>
 <div
   class="collection"
   infiniteScroll
@@ -14,9 +13,7 @@
   (scrolledUp)="onScrollUp()"
 >
   <div class="bg-white">
-    <div
-      class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
-    >
+    <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
       <h2 class="sr-only">Products</h2>
 
       <div
@@ -25,7 +22,8 @@
         <div class="group" *ngFor="let book of data">
           <a
             class="relative block aspect-2/3 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7"
-            [routerLink]="['/', 'books', 'markets', book.isbn13]"
+            [routerLink]="['/', 'books', 'markets']"
+            [queryParams]="{ isbn13: book.isbn13 }"
           >
             <img
               [src]="book.thumbnail"

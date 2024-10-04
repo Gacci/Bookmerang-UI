@@ -2,23 +2,22 @@ import { Injectable } from '@angular/core';
 import {
   Resolve,
   ActivatedRouteSnapshot,
-  RouterStateSnapshot,
+  RouterStateSnapshot
 } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { BookCollectionService } from '../services/book-collection.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class BooksCollectionResolver implements Resolve<any> {
   constructor(private bookCollectionService: BookCollectionService) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
+    state: RouterStateSnapshot
   ): Observable<any> {
-    console.log('BooksCollectionResolver', route.queryParams);
     return this.bookCollectionService.search(route.queryParams);
   }
 }

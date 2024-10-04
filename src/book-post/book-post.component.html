@@ -1,11 +1,7 @@
 <app-navigation></app-navigation>
 
-<!-- <loading-overlay></loading-overlay> -->
-
 <div class="w-full max-w-3xl bg-white shadow-lg rounded-lg mx-auto p-16">
-  <h1 class="text-3xl font-semibold text-gray-800 mb-6">
-    Book Condition Form
-  </h1>
+  <h1 class="text-3xl font-semibold text-gray-800 mb-6">Book Condition Form</h1>
 
   <form
     enctype="multipart/form-data"
@@ -53,9 +49,7 @@
 
     <!-- State -->
     <div class="mb-8">
-      <label class="block text-gray-700 font-medium mb-2"
-        >Overall Condition</label
-      >
+      <label class="block text-gray-700 font-medium mb-2">Overall Condition</label>
       <ul class="flex flex-col">
         <li
           class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
@@ -71,10 +65,7 @@
                 formControlName="state"
               />
             </div>
-            <label
-              for="new"
-              class="ms-3 block w-full text-sm text-gray-600"
-            >
+            <label for="new" class="ms-3 block w-full text-sm text-gray-600">
               New - Perfect condition, as if just purchased
             </label>
           </div>
@@ -94,10 +85,7 @@
                 formControlName="state"
               />
             </div>
-            <label
-              for="like-new"
-              class="ms-3 block w-full text-sm text-gray-600"
-            >
+            <label for="like-new" class="ms-3 block w-full text-sm text-gray-600">
               Like New - Minimal wear, barely used
             </label>
           </div>
@@ -117,10 +105,7 @@
                 formControlName="state"
               />
             </div>
-            <label
-              for="very-good"
-              class="ms-3 block w-full text-sm text-gray-600"
-            >
+            <label for="very-good" class="ms-3 block w-full text-sm text-gray-600">
               Very Good - Minor signs of use, but overall excellent
             </label>
           </div>
@@ -140,10 +125,7 @@
                 formControlName="state"
               />
             </div>
-            <label
-              for="good"
-              class="ms-3 block w-full text-sm text-gray-600"
-            >
+            <label for="good" class="ms-3 block w-full text-sm text-gray-600">
               Good - Noticeable wear but still in decent shape
             </label>
           </div>
@@ -163,10 +145,7 @@
                 formControlName="state"
               />
             </div>
-            <label
-              for="acceptable"
-              class="ms-3 block w-full text-sm text-gray-600"
-            >
+            <label for="acceptable" class="ms-3 block w-full text-sm text-gray-600">
               Acceptable
             </label>
           </div>
@@ -178,23 +157,17 @@
 
     <!-- Binding -->
     <div class="mb-8">
-      <label class="block text-gray-700 font-medium mb-2"
-        >Binding Condition</label
-      >
+      <label class="block text-gray-700 font-medium mb-2">Binding Condition</label>
       <select class="select" formControlName="binding">
         <option disabled value="SELECT">-- Select ---</option>
-        <option value="INTACT">
-          Intact - Good condition, fully functional
-        </option>
+        <option value="INTACT">Intact - Good condition, fully functional</option>
         <option value="BROKEN">
           Broken - Damaged binding, difficult to keep together
         </option>
         <option value="WEAK">
           Weak - Slightly loose but holds the pages together
         </option>
-        <option value="DAMAGED">
-          Damaged - Noticeably weakened but intact
-        </option>
+        <option value="DAMAGED">Damaged - Noticeably weakened but intact</option>
       </select>
 
       <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the book’s binding.</p> -->
@@ -202,9 +175,7 @@
 
     <!-- Cover -->
     <div class="mb-8">
-      <label class="block text-gray-700 font-medium mb-2"
-        >Cover Condition</label
-      >
+      <label class="block text-gray-700 font-medium mb-2">Cover Condition</label>
       <select class="select" formControlName="cover">
         <option disabled value="SELECT">-- Select ---</option>
         <option value="CREASED">Creased - Visible creases or folds</option>
@@ -215,9 +186,7 @@
         <option value="FADED">Faded - Colors have faded from wear</option>
         <option value="INTACT">Intact - No significant issues</option>
         <option value="RIPPED">Ripped - Tears or rips in the cover</option>
-        <option value="SCRATCHED">
-          Scratched - Visible scratches on the cover
-        </option>
+        <option value="SCRATCHED">Scratched - Visible scratches on the cover</option>
         <option value="STAINED">Stained - Visible stains or marks</option>
       </select>
 
@@ -226,9 +195,7 @@
 
     <!-- Pages -->
     <div class="mb-8">
-      <label class="block text-gray-700 font-medium mb-2"
-        >Pages Condition</label
-      >
+      <label class="block text-gray-700 font-medium mb-2">Pages Condition</label>
       <select class="select" formControlName="pages">
         <option disabled value="SELECT">-- Select ---</option>
         <option value="CREASED">Creased - Pages have visible folds</option>
@@ -251,9 +218,7 @@
         <option value="MINIMAL">Minimal - Barely any markings</option>
         <option value="NONE">None - No markings present</option>
         <option value="PEN">Pen - Some pages have pen markings</option>
-        <option value="PENCIL">
-          Pencil - Some pages have pencil markings
-        </option>
+        <option value="PENCIL">Pencil - Some pages have pencil markings</option>
       </select>
 
       <!-- <p class="text-sm text-gray-500 mb-2">Select the type of markings found inside the book.</p> -->
@@ -299,12 +264,9 @@
             />
           </svg>
           <p class="mb-2 text-sm text-gray-500">
-            <span class="font-semibold">Click to upload</span> or drag and
-            drop
+            <span class="font-semibold">Click to upload</span> or drag and drop
           </p>
-          <p class="text-xs text-gray-500">
-            SVG, PNG, JPG or GIF (MAX. 800x400px)
-          </p>
+          <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
         </div>
         <input
           id="dropzone"
@@ -317,9 +279,7 @@
         />
       </label>
     </div>
-    <div
-      class="h-96 py-8 bg-gray-50 rounded-lg text-center my-2 overflow-auto"
-    >
+    <div class="h-96 py-8 bg-gray-50 rounded-lg text-center my-2 overflow-auto">
       <div
         class="relative inline-block m-2 group"
         *ngFor="let box of images; trackBy: trackBy"

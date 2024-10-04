@@ -18,37 +18,37 @@ import { BookPostComponent } from '../book-post/book-post.component';
 export const routes: Routes = [
   {
     component: PasswordRecoveryStartComponent,
-    path: 'password/recovery/start',
+    path: 'password/recovery/start'
   },
   {
     component: SignUpComponent,
-    path: 'sign-up',
+    path: 'sign-up'
   },
   {
     component: SignInComponent,
-    path: 'sign-in',
+    path: 'sign-in'
   },
   {
     component: HomeComponent,
     path: 'home',
     resolve: {
-      posts: BookPostResolver,
-    },
+      posts: BookPostResolver
+    }
   },
   {
     component: BooksCollectionsComponent,
     path: 'books/collections',
     resolve: {
-      books: BooksCollectionResolver,
+      books: BooksCollectionResolver
     },
-    runGuardsAndResolvers: 'always',
+    runGuardsAndResolvers: 'always'
   },
   {
     component: BooksInventoriesComponent,
     path: 'books/inventories/:userId',
     resolve: {
-      posts: BookPostResolver,
-    },
+      posts: BookPostResolver
+    }
   },
   {
     component: BooksMarketsComponent,
@@ -56,19 +56,19 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'always',
     resolve: {
       posts: BookPostResolver,
-      book: BookResolverService,
-    },
+      book: BookResolverService
+    }
   },
   {
     component: BookPostComponent,
     path: 'books/markets/:isbn13',
     resolve: {
-      book: BookResolverService,
-    },
+      book: BookResolverService
+    }
   },
   {
     path: '**',
     pathMatch: 'full',
-    redirectTo: 'home',
-  },
+    redirectTo: 'home'
+  }
 ];

@@ -1,21 +1,17 @@
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { BookPostCardComponent } from '../components/book-post-card/book-post-card.component';
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
-import { LoadingOverlayComponent } from '../components/loading-overlay/loading-overlay.component';
 import { NavigationComponent } from '../components/navigation/navigation.component';
 
 import { BookMarketService } from '../services/book-market.service';
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
+import { LoadingOverlayService } from '../services/loading-overlay.service';
 
 @Component({
   selector: 'books-market',
@@ -25,15 +21,14 @@ import { BooksPricingComponent } from '../components/books-pricing/books-pricing
 
     BookPostCardComponent,
     BooksPricingComponent,
-    LoadingOverlayComponent,
     NavigationComponent,
     ReactiveFormsModule,
     RouterModule,
 
-    InfiniteScrollDirective,
+    InfiniteScrollDirective
   ],
   templateUrl: './books-markets.component.html',
-  styleUrl: './books-markets.component.scss',
+  styleUrl: './books-markets.component.scss'
 })
 export class BooksMarketsComponent extends InfiniteScrollView<any> {
   private route = inject(ActivatedRoute);
@@ -41,6 +36,8 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
   private router = inject(Router);
 
   private bookMarketService = inject(BookMarketService);
+
+  private loadingOverlayService = inject(LoadingOverlayService);
 
   protected isLoadingMetrics!: boolean;
 
@@ -56,27 +53,26 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
       likeNew: new FormControl(false),
       veryGood: new FormControl(false),
       good: new FormControl(false),
-      acceptable: new FormControl(false),
-    }),
+      acceptable: new FormControl(false)
+    })
   });
 
   ngOnInit(): void {
-    // this.book = {};
-    // this.isLoadingMetrics = true;
-    // this.metrics = { trade: {}, sale: [] };
-    // this.pageNumber += 1;
+    this.pageNumber += 1;
+    this.loadingOverlayService.$isLoading.subscribe(
+      (isLoadingNext) => this.isLoadingNext = isLoadingNext
+    );
 
-
-    this.route.data.subscribe((data: any) => {
-      this.book = data.book;
-      this.data = data.posts;
-      this.hasNextPage = !(data.posts?.length % this.pageSize);
+    this.route.data.subscribe((res: any) => {
+      this.book = res.book;
+      this.data = res.posts;
+      this.hasNextPage = !(res.posts?.length % this.pageSize);
     });
 
     this.route.queryParams.subscribe({
       next: (query: any) => {
-        console.log('BooksMarkets.QueryParams: ', query);
         this.params = { isbn13: query.isbn13 };
+
         this.filters.patchValue(
           query.state
             ? {
@@ -85,12 +81,12 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
                   likeNew: query.state.includes('LIKE_NEW'),
                   veryGood: query.state.includes('VERY_GOOD'),
                   good: query.state.includes('GOOD'),
-                  acceptable: query.state.includes('ACCEPTABLE'),
-                },
+                  acceptable: query.state.includes('ACCEPTABLE')
+                }
               }
-            : {},
+            : {}
         );
-      },
+      }
     });
   }
 
@@ -98,28 +94,24 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
     const params = {
       ...this.params,
       state: this.filters.value.state
-      ? [
-          ...(this.filters.value.state.new ? ['NEW'] : []),
-          ...(this.filters.value.state.likeNew ? ['LIKE_NEW'] : []),
-          ...(this.filters.value.state.veryGood ? ['VERY_GOOD'] : []),
-          ...(this.filters.value.state.good ? ['GOOD'] : []),
-          ...(this.filters.value.state.acceptable ? ['ACCEPTABLE'] : []),
-        ]
-      : [],
+        ? [
+            ...(this.filters.value.state.new ? ['NEW'] : []),
+            ...(this.filters.value.state.likeNew ? ['LIKE_NEW'] : []),
+            ...(this.filters.value.state.veryGood ? ['VERY_GOOD'] : []),
+            ...(this.filters.value.state.good ? ['GOOD'] : []),
+            ...(this.filters.value.state.acceptable ? ['ACCEPTABLE'] : [])
+          ]
+        : [],
       pageNumber: this.pageNumber,
-      pageSize: this.pageSize,
+      pageSize: this.pageSize
     };
     console.log(this);
-  
+
     if (this.isLoadingNext || !this.hasNextPage) {
       return;
     }
 
-  
     this.isLoadingNext = true;
-
-
-    await this.pause(1000);
     this.bookMarketService.search(params).subscribe({
       next: (data: any) => {
         console.log(data.length % this.pageSize);
@@ -131,7 +123,7 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
         console.log(data);
       },
       error: (e) => {},
-      complete: () => {},
+      complete: () => {}
     });
   }
 
@@ -153,19 +145,14 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
             ...(state.likeNew ? ['LIKE_NEW'] : []),
             ...(state.veryGood ? ['VERY_GOOD'] : []),
             ...(state.good ? ['GOOD'] : []),
-            ...(state.acceptable ? ['ACCEPTABLE'] : []),
+            ...(state.acceptable ? ['ACCEPTABLE'] : [])
           ]
-        : [],
+        : []
     };
 
-    console.log(this.book, body, [
-      '/',
-      'books',
-      'markets',
-      this.book.isbn13,
-    ]);
+    console.log(this.book, body, ['/', 'books', 'markets', this.book.isbn13]);
     this.router.navigate(['books', 'markets'], {
-      queryParams: { ...body, isbn13: this.book.isbn13 },
+      queryParams: { ...body, isbn13: this.book.isbn13 }
     });
   }
 }
