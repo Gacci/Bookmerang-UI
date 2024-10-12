@@ -33,6 +33,8 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
     this.route.queryParams.subscribe((params: any) => {
       this.params = { title: params.title };
       this.pageNumber += 1;
+
+      console.log('BooksCollectionsComponent.ngOnInit', this.pageNumber);
     });
 
     this.loadingOverlayService.$isLoading.subscribe(

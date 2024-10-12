@@ -23,6 +23,7 @@
     "@ngneat/hot-toast": "^7.0.0",
     "autoprefixer": "^10.4.19",
     "isbn3": "^1.2.0",
+    "jwt-decode": "^4.0.0",
     "ngx-infinite-scroll": "^18.0.0",
     "ngx-toastr": "^19.0.0",
     "password-meter": "^3.10.2",

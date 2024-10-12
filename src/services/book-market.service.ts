@@ -14,16 +14,12 @@ export class BookMarketService {
   }
 
   search(params: Data) {
-    console.log('BookPostOfferService.search', params);
-
     return this.http.get('http://127.0.0.1:3000/books/markets/search', {
       params
     });
   }
 
   metrics(isbn13: string) {
-    console.log('BookPostOfferService.metrics', isbn13);
-
     return this.http.get('http://127.0.0.1:3000/books/markets/metrics', {
       params: { isbn13 }
     });

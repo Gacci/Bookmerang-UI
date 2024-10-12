@@ -114,7 +114,9 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   handleResendRecoveryCode() {
     this.resendPasswordRequest = { sent: true };
     this.auth
-      .resendPasswordRecoveryCode(<EmailOnly>this.startPasswordRecoveryGroup.value)
+      .resendPasswordRecoveryCode(
+        <EmailOnly>this.startPasswordRecoveryGroup.value
+      )
       .subscribe({
         next: () => {
           this.startExpiresInCountdown();

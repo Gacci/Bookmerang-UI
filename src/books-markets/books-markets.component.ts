@@ -12,6 +12,7 @@ import { NavigationComponent } from '../components/navigation/navigation.compone
 import { BookMarketService } from '../services/book-market.service';
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'books-market',
@@ -31,6 +32,8 @@ import { LoadingOverlayService } from '../services/loading-overlay.service';
   styleUrl: './books-markets.component.scss'
 })
 export class BooksMarketsComponent extends InfiniteScrollView<any> {
+  private auth = inject(AuthService);
+
   private route = inject(ActivatedRoute);
 
   private router = inject(Router);
@@ -48,79 +51,82 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
   protected pricingViewState!: boolean;
 
   protected filters: FormGroup<any> = new FormGroup({
+    tradeable: new FormControl('all'),
     state: new FormGroup({
-      new: new FormControl(false),
-      likeNew: new FormControl(false),
-      veryGood: new FormControl(false),
-      good: new FormControl(false),
-      acceptable: new FormControl(false)
+      new: new FormControl(null),
+      likeNew: new FormControl(null),
+      veryGood: new FormControl(null),
+      good: new FormControl(null),
+      acceptable: new FormControl(null)
     })
   });
 
   ngOnInit(): void {
     this.pageNumber += 1;
-    this.loadingOverlayService.$isLoading.subscribe(
-      (isLoadingNext) => this.isLoadingNext = isLoadingNext
-    );
+    this.loadingOverlayService.$isLoading.subscribe({
+      next: (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
+    });
 
-    this.route.data.subscribe((res: any) => {
-      this.book = res.book;
-      this.data = res.posts;
-      this.hasNextPage = !(res.posts?.length % this.pageSize);
+    this.route.data.subscribe({
+      next: (res: any) => {
+        this.book = res.book;
+        this.data = res.posts;
+        this.hasNextPage = !(res.posts?.length % this.pageSize);
+      }
     });
 
     this.route.queryParams.subscribe({
       next: (query: any) => {
-        this.params = { isbn13: query.isbn13 };
-
-        this.filters.patchValue(
-          query.state
+        this.params = { ...query };
+        this.filters.patchValue({
+          ...(query.state
             ? {
                 state: {
-                  new: query.state.includes('NEW'),
-                  likeNew: query.state.includes('LIKE_NEW'),
-                  veryGood: query.state.includes('VERY_GOOD'),
-                  good: query.state.includes('GOOD'),
-                  acceptable: query.state.includes('ACCEPTABLE')
+                  new: !!(+query.state & (1 << 0)),
+                  likeNew: !!(+query.state & (1 << 1)),
+                  veryGood: !!(+query.state & (1 << 2)),
+                  good: !!(+query.state & (1 << 3)),
+                  acceptable: !!(+query.state & (1 << 4))
                 }
               }
-            : {}
-        );
+            : {}),
+          ...(/^true|false$/.test(query.tradeable)
+            ? { tradeable: JSON.parse(query.tradeable) }
+            : {})
+        });
       }
     });
   }
 
   override async onScrollDown() {
-    const params = {
-      ...this.params,
-      state: this.filters.value.state
-        ? [
-            ...(this.filters.value.state.new ? ['NEW'] : []),
-            ...(this.filters.value.state.likeNew ? ['LIKE_NEW'] : []),
-            ...(this.filters.value.state.veryGood ? ['VERY_GOOD'] : []),
-            ...(this.filters.value.state.good ? ['GOOD'] : []),
-            ...(this.filters.value.state.acceptable ? ['ACCEPTABLE'] : [])
-          ]
-        : [],
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize
-    };
-    console.log(this);
-
     if (this.isLoadingNext || !this.hasNextPage) {
       return;
     }
 
-    this.isLoadingNext = true;
+    const { state, tradeable } = this.params;
+    const params = {
+      isbn13: this.params.isbn13,
+      ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
+      ...(+state
+        ? {
+            'state[]': [
+              ...(!!(+state & (1 << 0)) ? ['NEW'] : []),
+              ...(!!(+state & (1 << 1)) ? ['LIKE_NEW'] : []),
+              ...(!!(+state & (1 << 2)) ? ['VERY_GOOD'] : []),
+              ...(!!(+state & (1 << 3)) ? ['GOOD'] : []),
+              ...(!!(+state & (1 << 4)) ? ['ACCEPTABLE'] : [])
+            ]
+          }
+        : {}),
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize
+    };
+
     this.bookMarketService.search(params).subscribe({
       next: (data: any) => {
-        console.log(data.length % this.pageSize);
         this.data = this.data.concat(data);
-        this.hasNextPage = !(data.length % this.pageSize);
+        this.hasNextPage = data?.length && !(data.length % this.pageSize);
         this.pageNumber += 1;
-        this.isLoadingNext = false;
-
-        console.log(data);
       },
       error: (e) => {},
       complete: () => {}
@@ -131,28 +137,20 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
     console.log('Scrolling up');
   }
 
-  async pause(delay: number) {
-    return new Promise((resolve) => setTimeout(resolve, delay));
-  }
-
   protected onSubmit(e: Event) {
-    const { state } = this.filters.value;
-    console.log('STATE: ', state);
-    const body = {
-      state: state
-        ? [
-            ...(state.new ? ['NEW'] : []),
-            ...(state.likeNew ? ['LIKE_NEW'] : []),
-            ...(state.veryGood ? ['VERY_GOOD'] : []),
-            ...(state.good ? ['GOOD'] : []),
-            ...(state.acceptable ? ['ACCEPTABLE'] : [])
-          ]
-        : []
-    };
-
-    console.log(this.book, body, ['/', 'books', 'markets', this.book.isbn13]);
+    const { state, tradeable } = this.filters.value;
+    console.log(state);
     this.router.navigate(['books', 'markets'], {
-      queryParams: { ...body, isbn13: this.book.isbn13 }
+      queryParams: {
+        isbn13: this.book.isbn13,
+        state:
+          (state.new ? 1 : 0) +
+          (state.likeNew ? 2 : 0) +
+          (state.veryGood ? 4 : 0) +
+          (state.good ? 8 : 0) +
+          (state.acceptable ? 16 : 0),
+        ...(/^true|false$/.test(tradeable) ? { tradeable } : {})
+      }
     });
   }
 }

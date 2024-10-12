@@ -1,11 +1,17 @@
 import { ApplicationConfig } from '@angular/core';
-import { provideRouter, withInMemoryScrolling, withRouterConfig } from '@angular/router';
+import {
+  provideRouter,
+  withInMemoryScrolling,
+  withRouterConfig
+} from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideHotToastConfig } from '@ngneat/hot-toast';
 
 import { routes } from './app.routes';
-import { jwtAuthInterceptor } from '../interceptors/jwt-auth.interceptor';
+
+import { cacheInterceptor } from '../interceptors/cache.interceptor';
 import { httpErrorsInterceptor } from '../interceptors/http-errors.interceptor';
+import { jwtAuthInterceptor } from '../interceptors/jwt-auth.interceptor';
 import { loadingOverlayInterceptor } from '../interceptors/loading-overlay.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -21,6 +27,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(
       withInterceptors([
+        cacheInterceptor,
         loadingOverlayInterceptor,
         jwtAuthInterceptor,
         httpErrorsInterceptor

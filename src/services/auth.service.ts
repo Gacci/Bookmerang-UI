@@ -1,19 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { map, of, tap } from 'rxjs';
 import { Data } from '@angular/router';
 
 import { Credentials } from '../interfaces/credentials.interface';
 import { EmailOnly } from '../interfaces/email-only.interface';
 import { Registration } from '../interfaces/registration.interface';
 
-const JWT_TOKENS = '__tcn';
+import { CacheService } from './cache.service';
+
+import * as JWT from 'jwt-decode';
+
+const JWT_TOKEN = '__tcn';
+
+const jwt =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnN0aXR1dGlvbnMiOls1LDU2XSwiZW1haWwiOiJjYW1lcm9uLm5vbGFuQGlzdGMuZWR1IiwiaWF0IjoxNzI4NjEyNjY2LCJpc3MiOiJodHRwOi8vYm9va21lcmFuZy5jb20iLCJqdGkiOiJGRTkxNEQzQ0EwMkI0MEVCQzA2NTUyOTA1QkMzQzdEMyIsInJvbGVzIjpbXSwic3ViIjo2NSwiZXhwIjoxNzI4ODcxODY2fQ.V0G24CIxdYHgkgxOhSqtWAuAZjmkumzkVKuDVVJWCBU';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private cache: CacheService
+  ) {
+    console.log(this.getJwtToken());
+  }
 
   register(payload: Registration) {
     return this.http.post('http://127.0.0.1:3000/auth/register', payload);
@@ -26,13 +38,18 @@ export class AuthService {
   }
 
   logout() {
-    return this.revokeTokens(this.getJwtTokens());
+    const token = this.getJwtTokenRaw();
+    if (!token) {
+      return of(true);
+    }
+
+    return this.revokeToken(token);
   }
 
-  revokeTokens(payload: Data) {
+  revokeToken(token: string) {
     return this.http
-      .post('http://127.0.0.1:3000/auth/tokens/revoke', payload)
-      .pipe(tap(() => this.removeJwtTokens()));
+      .delete(`http://127.0.0.1:3000/auth/tokens/revoke/${token}`)
+      .pipe(tap(() => this.removeJwtToken()));
   }
 
   resendPasswordRecoveryCode(payload: Data) {
@@ -70,31 +87,45 @@ export class AuthService {
     );
   }
   verifyCreateAccountCode(payload: Data) {
-    return this.http.post('http://127.0.0.1:3000/auth/accounts/verify', payload);
-  }
-
-  getJwtTokens() {
-    const tokens = localStorage.getItem(JWT_TOKENS);
-    if (!tokens) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(tokens);
-    } catch (e) {
-      return null;
-    }
+    return this.http.post(
+      'http://127.0.0.1:3000/auth/accounts/verify',
+      payload
+    );
   }
 
   refreshAccessToken() {
     return this.http.post('', {});
   }
 
-  private storeJwtTokens(tokens: Data) {
-    localStorage.setItem(JWT_TOKENS, JSON.stringify(tokens));
+  getJwtToken() {
+    const token = this.getJwtTokenRaw();
+    if (!token) {
+      return null;
+    }
+
+    return <JWT.JwtPayload & { institutions: Array<number> }>(
+      JWT.jwtDecode(token)
+    );
   }
 
-  private removeJwtTokens() {
-    localStorage.removeItem(JWT_TOKENS);
+  getJwtTokenRaw() {
+    return jwt; //localStorage.getItem(JWT_TOKEN);
+  }
+
+  getMarketScope() {
+    const jwt = this.getJwtToken();
+    if (!jwt) {
+      return [];
+    }
+
+    return jwt.institutions;
+  }
+
+  private storeJwtTokens(token: Data) {
+    localStorage.setItem(JWT_TOKEN, JSON.stringify(token));
+  }
+
+  private removeJwtToken() {
+    localStorage.removeItem(JWT_TOKEN);
   }
 }

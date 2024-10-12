@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { BookMarketService } from '../../services/book-market.service';
 
+
 @Component({
   selector: 'books-pricing',
   standalone: true,

@@ -10,6 +10,7 @@ import { BookPostCardComponent } from '../components/book-post-card/book-post-ca
 import { NavigationComponent } from '../components/navigation/navigation.component';
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +26,8 @@ import { LoadingOverlayService } from '../services/loading-overlay.service';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent extends InfiniteScrollView<Data> {
+  private auth = inject(AuthService);
+
   private route = inject(ActivatedRoute);
 
   private bookMarketService = inject(BookMarketService);
@@ -33,11 +36,16 @@ export class HomeComponent extends InfiniteScrollView<Data> {
 
   ngOnInit(): void {
     this.pageNumber += 1;
-    this.loadingOverlayService.$isLoading.subscribe(
-      (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
-    );
+    this.loadingOverlayService.$isLoading.subscribe({
+      next: (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
+    });
 
-    this.route.data.subscribe((data: any) => (this.data = data.posts));
+    this.route.data.subscribe({
+      next: (data: any) => {
+        this.data = data.posts;
+        this.hasNextPage = data?.length && !(data.length % this.pageSize);
+      }
+    });
   }
 
   override async onScrollDown() {
@@ -56,7 +64,6 @@ export class HomeComponent extends InfiniteScrollView<Data> {
         this.data = this.data.concat(data);
         this.hasNextPage = !(data.length % this.pageSize);
         this.pageNumber += 1;
-        this.isLoadingNext = false;
       },
       error: (e) => {},
       complete: () => {}

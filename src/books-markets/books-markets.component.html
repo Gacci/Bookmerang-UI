@@ -299,109 +299,134 @@
 </aside> -->
 
 <aside
-  class="fixed bottom-0 left-0 z-0 w-1/4 h-[calc(100%-70px)] transition-transform -translate-x-full sm:translate-x-0"
+  class="fixed bottom-0 left-0 z-0 w-1/4 h-[calc(100%-68px)] bg-gray-50 transition-transform -translate-x-full sm:translate-x-0 z-0"
   aria-label="Sidebar"
 >
   <form class="m-4" [formGroup]="filters" (ngSubmit)="onSubmit($event)">
-    <div formGroupName="state">
-      <h3 class="mb-4 font-semibold text-gray-900">Technology</h3>
-      <ul
-        class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg"
+    <!-- <div class="mb-8">
+      <label class="block text-gray-700 font-medium mb-2"
+        >Binding Condition</label
       >
-        <li class="w-full border-b border-gray-200 rounded-t-lg">
-          <div class="flex items-center ps-3">
-            <input
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-              id="new"
-              type="checkbox"
-              value="new"
-              formControlName="new"
-            />
-            <label
-              for="new"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-              >New</label
-            >
-          </div>
-        </li>
-        <li class="w-full border-b border-gray-200 rounded-t-lg">
-          <div class="flex items-center ps-3">
-            <input
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-              type="checkbox"
-              id="like-new"
-              value="like-new"
-              formControlName="likeNew"
-            />
-            <label
-              for="like-new"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-              >Like New</label
-            >
-          </div>
-        </li>
-        <li class="w-full border-b border-gray-200 rounded-t-lg">
-          <div class="flex items-center ps-3">
-            <input
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-              type="checkbox"
-              id="very-good"
-              value="very-good"
-              formControlName="veryGood"
-            />
-            <label
-              for="very-good"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-              >Very Good</label
-            >
-          </div>
-        </li>
-        <li class="w-full border-b border-gray-200 rounded-t-lg">
-          <div class="flex items-center ps-3">
-            <input
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-              type="checkbox"
-              id="good"
-              value="good"
-              formControlName="good"
-            />
-            <label
-              for="good"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-              >Good</label
-            >
-          </div>
-        </li>
-        <li class="w-full border-gray-200 rounded-t-lg">
-          <div class="flex items-center ps-3">
-            <input
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-              type="checkbox"
-              id="acceptable"
-              value="acceptable"
-              formControlName="acceptable"
-            />
-            <label
-              for="acceptable"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-              >Acceptable</label
-            >
-          </div>
-        </li>
-      </ul>
-    </div>
+      <select class="select w-full" formControlName="institutions">
+        <option disabled value="ALL">-- All ---</option>
+        <option value="ints.institutionId" *ngFor="let inst of institutions">
+          {{ inst.locationName }}
+        </option>
+      </select>
+    </div> -->
 
     <div class="my-4">
-      <label class="inline-flex items-center mb-5 cursor-pointer">
-        <input type="checkbox" value="" class="sr-only peer" />
-        <div
-          class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-        ></div>
-        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >Toggle me</span
-        >
-      </label>
+      <h3 class="mb-4 font-semibold text-gray-900">Trade options</h3>
+      <select class="select w-full bg-white" formControlName="tradeable">
+        <option value="all">All</option>
+        <option value="true">Include w/ trade option</option>
+        <option value="false">Don't include w/ trade option</option>
+      </select>
     </div>
+
+    <div class="my-4" formGroupName="state">
+        <h3 class="mb-4 font-semibold text-gray-900">Book Condition</h3>
+          <ul
+          class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg"
+        >
+          <li class="w-full border-b border-gray-200 rounded-t-lg">
+            <div class="flex items-center ps-3">
+              <input
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                id="new"
+                type="checkbox"
+                value="1"
+                formControlName="new"
+              />
+              <label
+                for="new"
+                class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+                >New</label
+              >
+            </div>
+          </li>
+          <li class="w-full border-b border-gray-200 rounded-t-lg">
+            <div class="flex items-center ps-3">
+              <input
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                type="checkbox"
+                id="like-new"
+                value="2"
+                formControlName="likeNew"
+              />
+              <label
+                for="like-new"
+                class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+                >Like New</label
+              >
+            </div>
+          </li>
+          <li class="w-full border-b border-gray-200 rounded-t-lg">
+            <div class="flex items-center ps-3">
+              <input
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                type="checkbox"
+                id="very-good"
+                value="4"
+                formControlName="veryGood"
+              />
+              <label
+                for="very-good"
+                class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+                >Very Good</label
+              >
+            </div>
+          </li>
+          <li class="w-full border-b border-gray-200 rounded-t-lg">
+            <div class="flex items-center ps-3">
+              <input
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                type="checkbox"
+                id="good"
+                value="8"
+                formControlName="good"
+              />
+              <label
+                for="good"
+                class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+                >Good</label
+              >
+            </div>
+          </li>
+          <li class="w-full border-gray-200 rounded-t-lg">
+            <div class="flex items-center ps-3">
+              <input
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                type="checkbox"
+                id="acceptable"
+                value="16"
+                formControlName="acceptable"
+              />
+              <label
+                for="acceptable"
+                class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+                >Acceptable</label
+              >
+            </div>
+          </li>
+        </ul>
+
+    </div>
+
+    <!-- <div class="my-4">
+      <label class="inline-flex items-center mb-5 cursor-pointer">
+        <input
+          type="checkbox"
+          value="true"
+          class="sr-only peer"
+          formControlName="tradeable"
+        />
+        <div
+          class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+        ></div>
+        <span class="ms-3 text-sm text-gray-900">With trading option</span>
+      </label>
+    </div> -->
 
     <div class="mt-6">
       <button class="relative w-full btn btn-blue-600 mt-8" type="submit">
@@ -449,7 +474,9 @@
             {{ book.publishers }}
           </li>
           <li>
-            <span class="font-medium" *ngIf="book.published">Publication Date:</span>
+            <span class="font-medium" *ngIf="book.published"
+              >Publication Date:</span
+            >
             {{ book.published }}
           </li>
           <li>
@@ -472,7 +499,7 @@
         <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.isbn13">
           <span class="text-sm">ISBN-10</span>
           <svg
-            class="size-2/6 block mx-auto mt-3 mb-1"
+            class="size-12 block mx-auto mt-3 mb-1"
             viewBox="-0.5 0 25 25"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -546,7 +573,7 @@
         <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.isbn13">
           <span class="text-sm">ISBN-10</span>
           <svg
-            class="size-2/6 block mx-auto mt-3 mb-1"
+            class="size-12 block mx-auto mt-3 mb-1"
             viewBox="-0.5 0 25 25"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -620,7 +647,7 @@
         <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.publishers">
           <span class="text-sm">Publisher</span>
           <svg
-            class="size-2/6 block mx-auto mt-3 mb-1"
+            class="size-12 block mx-auto mt-3 mb-1"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -637,7 +664,7 @@
         <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.published">
           <span class="text-sm">Publication date</span>
           <svg
-            class="size-2/6 block mx-auto mt-3 mb-1"
+            class="size-12 block mx-auto mt-3 mb-1"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -687,7 +714,7 @@
         <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.language">
           <span class="text-sm">Language</span>
           <svg
-            class="size-2/5 block mx-auto mt-3 mb-1"
+            class="size-14 block mx-auto mt-3 mb-1"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -711,7 +738,7 @@
         <li class="w-44 flex-shrink-0 border-r px-1" *ngIf="book.dimensions">
           <span class="text-sm">Dimensions</span>
           <svg
-            class="size-2/6 block mx-auto mt-3 mb-1"
+            class="size-12 block mx-auto mt-3 mb-1"
             viewBox="0 0 15 15"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -728,7 +755,7 @@
         <li class="w-44 flex-shrink-0 px-1" *ngIf="book.pages">
           <span class="text-sm">Print lenght</span>
           <svg
-            class="size-2/6 block mx-auto mt-3 mb-1"
+            class="size-12 block mx-auto mt-3 mb-1"
             viewBox="0 0 21 21"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -766,7 +793,7 @@
   [infiniteScrollUpDistance]="1"
   [infiniteScrollDistance]="0.5"
   [infiniteScrollThrottle]="500"
-  [immediateCheck]="true"
+  [immediateCheck]="hasNextPage"
   [infiniteScrollDisabled]="isLoadingNext"
   [scrollWindow]="true"
   (scrolled)="onScrollDown()"
@@ -777,7 +804,7 @@
 
 <!-- Main modal -->
 <div
-  class="fixed bottom-0 right-0 w-full xl:w-1/4 h-[calc(100%-70px)] overflow-x-auto overflow-y-hidden transition"
+  class="fixed bottom-0 right-0 w-1/4 h-[calc(100%-68px)] overflow-x-auto overflow-y-hidden transition"
   aria-hidden="true"
   tabindex="-1"
 >

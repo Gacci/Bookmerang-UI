@@ -30,7 +30,9 @@ export class NavigationComponent {
     }
 
     const json =
-      value.length === 10 || value.length === 13 ? ISBN.parse(value) : undefined;
+      value.length === 10 || value.length === 13
+        ? ISBN.parse(value)
+        : undefined;
 
     if (json?.isValid) {
       this.router.navigate(['books', 'markets'], {

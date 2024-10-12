@@ -49,10 +49,14 @@ export class BookPostComponent {
     price: new FormControl(99, [Validators.required, Validators.min(1)]),
     state: new FormControl('LIKE_NEW', [Validators.required]),
     tradeable: new FormControl<boolean>(false),
-    binding: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
+    binding: new FormControl('INTACT', [
+      selectionValidator({ not: ['SELECT'] })
+    ]),
     cover: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
     pages: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
-    markings: new FormControl('NONE', [selectionValidator({ not: ['SELECT'] })]),
+    markings: new FormControl('NONE', [
+      selectionValidator({ not: ['SELECT'] })
+    ]),
     notes: new FormControl(null, [Validators.required]),
     images: new FormControl(null, [Validators.min(1)]),
     isbn13: new FormControl(null),
