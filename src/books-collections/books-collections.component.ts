@@ -29,19 +29,19 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   private loadingOverlayService = inject(LoadingOverlayService);
 
   ngOnInit(): void {
-    this.pageNumber = 1;
-    this.route.queryParams.subscribe((params: any) => {
-      this.params = { title: params.title };
-      this.pageNumber += 1;
-
-      console.log('BooksCollectionsComponent.ngOnInit', this.pageNumber);
-    });
+    this.pageNumber += 1;
+    this.route.queryParams.subscribe(
+      (params: any) => (this.params = { title: params.title })
+    );
 
     this.loadingOverlayService.$isLoading.subscribe(
       (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
     );
 
-    this.route.data.subscribe((data: any) => (this.data = data.books.data));
+    this.route.data.subscribe((res: any) => {
+      this.data = res.books.data;
+      this.hasNextPage = !(this.data?.length % this.pageSize);
+    });
   }
 
   override async onScrollDown() {

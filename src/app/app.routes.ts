@@ -10,10 +10,13 @@ import { BooksCollectionsComponent } from '../books-collections/books-collection
 import { BooksInventoriesComponent } from '../books-inventories/books-inventories.component';
 import { BooksMarketsComponent } from '../books-markets/books-markets.component';
 
-import { BookPostResolver } from '../resolvers/book-post-resolver.service';
-import { BooksCollectionResolver } from '../resolvers/books-collection-resolver.service';
-import { BookResolverService } from '../resolvers/book-resolver.service';
 import { BookPostComponent } from '../book-post/book-post.component';
+import { isbnGuard } from '../guards/isbn.guard';
+
+import { bookResolver } from '../resolvers/book.resolver';
+import { inventoryResolver } from '../resolvers/inventory.resolver';
+import { bookMarketResolver } from '../resolvers/book-market.resolver';
+import { booksCollectionResolver } from '../resolvers/books-collection.resolver';
 
 export const routes: Routes = [
   {
@@ -32,14 +35,14 @@ export const routes: Routes = [
     component: HomeComponent,
     path: 'home',
     resolve: {
-      posts: BookPostResolver
+      posts: bookMarketResolver
     }
   },
   {
     component: BooksCollectionsComponent,
     path: 'books/collections',
     resolve: {
-      books: BooksCollectionResolver
+      books: booksCollectionResolver
     },
     runGuardsAndResolvers: 'always'
   },
@@ -47,28 +50,30 @@ export const routes: Routes = [
     component: BooksInventoriesComponent,
     path: 'books/inventories/:userId',
     resolve: {
-      posts: BookPostResolver
+      posts: inventoryResolver
     }
   },
   {
+    canActivate: [isbnGuard],
     component: BooksMarketsComponent,
     path: 'books/markets',
     runGuardsAndResolvers: 'always',
     resolve: {
-      posts: BookPostResolver,
-      book: BookResolverService
+      posts: bookMarketResolver,
+      book: bookResolver
     }
   },
   {
+    canActivate: [isbnGuard],
     component: BookPostComponent,
     path: 'books/markets/:isbn13',
     resolve: {
-      book: BookResolverService
+      book: bookResolver
     }
   },
   {
     path: '**',
     pathMatch: 'full',
-    redirectTo: 'home'
+    redirectTo: '/home'
   }
 ];

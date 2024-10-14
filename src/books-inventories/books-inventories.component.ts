@@ -40,7 +40,10 @@ export class BooksInventoriesComponent extends InfiniteScrollView<Data> {
       (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
     );
 
-    this.route.data.subscribe((data: any) => (this.data = data.posts));
+    this.route.data.subscribe((data: any) => {
+      this.data = data.posts;
+      this.hasNextPage = !!this.data?.length && !(data.length % this.pageSize);
+    });
   }
 
   override onScrollUp() {
@@ -58,15 +61,10 @@ export class BooksInventoriesComponent extends InfiniteScrollView<Data> {
       pageSize: this.pageSize
     };
 
-    this.bookMarketService.search(params).subscribe({
-      next: (data: any) => {
-        this.data = this.data.concat(data);
-        this.hasNextPage = !(data.length % this.pageSize);
-        this.pageNumber += 1;
-        this.isLoadingNext = false;
-      },
-      error: (e) => {},
-      complete: () => {}
+    this.bookMarketService.search(params).subscribe((data: any) => {
+      this.data = this.data.concat(data);
+      this.hasNextPage = !!this.data?.length && !(data.length % this.pageSize);
+      this.pageNumber += 1;
     });
   }
 }

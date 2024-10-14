@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
   FormControl,
@@ -15,6 +15,8 @@ import { StringService } from '../services/string.service';
 import { selectionValidator } from '../validators/selection.validator';
 import { BookMarketService } from '../services/book-market.service';
 import { ImageManagerService } from '../services/image-manager.service';
+import { ISBN13Pipe } from '../pipes/isbn13.pipe';
+import { AuthService } from '../services/auth.service';
 
 type FileBox = {
   base64: string;
@@ -30,8 +32,10 @@ type FileBox = {
   imports: [
     BooksPricingComponent,
     CommonModule,
+    ISBN13Pipe,
     NavigationComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   templateUrl: './book-post.component.html',
   styleUrl: './book-post.component.scss'
@@ -59,14 +63,14 @@ export class BookPostComponent {
     ]),
     notes: new FormControl(null, [Validators.required]),
     images: new FormControl(null, [Validators.min(1)]),
-    isbn13: new FormControl(null),
-    institutionId: new FormControl([0])
+    isbn13: new FormControl(null)
   });
 
   constructor(
     private route: ActivatedRoute,
+    private auth: AuthService,
     private bookMarketService: BookMarketService,
-    private imageManagerService: ImageManagerService,
+    // private imageManagerService: ImageManagerService,
     private strings: StringService
   ) {}
 
@@ -74,8 +78,7 @@ export class BookPostComponent {
     this.route.data.subscribe((data: any) => {
       this.book = data.book;
       this.payload.patchValue({
-        isbn13: this.book.isbn13,
-        institutionId: [1840]
+        isbn13: this.book.isbn13
       });
     });
 
@@ -134,9 +137,9 @@ export class BookPostComponent {
   }
 
   onSubmit(e: Event) {
-    console.log(this.payload.value, e.target);
-
     const { images, ...data } = this.payload.value;
+
+    // const token = this.auth.getJwtToken();
     this.bookMarketService.create(data).subscribe({
       next: (response) => {
         console.log(response);

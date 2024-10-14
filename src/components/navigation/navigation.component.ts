@@ -23,7 +23,7 @@ export class NavigationComponent {
 
   handleEnterKeyUp(e: Event) {
     const input = <HTMLInputElement>e.target;
-    const value = input.value?.replace(/^\s+|\s+$/, '');
+    const value = input.value?.replace(/^\s+|\-+|\s+$/, '');
 
     if (!value) {
       return;

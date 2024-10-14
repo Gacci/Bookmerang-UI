@@ -5,6 +5,7 @@ import {
   ElementRef,
   ViewChild
 } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -28,7 +29,6 @@ import {
 
 import { Swiper, SwiperOptions } from 'swiper/types';
 import { SwiperContainer } from 'swiper/element';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'password-recovery-start',

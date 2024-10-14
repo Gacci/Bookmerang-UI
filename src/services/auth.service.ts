@@ -14,7 +14,7 @@ import * as JWT from 'jwt-decode';
 const JWT_TOKEN = '__tcn';
 
 const jwt =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnN0aXR1dGlvbnMiOls1LDU2XSwiZW1haWwiOiJjYW1lcm9uLm5vbGFuQGlzdGMuZWR1IiwiaWF0IjoxNzI4NjEyNjY2LCJpc3MiOiJodHRwOi8vYm9va21lcmFuZy5jb20iLCJqdGkiOiJGRTkxNEQzQ0EwMkI0MEVCQzA2NTUyOTA1QkMzQzdEMyIsInJvbGVzIjpbXSwic3ViIjo2NSwiZXhwIjoxNzI4ODcxODY2fQ.V0G24CIxdYHgkgxOhSqtWAuAZjmkumzkVKuDVVJWCBU';
+  ''
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,69 @@
 <app-navigation></app-navigation>
 
+<aside
+  class="fixed bottom-0 left-0 z-0 w-1/4 h-[calc(100%-68px)] bg-gray-50 transition-transform -translate-x-full sm:translate-x-0 z-0"
+  aria-label="Sidebar"
+>
+  <div class="flex flex-col md:pl-8">
+    <!-- Book Cover -->
+    <div class="md:w-1/2 my-4">
+      <img
+        class="w-full rounded-lg shadow-md"
+        [alt]="book.title"
+        src="{{ book.thumbnail }}"
+      />
+    </div>
+
+    <!-- Book Information -->
+    <div>
+      <div>
+        <h1 class="inline text-lg font-semibold text-gray-800">
+          {{ book.title }} {{ book.subtitle ?? '' }}
+        </h1>
+        <p
+          class="inline mt-2 text-base text-gray-600"
+          *ngIf="book.authors?.length"
+        >
+          by <span class="font-medium">{{ book.authors }}</span>
+        </p>
+      </div>
+
+      <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn13">
+        ISBN-13: <span class="font-medium">{{ book.isbn13 | isbn13 }}</span>
+      </p>
+      <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn10">
+        ISBN-10: <span class="font-medium">{{ book.isbn10 }}</span>
+      </p>
+
+      <div class="mt-4">
+        <h2 class="text-xl font-medium text-gray-700">Details</h2>
+        <ul class="mt-2 text-gray-600 space-y-1">
+          <li class="text-sm">
+            <span class="font-medium" *ngIf="book.publishers?.length"
+              >Publisher:</span
+            >
+            {{ book.publishers }}
+          </li>
+          <li class="text-sm">
+            <span class="font-medium" *ngIf="book.published"
+              >Publication Date:</span
+            >
+            {{ book.published }}
+          </li>
+          <li class="text-sm">
+            <span class="font-medium" *ngIf="book.pages">Pages:</span>
+            {{ book.pages }}
+          </li>
+          <li class="text-sm">
+            <span class="font-medium" *ngIf="book.language">Language:</span>
+            {{ book.language }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</aside>
+
 <div class="w-full max-w-3xl bg-white shadow-lg rounded-lg mx-auto p-16">
   <h1 class="text-3xl font-semibold text-gray-800 mb-6">Book Condition Form</h1>
 
@@ -331,7 +395,6 @@
       </div>
     </div>
 
-    <input type="hidden" formControlName="institutionId" />
     <input type="hidden" formControlName="isbn13" />
 
     <!-- Submit Button -->

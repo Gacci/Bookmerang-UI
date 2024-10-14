@@ -6,13 +6,17 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { BookPostCardComponent } from '../components/book-post-card/book-post-card.component';
+import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 import { NavigationComponent } from '../components/navigation/navigation.component';
 
 import { BookMarketService } from '../services/book-market.service';
-import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 import { AuthService } from '../services/auth.service';
+import { ISBN13Pipe } from '../pipes/isbn13.pipe';
+
+import ISO6391 from 'iso-639-1';
+import * as ISBN from 'isbn3';
 
 @Component({
   selector: 'books-market',
@@ -22,6 +26,7 @@ import { AuthService } from '../services/auth.service';
 
     BookPostCardComponent,
     BooksPricingComponent,
+    ISBN13Pipe,
     NavigationComponent,
     ReactiveFormsModule,
     RouterModule,
@@ -69,9 +74,13 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
 
     this.route.data.subscribe({
       next: (res: any) => {
-        this.book = res.book;
         this.data = res.posts;
-        this.hasNextPage = !(res.posts?.length % this.pageSize);
+        this.book = {
+          ...res.book,
+          language: ISO6391.getName(res.book.language) ?? res.book.language
+        };
+        this.hasNextPage =
+          !!this.data?.length && !(res.posts?.length % this.pageSize);
       }
     });
 
@@ -105,7 +114,7 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
 
     const { state, tradeable } = this.params;
     const params = {
-      isbn13: this.params.isbn13,
+      isbn13: ISBN.asIsbn13(this.params.isbn13),
       ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
       ...(+state
         ? {
@@ -122,14 +131,10 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
       pageSize: this.pageSize
     };
 
-    this.bookMarketService.search(params).subscribe({
-      next: (data: any) => {
-        this.data = this.data.concat(data);
-        this.hasNextPage = data?.length && !(data.length % this.pageSize);
-        this.pageNumber += 1;
-      },
-      error: (e) => {},
-      complete: () => {}
+    this.bookMarketService.search(params).subscribe((data: any) => {
+      this.data = this.data.concat(data);
+      this.hasNextPage = !!this.data?.length && !(data.length % this.pageSize);
+      this.pageNumber += 1;
     });
   }
 
@@ -139,16 +144,17 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
 
   protected onSubmit(e: Event) {
     const { state, tradeable } = this.filters.value;
-    console.log(state);
+    const encoded =
+      (state.new ? 1 : 0) +
+      (state.likeNew ? 2 : 0) +
+      (state.veryGood ? 4 : 0) +
+      (state.good ? 8 : 0) +
+      (state.acceptable ? 16 : 0);
+
     this.router.navigate(['books', 'markets'], {
       queryParams: {
         isbn13: this.book.isbn13,
-        state:
-          (state.new ? 1 : 0) +
-          (state.likeNew ? 2 : 0) +
-          (state.veryGood ? 4 : 0) +
-          (state.good ? 8 : 0) +
-          (state.acceptable ? 16 : 0),
+        ...(encoded ? { state: encoded } : {}),
         ...(/^true|false$/.test(tradeable) ? { tradeable } : {})
       }
     });
