@@ -13,8 +13,7 @@ import * as JWT from 'jwt-decode';
 
 const JWT_TOKEN = '__tcn';
 
-const jwt =
-  ''
+const jwt = '';
 
 @Injectable({
   providedIn: 'root'
@@ -87,10 +86,7 @@ export class AuthService {
     );
   }
   verifyCreateAccountCode(payload: Data) {
-    return this.http.post(
-      'http://127.0.0.1:3000/auth/accounts/verify',
-      payload
-    );
+    return this.http.post('http://127.0.0.1:3000/auth/accounts/verify', payload);
   }
 
   refreshAccessToken() {
@@ -103,9 +99,7 @@ export class AuthService {
       return null;
     }
 
-    return <JWT.JwtPayload & { institutions: Array<number> }>(
-      JWT.jwtDecode(token)
-    );
+    return <JWT.JwtPayload & { institutions: Array<number> }>JWT.jwtDecode(token);
   }
 
   getJwtTokenRaw() {

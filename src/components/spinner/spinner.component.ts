@@ -59,10 +59,9 @@ export class SpinnerComponent {
 
   @HostBinding('class')
   get className(): string {
-    return [
-      this._backdrop,
-      !this.inline ? 'back-dropped' : 'no-back-drop'
-    ].join(' ');
+    return [this._backdrop, !this.inline ? 'back-dropped' : 'no-back-drop'].join(
+      ' '
+    );
   }
 
   @Input()

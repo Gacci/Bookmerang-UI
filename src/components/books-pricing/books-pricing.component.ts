@@ -29,7 +29,7 @@ import * as ISBN from 'isbn3';
 })
 export class BooksPricingComponent implements OnInit {
   @ViewChild('swiper', { read: ElementRef<SwiperContainer> })
-  swiperRefElem!: ElementRef<SwiperContainer>;
+  protected swiperRefElem!: ElementRef<SwiperContainer>;
 
   private swiper!: Swiper;
 
@@ -81,26 +81,19 @@ export class BooksPricingComponent implements OnInit {
             state: metric.state.replace('_', ' ')
           }))
         }));
-        console.log(this.groups);
 
         this.loading = false;
-
         this.loaded.emit(groups);
-        this.cdr.detectChanges();
 
-        this.swiper = <Swiper>(
-          (<unknown>this.swiperRefElem.nativeElement.swiper)
-        );
-        this.swiper.update();
+        this.cdr.detectChanges();
+        this.swiper = <Swiper>(<unknown>this.swiperRefElem.nativeElement.swiper);
 
         this.selectedSlideObject = this.groups.find(() => true);
-        console.log(this.selectedSlideObject);
-        this.swiper.on('slideChange', (swiper: Swiper) => {
-          this.selectedSlideObject = this.groups[swiper.activeIndex];
-
-          console.log(this.selectedSlideObject);
-          this.cdr.detectChanges();
-        });
+        this.swiper.on(
+          'slideChange',
+          (swiper: Swiper) =>
+            (this.selectedSlideObject = this.groups[swiper.activeIndex])
+        );
       });
   }
 }

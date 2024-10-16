@@ -5,9 +5,7 @@ import { bookMarketResolver } from './book-market.resolver';
 
 describe('bookMarketResolver', () => {
   const executeResolver: ResolveFn<boolean> = (...resolverParameters) =>
-    TestBed.runInInjectionContext(() =>
-      bookMarketResolver(...resolverParameters)
-    );
+    TestBed.runInInjectionContext(() => bookMarketResolver(...resolverParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

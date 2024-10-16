@@ -14,9 +14,13 @@ import { StringService } from '../services/string.service';
 
 import { selectionValidator } from '../validators/selection.validator';
 import { BookMarketService } from '../services/book-market.service';
+import { BookValuatorService } from '../services/book-valuator.service';
 import { ImageManagerService } from '../services/image-manager.service';
-import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 import { AuthService } from '../services/auth.service';
+
+import { ISBN13Pipe } from '../pipes/isbn13.pipe';
+
+import ISO6391 from 'iso-639-1';
 
 type FileBox = {
   base64: string;
@@ -47,20 +51,16 @@ export class BookPostComponent {
 
   protected recommendedSellingPriceRange: any = {};
 
-  private metrics!: any;
+  private pricings: { [key: string]: string }[] = [];
 
   protected payload = new FormGroup({
-    price: new FormControl(99, [Validators.required, Validators.min(1)]),
+    price: new FormControl<number>(99, [Validators.required, Validators.min(1)]),
     state: new FormControl('LIKE_NEW', [Validators.required]),
     tradeable: new FormControl<boolean>(false),
-    binding: new FormControl('INTACT', [
-      selectionValidator({ not: ['SELECT'] })
-    ]),
+    binding: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
     cover: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
     pages: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
-    markings: new FormControl('NONE', [
-      selectionValidator({ not: ['SELECT'] })
-    ]),
+    markings: new FormControl('NONE', [selectionValidator({ not: ['SELECT'] })]),
     notes: new FormControl(null, [Validators.required]),
     images: new FormControl(null, [Validators.min(1)]),
     isbn13: new FormControl(null)
@@ -70,37 +70,27 @@ export class BookPostComponent {
     private route: ActivatedRoute,
     private auth: AuthService,
     private bookMarketService: BookMarketService,
+    private bookValuator: BookValuatorService,
     // private imageManagerService: ImageManagerService,
     private strings: StringService
   ) {}
 
   ngOnInit(): void {
     this.route.data.subscribe((data: any) => {
-      this.book = data.book;
+      this.book = {
+        ...data.book,
+        language: ISO6391.getName(data.book.language) ?? data.book.language
+      };
+
       this.payload.patchValue({
         isbn13: this.book.isbn13
       });
     });
 
-    this.payload.controls.state.valueChanges.subscribe(
-      this.updateRecommendedSellingPrice.bind(this)
-    );
-
-    this.payload.controls.binding.valueChanges.subscribe(
-      this.updateRecommendedSellingPrice.bind(this)
-    );
-
-    this.payload.controls.cover.valueChanges.subscribe(
-      this.updateRecommendedSellingPrice.bind(this)
-    );
-
-    this.payload.controls.pages.valueChanges.subscribe(
-      this.updateRecommendedSellingPrice.bind(this)
-    );
-
-    this.payload.controls.markings.valueChanges.subscribe(
-      this.updateRecommendedSellingPrice.bind(this)
-    );
+    this.payload.valueChanges.subscribe((value: any) => {
+      console.log(value);
+      this.updateRecommendedSellingPrice(value);
+    });
   }
 
   onInputChange(e: Event) {
@@ -164,135 +154,34 @@ export class BookPostComponent {
   }
 
   onMetricsLoaded(metrics: any) {
-    this.metrics = metrics.reduce(
-      (groups: any, metric: any) => ({
-        ...groups,
-        [metric.state]: metric
-      }),
-      {}
-    );
+    this.pricings = [].concat(metrics);
   }
 
-  private updateRecommendedSellingPrice(value: string | null) {
-    if (!this.metrics) {
+  private updateRecommendedSellingPrice(value: any) {
+    console.log('updateRecommendedSellingPrice', this.pricings);
+    if (!this.pricings || !value.state) {
       return;
     }
 
-    console.log(value, this.metrics);
+    console.log(
+      this.pricings.map((pricing: any) => {
+        const bookPricingStats = pricing.metrics.find(
+          (metric: any) => metric.state === <string>value.state
+        );
 
-    const state = this.payload.value.state ?? '';
+        if (!bookPricingStats) {
+          return null;
+        }
 
-    const pricing = this.metrics[state];
-    this.recommendedSellingPriceRange = this.createPriceRange(
-      this.payload.value,
-      pricing._min,
-      pricing._max
+        return {
+          ...pricing,
+          recommended: this.bookValuator.computeEstimateRange(
+            value,
+            bookPricingStats.minPrice,
+            bookPricingStats.maxPrice
+          )
+        };
+      })
     );
-
-    console.log(this.recommendedSellingPriceRange);
-  }
-
-  private createPriceRange(
-    item: any,
-    minPrice: number | null,
-    maxPrice: number | null
-  ) {
-    const adjustments: any = {
-      // Base adjustments for each state
-      state: {
-        NEW: 0.5, // Increase by 50%
-        LIKE_NEW: 0.3, // Increase by 30%
-        VERY_GOOD: 0.2, // Increase by 20%
-        GOOD: 0.1, // Increase by 10%
-        ACCEPTABLE: 0 // No increase
-      },
-      // Additional adjustments for binding
-      binding: {
-        INTACT: 0, // No change
-        WEAK: -0.05, // Decrease by 5%
-        DAMAGED: -0.1, // Decrease by 10%
-        BROKEN: -0.2 // Decrease by 20%
-      },
-      // Additional adjustments for cover condition
-      cover: {
-        INTACT: 0, // No change
-        FADED: -0.05, // Decrease by 5%
-        CREASED: -0.1, // Decrease by 10%
-        RIPPED: -0.15, // Decrease by 15%
-        DISCOLORED: -0.1, // Decrease by 10%
-        SCRATCHED: -0.05, // Decrease by 5%
-        CUT: -0.1, // Decrease by 10%
-        STAINED: -0.15 // Decrease by 15%
-      },
-      // Additional adjustments for pages condition
-      pages: {
-        INTACT: 0, // No change
-        YELLOWED: -0.05, // Decrease by 5%
-        MARKED: -0.1, // Decrease by 10%
-        FOLDED: -0.1, // Decrease by 10%
-        CREASED: -0.1, // Decrease by 10%
-        TORN: -0.15, // Decrease by 15%
-        WARPED: -0.1, // Decrease by 10%
-        STAINED: -0.15 // Decrease by 15%
-      },
-      // Additional adjustments for markings
-      markings: {
-        NONE: 0, // No change
-        MINIMAL: -0.05, // Decrease by 5%
-        PENCIL: -0.1, // Decrease by 10%
-        HIGHLIGHTER: -0.1, // Decrease by 10%
-        PEN: -0.15, // Decrease by 15%
-        EXTENSIVE: -0.2 // Decrease by 20%
-      },
-      // Additional adjustments for extras
-      extras: {
-        ACCESS_CODE: 0.05, // Increase by 5%
-        CD: 0.05 // Increase by 5%
-      }
-    };
-
-    // Calculate total adjustment factor based on characteristics
-    const totalAdjustment: number =
-      (adjustments.state[item.state] ?? 0) +
-      (adjustments.binding[item.binding] ?? 0) +
-      (adjustments.cover[item.cover] ?? 0) +
-      (adjustments.pages[item.pages] ?? 0) +
-      (adjustments.markings[item.markings] || 0); // +
-    // item.extras.reduce(
-    //     (sum: number, extra: string) => (sum += adjustments.extras[extra] ?? 0),
-    //     0
-    // );
-
-    // Calculate the final price based on available price information
-    let calculatedPrice;
-    if (minPrice !== null && maxPrice !== null) {
-      // Both prices are available
-      const minAdjusted = minPrice * (1 + totalAdjustment);
-      const maxAdjusted = maxPrice * (1 + totalAdjustment);
-      calculatedPrice = {
-        minPrice: parseFloat(minAdjusted.toFixed(2)), // Round min price to two decimal places
-        maxPrice: parseFloat(maxAdjusted.toFixed(2)) // Round max price to two decimal places
-      };
-    } else if (minPrice !== null) {
-      // Only min price is available
-      calculatedPrice = {
-        minPrice: parseFloat(minPrice.toFixed(2)), // Round min price to two decimal places
-        maxPrice: minPrice * (1 + totalAdjustment) // Calculate max based on min
-      };
-    } else if (maxPrice !== null) {
-      // Only max price is available
-      calculatedPrice = {
-        minPrice: maxPrice * (1 + totalAdjustment), // Calculate min based on max
-        maxPrice: parseFloat(maxPrice.toFixed(2)) // Round max price to two decimal places
-      };
-    } else {
-      // If neither min nor max price is provided
-      return {
-        minPrice: null,
-        maxPrice: null
-      };
-    }
-
-    return calculatedPrice;
   }
 }

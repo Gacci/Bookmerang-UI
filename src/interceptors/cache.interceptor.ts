@@ -31,8 +31,7 @@ export const cacheInterceptor: HttpInterceptorFn = (req, next) => {
 
   const targetCacheResponse = cacheable.find(
     (expression: CacheableRoute) =>
-      expression.method === req.method &&
-      expression.route.test(req.urlWithParams)
+      expression.method === req.method && expression.route.test(req.urlWithParams)
   );
 
   if (!targetCacheResponse) {

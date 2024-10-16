@@ -5,9 +5,7 @@ import { inject } from '@angular/core';
 export const bookMarketResolver: ResolveFn<any> = (route, state) => {
   const params: any = { ...route.params, ...route.queryParams };
   return inject(BookMarketService).search({
-    ...(params.isbn13
-      ? { isbn13: [params.isbn13.replace(/[^0-9]+/g, '')] }
-      : {}),
+    ...(params.isbn13 ? { isbn13: [params.isbn13.replace(/[^0-9]+/g, '')] } : {}),
     ...(/^true|false$/.test(params.tradeable)
       ? { tradeable: JSON.parse(params.tradeable) }
       : {}),

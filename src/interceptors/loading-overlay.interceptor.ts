@@ -16,9 +16,7 @@ export const loadingOverlayInterceptor: HttpInterceptorFn = (req, next) => {
   ];
 
   // Check if the request URL matches any of the excluded routes
-  const shouldExcludeRoute = excludedRoutes.some((route) =>
-    route.test(req.url)
-  );
+  const shouldExcludeRoute = excludedRoutes.some((route) => route.test(req.url));
 
   if (!shouldExcludeRoute) {
     loadingOverlayService.show();
