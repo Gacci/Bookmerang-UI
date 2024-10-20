@@ -12,7 +12,8 @@ export const loadingOverlayInterceptor: HttpInterceptorFn = (req, next) => {
   // Define the routes or patterns that should skip the loading overlay
   const excludedRoutes: RegExp[] = [
     new RegExp('/books/collections/isbn/\\d{13}'),
-    new RegExp('/books/markets/metrics')
+    new RegExp('/books/markets/metrics'),
+    new RegExp('/users/\\d+')
   ];
 
   // Check if the request URL matches any of the excluded routes

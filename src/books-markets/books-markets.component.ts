@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
@@ -8,7 +8,6 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { BookPostCardComponent } from '../components/book-post-card/book-post-card.component';
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
-import { NavigationComponent } from '../components/navigation/navigation.component';
 
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
@@ -17,7 +16,10 @@ import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 import ISO6391 from 'iso-639-1';
 import * as ISBN from 'isbn3';
+import * as Hash from 'crypto-hash';
+import { Subject, takeUntil } from 'rxjs';
 
+console.log(Hash);
 @Component({
   selector: 'books-market',
   standalone: true,
@@ -27,7 +29,6 @@ import * as ISBN from 'isbn3';
     BookPostCardComponent,
     BooksPricingComponent,
     ISBN13Pipe,
-    NavigationComponent,
     ReactiveFormsModule,
     RouterModule,
 
@@ -36,9 +37,7 @@ import * as ISBN from 'isbn3';
   templateUrl: './books-markets.component.html',
   styleUrl: './books-markets.component.scss'
 })
-export class BooksMarketsComponent extends InfiniteScrollView<any> {
-  private auth = inject(AuthService);
-
+export class BooksMarketsComponent extends InfiniteScrollView<any> implements OnDestroy {  
   private route = inject(ActivatedRoute);
 
   private router = inject(Router);
@@ -46,6 +45,10 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
   private bookMarketService = inject(BookMarketService);
 
   private loadingOverlayService = inject(LoadingOverlayService);
+
+  private filtersHashedValue!: string;
+
+  protected filtersHashChanged!: boolean;
 
   protected isLoadingMetrics!: boolean;
 
@@ -58,11 +61,11 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
   protected filters: FormGroup<any> = new FormGroup({
     tradeable: new FormControl('all'),
     state: new FormGroup({
-      new: new FormControl(null),
-      likeNew: new FormControl(null),
-      veryGood: new FormControl(null),
-      good: new FormControl(null),
-      acceptable: new FormControl(null)
+      new: new FormControl(false),
+      likeNew: new FormControl(false),
+      veryGood: new FormControl(false),
+      good: new FormControl(false),
+      acceptable: new FormControl(false)
     })
   });
 
@@ -73,21 +76,22 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
     });
 
     this.route.data.subscribe({
-      next: (res: any) => {
-        this.data = res.posts;
+      next: (resolved: any) => {
+        this.data = resolved.posts;
         this.book = {
-          ...res.book,
-          language: ISO6391.getName(res.book.language) ?? res.book.language
+          ...resolved.book,
+          language: ISO6391.getName(resolved.book.language) 
+            ?? resolved.book.language
         };
         this.hasNextPage =
-          !!this.data?.length && !(res.posts?.length % this.pageSize);
+          !!this.data?.length && !(this.data?.length % this.pageSize);
       }
     });
 
     this.route.queryParams.subscribe({
-      next: (query: any) => {
+      next: async (query: any) => {
         this.params = { ...query };
-        this.filters.patchValue({
+        const patch = {
           ...(query.state
             ? {
                 state: {
@@ -102,9 +106,17 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
           ...(/^true|false$/.test(query.tradeable)
             ? { tradeable: JSON.parse(query.tradeable) }
             : {})
-        });
+        };
+
+        this.filters.patchValue(patch);
+        this.filtersHashedValue = await Hash.sha256(JSON.stringify(this.filters.value));
+        console.log(this.filters.value, patch);
       }
     });
+
+    this.filters.valueChanges.subscribe((async(filter: any) => {
+      this.filtersHashChanged = this.filtersHashedValue !== await Hash.sha256(JSON.stringify(this.filters.value));
+    }))
   }
 
   override async onScrollDown() {
@@ -131,7 +143,9 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
       pageSize: this.pageSize
     };
 
-    this.bookMarketService.search(params).subscribe((data: any) => {
+    this.bookMarketService.search(params)      
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((data: any) => {
       this.data = this.data.concat(data);
       this.hasNextPage = !!this.data?.length && !(data.length % this.pageSize);
       this.pageNumber += 1;
@@ -158,5 +172,9 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> {
         ...(/^true|false$/.test(tradeable) ? { tradeable } : {})
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe();
   }
 }

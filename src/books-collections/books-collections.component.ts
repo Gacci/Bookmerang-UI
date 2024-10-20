@@ -5,16 +5,16 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
-import { NavigationComponent } from '../components/navigation/navigation.component';
+
 import { BookCollectionService } from '../services/book-collection.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-collection',
   standalone: true,
   imports: [
     CommonModule,
-    NavigationComponent,
     RouterModule,
     InfiniteScrollDirective
   ],
@@ -30,17 +30,22 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
   ngOnInit(): void {
     this.pageNumber += 1;
-    this.route.queryParams.subscribe(
+    this.route.queryParams
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(
       (params: any) => (this.params = { title: params.title })
     );
 
-    this.loadingOverlayService.$isLoading.subscribe(
-      (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
-    );
+    this.loadingOverlayService.$isLoading
+    .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
+      );
 
-    this.route.data.subscribe((res: any) => {
-      this.data = res.books.data;
-      this.hasNextPage = !(this.data?.length % this.pageSize);
+    this.route.data.subscribe((resolved: any) => {
+      this.data = resolved.books.data;
+      this.hasNextPage =
+      !!this.data?.length && !(this.data?.length % this.pageSize);
     });
   }
 
@@ -68,4 +73,8 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   }
 
   override onScrollUp(): void {}
+
+  ngOnDestroy() {
+    this.unsubscribe();
+  }
 }

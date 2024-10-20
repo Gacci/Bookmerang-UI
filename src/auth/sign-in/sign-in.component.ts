@@ -37,16 +37,11 @@ export class SignInComponent {
 
   handleSignIn() {
     this.request = { sent: true };
-    this.auth.login(<Credentials>this.signInGroup.value).subscribe({
-      next: () => {
-        this.router.navigateByUrl('/');
-      },
-      error: () => {
-        this.request.done = true;
-      },
-      complete: () => {
-        this.request.done = true;
-      }
+    this.auth.login(<Credentials>this.signInGroup.value)
+    .subscribe({
+      next: async (response) => this.router.navigateByUrl('home'),
+      error: () => this.request.done = true,
+      complete: () => this.request.done = true
     });
   }
 
@@ -56,5 +51,9 @@ export class SignInComponent {
 
   get password() {
     return this.signInGroup.controls.password;
+  }
+
+  pause(milliseconds: number) {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
   }
 }

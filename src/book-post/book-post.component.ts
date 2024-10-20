@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
@@ -21,6 +21,8 @@ import { AuthService } from '../services/auth.service';
 import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 import ISO6391 from 'iso-639-1';
+import { Subject, takeUntil } from 'rxjs';
+import { Unsubscribable } from '../classes/unsubscribable';
 
 type FileBox = {
   base64: string;
@@ -44,14 +46,25 @@ type FileBox = {
   templateUrl: './book-post.component.html',
   styleUrl: './book-post.component.scss'
 })
-export class BookPostComponent {
+export class BookPostComponent extends Unsubscribable implements OnDestroy {
+  private route = inject(ActivatedRoute);
+  
+  private auth = inject(AuthService);
+  
+  private bookMarketService = inject(BookMarketService);
+
+  private bookValuator = inject(BookValuatorService);
+
+  // private imageManagerService: ImageManagerService,
+  private strings = inject(StringService);
+
+  private pricings: { [key: string]: string }[] = [];
+
   protected book: any = {};
 
   protected images: FileBox[] = [];
 
   protected recommendedSellingPriceRange: any = {};
-
-  private pricings: { [key: string]: string }[] = [];
 
   protected payload = new FormGroup({
     price: new FormControl<number>(99, [Validators.required, Validators.min(1)]),
@@ -66,31 +79,27 @@ export class BookPostComponent {
     isbn13: new FormControl(null)
   });
 
-  constructor(
-    private route: ActivatedRoute,
-    private auth: AuthService,
-    private bookMarketService: BookMarketService,
-    private bookValuator: BookValuatorService,
-    // private imageManagerService: ImageManagerService,
-    private strings: StringService
-  ) {}
 
   ngOnInit(): void {
-    this.route.data.subscribe((data: any) => {
-      this.book = {
-        ...data.book,
-        language: ISO6391.getName(data.book.language) ?? data.book.language
-      };
+    this.route.data
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data: any) => {
+        this.book = {
+          ...data.book,
+          language: ISO6391.getName(data.book.language) ?? data.book.language
+        };
 
-      this.payload.patchValue({
-        isbn13: this.book.isbn13
+        this.payload.patchValue({
+          isbn13: this.book.isbn13
+        });
       });
-    });
 
-    this.payload.valueChanges.subscribe((value: any) => {
-      console.log(value);
-      this.updateRecommendedSellingPrice(value);
-    });
+    this.payload.valueChanges
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((value: any) => {
+        console.log(value);
+        this.updateRecommendedSellingPrice(value);
+      });
   }
 
   onInputChange(e: Event) {
@@ -130,7 +139,9 @@ export class BookPostComponent {
     const { images, ...data } = this.payload.value;
 
     // const token = this.auth.getJwtToken();
-    this.bookMarketService.create(data).subscribe({
+    this.bookMarketService.create(data)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe({
       next: (response) => {
         console.log(response);
 
@@ -142,10 +153,6 @@ export class BookPostComponent {
         //     complete: () => {},
         //   });
       },
-      error: (e) => {
-        console.log(e);
-      },
-      complete: () => {}
     });
   }
 
@@ -183,5 +190,9 @@ export class BookPostComponent {
         };
       })
     );
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe();
   }
 }

@@ -23,7 +23,7 @@
     @apply flex justify-between items-center p-4 border-b;
 
     .post-card-info-left {
-      @apply flex space-x-2;
+      @apply flex items-center space-x-2;
     }
 
     .post-card-price {

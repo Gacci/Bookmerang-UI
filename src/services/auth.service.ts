@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, of, tap } from 'rxjs';
+import { BehaviorSubject, delay, map, of, tap } from 'rxjs';
 import { Data } from '@angular/router';
 
 import { Credentials } from '../interfaces/credentials.interface';
@@ -13,17 +13,34 @@ import * as JWT from 'jwt-decode';
 
 const JWT_TOKEN = '__tcn';
 
-const jwt = '';
+const jwt =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnN0aXR1dGlvbnMiOls1LDU2XSwiZW1haWwiOiJjYW1lcm9uLm5vbGFuQGlzdGMuZWR1IiwiaWF0IjoxNzI5MTM2MDE3LCJpc3MiOiJodHRwOi8vYm9va21lcmFuZy5jb20iLCJqdGkiOiIzMzE3MjI4RkYyODlCQUFDNEExNTRGQ0FGOTZGRDg1NiIsInJvbGVzIjpbXSwic3ViIjo2NSwiZXhwIjoxNzI5Mzk1MjE3fQ.slFz2OmMzFLxy0j8KLnw7BJC284lueN9xrfME3jijAA';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private authTokenSubject = new BehaviorSubject<any>(false);
+  public $jwt = this.authTokenSubject.asObservable();
+
+  // private jwtRawToken!: string | null;
+
+  // private jwtDecodedToken: any | null;
+
   constructor(
     private readonly http: HttpClient,
     private cache: CacheService
   ) {
-    console.log(this.getJwtToken());
+    // this.jwtRawToken = this.getJwtTokenRaw();
+    // this.jwtDecodedToken = this.getJwtToken();
+
+    this.authTokenSubject.next(
+      this.getJwtTokenRaw() 
+      ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '') 
+      : undefined
+    );
+
+    // console.log(this.jwtDecodedToken)
   }
 
   register(payload: Registration) {
@@ -33,7 +50,16 @@ export class AuthService {
   login(payload: Credentials) {
     return this.http
       .post('http://127.0.0.1:3000/auth/login', payload)
-      .pipe(tap((response: Data) => this.storeJwtTokens(response)));
+      .pipe(
+        tap((response: Data) => {
+          this.storeJwtToken(response);
+          this.authTokenSubject.next(
+            this.getJwtTokenRaw() 
+              ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '') 
+              : undefined
+          );
+        })
+      );
   }
 
   logout() {
@@ -47,8 +73,11 @@ export class AuthService {
 
   revokeToken(token: string) {
     return this.http
-      .delete(`http://127.0.0.1:3000/auth/tokens/revoke/${token}`)
-      .pipe(tap(() => this.removeJwtToken()));
+      .delete(`http://127.0.0.1:3000/auth/tokens/revoke`, { body: { token } })
+      .pipe(tap(() => {
+        this.removeJwtToken();
+        this.authTokenSubject.next(null);
+      }));
   }
 
   resendPasswordRecoveryCode(payload: Data) {
@@ -93,30 +122,29 @@ export class AuthService {
     return this.http.post('', {});
   }
 
-  getJwtToken() {
-    const token = this.getJwtTokenRaw();
-    if (!token) {
-      return null;
-    }
-
-    return <JWT.JwtPayload & { institutions: Array<number> }>JWT.jwtDecode(token);
+  isAuthenticated() {
+    return (1000 * (this.authTokenSubject?.value?.exp || 0)) > Date.now();
   }
 
-  getJwtTokenRaw() {
-    return jwt; //localStorage.getItem(JWT_TOKEN);
+  getUserId() {
+    return this.authTokenSubject?.value?.sub;
   }
 
   getMarketScope() {
-    const jwt = this.getJwtToken();
-    if (!jwt) {
-      return [];
-    }
-
-    return jwt.institutions;
+    return this.authTokenSubject?.value?.institutions;
   }
 
-  private storeJwtTokens(token: Data) {
-    localStorage.setItem(JWT_TOKEN, JSON.stringify(token));
+  getJwtTokenRaw() {
+    return localStorage.getItem(JWT_TOKEN);
+  }
+
+  getJwtToken() {
+    // <JWT.JwtPayload & { institutions: Array<number> }>
+    return this.authTokenSubject.value;
+  }
+
+  private storeJwtToken(token: any) {
+    localStorage.setItem(JWT_TOKEN, token.access_token);
   }
 
   private removeJwtToken() {

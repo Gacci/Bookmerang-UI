@@ -8,8 +8,9 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   ViewChild,
   ElementRef,
-  AfterViewInit,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnDestroy,
+  inject
 } from '@angular/core';
 
 import { BookMarketService } from '../../services/book-market.service';
@@ -18,6 +19,8 @@ import { Swiper, SwiperOptions } from 'swiper/types';
 import { SwiperContainer } from 'swiper/element';
 
 import * as ISBN from 'isbn3';
+import { Subject, takeUntil } from 'rxjs';
+import { Unsubscribable } from '../../classes/unsubscribable';
 
 @Component({
   selector: 'books-pricing',
@@ -27,11 +30,15 @@ import * as ISBN from 'isbn3';
   templateUrl: './books-pricing.component.html',
   styleUrl: './books-pricing.component.scss'
 })
-export class BooksPricingComponent implements OnInit {
+export class BooksPricingComponent extends Unsubscribable implements OnInit, OnDestroy {
   @ViewChild('swiper', { read: ElementRef<SwiperContainer> })
-  protected swiperRefElem!: ElementRef<SwiperContainer>;
+  private swiperRefElem!: ElementRef<SwiperContainer>;
 
   private swiper!: Swiper;
+
+  private bookMarketService = inject(BookMarketService);
+
+  private cdr = inject(ChangeDetectorRef);
 
   @Input()
   isbn13!: string;
@@ -49,14 +56,10 @@ export class BooksPricingComponent implements OnInit {
 
   protected loading: boolean = true;
 
-  constructor(
-    private bookMarketService: BookMarketService,
-    private cdr: ChangeDetectorRef
-  ) {}
-
   ngOnInit() {
     this.bookMarketService
       .metrics(ISBN.asIsbn13(this.isbn13))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((groups: any) => {
         this.groups = groups.map((group: any) => ({
           ...group,
@@ -72,8 +75,8 @@ export class BooksPricingComponent implements OnInit {
                     range:
                       'from $' +
                       [
-                        ...(metric.minPrice ? [metric.minPrice] : []),
-                        ...(metric.maxPrice ? [metric.maxPrice] : [])
+                        ...(metric.minPrice ? [metric.minPrice.toFixed(2)] : []),
+                        ...(metric.maxPrice ? [metric.maxPrice.toFixed(2)] : [])
                       ].join(' to $')
                   }
                 : { range: 'from $' + metric.minPrice }
@@ -91,9 +94,14 @@ export class BooksPricingComponent implements OnInit {
         this.selectedSlideObject = this.groups.find(() => true);
         this.swiper.on(
           'slideChange',
-          (swiper: Swiper) =>
-            (this.selectedSlideObject = this.groups[swiper.activeIndex])
-        );
+          (swiper: Swiper) => {
+            this.selectedSlideObject = this.groups[swiper.activeIndex];
+            this.cdr.detectChanges();
+        });
       });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe();
   }
 }

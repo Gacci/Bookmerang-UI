@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -11,5 +11,23 @@ import { RouterModule } from '@angular/router';
 })
 export class BookPostCardComponent {
   @Input()
-  post!: any;
+    post!: any;
+
+  @Input()
+    listBookCtrl!: boolean;
+
+  @Input()
+    userChatCtrl!: boolean;
+
+  @Input()
+    editPostCtrl!: boolean;
+
+  
+  @Output()
+    action: EventEmitter<any> = new EventEmitter<any>();
+
+
+  showMenuOptions(e: Event) {
+    this.action.emit({ e });
+  }
 }

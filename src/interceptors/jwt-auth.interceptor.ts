@@ -9,8 +9,7 @@ export const jwtAuthInterceptor: HttpInterceptorFn = (
   next: HttpHandlerFn
 ) => {
   const service = inject(AuthService);
-  const jwtAuthToken = service.getJwtToken();
-  if (jwtAuthToken) {
+  if (service.isAuthenticated()) {
     const token = service.getJwtTokenRaw();
     request = request.clone({
       setHeaders: {
@@ -21,7 +20,7 @@ export const jwtAuthInterceptor: HttpInterceptorFn = (
 
   return next(request).pipe(
     catchError((error) => {
-      if (error.status === 401 && jwtAuthToken) {
+      if (error.status === 401 && service.isAuthenticated()) {
         // Token might be expired, attempt to refresh
         return service.refreshAccessToken().pipe(
           switchMap(() => {

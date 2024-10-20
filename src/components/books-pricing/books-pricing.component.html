@@ -43,6 +43,7 @@
       scrollbar="true"
       pagination-clickable="true"
       a11y="false"
+      *ngIf="groups?.length && !loading"
     >
       <swiper-slide class="bg-white swiper-no-swiping" *ngFor="let group of groups">
         <div class="p-4 md:p-5">
@@ -162,6 +163,10 @@
       </swiper-slide>
     </swiper-container>
   </div>
+
+  <!-- <div *ngIf="!groups?.length && !loading">
+    <p class="px-2 py-8">No results</p>
+  </div> -->
 
   <div class="w-full relative" *ngIf="loading">
     <div class="max-w-lg mx-auto">

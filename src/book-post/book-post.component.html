@@ -1,12 +1,10 @@
-<app-navigation></app-navigation>
-
 <aside
   class="fixed bottom-0 left-0 z-0 w-1/4 h-[calc(100%-68px)] bg-gray-50 transition-transform -translate-x-full sm:translate-x-0 z-0"
   aria-label="Sidebar"
 >
-  <div class="flex flex-col md:px-8 xl:max-w-md">
+  <div class="flex flex-col overflow-y-auto md:px-8 xl:max-w-md">
     <!-- Book Cover -->
-    <div class="md:w-1/2 my-4">
+    <div class="md:w-40 my-4">
       <img
         class="w-full rounded-lg shadow-md"
         [alt]="book.title"
@@ -15,15 +13,13 @@
     </div>
 
     <!-- Book Information -->
-    <div>
-      <div>
-        <h1 class="inline text-lg font-semibold text-gray-800">
-          {{ book.title }} {{ book.subtitle ?? '' }}
-        </h1>
-        <p class="inline mt-2 text-base text-gray-600" *ngIf="book.authors?.length">
-          by <span class="font-medium">{{ book.authors }}</span>
-        </p>
-      </div>
+    <div class="lg:w-64"> 
+      <h1 class="inline text-sm font-semibold text-gray-800">
+        {{ book.title }} {{ book.subtitle ?? '' }}
+      </h1>
+      <p class="inline mt-2 text-sm text-gray-600" *ngIf="book.authors?.length">
+        by <span class="font-medium">{{ book.authors }}</span>
+      </p>
 
       <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn13">
         ISBN-13: <span class="font-medium">{{ book.isbn13 | isbn13 }}</span>

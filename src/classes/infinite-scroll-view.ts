@@ -1,6 +1,7 @@
 import { Data } from '@angular/router';
+import { Unsubscribable } from './unsubscribable';
 
-export abstract class InfiniteScrollView<T> {
+export abstract class InfiniteScrollView<T> extends Unsubscribable {
   protected data: T[] = [];
 
   protected pageNumber: number = 1;

@@ -1,5 +1,3 @@
-<app-navigation></app-navigation>
-
 <div
   class="collection"
   infiniteScroll
@@ -8,7 +6,7 @@
   [infiniteScrollThrottle]="500"
   [immediateCheck]="true"
   [infiniteScrollDisabled]="isLoadingNext"
-  [scrollWindow]="false"
+  [scrollWindow]="true"
   (scrolled)="onScrollDown()"
   (scrolledUp)="onScrollUp()"
   *ngIf="!!data?.length"

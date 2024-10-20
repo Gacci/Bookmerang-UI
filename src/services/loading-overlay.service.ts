@@ -8,11 +8,22 @@ export class LoadingOverlayService {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public $isLoading = this.loadingSubject.asObservable();
 
+  private activeRequestCount: number = 0;
+
   show() {
-    this.loadingSubject.next(true);
+    this.activeRequestCount++;
+    if ( this.activeRequestCount === 1 ) {
+      this.loadingSubject.next(true);
+    }
   }
 
   hide() {
-    this.loadingSubject.next(false);
+    if (this.activeRequestCount > 0) {
+      this.activeRequestCount--;
+    }
+
+    if ( this.activeRequestCount === 0 ) {
+      this.loadingSubject.next(false); 
+    }
   }
 }

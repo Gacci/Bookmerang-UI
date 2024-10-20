@@ -1,5 +1,3 @@
-<app-navigation></app-navigation>
-
 <div
   class="feed"
   infiniteScroll
@@ -8,9 +6,14 @@
   [infiniteScrollThrottle]="500"
   [immediateCheck]="hasNextPage"
   [infiniteScrollDisabled]="isLoadingNext"
-  [scrollWindow]="false"
+  [scrollWindow]="true"
   (scrolled)="onScrollDown()"
   (scrolledUp)="onScrollUp()"
 >
-  <book-post-card *ngFor="let post of data" [post]="post"></book-post-card>
+  <book-post-card 
+    *ngFor="let post of data" 
+    [post]="post"
+    [listBookCtrl]="true"
+    [userChatCtrl]="true">
+  </book-post-card>
 </div>
