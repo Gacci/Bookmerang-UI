@@ -15,9 +15,6 @@ import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 import { Subject, takeUntil } from 'rxjs';
 
-
-
-
 @Component({
   selector: 'books-inventory',
   standalone: true,
@@ -30,7 +27,10 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './books-inventories.component.html',
   styleUrl: './books-inventories.component.scss'
 })
-export class BooksInventoriesComponent extends InfiniteScrollView<Data> implements OnDestroy{  
+export class BooksInventoriesComponent
+  extends InfiniteScrollView<Data>
+  implements OnDestroy
+{
   private route = inject(ActivatedRoute);
 
   private auth = inject(AuthService);
@@ -56,17 +56,18 @@ export class BooksInventoriesComponent extends InfiniteScrollView<Data> implemen
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
-      );
+      .subscribe((isLoadingNext) => (this.isLoadingNext = isLoadingNext));
 
     this.route.data
-      .pipe(takeUntil(this.unsubscribe$))  
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resolved: any) => {
         this.data = resolved.posts;
-        this.user = { ...resolved.user, ...(!resolved.user.joinedOn ? { joinedOn: new Date() } : {}) };
-          this.hasNextPage =
-            !!this.data?.length && !(this.data?.length % this.pageSize);
+        this.user = {
+          ...resolved.user,
+          ...(!resolved.user.joinedOn ? { joinedOn: new Date() } : {})
+        };
+        this.hasNextPage =
+          !!this.data?.length && !(this.data?.length % this.pageSize);
       });
   }
 
@@ -85,21 +86,23 @@ export class BooksInventoriesComponent extends InfiniteScrollView<Data> implemen
       pageSize: this.pageSize
     };
 
-    this.bookMarketService.search(params)      
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((data: any) => {
-      this.data = this.data.concat(data);
-      this.hasNextPage = !!this.data?.length && !(data.length % this.pageSize);
-      this.pageNumber += 1;
-    });
+    this.bookMarketService
+      .search(params)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data: any) => {
+        this.data = this.data.concat(data);
+        this.hasNextPage =
+          !!this.data?.length && !(data.length % this.pageSize);
+        this.pageNumber += 1;
+      });
   }
 
-
   openBottomSheet() {
-    const bottomSheetRef = this.ngDialogService.open(BookOfferEditSheetComponent, {
+    const bottomSheetRef = this.ngDialogService.open(
+      BookOfferEditSheetComponent,
+      {}
+    );
 
-    });
-    
     bottomSheetRef.afterClosed$.subscribe((result) => {
       if (result) {
         console.log('User confirmed:', result);
@@ -107,7 +110,6 @@ export class BooksInventoriesComponent extends InfiniteScrollView<Data> implemen
         console.log('User dismissed the bottom sheet.');
       }
     });
-
   }
 
   ngOnDestroy() {

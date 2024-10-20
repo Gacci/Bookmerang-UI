@@ -37,11 +37,10 @@ export class SignInComponent {
 
   handleSignIn() {
     this.request = { sent: true };
-    this.auth.login(<Credentials>this.signInGroup.value)
-    .subscribe({
+    this.auth.login(<Credentials>this.signInGroup.value).subscribe({
       next: async (response) => this.router.navigateByUrl('home'),
-      error: () => this.request.done = true,
-      complete: () => this.request.done = true
+      error: () => (this.request.done = true),
+      complete: () => (this.request.done = true)
     });
   }
 

@@ -27,9 +27,9 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(
       withInterceptors([
-        cacheInterceptor,
         loadingOverlayInterceptor,
         jwtAuthInterceptor,
+        cacheInterceptor,
         httpErrorsInterceptor
       ])
     ),

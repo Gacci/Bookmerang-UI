@@ -9,8 +9,7 @@ describe('BookOfferEditSheetComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BookOfferEditSheetComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(BookOfferEditSheetComponent);
     component = fixture.componentInstance;

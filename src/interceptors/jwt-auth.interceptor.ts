@@ -1,4 +1,8 @@
-import { HttpRequest, HttpInterceptorFn, HttpHandlerFn } from '@angular/common/http';
+import {
+  HttpRequest,
+  HttpInterceptorFn,
+  HttpHandlerFn
+} from '@angular/common/http';
 import { inject } from '@angular/core';
 import { throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';

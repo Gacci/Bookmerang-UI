@@ -3,6 +3,7 @@ import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
+import { takeUntil } from 'rxjs';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { BookPostCardComponent } from '../components/book-post-card/book-post-card.component';
@@ -11,13 +12,11 @@ import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
-import { AuthService } from '../services/auth.service';
+
 import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
-import ISO6391 from 'iso-639-1';
 import * as ISBN from 'isbn3';
 import * as Hash from 'crypto-hash';
-import { Subject, takeUntil } from 'rxjs';
 
 console.log(Hash);
 @Component({
@@ -37,7 +36,10 @@ console.log(Hash);
   templateUrl: './books-markets.component.html',
   styleUrl: './books-markets.component.scss'
 })
-export class BooksMarketsComponent extends InfiniteScrollView<any> implements OnDestroy {  
+export class BooksMarketsComponent
+  extends InfiniteScrollView<any>
+  implements OnDestroy
+{
   private route = inject(ActivatedRoute);
 
   private router = inject(Router);
@@ -71,24 +73,22 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> implements On
 
   ngOnInit(): void {
     this.pageNumber += 1;
-    this.loadingOverlayService.$isLoading.subscribe({
-      next: (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
-    });
+    this.loadingOverlayService.$isLoading
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
+      });
 
-    this.route.data.subscribe({
+    this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (resolved: any) => {
         this.data = resolved.posts;
-        this.book = {
-          ...resolved.book,
-          language: ISO6391.getName(resolved.book.language) 
-            ?? resolved.book.language
-        };
+        this.book = resolved.book;
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
       }
     });
 
-    this.route.queryParams.subscribe({
+    this.route.queryParams.pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: async (query: any) => {
         this.params = { ...query };
         const patch = {
@@ -109,14 +109,19 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> implements On
         };
 
         this.filters.patchValue(patch);
-        this.filtersHashedValue = await Hash.sha256(JSON.stringify(this.filters.value));
-        console.log(this.filters.value, patch);
+        this.filtersHashedValue = await Hash.sha256(
+          JSON.stringify(this.filters.value)
+        );
       }
     });
 
-    this.filters.valueChanges.subscribe((async(filter: any) => {
-      this.filtersHashChanged = this.filtersHashedValue !== await Hash.sha256(JSON.stringify(this.filters.value));
-    }))
+    this.filters.valueChanges
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(async (filter: any) => {
+        this.filtersHashChanged =
+          this.filtersHashedValue !==
+          (await Hash.sha256(JSON.stringify(this.filters.value)));
+      });
   }
 
   override async onScrollDown() {
@@ -143,13 +148,15 @@ export class BooksMarketsComponent extends InfiniteScrollView<any> implements On
       pageSize: this.pageSize
     };
 
-    this.bookMarketService.search(params)      
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((data: any) => {
-      this.data = this.data.concat(data);
-      this.hasNextPage = !!this.data?.length && !(data.length % this.pageSize);
-      this.pageNumber += 1;
-    });
+    this.bookMarketService
+      .search(params)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((data: any) => {
+        this.data = this.data.concat(data);
+        this.hasNextPage =
+          !!this.data?.length && !(data.length % this.pageSize);
+        this.pageNumber += 1;
+      });
   }
 
   override onScrollUp() {

@@ -10,31 +10,31 @@ type RequestType = 'DELETE' | 'GET' | 'POST' | 'PUT';
 type CacheableRoute = {
   method: RequestType;
   route: RegExp;
-  ttl: number;
+  ttl: number | boolean;
 };
 
 const cacheable: CacheableRoute[] = [
   {
     method: 'GET',
-    route: /\/auth\/scope$/,
-    ttl: 60 * 60 * 1000
+    route: /\/books\/collection\??.+/,
+    ttl: 60 * 60 * 1000 * 6
   },
   {
     method: 'GET',
-    route: /\/books\/collection\?.+/,
+    route: /\/books\/markets\/search\??.*/,
     ttl: 60 * 60 * 1000 * 6
   }
 ];
 
 export const cacheInterceptor: HttpInterceptorFn = (req, next) => {
   const cache = inject(CacheService);
-
   const targetCacheResponse = cacheable.find(
     (expression: CacheableRoute) =>
-      expression.method === req.method && expression.route.test(req.urlWithParams)
+      expression.method === req.method &&
+      expression.route.test(req.urlWithParams)
   );
 
-  if (!targetCacheResponse) {
+  if (targetCacheResponse?.ttl !== 0) {
     return next(req);
   }
 
@@ -46,7 +46,7 @@ export const cacheInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     tap((event) => {
       if (event instanceof HttpResponse) {
-        cache.put(req, event.clone());
+        cache.put(req, event);
       }
     })
   );

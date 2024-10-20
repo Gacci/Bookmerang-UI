@@ -9,7 +9,12 @@ import { NavigationComponent } from '../components/navigation/navigation.compone
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, LoadingOverlayComponent, NavigationComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    LoadingOverlayComponent,
+    NavigationComponent
+  ],
   providers: [BookMarketService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

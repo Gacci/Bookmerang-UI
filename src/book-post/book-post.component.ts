@@ -8,6 +8,8 @@ import {
   Validators
 } from '@angular/forms';
 
+import { takeUntil } from 'rxjs';
+
 import { NavigationComponent } from '../components/navigation/navigation.component';
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 import { StringService } from '../services/string.service';
@@ -18,11 +20,9 @@ import { BookValuatorService } from '../services/book-valuator.service';
 import { ImageManagerService } from '../services/image-manager.service';
 import { AuthService } from '../services/auth.service';
 
-import { ISBN13Pipe } from '../pipes/isbn13.pipe';
-
-import ISO6391 from 'iso-639-1';
-import { Subject, takeUntil } from 'rxjs';
 import { Unsubscribable } from '../classes/unsubscribable';
+
+import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 type FileBox = {
   base64: string;
@@ -48,9 +48,9 @@ type FileBox = {
 })
 export class BookPostComponent extends Unsubscribable implements OnDestroy {
   private route = inject(ActivatedRoute);
-  
+
   private auth = inject(AuthService);
-  
+
   private bookMarketService = inject(BookMarketService);
 
   private bookValuator = inject(BookValuatorService);
@@ -67,30 +67,32 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
   protected recommendedSellingPriceRange: any = {};
 
   protected payload = new FormGroup({
-    price: new FormControl<number>(99, [Validators.required, Validators.min(1)]),
+    price: new FormControl<number>(99, [
+      Validators.required,
+      Validators.min(1)
+    ]),
     state: new FormControl('LIKE_NEW', [Validators.required]),
     tradeable: new FormControl<boolean>(false),
-    binding: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
+    binding: new FormControl('INTACT', [
+      selectionValidator({ not: ['SELECT'] })
+    ]),
     cover: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
     pages: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
-    markings: new FormControl('NONE', [selectionValidator({ not: ['SELECT'] })]),
+    markings: new FormControl('NONE', [
+      selectionValidator({ not: ['SELECT'] })
+    ]),
     notes: new FormControl(null, [Validators.required]),
     images: new FormControl(null, [Validators.min(1)]),
     isbn13: new FormControl(null)
   });
 
-
   ngOnInit(): void {
     this.route.data
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((data: any) => {
-        this.book = {
-          ...data.book,
-          language: ISO6391.getName(data.book.language) ?? data.book.language
-        };
-
+      .subscribe(({ book }: any) => {
+        this.book = book;
         this.payload.patchValue({
-          isbn13: this.book.isbn13
+          isbn13: book.isbn13
         });
       });
 
@@ -139,21 +141,22 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
     const { images, ...data } = this.payload.value;
 
     // const token = this.auth.getJwtToken();
-    this.bookMarketService.create(data)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe({
-      next: (response) => {
-        console.log(response);
+    this.bookMarketService
+      .create(data)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          console.log(response);
 
-        // this.imageManagerService
-        //   .upload(this.images.map((box: FileBox) => box.file))
-        //   .subscribe({
-        //     next: (response) => {},
-        //     error: () => {},
-        //     complete: () => {},
-        //   });
-      },
-    });
+          // this.imageManagerService
+          //   .upload(this.images.map((box: FileBox) => box.file))
+          //   .subscribe({
+          //     next: (response) => {},
+          //     error: () => {},
+          //     complete: () => {},
+          //   });
+        }
+      });
   }
 
   trackBy(index: number, item: any) {

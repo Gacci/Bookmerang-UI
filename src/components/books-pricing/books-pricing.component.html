@@ -3,7 +3,9 @@
   <div class="relative bg-white" *ngIf="!loading">
     <!-- Modal header -->
     <div class="block">
-      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+      <div
+        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
+      >
         <h3 class="text-lg font-semibold text-gray-900">
           {{ selectedSlideObject.locationName }}
         </h3>
@@ -45,7 +47,10 @@
       a11y="false"
       *ngIf="groups?.length && !loading"
     >
-      <swiper-slide class="bg-white swiper-no-swiping" *ngFor="let group of groups">
+      <swiper-slide
+        class="bg-white swiper-no-swiping"
+        *ngFor="let group of groups"
+      >
         <div class="p-4 md:p-5">
           <ol class="relative border-s border-gray-200 ms-3.5 mb-4 md:mb-5">
             <li class="mb-6 ms-8" *ngFor="let metric of group.metrics">
@@ -153,9 +158,9 @@
                 </span>
               </h5>
               <span class="block mb-3 text-xs font-normal text-gray-500">
-                Trade Smart, Save Big: Swap Your Textbooks for Sustainable Savings!
-                Reduce Waste, Reuse Knowledge, and Keep Both Your Wallet and the
-                Planet Happy!
+                Trade Smart, Save Big: Swap Your Textbooks for Sustainable
+                Savings! Reduce Waste, Reuse Knowledge, and Keep Both Your
+                Wallet and the Planet Happy!
               </span>
             </li>
           </ol>

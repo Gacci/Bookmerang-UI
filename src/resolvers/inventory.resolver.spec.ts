@@ -5,7 +5,9 @@ import { inventoryResolver } from './inventory.resolver';
 
 describe('inventoryResolver', () => {
   const executeResolver: ResolveFn<boolean> = (...resolverParameters) =>
-    TestBed.runInInjectionContext(() => inventoryResolver(...resolverParameters));
+    TestBed.runInInjectionContext(() =>
+      inventoryResolver(...resolverParameters)
+    );
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

@@ -1,19 +1,13 @@
 import { Routes } from '@angular/router';
-// import { SigningComponent } from '../../src/components/signing/signing.component';
-
-import { PasswordRecoveryStartComponent } from '../auth/password-recovery-start/password-recovery-start.component';
-import { SignInComponent } from '../auth/sign-in/sign-in.component';
-import { SignUpComponent } from '../auth/sign-up/sign-up.component';
 
 import { BooksCollectionsComponent } from '../books-collections/books-collections.component';
 import { BooksInventoriesComponent } from '../books-inventories/books-inventories.component';
 import { BooksMarketsComponent } from '../books-markets/books-markets.component';
 import { BookPostComponent } from '../book-post/book-post.component';
 import { HomeComponent } from '../home/home.component';
-
-import { isbnGuard } from '../guards/isbn.guard';
-import { isLoggedGuard } from '../guards/is-logged.guard';
-import { isNotLoggedGuard } from '../guards/is-not-logged.guard';
+import { PasswordRecoveryStartComponent } from '../auth/password-recovery-start/password-recovery-start.component';
+import { SignInComponent } from '../auth/sign-in/sign-in.component';
+import { SignUpComponent } from '../auth/sign-up/sign-up.component';
 
 import { bookMarketResolver } from '../resolvers/book-market.resolver';
 import { bookResolver } from '../resolvers/book.resolver';
@@ -21,7 +15,10 @@ import { booksCollectionResolver } from '../resolvers/books-collection.resolver'
 import { inventoryResolver } from '../resolvers/inventory.resolver';
 import { userResolver } from '../resolvers/user.resolver';
 
-
+import { bookExistsGuard } from '../guards/book-exists.guard';
+import { isLoggedGuard } from '../guards/is-logged.guard';
+import { isNotLoggedGuard } from '../guards/is-not-logged.guard';
+import { isISBNGuard } from '../guards/is-isbn.guard';
 
 export const routes: Routes = [
   {
@@ -66,7 +63,7 @@ export const routes: Routes = [
     }
   },
   {
-    canActivate: [isLoggedGuard, isbnGuard],
+    canActivate: [isLoggedGuard, isISBNGuard, bookExistsGuard],
     component: BooksMarketsComponent,
     path: 'books/markets',
     runGuardsAndResolvers: 'always',
@@ -76,7 +73,7 @@ export const routes: Routes = [
     }
   },
   {
-    canActivate: [isLoggedGuard, isbnGuard],
+    canActivate: [isLoggedGuard, isISBNGuard, bookExistsGuard],
     component: BookPostComponent,
     path: 'books/markets/:isbn13',
     resolve: {

@@ -35,9 +35,9 @@ export class AuthService {
     // this.jwtDecodedToken = this.getJwtToken();
 
     this.authTokenSubject.next(
-      this.getJwtTokenRaw() 
-      ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '') 
-      : undefined
+      this.getJwtTokenRaw()
+        ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '')
+        : undefined
     );
 
     // console.log(this.jwtDecodedToken)
@@ -48,18 +48,16 @@ export class AuthService {
   }
 
   login(payload: Credentials) {
-    return this.http
-      .post('http://127.0.0.1:3000/auth/login', payload)
-      .pipe(
-        tap((response: Data) => {
-          this.storeJwtToken(response);
-          this.authTokenSubject.next(
-            this.getJwtTokenRaw() 
-              ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '') 
-              : undefined
-          );
-        })
-      );
+    return this.http.post('http://127.0.0.1:3000/auth/login', payload).pipe(
+      tap((response: Data) => {
+        this.storeJwtToken(response);
+        this.authTokenSubject.next(
+          this.getJwtTokenRaw()
+            ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '')
+            : undefined
+        );
+      })
+    );
   }
 
   logout() {
@@ -74,10 +72,12 @@ export class AuthService {
   revokeToken(token: string) {
     return this.http
       .delete(`http://127.0.0.1:3000/auth/tokens/revoke`, { body: { token } })
-      .pipe(tap(() => {
-        this.removeJwtToken();
-        this.authTokenSubject.next(null);
-      }));
+      .pipe(
+        tap(() => {
+          this.removeJwtToken();
+          this.authTokenSubject.next(null);
+        })
+      );
   }
 
   resendPasswordRecoveryCode(payload: Data) {
@@ -115,7 +115,10 @@ export class AuthService {
     );
   }
   verifyCreateAccountCode(payload: Data) {
-    return this.http.post('http://127.0.0.1:3000/auth/accounts/verify', payload);
+    return this.http.post(
+      'http://127.0.0.1:3000/auth/accounts/verify',
+      payload
+    );
   }
 
   refreshAccessToken() {
@@ -123,7 +126,7 @@ export class AuthService {
   }
 
   isAuthenticated() {
-    return (1000 * (this.authTokenSubject?.value?.exp || 0)) > Date.now();
+    return 1000 * (this.authTokenSubject?.value?.exp || 0) > Date.now();
   }
 
   getUserId() {

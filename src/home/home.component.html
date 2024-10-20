@@ -10,10 +10,11 @@
   (scrolled)="onScrollDown()"
   (scrolledUp)="onScrollUp()"
 >
-  <book-post-card 
-    *ngFor="let post of data" 
+  <book-post-card
+    *ngFor="let post of data"
     [post]="post"
     [listBookCtrl]="true"
-    [userChatCtrl]="true">
+    [userChatCtrl]="true"
+  >
   </book-post-card>
 </div>

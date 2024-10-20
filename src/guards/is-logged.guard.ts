@@ -3,12 +3,9 @@ import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 
 export const isLoggedGuard: CanActivateFn = (route, state) => {
-    if(!!inject(AuthService).isAuthenticated()) {
-      return true;
-    }
+  if (!!inject(AuthService).isAuthenticated()) {
+    return true;
+  }
 
-    inject(Router)
-      .navigateByUrl('/sign-in');
-
-    return false;
+  return inject(Router).createUrlTree(['/sign-in']);
 };

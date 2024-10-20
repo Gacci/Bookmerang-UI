@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { isNotLoggedGuard } from './is-not-logged.guard';
+import { bookExistsGuard } from './book-exists.guard';
 
-describe('isNotLoggedGuard', () => {
+describe('bookExistsGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => isNotLoggedGuard(...guardParameters));
+    TestBed.runInInjectionContext(() => bookExistsGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

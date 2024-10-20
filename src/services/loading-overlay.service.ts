@@ -12,7 +12,7 @@ export class LoadingOverlayService {
 
   show() {
     this.activeRequestCount++;
-    if ( this.activeRequestCount === 1 ) {
+    if (this.activeRequestCount === 1) {
       this.loadingSubject.next(true);
     }
   }
@@ -22,8 +22,8 @@ export class LoadingOverlayService {
       this.activeRequestCount--;
     }
 
-    if ( this.activeRequestCount === 0 ) {
-      this.loadingSubject.next(false); 
+    if (this.activeRequestCount === 0) {
+      this.loadingSubject.next(false);
     }
   }
 }

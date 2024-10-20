@@ -25,9 +25,15 @@ export class PasswordCheckerComponent {
     );
 
     this.minEightChars = chars.length >= 8;
-    this.oneLowerCase = !!~chars.findIndex((ch: number) => ch >= 97 && ch <= 122);
-    this.oneUpperCase = !!~chars.findIndex((ch: number) => ch >= 65 && ch <= 90);
-    this.oneDigitChar = !!~chars.findIndex((ch: number) => ch >= 48 && ch <= 57);
+    this.oneLowerCase = !!~chars.findIndex(
+      (ch: number) => ch >= 97 && ch <= 122
+    );
+    this.oneUpperCase = !!~chars.findIndex(
+      (ch: number) => ch >= 65 && ch <= 90
+    );
+    this.oneDigitChar = !!~chars.findIndex(
+      (ch: number) => ch >= 48 && ch <= 57
+    );
     this.oneSpecialChar = !!~chars.findIndex(
       (ch: number) =>
         (ch >= 33 && ch <= 47) || // Special characters in range !"#$%&'()*+,-./

@@ -55,7 +55,11 @@ const extras: any = {
   providedIn: 'root'
 })
 export class BookValuatorService {
-  computeEstimateRange(item: any, minPrice: number | null, maxPrice: number | null) {
+  computeEstimateRange(
+    item: any,
+    minPrice: number | null,
+    maxPrice: number | null
+  ) {
     // Calculate total adjustment factor based on characteristics
     const totalAdjustment: number =
       (state[item.state] ?? 0) +

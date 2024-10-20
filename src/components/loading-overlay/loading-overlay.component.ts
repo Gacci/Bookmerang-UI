@@ -1,6 +1,15 @@
-import { Component, HostBinding, inject, OnDestroy, OnInit } from '@angular/core';
-import { LoadingOverlayService } from '../../services/loading-overlay.service';
+import {
+  Component,
+  HostBinding,
+  inject,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntil } from 'rxjs';
+
+import { LoadingOverlayService } from '../../services/loading-overlay.service';
+
 import { Unsubscribable } from '../../classes/unsubscribable';
 
 @Component({
@@ -9,7 +18,7 @@ import { Unsubscribable } from '../../classes/unsubscribable';
   imports: [CommonModule],
   styles: `
     :host {
-      @apply fixed top-0 right-0 bottom-0 left-0 bg-gray-50 bg-opacity-50 z-10;
+      @apply fixed top-0 right-0 bottom-0 left-0 bg-gray-50 bg-opacity-75 z-10;
     }
   `,
   template: `
@@ -37,16 +46,21 @@ import { Unsubscribable } from '../../classes/unsubscribable';
     </div>
   `
 })
-export class LoadingOverlayComponent extends Unsubscribable implements OnInit, OnDestroy{
-  // Dynamically bind CSS class to show/hide the overlay
-  @HostBinding('class.hidden') isHidden!: boolean;
+export class LoadingOverlayComponent
+  extends Unsubscribable
+  implements OnInit, OnDestroy
+{
+  @HostBinding('class.hidden')
+  isHidden!: boolean;
 
   public loadingOverlayService = inject(LoadingOverlayService);
 
   ngOnInit() {
-    this.loadingOverlayService.$isLoading.subscribe((isHidden: boolean) => {
-      this.isHidden = !isHidden;
-    });
+    this.loadingOverlayService.$isLoading
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((isHidden: boolean) => {
+        this.isHidden = !isHidden;
+      });
   }
 
   ngOnDestroy(): void {

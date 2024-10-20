@@ -13,11 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-collection',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    InfiniteScrollDirective
-  ],
+  imports: [CommonModule, RouterModule, InfiniteScrollDirective],
   templateUrl: './books-collections.component.html',
   styleUrl: './books-collections.component.scss'
 })
@@ -31,21 +27,17 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   ngOnInit(): void {
     this.pageNumber += 1;
     this.route.queryParams
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(
-      (params: any) => (this.params = { title: params.title })
-    );
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((params: any) => (this.params = { title: params.title }));
 
     this.loadingOverlayService.$isLoading
-    .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
-      );
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((isLoadingNext) => (this.isLoadingNext = isLoadingNext));
 
     this.route.data.subscribe((resolved: any) => {
       this.data = resolved.books.data;
       this.hasNextPage =
-      !!this.data?.length && !(this.data?.length % this.pageSize);
+        !!this.data?.length && !(this.data?.length % this.pageSize);
     });
   }
 

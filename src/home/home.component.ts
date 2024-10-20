@@ -36,14 +36,12 @@ export class HomeComponent extends InfiniteScrollView<Data> {
   ngOnInit(): void {
     this.pageNumber += 1;
     this.loadingOverlayService.$isLoading
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe({
-      next: (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
+      });
 
-    this.route.data
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe({
+    this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (resolved: any) => {
         this.data = resolved.posts;
         this.hasNextPage =
@@ -63,17 +61,18 @@ export class HomeComponent extends InfiniteScrollView<Data> {
       pageSize: this.pageSize
     };
 
-    this.bookMarketService.search(params)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe({
-      next: (data: any) => {
-        this.data = this.data.concat(data);
-        this.hasNextPage = !(data.length % this.pageSize);
-        this.pageNumber += 1;
-      },
-      error: (e) => {},
-      complete: () => {}
-    });
+    this.bookMarketService
+      .search(params)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: any) => {
+          this.data = this.data.concat(data);
+          this.hasNextPage = !(data.length % this.pageSize);
+          this.pageNumber += 1;
+        },
+        error: (e) => {},
+        complete: () => {}
+      });
   }
 
   override onScrollUp() {

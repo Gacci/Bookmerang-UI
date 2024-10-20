@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +8,7 @@ export class CacheService {
   private cache = new Map<string, HttpResponse<any>>();
 
   constructor() {
-    this.cache.clear();
+    // this.cache.clear();
   }
 
   get(req: HttpRequest<any>): HttpResponse<any> | undefined {

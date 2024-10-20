@@ -2,16 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { finalize, of, switchMap, takeUntil, tap } from 'rxjs';
+
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 
 import { DropdownDirective } from '../../directives/dropdown.directive';
 
-import * as ISBN from 'isbn3';
-import { finalize, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { Unsubscribable } from '../../classes/unsubscribable';
 
-
+import * as Hash from 'crypto-hash';
+import * as ISBN from 'isbn3';
 
 type SearchEvent = {
   type: 'isbn' | 'keyword';
@@ -25,19 +26,23 @@ type SearchEvent = {
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss'
 })
-export class NavigationComponent extends Unsubscribable implements OnInit, OnDestroy {
-  private router = inject(Router); 
-  
-  private auth = inject(AuthService); 
-  
+export class NavigationComponent
+  extends Unsubscribable
+  implements OnInit, OnDestroy
+{
+  private router = inject(Router);
+
+  private auth = inject(AuthService);
+
   private users = inject(UserService);
+
+  private lastHashedKeyword!: string;
 
   protected user!: any;
 
   protected isLoadingUser!: boolean;
 
   protected isAuthenticated!: boolean;
-
 
   ngOnInit(): void {
     this.isLoadingUser = true;
@@ -49,7 +54,7 @@ export class NavigationComponent extends Unsubscribable implements OnInit, OnDes
           if (this.isAuthenticated) {
             return this.users.profile(this.auth.getUserId());
           } else {
-            return of(null);  // Handle unauthenticated state
+            return of(null); // Handle unauthenticated state
           }
         }),
         finalize(() => {
@@ -65,11 +70,9 @@ export class NavigationComponent extends Unsubscribable implements OnInit, OnDes
           this.isLoadingUser = false;
         }
       });
-  
   }
 
-
-  handleEnterKeyUp(e: Event) {
+  async handleEnterKeyUp(e: Event) {
     const input = <HTMLInputElement>e.target;
     const value = input.value?.replace(/^\s+|\-+|\s+$/, '');
 
@@ -77,13 +80,25 @@ export class NavigationComponent extends Unsubscribable implements OnInit, OnDes
       return;
     }
 
+    const newHashedKeyword = await Hash.sha256(value);
+    if (this.lastHashedKeyword === newHashedKeyword) {
+      return;
+    }
+
+    this.lastHashedKeyword = newHashedKeyword;
     const json =
-      value.length === 10 || value.length === 13 ? ISBN.parse(value) : undefined;
+      value.length === 10 || value.length === 13
+        ? ISBN.parse(value)
+        : undefined;
 
     if (json?.isValid) {
-      this.router.navigate(['books', 'markets'], {
-        queryParams: { isbn13: <string>json.isbn13 }
-      });
+      this.router
+        .navigate(['books', 'markets'], {
+          queryParams: { isbn13: <string>json.isbn13 }
+        })
+        .catch((error) => {
+          console.log('Could not run search', error);
+        });
     } else {
       this.router.navigate(['books', 'collections'], {
         queryParams: { title: value }
@@ -92,12 +107,13 @@ export class NavigationComponent extends Unsubscribable implements OnInit, OnDes
   }
 
   handleSignOut() {
-    this.auth.logout()
+    this.auth
+      .logout()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
           console.log(response);
-          this.router.navigateByUrl('/sign-in')
+          this.router.navigateByUrl('/sign-in');
         }
       });
   }

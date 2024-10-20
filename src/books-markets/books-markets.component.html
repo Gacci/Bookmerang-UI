@@ -128,15 +128,16 @@
     </div> -->
 
     <div class="mt-6">
-      <button class="relative w-full btn btn-blue-600 mt-8" 
+      <button
+        class="relative w-full btn btn-blue-600 mt-8"
         type="submit"
-        [disabled]="!filtersHashChanged">
+        [disabled]="!filtersHashChanged"
+      >
         Apply Filters
       </button>
     </div>
   </form>
 </aside>
-
 
 <div class="max-w-3xl mx-auto mt-10 p-6 rounded-lg lg:max-w-4xl">
   <div class="flex flex-col md:flex-row">
@@ -181,7 +182,9 @@
             {{ book.publishers }}
           </li>
           <li>
-            <span class="font-medium" *ngIf="book.published">Publication Date:</span>
+            <span class="font-medium" *ngIf="book.published"
+              >Publication Date:</span
+            >
             {{ book.published }}
           </li>
           <li>
@@ -349,7 +352,10 @@
           </svg>
           <span class="text-sm font-bold">{{ book.isbn13 | isbn13 }}</span>
         </li>
-        <li class="w-44 flex-shrink-0 border-l px-1" *ngIf="book.publishers?.length">
+        <li
+          class="w-44 flex-shrink-0 border-l px-1"
+          *ngIf="book.publishers?.length"
+        >
           <span class="text-sm">Publisher</span>
           <svg
             class="size-1/4 block mx-auto mt-3 mb-1"
@@ -492,8 +498,6 @@
   </div>
 </div>
 
-
-
 <div
   infiniteScroll
   [infiniteScrollUpDistance]="1"
@@ -505,15 +509,14 @@
   (scrolled)="onScrollDown()"
   (scrolledUp)="onScrollUp()"
 >
-  <book-post-card 
-    *ngFor="let post of data" 
+  <book-post-card
+    *ngFor="let post of data"
     [post]="post"
     [listBookCtrl]="true"
-    [userChatCtrl]="true">
+    [userChatCtrl]="true"
+  >
   </book-post-card>
 </div>
-
-
 
 <!-- Main modal -->
 <div

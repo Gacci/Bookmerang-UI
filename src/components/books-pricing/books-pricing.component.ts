@@ -30,7 +30,10 @@ import { Unsubscribable } from '../../classes/unsubscribable';
   templateUrl: './books-pricing.component.html',
   styleUrl: './books-pricing.component.scss'
 })
-export class BooksPricingComponent extends Unsubscribable implements OnInit, OnDestroy {
+export class BooksPricingComponent
+  extends Unsubscribable
+  implements OnInit, OnDestroy
+{
   @ViewChild('swiper', { read: ElementRef<SwiperContainer> })
   private swiperRefElem!: ElementRef<SwiperContainer>;
 
@@ -75,7 +78,9 @@ export class BooksPricingComponent extends Unsubscribable implements OnInit, OnD
                     range:
                       'from $' +
                       [
-                        ...(metric.minPrice ? [metric.minPrice.toFixed(2)] : []),
+                        ...(metric.minPrice
+                          ? [metric.minPrice.toFixed(2)]
+                          : []),
                         ...(metric.maxPrice ? [metric.maxPrice.toFixed(2)] : [])
                       ].join(' to $')
                   }
@@ -88,15 +93,19 @@ export class BooksPricingComponent extends Unsubscribable implements OnInit, OnD
         this.loading = false;
         this.loaded.emit(groups);
 
+        if (!this.swiperRefElem) {
+          return;
+        }
+
         this.cdr.detectChanges();
-        this.swiper = <Swiper>(<unknown>this.swiperRefElem.nativeElement.swiper);
+        this.swiper = <Swiper>(
+          (<unknown>this.swiperRefElem.nativeElement.swiper)
+        );
 
         this.selectedSlideObject = this.groups.find(() => true);
-        this.swiper.on(
-          'slideChange',
-          (swiper: Swiper) => {
-            this.selectedSlideObject = this.groups[swiper.activeIndex];
-            this.cdr.detectChanges();
+        this.swiper.on('slideChange', (swiper: Swiper) => {
+          this.selectedSlideObject = this.groups[swiper.activeIndex];
+          this.cdr.detectChanges();
         });
       });
   }
