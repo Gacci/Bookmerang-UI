@@ -62,6 +62,7 @@ export class BooksMarketsComponent
 
   protected filters: FormGroup<any> = new FormGroup({
     tradeable: new FormControl('all'),
+    sorting: new FormControl('price:desc'),
     state: new FormGroup({
       new: new FormControl(false),
       likeNew: new FormControl(false),
@@ -103,6 +104,11 @@ export class BooksMarketsComponent
                 }
               }
             : {}),
+          ...(['posted-on', 'review', 'price:asc', 'price:desc'].includes(
+            query.sorting
+          )
+            ? { sorting: query.sorting }
+            : { sorting: 'posted-on' }),
           ...(/^true|false$/.test(query.tradeable)
             ? { tradeable: JSON.parse(query.tradeable) }
             : {})
@@ -129,10 +135,13 @@ export class BooksMarketsComponent
       return;
     }
 
-    const { state, tradeable } = this.params;
+    const { state, tradeable, sorting } = this.params;
     const params = {
       isbn13: ISBN.asIsbn13(this.params.isbn13),
       ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
+      ...(['posted-on', 'review', 'price:asc', 'price:desc'].includes(sorting)
+        ? { sorting }
+        : {}),
       ...(+state
         ? {
             'state[]': [
@@ -164,7 +173,7 @@ export class BooksMarketsComponent
   }
 
   protected onSubmit(e: Event) {
-    const { state, tradeable } = this.filters.value;
+    const { state, tradeable, sorting } = this.filters.value;
     const encoded =
       (state.new ? 1 : 0) +
       (state.likeNew ? 2 : 0) +
@@ -176,7 +185,8 @@ export class BooksMarketsComponent
       queryParams: {
         isbn13: this.book.isbn13,
         ...(encoded ? { state: encoded } : {}),
-        ...(/^true|false$/.test(tradeable) ? { tradeable } : {})
+        ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
+        ...(sorting ? { sorting } : {})
       }
     });
   }

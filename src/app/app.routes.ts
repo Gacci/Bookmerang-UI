@@ -19,6 +19,7 @@ import { bookExistsGuard } from '../guards/book-exists.guard';
 import { isLoggedGuard } from '../guards/is-logged.guard';
 import { isNotLoggedGuard } from '../guards/is-not-logged.guard';
 import { isISBNGuard } from '../guards/is-isbn.guard';
+import { SettingsComponent } from '../settings/settings.component';
 
 export const routes: Routes = [
   {
@@ -38,10 +39,15 @@ export const routes: Routes = [
   },
   {
     canActivate: [isLoggedGuard],
+    component: SettingsComponent,
+    path: 'settings'
+  },
+  {
+    canActivate: [isLoggedGuard],
     component: HomeComponent,
     path: 'home',
     resolve: {
-      posts: bookMarketResolver
+      // posts: bookMarketResolver
     }
   },
   {

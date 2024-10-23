@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { finalize, of, switchMap, takeUntil, tap } from 'rxjs';
 
@@ -22,7 +22,7 @@ type SearchEvent = {
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule, DropdownDirective],
+  imports: [CommonModule, DropdownDirective, RouterModule],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss'
 })

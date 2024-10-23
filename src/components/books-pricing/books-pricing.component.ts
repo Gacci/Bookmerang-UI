@@ -93,16 +93,17 @@ export class BooksPricingComponent
         this.loading = false;
         this.loaded.emit(groups);
 
+        this.cdr.detectChanges();
+        this.selectedSlideObject = this.groups.find(() => true);
+
         if (!this.swiperRefElem) {
           return;
         }
 
-        this.cdr.detectChanges();
         this.swiper = <Swiper>(
           (<unknown>this.swiperRefElem.nativeElement.swiper)
         );
 
-        this.selectedSlideObject = this.groups.find(() => true);
         this.swiper.on('slideChange', (swiper: Swiper) => {
           this.selectedSlideObject = this.groups[swiper.activeIndex];
           this.cdr.detectChanges();

@@ -99,7 +99,7 @@
             <img
               alt="Profile picture"
               class="relative inline-block h-10 w-10 cursor-pointer rounded-full object-cover object-center"
-              [src]="user.profilePictureUrl"
+              [src]="user?.profilePictureUrl"
               [tcnDropdown]="profileDropdownContent"
             />
 
@@ -125,9 +125,13 @@
                   />
                 </svg>
 
-                <p class="text-slate-800 font-medium ml-2">My Profile</p>
+                <a
+                  class="text-slate-800 font-medium ml-2"
+                  [routerLink]="['settings']"
+                  >Settings</a
+                >
               </li>
-              <li
+              <!-- <li
                 role="menuitem"
                 class="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
               >
@@ -145,7 +149,32 @@
                 </svg>
 
                 <p class="text-slate-800 font-medium ml-2">Edit Profile</p>
+              </li> -->
+
+              <li
+                role="menuitem"
+                class="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+              >
+              <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class="w-5 h-5 text-slate-400"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.25 3A2.25 2.25 0 0 0 3 5.25v9.5A2.25 2.25 0 0 0 5.25 17h9.5A2.25 2.25 0 0 0 17 14.75v-9.5A2.25 2.25 0 0 0 14.75 3h-9.5ZM5 5.25c0-.138.112-.25.25-.25h9.5c.138 0 .25.112.25.25v1.5a.25.25 0 0 1-.25.25h-9.5a.25.25 0 0 1-.25-.25v-1.5ZM4.75 8a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9A.75.75 0 0 1 4.75 8Zm0 4a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <a
+            class="text-slate-800 font-medium ml-2"
+            [routerLink]="['books', 'inventories', user.userId]"
+            >Inventory</a
+          >
               </li>
+
               <li
                 role="menuitem"
                 class="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"

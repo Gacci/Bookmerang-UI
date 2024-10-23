@@ -34,20 +34,21 @@ export class HomeComponent extends InfiniteScrollView<Data> {
   private loadingOverlayService = inject(LoadingOverlayService);
 
   ngOnInit(): void {
-    this.pageNumber += 1;
+    // this.pageNumber += 1;
+    this.onScrollDown();
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
       });
 
-    this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: (resolved: any) => {
-        this.data = resolved.posts;
-        this.hasNextPage =
-          !!this.data?.length && !(this.data?.length % this.pageSize);
-      }
-    });
+    // this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
+    //   next: (resolved: any) => {
+    //     this.data = resolved.posts;
+    //     this.hasNextPage =
+    //       !!this.data?.length && !(this.data?.length % this.pageSize);
+    //   }
+    // });
   }
 
   override async onScrollDown() {

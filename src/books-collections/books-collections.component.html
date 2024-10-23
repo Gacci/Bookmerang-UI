@@ -17,6 +17,21 @@
     >
       <!-- <h2 class="">Products</h2> -->
 
+      <form class="p-2 my-2 rounded-md">
+        <div class="flex flex-row flex-grow"></div>
+        <div class="flex flex-row items-center space-x-2">
+          <h3 class="font-normal text-gray-900">Sort by</h3>
+          <select class="select bg-white">
+            <option value="price:asc">Price: Lowest to Highest</option>
+            <option value="price:desc">Price: Highest to Lowest</option>
+            <option value="posted-on">Most Recently Listed</option>
+            <option value="authors-asc">Authors: A - Z</option>
+            <option value="authors:desc">Authors: Z - A</option>
+            <option value="review">Avg. Seller Review</option>
+          </select>
+        </div>
+      </form>
+
       <div
         class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xl:gap-x-8"
       >

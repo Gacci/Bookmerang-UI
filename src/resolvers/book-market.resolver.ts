@@ -21,6 +21,22 @@ export const bookMarketResolver: ResolveFn<any> = (route, state) => {
             ...(!!(+params.state & (1 << 4)) ? ['ACCEPTABLE'] : [])
           ]
         }
+      : {}),
+    ...(['posted-on', 'review', 'price:asc', 'price:desc'].includes(
+      params.sorting
+    )
+      ? { sorting: params.sorting }
       : {})
   });
+
+  /*
+      ...(['posted-on', 'review', 'price:asc', 'price:desc'].includes(
+        params.sorting
+      )
+        ? (([sortBy, sortDir = 'desc']) => ({ sortBy, sortDir }))(
+              params.sorting.split(':')
+            )
+          
+        : {})
+*/
 };
