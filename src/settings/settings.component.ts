@@ -30,7 +30,7 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
   protected programs = inject(AcademicProgramService);
 
   protected academicProgramsList: any[] = [];
-  
+
   protected form = new FormGroup({
     personal: new FormGroup({
       firstName: new FormControl(null, [Validators.required]),
@@ -61,29 +61,32 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     profilePictureUrl: 'https://via.placeholder.com/100'
   };
 
-
   ngOnInit(): void {
-    this.users.profile(this.auth.getUserId())
+    this.users
+      .profile(this.auth.getUserId())
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (user: any) => {
           const { academic, ...personal } = user;
           this.user = user;
           this.form.patchValue({
-            personal, academic
-          }); 
+            personal,
+            academic
+          });
         }
       });
 
-    this.programs.dump()
+    this.programs
+      .dump()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (programs: any[]) => {
-          this.academicProgramsList = [{ name: 'Select your major/minor', academicProgramId: 0 }].concat(programs);
+          this.academicProgramsList = [
+            { name: 'Select your major/minor', academicProgramId: 0 }
+          ].concat(programs);
         }
       });
   }
-
 
   onSubmit(): void {
     console.log(this.form.value);
@@ -101,12 +104,11 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     }
 
     const reader = new FileReader();
-    reader.onload = (e) => 
-        this.user.profilePictureUrl = <string>e.target?.result;
+    reader.onload = (e) =>
+      (this.user.profilePictureUrl = <string>e.target?.result);
 
     reader.readAsDataURL(<File>target.files.item(0));
   }
-
 
   get password() {
     return this.form.controls.security.controls.password;

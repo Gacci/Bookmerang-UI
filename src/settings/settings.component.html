@@ -12,7 +12,7 @@
           {{ user.firstName }} {{ user.lastName }}
         </h1>
         <label for="picture">
-            <input
+          <input
             type="file"
             class="hidden"
             id="picture"
@@ -29,262 +29,266 @@
     <!-- Section 1: Personal Information -->
     <div>
       <h2 class="text-lg font-semibold">Personal Information</h2>
-        <div class="grid grid-cols-2 gap-4" formGroupName="personal">
-            <div class="col-span-1">
-            <label class="block text-sm font-medium text-gray-700"
-                >First Name</label
-            >
-            <input
-                type="text"
-                formControlName="firstName"
-                class="input mt-1 w-full"
-            />
-            </div>
-            <div class="col-span-1">
-            <label class="block text-sm font-medium text-gray-700"
-                >Last Name</label
-            >
-            <input
-                type="text"
-                formControlName="lastName"
-                class="input mt-1 w-full"
-            />
-            </div>
-            <div class="col-span-1 w-full">
-            <label class="block text-sm font-medium text-gray-700"
-                >Phone Number</label
-            >
-            <input
-                type="text"
-                formControlName="phone"
-                class="input mt-1 w-full"
-            />
-            </div>
-            <div class="col-span-1">
-            <label class="block text-sm font-medium text-gray-700"
-                >Alternative Email</label
-            >
-            <input
-                type="text"
-                formControlName="alternativeEmail"
-                class="input mt-1 w-full"
-            />
-            </div>
-
-            <div class="col-span-2">
-            <label class="block text-sm font-medium text-gray-700 mb-2"
-                >Gender</label
-            >
-            <ul class="w-full flex flex-col sm:flex-row">
-                <!-- Male -->
-                <li
-                class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
-                >
-                <div class="relative flex items-start w-full">
-                    <div class="flex items-center h-5">
-                    <input
-                        id="male"
-                        name="gender"
-                        type="radio"
-                        value="male"
-                        formControlName="gender"
-                        class="border-gray-200 rounded-full"
-                    />
-                    </div>
-                    <label
-                    for="male"
-                    class="ms-3 block w-full text-sm text-gray-600"
-                    >
-                    Male
-                    </label>
-                </div>
-                </li>
-
-                <!-- Female -->
-                <li
-                class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
-                >
-                <div class="relative flex items-start w-full">
-                    <div class="flex items-center h-5">
-                    <input
-                        id="female"
-                        name="gender"
-                        type="radio"
-                        value="female"
-                        formControlName="gender"
-                        class="border-gray-200 rounded-full"
-                    />
-                    </div>
-                    <label
-                    for="female"
-                    class="ms-3 block w-full text-sm text-gray-600"
-                    >
-                    Female
-                    </label>
-                </div>
-                </li>
-
-                <!-- Other -->
-                <li
-                class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
-                >
-                <div class="relative flex items-start w-full">
-                    <div class="flex items-center h-5">
-                    <input
-                        id="other"
-                        name="gender"
-                        type="radio"
-                        value="other"
-                        formControlName="gender"
-                        class="border-gray-200 rounded-full"
-                    />
-                    </div>
-                    <label
-                    for="other"
-                    class="ms-3 block w-full text-sm text-gray-600"
-                    >
-                    Other
-                    </label>
-                </div>
-                </li>
-
-                <!-- Other -->
-                <li
-                class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
-                >
-                <div class="relative flex items-start w-full">
-                    <div class="flex items-center h-5">
-                    <input
-                        id="unspecified"
-                        name="gender"
-                        type="radio"
-                        value="unspecified"
-                        formControlName="gender"
-                        class="border-gray-200 rounded-full"
-                    />
-                    </div>
-                    <label
-                    for="unspecified"
-                    class="ms-3 block w-full text-sm text-gray-600"
-                    >
-                    Unspecified
-                    </label>
-                </div>
-                </li>
-            </ul>
-            </div>
-
-            <!-- Section 2: Bio -->
-            <div class="col-span-2">
-            <div class="col-span-4">
-                <label class="block text-sm font-medium text-gray-700"
-                >Tell us about yourself</label
-                >
-                <textarea
-                formControlName="bio"
-                rows="4"
-                class="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="Write a short bio..."
-                ></textarea>
-            </div>
-            </div>
+      <div class="grid grid-cols-2 gap-4" formGroupName="personal">
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700"
+            >First Name</label
+          >
+          <input
+            type="text"
+            formControlName="firstName"
+            class="input mt-1 w-full"
+          />
         </div>
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700"
+            >Last Name</label
+          >
+          <input
+            type="text"
+            formControlName="lastName"
+            class="input mt-1 w-full"
+          />
+        </div>
+        <div class="col-span-1 w-full">
+          <label class="block text-sm font-medium text-gray-700"
+            >Phone Number</label
+          >
+          <input
+            type="text"
+            formControlName="phone"
+            class="input mt-1 w-full"
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700"
+            >Alternative Email</label
+          >
+          <input
+            type="text"
+            formControlName="alternativeEmail"
+            class="input mt-1 w-full"
+          />
+        </div>
+
+        <div class="col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-2"
+            >Gender</label
+          >
+          <ul class="w-full flex flex-col sm:flex-row">
+            <!-- Male -->
+            <li
+              class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
+            >
+              <div class="relative flex items-start w-full">
+                <div class="flex items-center h-5">
+                  <input
+                    id="male"
+                    name="gender"
+                    type="radio"
+                    value="male"
+                    formControlName="gender"
+                    class="border-gray-200 rounded-full"
+                  />
+                </div>
+                <label
+                  for="male"
+                  class="ms-3 block w-full text-sm text-gray-600"
+                >
+                  Male
+                </label>
+              </div>
+            </li>
+
+            <!-- Female -->
+            <li
+              class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
+            >
+              <div class="relative flex items-start w-full">
+                <div class="flex items-center h-5">
+                  <input
+                    id="female"
+                    name="gender"
+                    type="radio"
+                    value="female"
+                    formControlName="gender"
+                    class="border-gray-200 rounded-full"
+                  />
+                </div>
+                <label
+                  for="female"
+                  class="ms-3 block w-full text-sm text-gray-600"
+                >
+                  Female
+                </label>
+              </div>
+            </li>
+
+            <!-- Other -->
+            <li
+              class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
+            >
+              <div class="relative flex items-start w-full">
+                <div class="flex items-center h-5">
+                  <input
+                    id="other"
+                    name="gender"
+                    type="radio"
+                    value="other"
+                    formControlName="gender"
+                    class="border-gray-200 rounded-full"
+                  />
+                </div>
+                <label
+                  for="other"
+                  class="ms-3 block w-full text-sm text-gray-600"
+                >
+                  Other
+                </label>
+              </div>
+            </li>
+
+            <!-- Other -->
+            <li
+              class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
+            >
+              <div class="relative flex items-start w-full">
+                <div class="flex items-center h-5">
+                  <input
+                    id="unspecified"
+                    name="gender"
+                    type="radio"
+                    value="unspecified"
+                    formControlName="gender"
+                    class="border-gray-200 rounded-full"
+                  />
+                </div>
+                <label
+                  for="unspecified"
+                  class="ms-3 block w-full text-sm text-gray-600"
+                >
+                  Unspecified
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Section 2: Bio -->
+        <div class="col-span-2">
+          <div class="col-span-4">
+            <label class="block text-sm font-medium text-gray-700"
+              >Tell us about yourself</label
+            >
+            <textarea
+              formControlName="bio"
+              rows="4"
+              class="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="Write a short bio..."
+            ></textarea>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Section 2: Password Management -->
     <div>
       <h2 class="text-lg font-semibold">Password Management</h2>
-      <div class="space-y-4" formGroupName="security" >
+      <div class="space-y-4" formGroupName="security">
         <div class="input-box mb-4 w-full md:w-2/3">
-            <label class="block text-sm font-medium text-gray-700">Choose Password</label>
-            <input
-              class="w-full"
-              type="password"
-              autocomplete="password"
-              placeholder="********"
-              formControlName="password"
-              [class.error-on]="
-                password.invalid && password.dirty && !!password.value
-              "
-            />
-  
-            <!-- <password-checker 
+          <label class="block text-sm font-medium text-gray-700"
+            >Choose Password</label
+          >
+          <input
+            class="w-full"
+            type="password"
+            autocomplete="password"
+            placeholder="********"
+            formControlName="password"
+            [class.error-on]="
+              password.invalid && password.dirty && !!password.value
+            "
+          />
+
+          <!-- <password-checker 
               class="password-checker"
               [input]="password.value"></password-checker> -->
-  
-            <ng-container
+
+          <ng-container
+            *ngIf="
+              (password.dirty || password.touched) &&
+              password.value &&
+              password.invalid
+            "
+          >
+            <small
+              class="input-error"
               *ngIf="
-                (password.dirty || password.touched) &&
-                password.value &&
-                password.invalid
+                password.hasError('pattern') &&
+                !password.hasError('passwordMismatch')
               "
             >
-              <small
-                class="input-error"
-                *ngIf="
-                  password.hasError('pattern') &&
-                  !password.hasError('passwordMismatch')
-                "
-              >
-                Password does not meet requirements
-              </small>
-              <small
-                class="input-error"
-                *ngIf="
-                  confirmed.value &&
-                  !password.hasError('pattern') &&
-                  password.hasError('passwordMismatch')
-                "
-              >
-                Passwords don't match
-              </small>
-            </ng-container>
+              Password does not meet requirements
+            </small>
+            <small
+              class="input-error"
+              *ngIf="
+                confirmed.value &&
+                !password.hasError('pattern') &&
+                password.hasError('passwordMismatch')
+              "
+            >
+              Passwords don't match
+            </small>
+          </ng-container>
         </div>
         <div class="input-box w-full md:w-2/3">
-            <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
-            <input
-              class="w-full"
-              type="password"
-              autocomplete="email"
-              placeholder="********"
-              formControlName="confirmed"
-              [class.error-on]="
-                confirmed.invalid && confirmed.dirty && !!confirmed.value
-              "
-            />
-  
-            <!-- <password-checker 
+          <label class="block text-sm font-medium text-gray-700"
+            >Confirm Password</label
+          >
+          <input
+            class="w-full"
+            type="password"
+            autocomplete="email"
+            placeholder="********"
+            formControlName="confirmed"
+            [class.error-on]="
+              confirmed.invalid && confirmed.dirty && !!confirmed.value
+            "
+          />
+
+          <!-- <password-checker 
               class="password-checker"
               [input]="confirmed.value"></password-checker> -->
-  
-            <ng-container
+
+          <ng-container
+            *ngIf="
+              (confirmed.dirty || confirmed.touched) &&
+              confirmed.value &&
+              confirmed.invalid
+            "
+          >
+            <small
+              class="input-error"
               *ngIf="
-                (confirmed.dirty || confirmed.touched) &&
-                confirmed.value &&
-                confirmed.invalid
+                confirmed.hasError('pattern') &&
+                !confirmed.hasError('passwordMismatch')
               "
             >
-              <small
-                class="input-error"
-                *ngIf="
-                  confirmed.hasError('pattern') &&
-                  !confirmed.hasError('passwordMismatch')
-                "
-              >
-                Password does not meet requirements
-              </small>
-              <small
-                class="input-error"
-                *ngIf="
-                  password.value &&
-                  !confirmed.hasError('pattern') &&
-                  confirmed.hasError('passwordMismatch')
-                "
-              >
-                Passwords don't match
-              </small>
-            </ng-container>
-          </div>
+              Password does not meet requirements
+            </small>
+            <small
+              class="input-error"
+              *ngIf="
+                password.value &&
+                !confirmed.hasError('pattern') &&
+                confirmed.hasError('passwordMismatch')
+              "
+            >
+              Passwords don't match
+            </small>
+          </ng-container>
+        </div>
       </div>
     </div>
 
@@ -309,10 +313,12 @@
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700">Major</label>
           <select class="select bg-white w-full" formControlName="major">
-            <option 
-                *ngFor="let program of academicProgramsList" 
-                [disabled]="!program.academicProgramId"
-                [value]="program.academicProgramId">{{ program.name }}
+            <option
+              *ngFor="let program of academicProgramsList"
+              [disabled]="!program.academicProgramId"
+              [value]="program.academicProgramId"
+            >
+              {{ program.name }}
             </option>
           </select>
         </div>
@@ -325,7 +331,6 @@
       <button
         type="submit"
         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        
       >
         Save Changes
       </button>

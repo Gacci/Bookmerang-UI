@@ -17,6 +17,8 @@ import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 import * as ISBN from 'isbn3';
 import * as Hash from 'crypto-hash';
+import { ConfirmDialogComponent } from '../components/confirm-dialog.component';
+import { SurveyService } from '../services/survey.service';
 
 console.log(Hash);
 @Component({
@@ -27,6 +29,7 @@ console.log(Hash);
 
     BookPostCardComponent,
     BooksPricingComponent,
+    ConfirmDialogComponent,
     ISBN13Pipe,
     ReactiveFormsModule,
     RouterModule,
@@ -48,6 +51,8 @@ export class BooksMarketsComponent
 
   private loadingOverlayService = inject(LoadingOverlayService);
 
+  private surveyService = inject(SurveyService);
+
   private filtersHashedValue!: string;
 
   protected filtersHashChanged!: boolean;
@@ -59,6 +64,8 @@ export class BooksMarketsComponent
   protected book!: any;
 
   protected pricingViewState!: boolean;
+
+  protected survey!: any;
 
   protected filters: FormGroup<any> = new FormGroup({
     tradeable: new FormControl('all'),
@@ -79,15 +86,6 @@ export class BooksMarketsComponent
       .subscribe({
         next: (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
       });
-
-    this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: (resolved: any) => {
-        this.data = resolved.posts;
-        this.book = resolved.book;
-        this.hasNextPage =
-          !!this.data?.length && !(this.data?.length % this.pageSize);
-      }
-    });
 
     this.route.queryParams.pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: async (query: any) => {
@@ -128,6 +126,17 @@ export class BooksMarketsComponent
           this.filtersHashedValue !==
           (await Hash.sha256(JSON.stringify(this.filters.value)));
       });
+
+      this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
+        next: (resolved: any) => {
+          this.data = resolved.posts;
+          this.book = resolved.book;
+          this.hasNextPage =
+            !!this.data?.length && !(this.data?.length % this.pageSize);
+        }
+      });
+
+      this.survey = this.surveyService.getAcademicSurveyQuestion();
   }
 
   override async onScrollDown() {
@@ -135,6 +144,7 @@ export class BooksMarketsComponent
       return;
     }
 
+    console.log('onScrollDown');
     const { state, tradeable, sorting } = this.params;
     const params = {
       isbn13: ISBN.asIsbn13(this.params.isbn13),
@@ -189,6 +199,13 @@ export class BooksMarketsComponent
         ...(sorting ? { sorting } : {})
       }
     });
+  }
+
+  onSurveySelection(selection: boolean | null) {
+    setTimeout(() => {
+      this.survey = this.surveyService.getAcademicSurveyQuestion();
+      console.log(selection, this.survey);
+    }, 3000)
   }
 
   ngOnDestroy() {

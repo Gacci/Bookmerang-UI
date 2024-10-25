@@ -10,6 +10,15 @@
   (scrolled)="onScrollDown()"
   (scrolledUp)="onScrollUp()"
 >
+  <confirm-dialog
+    *ngIf="!isLoadingNext"
+    [title]="survey.title"
+    [contentType]="survey.contentType"
+    [content]="survey.question"
+    [value]="survey.value"
+    (selection)="onSurveySelection($event)"
+  ></confirm-dialog>
+
   <book-post-card
     *ngFor="let post of data"
     [post]="post"

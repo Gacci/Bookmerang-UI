@@ -2,7 +2,7 @@
   class="fixed bottom-0 left-0 z-0 w-1/4 h-[calc(100%-68px)] bg-gray-50 transition-transform -translate-x-full z-0 sm:translate-x-0 sm:shadow-lg lg:shadow-none"
   aria-label="Sidebar"
 >
-  <form class="m-4" [formGroup]="filters" (ngSubmit)="onSubmit($event)">
+  <form class="mx-8 my-12" [formGroup]="filters" (ngSubmit)="onSubmit($event)">
     <!-- <div class="mb-8">
       <label class="block text-gray-700 font-medium mb-2"
         >Binding Condition</label
@@ -507,6 +507,15 @@
     <p class="mt-2 text-gray-600">{{ book.notes ?? 'N/A' }}</p>
   </div>
 </div>
+
+<confirm-dialog
+  *ngIf="!isLoadingNext"
+  [title]="survey.title"
+  [contentType]="survey.contentType"
+  [content]="survey.question"
+  [value]="survey.value"
+  (selection)="onSurveySelection($event)"
+></confirm-dialog>
 
 <div
   infiniteScroll

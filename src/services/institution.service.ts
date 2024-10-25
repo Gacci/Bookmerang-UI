@@ -6,13 +6,15 @@ import { Data } from '@angular/router';
   providedIn: 'root'
 })
 export class InstitutionService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   read(id: number) {
     return this.http.get('http://127.0.0.1:3000/academics/insitutions/${id}');
   }
 
   search(params: Data) {
-    return this.http.get('http://127.0.0.1:3000/academics/insitutions', { params });
+    return this.http.get('http://127.0.0.1:3000/academics/insitutions', {
+      params
+    });
   }
 }

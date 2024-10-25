@@ -96,13 +96,23 @@ export class NavigationComponent
         .navigate(['books', 'markets'], {
           queryParams: { isbn13: <string>json.isbn13 }
         })
+        .then(() => {
+          this.lastHashedKeyword = '';
+        })
         .catch((error) => {
           console.log('Could not run search', error);
         });
     } else {
-      this.router.navigate(['books', 'collections'], {
-        queryParams: { title: value }
-      });
+      this.router
+        .navigate(['books', 'collections'], {
+          queryParams: { title: value }
+        })
+        .then(() => {
+          this.lastHashedKeyword = '';
+        })
+        .catch(() => {
+          this.lastHashedKeyword = '';
+        });
     }
   }
 

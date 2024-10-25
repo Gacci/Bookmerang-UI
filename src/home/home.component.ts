@@ -1,16 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Data, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { takeUntil } from 'rxjs';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { BookMarketService } from '../services/book-market.service';
 
+import { ConfirmDialogComponent } from '../components/confirm-dialog.component';
 import { BookPostCardComponent } from '../components/book-post-card/book-post-card.component';
-import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 import { AuthService } from '../services/auth.service';
-import { Subject, takeUntil } from 'rxjs';
+
+import { InfiniteScrollView } from '../classes/infinite-scroll-view';
+import { SurveyService } from '../services/survey.service';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +22,7 @@ import { Subject, takeUntil } from 'rxjs';
     CommonModule,
     InfiniteScrollDirective,
     RouterOutlet,
+    ConfirmDialogComponent,
     BookPostCardComponent
   ],
   templateUrl: './home.component.html',
@@ -32,6 +36,10 @@ export class HomeComponent extends InfiniteScrollView<Data> {
   private bookMarketService = inject(BookMarketService);
 
   private loadingOverlayService = inject(LoadingOverlayService);
+
+  private surveyService = inject(SurveyService);
+
+  protected survey: any = this.surveyService.getAcademicSurveyQuestion();
 
   ngOnInit(): void {
     // this.pageNumber += 1;
@@ -68,7 +76,8 @@ export class HomeComponent extends InfiniteScrollView<Data> {
       .subscribe({
         next: (data: any) => {
           this.data = this.data.concat(data);
-          this.hasNextPage = !(data.length % this.pageSize);
+          this.hasNextPage =
+            !!this.data.length && !(data.length % this.pageSize);
           this.pageNumber += 1;
         },
         error: (e) => {},
@@ -78,6 +87,13 @@ export class HomeComponent extends InfiniteScrollView<Data> {
 
   override onScrollUp() {
     console.log('Scrolling up');
+  }
+
+  onSurveySelection(selection: boolean | null) {
+    setTimeout(() => {
+      this.survey = this.surveyService.getAcademicSurveyQuestion();
+      console.log(selection, this.survey);
+    }, 3000);
   }
 
   ngOnDestroy() {
