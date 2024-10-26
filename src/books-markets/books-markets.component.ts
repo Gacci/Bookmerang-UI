@@ -6,7 +6,10 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
-import { BookPostCardComponent } from '../components/book-post-card/book-post-card.component';
+import {
+  BookPostCardComponent,
+  BookPostEvent
+} from '../components/book-post-card/book-post-card.component';
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
@@ -84,7 +87,7 @@ export class BooksMarketsComponent
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
+        next: isLoadingNext => (this.isLoadingNext = isLoadingNext)
       });
 
     this.route.queryParams.pipe(takeUntil(this.unsubscribe$)).subscribe({
@@ -127,16 +130,16 @@ export class BooksMarketsComponent
           (await Hash.sha256(JSON.stringify(this.filters.value)));
       });
 
-      this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
-        next: (resolved: any) => {
-          this.data = resolved.posts;
-          this.book = resolved.book;
-          this.hasNextPage =
-            !!this.data?.length && !(this.data?.length % this.pageSize);
-        }
-      });
+    this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (resolved: any) => {
+        this.data = resolved.posts;
+        this.book = resolved.book;
+        this.hasNextPage =
+          !!this.data?.length && !(this.data?.length % this.pageSize);
+      }
+    });
 
-      this.survey = this.surveyService.getAcademicSurveyQuestion();
+    this.survey = this.surveyService.getAcademicSurveyQuestion();
   }
 
   override async onScrollDown() {
@@ -172,8 +175,7 @@ export class BooksMarketsComponent
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data: any) => {
         this.data = this.data.concat(data);
-        this.hasNextPage =
-          !!this.data?.length && !(data.length % this.pageSize);
+        this.hasNextPage = !!data?.length && !(data.length % this.pageSize);
         this.pageNumber += 1;
       });
   }
@@ -205,7 +207,11 @@ export class BooksMarketsComponent
     setTimeout(() => {
       this.survey = this.surveyService.getAcademicSurveyQuestion();
       console.log(selection, this.survey);
-    }, 3000)
+    }, 3000);
+  }
+
+  onActionClicked(event: BookPostEvent) {
+    console.log(event);
   }
 
   ngOnDestroy() {

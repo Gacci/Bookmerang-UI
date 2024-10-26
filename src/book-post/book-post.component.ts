@@ -113,7 +113,7 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
     const files: File[] = Array.from(target.files);
     for (const file of files) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         const base64 = <string>e.target?.result;
         this.images.push({
           file,
@@ -145,7 +145,7 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
       .create(data)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: (response) => {
+        next: response => {
           console.log(response);
 
           // this.imageManagerService

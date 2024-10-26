@@ -8,18 +8,20 @@
       <div class="post-card-titling">
         <a
           class="post-card-user-name"
-          [routerLink]="['/', 'books', 'inventories', post.userId]"
-          >{{ post.user.firstName }} {{ post.user.lastName }}</a
+          [routerLink]="['/', 'books', 'inventories', _post.userId]"
         >
-        <span class="post-card-date-time">{{
-          post.postedOn | date: 'MMM d, Y HH:mm'
-        }}</span>
+          {{ _post.user.firstName }} {{ _post.user.lastName }}
+        </a>
+        <span class="post-card-date-time">
+          {{ _post.postedOn | date: 'MMM d, Y HH:mm' }}
+        </span>
       </div>
 
-      <div class="relative" *ngIf="editPostCtrl">
+      <div class="relative" *ngIf="editPostEnabled || deletePostEnabled">
         <button
+          type="button"
           class="w-10 h-10 p-1 text-center rounded-full hover:bg-gray-100"
-          (click)="showMenuOptions($event)"
+          [tcnDropdown]="menuDropdownContent"
         >
           <svg
             class="size-6 mx-auto"
@@ -41,6 +43,71 @@
             />
           </svg>
         </button>
+
+        <ul
+          #menuDropdownContent
+          role="menu"
+          class="absolute z-10 min-w-[180px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg shadow-sm focus:outline-none"
+        >
+          <!-- <hr class="my-2 border-slate-200" role="menuitem" /> -->
+          <li
+            role="menuitem"
+            class="cursor-pointer text-slate-800 rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+            *ngIf="editPostEnabled"
+          >
+            <button
+              type="button"
+              class="flex w-full items-center space-x-1 text-sm"
+              [disabled]="
+                isProcessingDelete || isProcessingEdit || !isSelfOwned
+              "
+              (click)="onEditBookPost($event)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-5 h-5 text-slate-400"
+              >
+                <path
+                  d="M15.232 3.232a3 3 0 0 1 4.24 4.24l-1.792 1.792-4.24-4.24 1.792-1.792Zm-2.414 2.414L5.5 13.964V16.5h2.536l7.318-7.318-2.536-2.536Z"
+                />
+              </svg>
+
+              <span>Edit</span>
+            </button>
+          </li>
+
+          <li
+            role="menuitem"
+            class="cursor-pointer text-slate-800 rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+            *ngIf="deletePostEnabled"
+          >
+            <button
+              type="button"
+              class="flex w-full items-center space-x-1 text-sm"
+              [disabled]="
+                isProcessingDelete || isProcessingEdit || !isSelfOwned
+              "
+              (click)="onDeleteBookPost($event)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-5 h-5 text-slate-400"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h4a1 1 0 0 1 0 2h-1.317l-1.45 13.978A2 2 0 0 1 17.333 24H6.667a2 2 0 0 1-1.999-1.878L3.217 8H2a1 1 0 0 1 0-2h4V4zm2 0v2h8V4H8zm-1 6a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+
+              <span>Delete</span>
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -49,99 +116,96 @@
     <div class="post-card-book">
       <a
         class="post-card-book-cover-box"
-        [queryParams]="{ isbn13: post.book.isbn13 }"
+        [queryParams]="{ isbn13: _post.book.isbn13 }"
         [routerLink]="['/', 'books', 'markets']"
       >
-        <img class="post-card-book-cover" [src]="post.book.thumbnail" />
+        <img class="post-card-book-cover" [src]="_post.book.thumbnail" />
       </a>
       <a
         class="post-card-book-title"
-        [queryParams]="{ isbn13: post.book.isbn13 }"
+        [queryParams]="{ isbn13: _post.book.isbn13 }"
         [routerLink]="['/', 'books', 'markets']"
-        >{{ post.book.title }} {{ post.book.subtitle }}</a
       >
-      <span class="post-card-book-isbn">{{ post.book.isbn13 | isbn13 }}</span>
+        {{ _post.book.title }} {{ _post.book.subtitle }}
+      </a>
+      <span class="post-card-book-isbn">{{ _post.book.isbn13 | isbn13 }}</span>
+      <span class="post-card-book-isbn" *ngIf="_post.book.isbn10">{{ _post.book.isbn10 }}</span>
+      <div class="flex flex-row justify-center space-x-1">
+        <span class="post-card-price">{{ _post.price | currency: 'USD' }}</span>
+        <span class="post-card-type">{{ _post.state }}</span>
+      </div>
     </div>
   </div>
 
   <div class="post-card-info">
     <div class="post-card-info-left">
-      <span class="post-card-price">{{ post.price | currency: 'USD' }}</span>
-      <span class="post-card-type">{{ post.state }}</span>
-    </div>
-    <div class="post-card-info-right">
-      <!-- *ngIf="post.tradeable" -->
-      <div class="post-card-trade">
+      <button
+        type="button"
+        class="post-card-save"
+        [disabled]="
+          !likePostEnabled ||
+          isProcessingLike ||
+          isProcessingDelete ||
+          isSelfOwned
+        "
+        (click)="onToggleLikeBookPost($event)"
+      >
         <svg
-          class="size-6"
-          viewBox="0 0 64 64"
           xmlns="http://www.w3.org/2000/svg"
-        >
-          <g fill="none" fill-rule="evenodd">
-            <g transform="rotate(110 4.339 30.802)">
-              <polygon
-                fill="#80D25B"
-                points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
-              />
-              <path
-                fill="#22BA8E"
-                d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
-              />
-            </g>
-            <g transform="scale(1 -1) rotate(-70 -11.107 -40.767)">
-              <polygon
-                fill="#80D25B"
-                points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
-              />
-              <path
-                fill="#22BA8E"
-                d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
-              />
-            </g>
-            <g transform="scale(1 -1) rotate(54 55.492 16.03)">
-              <polygon
-                fill="#80D25B"
-                points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
-              />
-              <path
-                fill="#22BA8E"
-                d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
-              />
-            </g>
-          </g>
-        </svg>
-      </div>
-
-      <button class="post-card-sell" *ngIf="listBookCtrl">
-        <svg
-          class="size-6"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
+          fill="currentColor"
+          class="w-5 h-5"
+          [ngClass]="{
+            'text-slate-400': !_post.savedBookOfferId,
+            'text-red-600': isProcessingLike || !!_post.savedBookOfferId,
+            'animate-pulse': isProcessingLike
+          }"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            fill-rule="evenodd"
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            clip-rule="evenodd"
           />
         </svg>
       </button>
-
-      <button class="post-card-chat" *ngIf="userChatCtrl">
+    </div>
+    <div class="post-card-info-middle">
+      <button
+        type="button"
+        class="post-card-share"
+        (click)="onSharePost($event)"
+      >
         <svg
-          class="size-6"
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
+          fill="currentColor"
+          class="w-6 h-6 text-slate-400"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M13.803 5.33333C13.803 3.49238 15.3022 2 17.1515 2C19.0008 2 20.5 3.49238 20.5 5.33333C20.5 7.17428 19.0008 8.66667 17.1515 8.66667C16.2177 8.66667 15.3738 8.28596 14.7671 7.67347L10.1317 10.8295C10.1745 11.0425 10.197 11.2625 10.197 11.4872C10.197 11.9322 10.109 12.3576 9.94959 12.7464L15.0323 16.0858C15.6092 15.6161 16.3473 15.3333 17.1515 15.3333C19.0008 15.3333 20.5 16.8257 20.5 18.6667C20.5 20.5076 19.0008 22 17.1515 22C15.3022 22 13.803 20.5076 13.803 18.6667C13.803 18.1845 13.9062 17.7255 14.0917 17.3111L9.05007 13.9987C8.46196 14.5098 7.6916 14.8205 6.84848 14.8205C4.99917 14.8205 3.5 13.3281 3.5 11.4872C3.5 9.64623 4.99917 8.15385 6.84848 8.15385C7.9119 8.15385 8.85853 8.64725 9.47145 9.41518L13.9639 6.35642C13.8594 6.03359 13.803 5.6896 13.803 5.33333Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <div class="post-card-info-right">
+      <button
+        type="button"
+        class="post-card-chat"
+        [disabled]="!userChatEnabled"
+        (click)="onMessageSeller($event)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-6 text-slate-400"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12 2C6.477 2 2 5.943 2 10.5c0 1.962.805 3.8 2.21 5.26a11.673 11.673 0 0 1-1.626 2.775c-.325.434-.523.835-.573 1.192-.06.437.267.825.738.825.635 0 1.597-.27 2.793-.85C8.098 20.836 9.988 21.5 12 21.5c5.523 0 10-3.943 10-9S17.523 2 12 2ZM8 9.75A.75.75 0 0 1 8.75 9h6.5a.75.75 0 0 1 0 1.5h-6.5A.75.75 0 0 1 8 9.75Zm0 3a.75.75 0 0 1 .75-.75h6.5a.75.75 0 0 1 0 1.5h-6.5A.75.75 0 0 1 8 12.75Z"
+            clip-rule="evenodd"
           />
         </svg>
       </button>
@@ -149,24 +213,24 @@
   </div>
 
   <div class="post-card-footer">
-    <div *ngIf="post.notes">
+    <div *ngIf="_post.notes">
       <div class="flex justify-between">
-        <p class="animation" [ngClass]="{ hidden: !post.isNotesOpen }">
-          {{ post.notes }}
+        <p class="animation" [ngClass]="{ hidden: !_post.isNotesOpen }">
+          {{ _post.notes }}
         </p>
 
         <p
           class="animation overflow-hidden whitespace-nowrap text-ellipsis"
-          [ngClass]="{ hidden: post.isNotesOpen }"
+          [ngClass]="{ hidden: _post.isNotesOpen }"
         >
-          {{ post.notes }}
+          {{ _post.notes }}
         </p>
-        <span
+        <span *ngIf="!_post.isNotesOpen"
           class="whitespace-nowrap text-blue-600 cursor-pointer hover:underline"
-          *ngIf="!post.isNotesOpen"
-          (click)="post.isNotesOpen = !post.isNotesOpen"
-          >See more</span
+          (click)="_post.isNotesOpen = !_post.isNotesOpen"
         >
+          See more
+        </span>
       </div>
     </div>
   </div>

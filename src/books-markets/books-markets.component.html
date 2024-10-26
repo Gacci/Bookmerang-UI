@@ -51,8 +51,9 @@
             <label
               for="new"
               class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-              >New</label
             >
+              New
+            </label>
           </div>
         </li>
         <li class="w-full border-b border-gray-200 rounded-t-lg">
@@ -67,8 +68,9 @@
             <label
               for="like-new"
               class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-              >Like New</label
             >
+              Like New
+            </label>
           </div>
         </li>
         <li class="w-full border-b border-gray-200 rounded-t-lg">
@@ -83,8 +85,9 @@
             <label
               for="very-good"
               class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-              >Very Good</label
             >
+              Very Good
+            </label>
           </div>
         </li>
         <li class="w-full border-b border-gray-200 rounded-t-lg">
@@ -99,8 +102,9 @@
             <label
               for="good"
               class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-              >Good</label
             >
+              Good
+            </label>
           </div>
         </li>
         <li class="w-full border-gray-200 rounded-t-lg">
@@ -115,8 +119,9 @@
             <label
               for="acceptable"
               class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
-              >Acceptable</label
             >
+              Acceptable
+            </label>
           </div>
         </li>
       </ul>
@@ -162,8 +167,9 @@
         <a
           class="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
           [routerLink]="['/', 'books', 'markets', book.isbn13]"
-          >Sell my copy</a
         >
+          Sell my copy
+        </a>
       </div>
     </div>
 
@@ -173,28 +179,31 @@
         {{ book.title }} {{ book.subtitle ?? '' }}
       </h1>
       <p class="mt-2 text-lg text-gray-600" *ngIf="book.authors?.length">
-        By <span class="font-medium">{{ book.authors }}</span>
+        By
+        <span class="font-medium">{{ book.authors }}</span>
       </p>
       <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn13">
-        ISBN-13: <span class="font-medium">{{ book.isbn13 | isbn13 }}</span>
+        ISBN-13:
+        <span class="font-medium">{{ book.isbn13 | isbn13 }}</span>
       </p>
       <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn13">
-        ISBN-10: <span class="font-medium">{{ book.isbn10 }}</span>
+        ISBN-10:
+        <span class="font-medium">{{ book.isbn10 }}</span>
       </p>
 
       <div class="mt-4">
         <h2 class="text-xl font-medium text-gray-700">Details</h2>
         <ul class="mt-2 text-gray-600 space-y-1">
           <li>
-            <span class="font-medium" *ngIf="book.publishers?.length"
-              >Publisher:</span
-            >
+            <span class="font-medium" *ngIf="book.publishers?.length">
+              Publisher:
+            </span>
             {{ book.publishers }}
           </li>
           <li>
-            <span class="font-medium" *ngIf="book.published"
-              >Publication Date:</span
-            >
+            <span class="font-medium" *ngIf="book.published">
+              Publication Date:
+            </span>
             {{ book.published }}
           </li>
           <li>
@@ -428,9 +437,9 @@
               stroke-linecap="round"
             />
           </svg>
-          <span class="text-sm font-bold">{{
-            book.published | date: 'MMM dd, YYYY'
-          }}</span>
+          <span class="text-sm font-bold">
+            {{ book.published | date: 'MMM dd, YYYY' }}
+          </span>
         </li>
         <li class="w-44 flex-shrink-0 border-l px-1" *ngIf="book.language">
           <span class="text-sm">Language</span>
@@ -530,11 +539,9 @@
 >
   <book-post-card
     *ngFor="let post of data"
+    (action)="onActionClicked($event)"
     [post]="post"
-    [listBookCtrl]="true"
-    [userChatCtrl]="true"
-  >
-  </book-post-card>
+  ></book-post-card>
 </div>
 
 <!-- Main modal -->

@@ -44,7 +44,7 @@ export const cacheInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   return next(req).pipe(
-    tap((event) => {
+    tap(event => {
       if (event instanceof HttpResponse) {
         cache.put(req, event);
       }

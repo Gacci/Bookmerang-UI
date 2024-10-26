@@ -180,8 +180,8 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
 
   private disableGroupControls(group: FormGroup) {
     Object.keys(group.controls)
-      .map((key) => group.controls[key])
-      .forEach((ctrl) => {
+      .map(key => group.controls[key])
+      .forEach(ctrl => {
         ctrl.disable();
         ctrl.markAsPristine();
         ctrl.markAsUntouched();

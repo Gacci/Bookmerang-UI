@@ -1,6 +1,12 @@
 .post-card {
     @apply relative block w-128 mx-auto my-8 shadow-md bg-white rounded-md;
   }
+  .post-card-price {
+    @apply font-bold text-green-600;
+  }
+  .post-card-type {
+    @apply font-bold text-gray-600 whitespace-nowrap;
+  }
   .post-card-header {
     @apply px-4 py-2;
   }
@@ -25,19 +31,12 @@
     .post-card-info-left {
       @apply flex items-center space-x-2;
     }
-
-    .post-card-price {
-      @apply font-bold text-green-600;
-    }
-    .post-card-type {
-      @apply font-bold text-gray-600 whitespace-nowrap;
-    }
   }
   .post-card-body {
     @apply border-y overflow-hidden;
   }
   .post-card-book {
-    @apply w-64 mx-auto my-10;
+    @apply w-64 mx-auto my-10 text-center;
 
     .post-card-book-title {
       @apply block leading-5 font-medium text-blue-700;
@@ -57,15 +56,18 @@
     }
   }
   .post-card-chat,
-  .post-card-sell {
+  .post-card-sell,
+  .post-card-save,
+  .post-card-share {
     @apply p-2 mx-1 bg-gray-100 rounded-full align-middle;
 
-    &:hover {
+    &:not(:disabled) {
+      @apply cursor-pointer;
+    }
+
+    &:hover:not(:disabled) {
       @apply bg-gray-200;
     }
-  }
-  .post-card-trade{
-    @apply p-2 mx-1 bg-green-100 rounded-full align-middle inline-block;
   }
   .post-card-footer {
     @apply px-8 py-4;

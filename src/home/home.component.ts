@@ -47,7 +47,7 @@ export class HomeComponent extends InfiniteScrollView<Data> {
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: (isLoadingNext) => (this.isLoadingNext = isLoadingNext)
+        next: isLoadingNext => (this.isLoadingNext = isLoadingNext)
       });
 
     // this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
@@ -80,7 +80,7 @@ export class HomeComponent extends InfiniteScrollView<Data> {
             !!this.data.length && !(data.length % this.pageSize);
           this.pageNumber += 1;
         },
-        error: (e) => {},
+        error: e => {},
         complete: () => {}
       });
   }

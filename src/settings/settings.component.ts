@@ -104,7 +104,7 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     }
 
     const reader = new FileReader();
-    reader.onload = (e) =>
+    reader.onload = e =>
       (this.user.profilePictureUrl = <string>e.target?.result);
 
     reader.readAsDataURL(<File>target.files.item(0));

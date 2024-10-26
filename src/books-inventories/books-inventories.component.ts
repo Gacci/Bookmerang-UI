@@ -1,19 +1,22 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Data } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { takeUntil } from 'rxjs';
 
 import { DialogService } from '@ngneat/dialog';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
-import { BookPostCardComponent } from '../components/book-post-card/book-post-card.component';
+import {
+  BookPostCardComponent,
+  BookPostEvent
+} from '../components/book-post-card/book-post-card.component';
 import { BookOfferEditSheetComponent } from '../components/book-offer-edit-sheet/book-offer-edit-sheet.component';
 
 import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'books-inventory',
@@ -43,20 +46,17 @@ export class BooksInventoriesComponent
 
   protected user!: any;
 
-  protected allowEditingPost!: boolean;
-
   ngOnInit(): void {
     this.pageNumber += 1;
     this.route.params
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((params: any) => {
         this.params = { userId: params.userId };
-        this.allowEditingPost = +this.params?.userId === this.auth.getUserId();
       });
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((isLoadingNext) => (this.isLoadingNext = isLoadingNext));
+      .subscribe(isLoadingNext => (this.isLoadingNext = isLoadingNext));
 
     this.route.data
       .pipe(takeUntil(this.unsubscribe$))
@@ -97,13 +97,13 @@ export class BooksInventoriesComponent
       });
   }
 
-  openBottomSheet() {
+  onActionClicked(e: BookPostEvent) {
     const bottomSheetRef = this.ngDialogService.open(
       BookOfferEditSheetComponent,
       {}
     );
 
-    bottomSheetRef.afterClosed$.subscribe((result) => {
+    bottomSheetRef.afterClosed$.subscribe(result => {
       if (result) {
         console.log('User confirmed:', result);
       } else {

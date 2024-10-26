@@ -1,32 +1,224 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  Output
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
+
 import { ISBN13Pipe } from '../../pipes/isbn13.pipe';
+import { DropdownDirective } from '../../directives/dropdown.directive';
+import { BookMarketService } from '../../services/book-market.service';
+import { AuthService } from '../../services/auth.service';
+import { Unsubscribable } from '../../classes/unsubscribable';
+import { takeUntil } from 'rxjs';
+
+export enum ActionEvent {
+  Chat = 1,
+  Edit = 2,
+  List = 3,
+  Like = 4,
+  Unlike = 5,
+  Delete = 6,
+  Message = 7
+}
+
+export interface BookPostEvent {
+  event: Event;
+  post: {
+    type: ActionEvent;
+    data: any;
+  };
+}
 
 @Component({
   selector: 'book-post-card',
   standalone: true,
-  imports: [CommonModule, RouterModule, ISBN13Pipe],
+  imports: [CommonModule, RouterModule, DropdownDirective, ISBN13Pipe],
   styleUrl: './book-post-card.component.scss',
   templateUrl: './book-post-card.component.html'
 })
-export class BookPostCardComponent {
-  @Input()
-  post!: any;
+export class BookPostCardComponent extends Unsubscribable implements OnDestroy {
+  private readonly auth = inject(AuthService);
+
+  private readonly bookMarketService = inject(BookMarketService);
+
+  private readonly ActionEvents = ActionEvent;
+
+  protected _post!: any;
+
+  protected isProcessingEdit!: boolean;
+
+  protected isProcessingDelete!: boolean;
+
+  protected isProcessingLike!: boolean;
+
+  protected isSelfOwned!: boolean;
 
   @Input()
-  listBookCtrl!: boolean;
+  set post(_post: any) {
+    this._post = _post;
+    this.isSelfOwned = this._post.userId === this.auth.getUserId();
+    this.deletePostEnabled = this._post.userId === this.auth.getUserId();
+    this.editPostEnabled = this._post.userId === this.auth.getUserId();
+    this.likePostEnabled = this._post.userId !== this.auth.getUserId();
+    this.userChatEnabled = this._post.userId !== this.auth.getUserId();
+  }
 
   @Input()
-  userChatCtrl!: boolean;
+  editPostEnabled!: boolean;
 
   @Input()
-  editPostCtrl!: boolean;
+  likePostEnabled!: boolean;
 
-  @Output()
-  action: EventEmitter<any> = new EventEmitter<any>();
+  @Input()
+  userChatEnabled!: boolean;
 
-  showMenuOptions(e: Event) {
-    this.action.emit({ e });
+  @Input()
+  deletePostEnabled!: boolean;
+
+  @Output() action: EventEmitter<BookPostEvent> =
+    new EventEmitter<BookPostEvent>();
+
+  async onToggleLikeBookPost(event: Event) {
+    this._post.savedBookOfferId
+      ? this.onUnlikeBookPost(event)
+      : this.onLikeBookPost(event);
+  }
+
+  async onLikeBookPost(event: Event) {
+    if (
+      this._post.savedBookOfferId ||
+      this.isProcessingDelete ||
+      this.isProcessingEdit
+    ) {
+      return;
+    }
+
+    this.isProcessingLike = true;
+    this.action.emit({
+      event,
+      post: { data: this.post, type: ActionEvent.Like }
+    });
+
+    await this.pause(3000);
+    this.bookMarketService
+      .likeBookPost({
+        bookOfferId: this._post.bookOfferId,
+        userId: this.auth.getUserId()
+      })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response: any) => {
+          console.log(response);
+          this._post.savedBookOfferId = response.savedBookOfferId;
+          this.isProcessingLike = false;
+        },
+        error: (error: any) => {
+          console.error('Error saving post:', error);
+          this.isProcessingLike = false;
+        }
+      });
+  }
+
+  async onUnlikeBookPost(event: Event) {
+    if (
+      !this._post.savedBookOfferId ||
+      this.isProcessingDelete ||
+      this.isProcessingEdit
+    ) {
+      return;
+    }
+
+    this.isProcessingLike = true;
+    this.action.emit({
+      event,
+      post: { data: this.post, type: ActionEvent.Unlike }
+    });
+
+    await this.pause(3000);
+    this.bookMarketService
+      .unlikeBookPost(this._post.savedBookOfferId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response: any) => {
+          this._post.savedBookOfferId = null;
+          this.isProcessingLike = false;
+        },
+        error: (error: any) => {
+          console.error('Error deleting post:', error);
+          this.isProcessingLike = false;
+        }
+      });
+  }
+
+  onEditBookPost(event: Event) {
+    if (this.isProcessingDelete || this.isProcessingEdit) {
+      return;
+    }
+
+    this.isProcessingEdit = true;
+    this.action.emit({
+      event,
+      post: { data: this.post, type: ActionEvent.Edit }
+    });
+
+    this.bookMarketService
+      .update(this.post)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response: any) => {
+          this.isProcessingEdit = false;
+        },
+        error: (error: any) => {
+          console.error('Error deleting post:', error);
+          this.isProcessingEdit = false;
+        }
+      });
+  }
+
+  onDeleteBookPost(event: Event) {
+    if (this.isProcessingDelete || this.isProcessingEdit) {
+      return;
+    }
+
+    this.isProcessingDelete = true;
+    this.action.emit({
+      event,
+      post: { type: ActionEvent.Delete, data: this.post }
+    });
+
+    this.bookMarketService
+      .remove(this._post.bookOfferId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response: any) => {
+          this.isProcessingDelete = false;
+        },
+        error: (error: any) => {
+          console.error('Error deleting post:', error);
+          this.isProcessingDelete = false;
+        }
+      });
+  }
+
+  onMessageSeller(event: Event) {
+    this.action.emit({
+      event,
+      post: { type: ActionEvent.Message, data: this.post }
+    });
+  }
+
+  onSharePost(event: Event) {}
+
+  ngOnDestroy(): void {
+    this.unsubscribe();
+  }
+
+  async pause(timeout: number) {
+    await new Promise(resolve => setTimeout(resolve, timeout));
   }
 }

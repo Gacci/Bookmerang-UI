@@ -116,7 +116,7 @@ export class SignUpComponent {
         ...this.verifyRegisterCodeGroup.value
       })
       .subscribe({
-        next: (response) => {
+        next: response => {
           console.log(response);
           this.expiresInSeconds = 0;
         },

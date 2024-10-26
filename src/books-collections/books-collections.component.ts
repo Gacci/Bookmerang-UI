@@ -32,7 +32,7 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((isLoadingNext) => (this.isLoadingNext = isLoadingNext));
+      .subscribe(isLoadingNext => (this.isLoadingNext = isLoadingNext));
 
     this.route.data.subscribe((resolved: any) => {
       this.data = resolved.books.data;
@@ -59,7 +59,7 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
         this.pageNumber += 1;
         this.isLoadingNext = false;
       },
-      error: (e) => {},
+      error: e => {},
       complete: () => {}
     });
   }

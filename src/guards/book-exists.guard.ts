@@ -15,7 +15,7 @@ export const bookExistsGuard: CanActivateFn = (route, state) => {
   return inject(BookCollectionService)
     .read(ISBN.asIsbn13(params.isbn13))
     .pipe(
-      map((book) => !!book),
+      map(book => !!book),
       catchError(() => of(false))
     );
 };

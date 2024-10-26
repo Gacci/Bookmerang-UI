@@ -19,11 +19,5 @@
     (selection)="onSurveySelection($event)"
   ></confirm-dialog>
 
-  <book-post-card
-    *ngFor="let post of data"
-    [post]="post"
-    [listBookCtrl]="true"
-    [userChatCtrl]="true"
-  >
-  </book-post-card>
+  <book-post-card *ngFor="let post of data" [post]="post"></book-post-card>
 </div>

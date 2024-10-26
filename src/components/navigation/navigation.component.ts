@@ -66,7 +66,7 @@ export class NavigationComponent
           this.user = user;
           this.isLoadingUser = false;
         },
-        error: (err) => {
+        error: err => {
           this.isLoadingUser = false;
         }
       });
@@ -99,7 +99,7 @@ export class NavigationComponent
         .then(() => {
           this.lastHashedKeyword = '';
         })
-        .catch((error) => {
+        .catch(error => {
           console.log('Could not run search', error);
         });
     } else {
@@ -121,7 +121,7 @@ export class NavigationComponent
       .logout()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
-        next: (response) => {
+        next: response => {
           console.log(response);
           this.router.navigateByUrl('/sign-in');
         }

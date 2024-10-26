@@ -6,38 +6,24 @@ import { map } from 'rxjs';
 
 import ISO6391 from 'iso-639-1';
 import * as ISBN from 'isbn3';
+import { BookService } from './book.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookCollectionService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private books: BookService
+  ) {}
 
   read(isbn13: string) {
     return this.http
       .get(`http://127.0.0.1:3000/books/collections/isbn/${isbn13}`)
-      .pipe(
-        map((book: any) => ({
-          ...book,
-          ...(book.isbn10 && !book.isbn13
-            ? { isbn13: ISBN.asIsbn13(book.isbn10) }
-            : {}),
-          ...(book.isbn13 && !book.isbn10
-            ? { isbn13: ISBN.asIsbn10(book.isbn13) }
-            : {}),
-          ...(book.language
-            ? {
-                language:
-                  ISO6391.getName(book.language) ?? book.language?.toUpperCase()
-              }
-            : {}),
-          ...(!book.thumbnail
-            ? { thumbnail: './assets/images/book-cover-unavailable.jpeg' }
-            : {})
-        }))
-      );
+      .pipe(map((book: any) => this.books.populate(book)));
   }
 
+  // ONLY COVER on populate
   search(params: Data) {
     return this.http
       .get<
@@ -45,13 +31,8 @@ export class BookCollectionService {
       >('http://127.0.0.1:3000/books/collections/search', { params })
       .pipe(
         map((response: any) => ({
-          meta: response.meta,
-          data: response.data.map((book: any) => ({
-            ...book,
-            ...(!book.thumbnail
-              ? { thumbnail: './assets/images/book-cover-unavailable.jpeg' }
-              : {})
-          }))
+          data: response.data.map((book: any) => this.books.populate(book)),
+          meta: response.meta
         }))
       );
   }
