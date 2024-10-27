@@ -46,9 +46,7 @@ export class HomeComponent extends InfiniteScrollView<Data> {
     this.onScrollDown();
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: isLoadingNext => (this.isLoadingNext = isLoadingNext)
-      });
+      .subscribe(isLoadingNext => (this.isLoadingNext = isLoadingNext));
 
     // this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
     //   next: (resolved: any) => {

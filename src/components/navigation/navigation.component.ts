@@ -13,6 +13,8 @@ import { Unsubscribable } from '../../classes/unsubscribable';
 
 import * as Hash from 'crypto-hash';
 import * as ISBN from 'isbn3';
+import { DialogService } from '@ngneat/dialog';
+import { InstitutionsDialogComponent } from '../institutions-dialog/institutions-dialog.component';
 
 type SearchEvent = {
   type: 'isbn' | 'keyword';
@@ -36,13 +38,15 @@ export class NavigationComponent
 
   private users = inject(UserService);
 
-  private lastHashedKeyword!: string;
+  private ngDialogService = inject(DialogService);
 
-  protected user!: any;
+  private lastHashedKeyword!: string;
 
   protected isLoadingUser!: boolean;
 
   protected isAuthenticated!: boolean;
+
+  protected user!: any;
 
   ngOnInit(): void {
     this.isLoadingUser = true;
@@ -120,11 +124,22 @@ export class NavigationComponent
     this.auth
       .logout()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: response => {
-          console.log(response);
-          this.router.navigateByUrl('/sign-in');
-        }
+      .subscribe(response => {
+        this.router.navigateByUrl('/sign-in');
+      });
+  }
+
+  handleInstitutionsDialog() {
+    const bottomSheetRef = this.ngDialogService.open(
+      InstitutionsDialogComponent
+    );
+
+    bottomSheetRef.afterClosed$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(result => {
+        this.auth.setPreferredSearchScope(result);
+
+        console.log('User selected:', result);
       });
   }
 

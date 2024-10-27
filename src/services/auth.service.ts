@@ -13,19 +13,15 @@ import * as JWT from 'jwt-decode';
 
 const JWT_TOKEN = '__tcn';
 
-const jwt =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnN0aXR1dGlvbnMiOls1LDU2XSwiZW1haWwiOiJjYW1lcm9uLm5vbGFuQGlzdGMuZWR1IiwiaWF0IjoxNzI5MTM2MDE3LCJpc3MiOiJodHRwOi8vYm9va21lcmFuZy5jb20iLCJqdGkiOiIzMzE3MjI4RkYyODlCQUFDNEExNTRGQ0FGOTZGRDg1NiIsInJvbGVzIjpbXSwic3ViIjo2NSwiZXhwIjoxNzI5Mzk1MjE3fQ.slFz2OmMzFLxy0j8KLnw7BJC284lueN9xrfME3jijAA';
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private authTokenSubject = new BehaviorSubject<any>(false);
+
   public $jwt = this.authTokenSubject.asObservable();
 
-  // private jwtRawToken!: string | null;
-
-  // private jwtDecodedToken: any | null;
+  private primarySearchScope!: number;
 
   constructor(
     private readonly http: HttpClient,
@@ -39,6 +35,9 @@ export class AuthService {
         ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '')
         : undefined
     );
+
+    const { institutions } = this.getJwtToken();
+    this.primarySearchScope = institutions?.length === 1 ? institutions[0] : 0;
 
     // console.log(this.jwtDecodedToken)
   }
@@ -133,17 +132,20 @@ export class AuthService {
     return this.authTokenSubject?.value?.sub;
   }
 
-  getMarketScope() {
-    return this.authTokenSubject?.value?.institutions;
-  }
-
   getJwtTokenRaw() {
     return localStorage.getItem(JWT_TOKEN);
   }
 
   getJwtToken() {
-    // <JWT.JwtPayload & { institutions: Array<number> }>
     return this.authTokenSubject.value;
+  }
+
+  getPreferredSearchScope() {
+    return this.primarySearchScope;
+  }
+
+  setPreferredSearchScope(primarySearchScope: number) {
+    this.primarySearchScope = primarySearchScope;
   }
 
   private storeJwtToken(token: any) {

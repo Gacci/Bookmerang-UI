@@ -2,26 +2,28 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-
 import { takeUntil } from 'rxjs';
+
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import {
   BookPostCardComponent,
   BookPostEvent
 } from '../components/book-post-card/book-post-card.component';
-import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
-import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
+
+import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
+import { ConfirmDialogComponent } from '../components/confirm-dialog.component';
+import { SurveyService } from '../services/survey.service';
+
+import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
 import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 import * as ISBN from 'isbn3';
 import * as Hash from 'crypto-hash';
-import { ConfirmDialogComponent } from '../components/confirm-dialog.component';
-import { SurveyService } from '../services/survey.service';
 
 console.log(Hash);
 @Component({
@@ -86,12 +88,22 @@ export class BooksMarketsComponent
     this.pageNumber += 1;
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: isLoadingNext => (this.isLoadingNext = isLoadingNext)
+      .subscribe(isLoadingNext => (this.isLoadingNext = isLoadingNext));
+
+    this.route.data
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resolved: any) => {
+        this.book = resolved.book;
+        this.data = resolved.posts;
+        this.hasNextPage =
+          !!this.data?.length && !(this.data?.length % this.pageSize);
+
+        console.log(this);
       });
 
-    this.route.queryParams.pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: async (query: any) => {
+    this.route.queryParams
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(async (query: any) => {
         this.params = { ...query };
         const patch = {
           ...(query.state
@@ -119,8 +131,7 @@ export class BooksMarketsComponent
         this.filtersHashedValue = await Hash.sha256(
           JSON.stringify(this.filters.value)
         );
-      }
-    });
+      });
 
     this.filters.valueChanges
       .pipe(takeUntil(this.unsubscribe$))
@@ -129,15 +140,6 @@ export class BooksMarketsComponent
           this.filtersHashedValue !==
           (await Hash.sha256(JSON.stringify(this.filters.value)));
       });
-
-    this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: (resolved: any) => {
-        this.data = resolved.posts;
-        this.book = resolved.book;
-        this.hasNextPage =
-          !!this.data?.length && !(this.data?.length % this.pageSize);
-      }
-    });
 
     this.survey = this.surveyService.getAcademicSurveyQuestion();
   }
@@ -148,7 +150,7 @@ export class BooksMarketsComponent
     }
 
     console.log('onScrollDown');
-    const { state, tradeable, sorting } = this.params;
+    const { state, tradeable, sorting, institution } = this.params;
     const params = {
       isbn13: ISBN.asIsbn13(this.params.isbn13),
       ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
@@ -185,6 +187,7 @@ export class BooksMarketsComponent
   }
 
   protected onSubmit(e: Event) {
+    console.log(this.filters.value);
     const { state, tradeable, sorting } = this.filters.value;
     const encoded =
       (state.new ? 1 : 0) +

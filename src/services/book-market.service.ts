@@ -44,12 +44,13 @@ export class BookMarketService {
         params
       })
       .pipe(
-        map((response: any) =>
-          response.map((post: any) => ({
+        map((response: any) => {
+          console.log(response);
+          return response.map((post: any) => ({
             ...post,
             book: this.books.populate(post.book)
-          }))
-        )
+          }));
+        })
       );
   }
 
@@ -70,5 +71,17 @@ export class BookMarketService {
     return this.http.delete(
       `http://127.0.0.1:3000/books/markets/posts/favorites/${bookOfferId}`
     );
+  }
+
+  collections(params: Data) {
+    return this.http
+      .get('http://127.0.0.1:3000/books/markets/collections/search', {
+        params
+      })
+      .pipe(
+        map((response: any) => ({
+          data: response.data.map((book: any) => this.books.populate(book))
+        }))
+      );
   }
 }

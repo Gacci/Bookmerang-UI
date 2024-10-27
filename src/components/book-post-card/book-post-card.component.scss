@@ -1,11 +1,14 @@
 .post-card {
-    @apply relative block w-128 mx-auto my-8 shadow-md bg-white rounded-md;
+    @apply relative block w-128 mx-auto my-8 border; // shadow-md rounded-md
   }
-  .post-card-price {
-    @apply font-bold text-green-600;
+  .post-card-tradeable {
+    @apply font-semibold text-sm text-green-600;
+  }
+  .post-card-nontradeable {
+    @apply font-semibold text-sm text-gray-600;
   }
   .post-card-type {
-    @apply font-bold text-gray-600 whitespace-nowrap;
+    @apply font-semibold text-sm text-gray-600 whitespace-nowrap;
   }
   .post-card-header {
     @apply px-4 py-2;
@@ -26,7 +29,7 @@
     @apply block;
   }
   .post-card-info {
-    @apply flex justify-between items-center p-4 border-b;
+    @apply flex justify-between items-center p-4;
 
     .post-card-info-left {
       @apply flex items-center space-x-2;
@@ -36,17 +39,20 @@
     @apply border-y overflow-hidden;
   }
   .post-card-book {
-    @apply w-64 mx-auto my-10 text-center;
+    @apply mx-8 my-10 text-center;
 
     .post-card-book-title {
-      @apply block leading-5 font-medium text-blue-700;
+      @apply block leading-5 font-medium text-gray-700;
+    }
+    .post-card-book-isbns {
+      @apply my-1;
     }
     .post-card-book-isbn {
-      @apply block my-1;
+      @apply block text-sm;
     }
   }
   .post-card-book-cover-box {
-    @apply relative block z-0 aspect-2/3;
+    @apply w-64 mx-auto relative block z-0 aspect-2/3;
 
     .post-card-book-cover {
       @apply absolute top-0 left-0 w-full h-full;
@@ -70,7 +76,7 @@
     }
   }
   .post-card-footer {
-    @apply px-8 py-4;
+    @apply px-8 py-4 border-t;
   }
   .post-card-desc {
     @apply text-gray-500;

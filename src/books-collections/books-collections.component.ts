@@ -9,6 +9,7 @@ import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 import { BookCollectionService } from '../services/book-collection.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 import { Subject, takeUntil } from 'rxjs';
+import { BookMarketService } from '../services/book-market.service';
 
 @Component({
   selector: 'app-collection',
@@ -20,7 +21,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   private route = inject(ActivatedRoute);
 
-  private bookMarketService = inject(BookCollectionService);
+  private bookMarketService = inject(BookMarketService);
 
   private loadingOverlayService = inject(LoadingOverlayService);
 
@@ -34,11 +35,13 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(isLoadingNext => (this.isLoadingNext = isLoadingNext));
 
-    this.route.data.subscribe((resolved: any) => {
-      this.data = resolved.books.data;
-      this.hasNextPage =
-        !!this.data?.length && !(this.data?.length % this.pageSize);
-    });
+    this.route.data
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resolved: any) => {
+        this.data = resolved.books.data;
+        this.hasNextPage =
+          !!this.data?.length && !(this.data?.length % this.pageSize);
+      });
   }
 
   override async onScrollDown() {
@@ -52,16 +55,15 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
       pageSize: this.pageSize
     };
 
-    this.bookMarketService.search(params).subscribe({
-      next: (response: any) => {
+    this.bookMarketService
+      .collections(params)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response: any) => {
         this.data = this.data.concat(response.data);
-        this.hasNextPage = !(this.data.length % this.pageSize);
+        this.hasNextPage =
+          !!this.data.length && !(this.data.length % this.pageSize);
         this.pageNumber += 1;
-        this.isLoadingNext = false;
-      },
-      error: e => {},
-      complete: () => {}
-    });
+      });
   }
 
   override onScrollUp(): void {}

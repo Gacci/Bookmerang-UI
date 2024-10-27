@@ -20,6 +20,7 @@ import { isLoggedGuard } from '../guards/is-logged.guard';
 import { isNotLoggedGuard } from '../guards/is-not-logged.guard';
 import { isISBNGuard } from '../guards/is-isbn.guard';
 import { SettingsComponent } from '../settings/settings.component';
+import { institutionResolver } from '../resolvers/institution.resolver';
 
 export const routes: Routes = [
   {
@@ -74,8 +75,9 @@ export const routes: Routes = [
     path: 'books/markets',
     runGuardsAndResolvers: 'always',
     resolve: {
-      posts: bookMarketResolver,
-      book: bookResolver
+      book: bookResolver,
+      institutions: institutionResolver,
+      posts: bookMarketResolver
     }
   },
   {

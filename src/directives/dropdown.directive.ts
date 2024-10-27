@@ -61,7 +61,7 @@ export class DropdownDirective implements OnInit {
     if (this.open) {
       Object.entries({
         display: 'block',
-        'max-height': '300px',
+        'max-height': '380px',
         opacity: '1',
         overflow: 'hidden',
         transform: 'translateX(-100%)',

@@ -128,10 +128,24 @@
       >
         {{ _post.book.title }} {{ _post.book.subtitle }}
       </a>
-      <span class="post-card-book-isbn">{{ _post.book.isbn13 | isbn13 }}</span>
-      <span class="post-card-book-isbn" *ngIf="_post.book.isbn10">{{ _post.book.isbn10 }}</span>
+      <div class="post-card-book-isbns">
+        <span class="post-card-book-isbn">
+          {{ _post.book.isbn13 | isbn13 }}
+        </span>
+        <span class="post-card-book-isbn" *ngIf="_post.book.isbn10">
+          {{ _post.book.isbn10 }}
+        </span>
+      </div>
       <div class="flex flex-row justify-center space-x-1">
-        <span class="post-card-price">{{ _post.price | currency: 'USD' }}</span>
+        <span
+          class="post-card-price"
+          [ngClass]="{
+            'post-card-tradeable': _post.tradeable,
+            'post-card-nontradeable': !_post.tradeable
+          }"
+        >
+          {{ _post.price | currency: 'USD' }}
+        </span>
         <span class="post-card-type">{{ _post.state }}</span>
       </div>
     </div>
@@ -212,7 +226,7 @@
     </div>
   </div>
 
-  <div class="post-card-footer">
+  <div class="post-card-footer" *ngIf="!!_post.notes">
     <div *ngIf="_post.notes">
       <div class="flex justify-between">
         <p class="animation" [ngClass]="{ hidden: !_post.isNotesOpen }">
@@ -225,7 +239,8 @@
         >
           {{ _post.notes }}
         </p>
-        <span *ngIf="!_post.isNotesOpen"
+        <span
+          *ngIf="!_post.isNotesOpen"
           class="whitespace-nowrap text-blue-600 cursor-pointer hover:underline"
           (click)="_post.isNotesOpen = !_post.isNotesOpen"
         >

@@ -26,7 +26,7 @@ export class BookService {
         : {}),
       ...(!book.thumbnail
         ? { thumbnail: './assets/images/book-cover-unavailable.jpeg' }
-        : {})
+        : { thumbnail: 'http://localhost:3000/' + book.thumbnail })
     };
   }
 }
