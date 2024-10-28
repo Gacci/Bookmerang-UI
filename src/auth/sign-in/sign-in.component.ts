@@ -38,7 +38,9 @@ export class SignInComponent {
   handleSignIn() {
     this.request = { sent: true };
     this.auth.login(<Credentials>this.signInGroup.value).subscribe({
-      next: async response => this.router.navigateByUrl('home'),
+      next: async response => {
+        this.router.navigateByUrl('home');
+      },
       error: () => (this.request.done = true),
       complete: () => (this.request.done = true)
     });

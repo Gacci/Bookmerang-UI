@@ -13,6 +13,7 @@ import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 import { BookMarketService } from '../services/book-market.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'books-collection',
@@ -29,6 +30,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './books-collections.component.scss'
 })
 export class BooksCollectionsComponent extends InfiniteScrollView<any> {
+  private readonly auth = inject(AuthService);
+
   private readonly route = inject(ActivatedRoute);
 
   private readonly router = inject(Router);
@@ -37,16 +40,24 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
   private readonly loadingOverlayService = inject(LoadingOverlayService);
 
+  protected scope = <number>this.auth.getPrimarySearchScopeId();
+
   protected filter = new FormGroup({
     sorting: new FormControl('price:desc'),
-    institution: new FormControl(0)
+    scope: new FormControl(0)
   });
 
   ngOnInit(): void {
     this.pageNumber += 1;
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((params: any) => (this.params = { title: params.title }));
+      .subscribe((params: any) => {
+        console.log('BooksCollectionsComponent.ngOnInit', params);
+        this.params = {
+          scope: params.scope,
+          title: params.title
+        };
+      });
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
@@ -62,6 +73,7 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   }
 
   override async onScrollDown() {
+    console.log('BooksCollectionsComponent', this.params);
     if (this.isLoadingNext || !this.hasNextPage) {
       return;
     }
@@ -86,11 +98,11 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   override onScrollUp(): void {}
 
   protected onSubmit(e: Event) {
-    const { institution, sorting } = this.filter.value;
+    const { scope, sorting } = this.filter.value;
     this.router.navigate(['books', 'collections'], {
       queryParams: {
         title: this.params.title,
-        ...(institution ? { institution } : {}),
+        ...(scope ? { scope } : {}),
         ...(sorting ? { sorting } : {})
       }
     });

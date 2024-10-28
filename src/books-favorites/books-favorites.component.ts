@@ -29,11 +29,15 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
 
   private readonly loadingOverlayService = inject(LoadingOverlayService);
 
+  protected scope = <number>this.auth.getPrimarySearchScopeId();
+
   async ngOnInit() {
     this.pageNumber += 1;
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((params: any) => (this.params = { userId: this.auth.getUserId() }));
+      .subscribe(
+        (params: any) => (this.params = { userId: this.auth.getUserId() })
+      );
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
@@ -41,19 +45,19 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
 
     this.route.data
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(async (resolved: any) => {
+      .subscribe((resolved: any) => {
+        this.data = resolved.favorites;
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
       });
 
-      await this.onScrollDown();
+    await this.onScrollDown();
   }
 
   override async onScrollDown() {
-    console.log('searching ...', this.isLoadingNext, !this.hasNextPage);
-    // if (this.isLoadingNext || !this.hasNextPage) {
-    //   return;
-    // }
+    if (this.isLoadingNext || !this.hasNextPage) {
+      return;
+    }
 
     const params = {
       ...this.params,

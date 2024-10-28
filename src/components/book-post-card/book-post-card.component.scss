@@ -29,7 +29,7 @@
     @apply block;
   }
   .post-card-info {
-    @apply flex justify-between items-center p-4;
+    @apply flex justify-between items-center px-4 py-2;
 
     .post-card-info-left {
       @apply flex items-center space-x-2;

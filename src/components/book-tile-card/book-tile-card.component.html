@@ -2,7 +2,7 @@
   <a
     class="relative block aspect-2/3 w-1/2 overflow-hidden mx-auto my-4 rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 md:w-2/3 lg:w-1/2"
     [routerLink]="['/', 'books', 'markets']"
-    [queryParams]="{ isbn13: book.isbn13 }"
+    [queryParams]="{ scope, isbn13: book.isbn13 }"
   >
     <img
       class="absolute top-0 left-0 h-full w-full object-cover object-center group-hover:opacity-75"
@@ -12,7 +12,8 @@
   </a>
   <a
     class="mt-2 text-sm font-medium text-gray-900"
-    [routerLink]="['/', 'books', 'markets', book.isbn13]"
+    [routerLink]="['/', 'books', 'markets']"
+    [queryParams]="{ scope, isbn13: book.isbn13 }"
   >
     {{ book.title }} {{ book.subtitle }}
   </a>

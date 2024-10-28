@@ -66,6 +66,8 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
 
   protected recommendedSellingPriceRange: any = {};
 
+  protected scope = <number>this.auth.getPrimarySearchScopeId();
+
   protected payload = new FormGroup({
     price: new FormControl<number>(99, [
       Validators.required,

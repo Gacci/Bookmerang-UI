@@ -38,6 +38,8 @@ export class BooksInventoriesComponent
   extends InfiniteScrollView<any>
   implements OnDestroy
 {
+  private auth = inject(AuthService);
+
   private readonly route = inject(ActivatedRoute);
 
   private readonly bookMarketService = inject(BookMarketService);
@@ -47,6 +49,8 @@ export class BooksInventoriesComponent
   private readonly loadingOverlayService = inject(LoadingOverlayService);
 
   protected user!: any;
+
+  protected scope = <number>this.auth.getPrimarySearchScopeId();
 
   ngOnInit(): void {
     this.pageNumber += 1;

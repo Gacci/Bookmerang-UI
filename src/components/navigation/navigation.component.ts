@@ -43,6 +43,8 @@ export class NavigationComponent
 
   protected user!: any;
 
+  protected scope = this.auth.getPrimarySearchScopeId();
+
   ngOnInit(): void {
     this.isLoadingUser = true;
     this.auth.$jwt
@@ -91,9 +93,10 @@ export class NavigationComponent
         : undefined;
 
     if (json?.isValid) {
+      console.log('Searching by isbn');
       this.router
         .navigate(['books', 'markets'], {
-          queryParams: { isbn13: <string>json.isbn13 }
+          queryParams: { scope: this.scope, isbn13: <string>json.isbn13 }
         })
         .then(() => {
           this.lastHashedKeyword = '';
@@ -102,9 +105,10 @@ export class NavigationComponent
           console.log('Could not run search', error);
         });
     } else {
+      console.log('Searching by title or author');
       this.router
         .navigate(['books', 'collections'], {
-          queryParams: { title: value }
+          queryParams: { scope: this.scope, title: value }
         })
         .then(() => {
           this.lastHashedKeyword = '';

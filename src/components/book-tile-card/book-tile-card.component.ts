@@ -14,4 +14,7 @@ import { Unsubscribable } from '../../classes/unsubscribable';
 export class BookTileCardComponent extends Unsubscribable {
   @Input()
   book!: any;
+
+  @Input()
+  scope!: number;
 }

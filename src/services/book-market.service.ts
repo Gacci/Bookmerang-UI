@@ -54,13 +54,11 @@ export class BookMarketService {
       );
   }
 
-  metrics(isbn13: string) {
+  metrics(params: any) {
     return this.http.get('http://127.0.0.1:3000/books/markets/posts/metrics', {
-      params: { isbn13 }
+      params: { institutionId: params.scope, isbn13: params.isbn13 }
     });
   }
-
-
 
   collections(params: Data) {
     return this.http
@@ -73,9 +71,6 @@ export class BookMarketService {
         }))
       );
   }
-
-
-
 
   likeBookPost(body: Data) {
     return this.http.post(
@@ -91,7 +86,8 @@ export class BookMarketService {
   }
 
   favorites(params: Data) {
-    return this.http.get('http://127.0.0.1:3000/books/markets/favorites/search', { params })
+    return this.http
+      .get('http://127.0.0.1:3000/books/markets/favorites/search', { params })
       .pipe(
         map((response: any) => {
           console.log(response);

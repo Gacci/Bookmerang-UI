@@ -75,7 +75,7 @@ export class BooksMarketsComponent
   protected filters: FormGroup<any> = new FormGroup({
     tradeable: new FormControl('all'),
     sorting: new FormControl('price:desc'),
-    institution: new FormControl(0),
+    scope: new FormControl(0),
     state: new FormGroup({
       new: new FormControl(false),
       likeNew: new FormControl(false),
@@ -107,6 +107,7 @@ export class BooksMarketsComponent
       .subscribe(async (query: any) => {
         this.params = { ...query };
         const patch = {
+          ...(query.scope ? { scope: +query.scope } : {}),
           ...(query.state
             ? {
                 state: {
@@ -125,8 +126,7 @@ export class BooksMarketsComponent
             : { sorting: 'posted-on' }),
           ...(/^true|false$/.test(query.tradeable)
             ? { tradeable: JSON.parse(query.tradeable) }
-            : {}),
-          ...(query.institution ? { institution: +query.institution } : {})
+            : {})
         };
 
         this.filters.patchValue(patch);
@@ -152,10 +152,10 @@ export class BooksMarketsComponent
     }
 
     console.log('onScrollDown');
-    const { state, tradeable, sorting, institution } = this.params;
+    const { state, tradeable, sorting, scope } = this.params;
     const params = {
+      institutionId: scope,
       isbn13: ISBN.asIsbn13(this.params.isbn13),
-      ...(institution ? { institution } : {}),
       ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
       ...(['posted-on', 'review', 'price:asc', 'price:desc'].includes(sorting)
         ? { sorting }
@@ -191,7 +191,7 @@ export class BooksMarketsComponent
 
   protected onSubmit(e: Event) {
     console.log(this.filters.value);
-    const { state, tradeable, sorting, institution } = this.filters.value;
+    const { state, tradeable, sorting, scope } = this.filters.value;
     const encoded =
       (state.new ? 1 : 0) +
       (state.likeNew ? 2 : 0) +
@@ -202,7 +202,7 @@ export class BooksMarketsComponent
     this.router.navigate(['books', 'markets'], {
       queryParams: {
         isbn13: this.book.isbn13,
-        ...(institution ? { institution } : {}),
+        ...(scope ? { scope } : {}),
         ...(encoded ? { state: encoded } : {}),
         ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
         ...(sorting ? { sorting } : {})

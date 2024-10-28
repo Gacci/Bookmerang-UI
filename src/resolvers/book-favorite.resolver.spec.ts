@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { ResolveFn } from '@angular/router';
 
-import { institutionResolver } from './institution.resolver';
+import { bookFavoriteResolver } from './book-favorite.resolver';
 
-describe('institutionResolver', () => {
+describe('bookFavoriteResolver', () => {
   const executeResolver: ResolveFn<boolean> = (...resolverParameters) =>
     TestBed.runInInjectionContext(() =>
-      institutionResolver(...resolverParameters)
+      bookFavoriteResolver(...resolverParameters)
     );
 
   beforeEach(() => {

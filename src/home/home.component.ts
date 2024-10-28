@@ -41,6 +41,8 @@ export class HomeComponent extends InfiniteScrollView<Data> {
 
   protected survey: any = this.surveyService.getAcademicSurveyQuestion();
 
+  protected scope = <number>this.auth.getPrimarySearchScopeId();
+
   ngOnInit(): void {
     // this.pageNumber += 1;
     this.onScrollDown();
@@ -64,6 +66,7 @@ export class HomeComponent extends InfiniteScrollView<Data> {
 
     const params = {
       ...this.params,
+      institutionId: this.scope,
       pageNumber: this.pageNumber,
       pageSize: this.pageSize
     };

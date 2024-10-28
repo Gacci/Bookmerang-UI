@@ -75,6 +75,9 @@ export class BookPostCardComponent extends Unsubscribable implements OnDestroy {
   @Input()
   deletePostEnabled!: boolean;
 
+  @Input()
+  scope!: number;
+
   @Output() action: EventEmitter<BookPostEvent> =
     new EventEmitter<BookPostEvent>();
 

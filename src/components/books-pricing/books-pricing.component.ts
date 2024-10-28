@@ -44,6 +44,9 @@ export class BooksPricingComponent
   private cdr = inject(ChangeDetectorRef);
 
   @Input()
+  scope!: number;
+
+  @Input()
   isbn13!: string;
 
   @Output()
@@ -60,8 +63,9 @@ export class BooksPricingComponent
   protected loading: boolean = true;
 
   ngOnInit() {
+    console.log(this.scope, this.isbn13);
     this.bookMarketService
-      .metrics(ISBN.asIsbn13(this.isbn13))
+      .metrics({ scope: this.scope, isbn13: ISBN.asIsbn13(this.isbn13) })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((groups: any) => {
         this.groups = groups.map((group: any) => ({

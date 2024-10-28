@@ -13,8 +13,14 @@ import * as JWT from 'jwt-decode';
 
 const JWT_TOKEN = '__tcn';
 
+type UserRefInstitutions = {
+  userId: number;
+  institutionId: number;
+  primary: boolean;
+};
+
 type JwtPayloadPlus = JWT.JwtPayload & {
-  institutions: number[];
+  institutions: UserRefInstitutions[];
 };
 
 @Injectable({
@@ -31,7 +37,7 @@ export class AuthService {
     private readonly http: HttpClient,
     private cache: CacheService
   ) {
-    if ( !this.authTokenSubject.value ) {
+    if (!this.authTokenSubject.value) {
       this.authTokenSubject.next(
         this.getJwtTokenRaw()
           ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '')
@@ -45,26 +51,16 @@ export class AuthService {
   }
 
   login(payload: Credentials) {
-    return this.http.post('http://127.0.0.1:3000/auth/login', payload)
-      .pipe(
-        tap((response: Data) => {
-          this.storeJwtToken(response);
-          this.authTokenSubject.next(
-            this.getJwtTokenRaw()
-              ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '')
-              : null
-          );
-        }),
-        switchMap((login) => 
-          this.http.get(`http://127.0.0.1:3000/auth/institutions`)
-            .pipe(
-              tap((institutions) => this.institutions = <any[]>institutions),
-              map(() => login)
-            )
-        )
-      );
+    return this.http.post('http://127.0.0.1:3000/auth/login', payload).pipe(
+      tap((login: any) => {
+        localStorage.setItem(JWT_TOKEN, login.access_token);
+        this.authTokenSubject.next(
+          <JwtPayloadPlus>JWT.jwtDecode(login.access_token)
+        );
+      }),
+      switchMap(login => this.getUserInstitutions().pipe(map(() => login)))
+    );
   }
-  
 
   logout() {
     const token = this.getJwtTokenRaw();
@@ -80,9 +76,8 @@ export class AuthService {
       .delete(`http://127.0.0.1:3000/auth/tokens/revoke`, { body: { token } })
       .pipe(
         tap(() => {
-          this.removeJwtToken();
           this.authTokenSubject.next(null);
-          this.institutions = [];
+          localStorage.removeItem(JWT_TOKEN);
         })
       );
   }
@@ -121,7 +116,7 @@ export class AuthService {
       payload
     );
   }
-  
+
   verifyCreateAccountCode(payload: Data) {
     return this.http.post(
       'http://127.0.0.1:3000/auth/accounts/verify',
@@ -134,7 +129,11 @@ export class AuthService {
   }
 
   getUserInstitutions() {
-    return this.http.get(`http://127.0.0.1:3000/auth/institutions`);
+    return this.http.get<any[]>('http://127.0.0.1:3000/auth/institutions').pipe(
+      tap((institutions: any[]) => {
+        this.institutions = institutions;
+      })
+    );
   }
 
   updatePrimaryInstitution(institutionId: number) {
@@ -142,7 +141,7 @@ export class AuthService {
   }
 
   isAuthenticated() {
-    return ((this.authTokenSubject?.value?.exp || 0) * 1000) > Date.now();
+    return (this.authTokenSubject?.value?.exp || 0) * 1000 > Date.now();
   }
 
   getUserId() {
@@ -159,15 +158,12 @@ export class AuthService {
     return <JwtPayloadPlus>this.authTokenSubject.value;
   }
 
-  getPreferredSearchScope() {
-  return this.institutions.find(() => true);
-  }
+  getPrimarySearchScopeId() {
+    const { institutions } = this.authTokenSubject?.value ?? {};
+    if (institutions?.length) {
+      return institutions.find(() => true)?.institutionId;
+    }
 
-  private storeJwtToken(token: any) {
-    localStorage.setItem(JWT_TOKEN, token.access_token);
-  }
-
-  private removeJwtToken() {
-    localStorage.removeItem(JWT_TOKEN);
+    return null;
   }
 }

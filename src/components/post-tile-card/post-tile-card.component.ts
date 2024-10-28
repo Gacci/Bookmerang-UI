@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  inject,
+  Input,
+  Output
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { takeUntil } from 'rxjs';
@@ -12,7 +19,10 @@ import { DropdownDirective } from '../../directives/dropdown.directive';
 
 export enum ActionEvent {
   Edit = 1,
-  Delete = 2
+  Delete = 2,
+  Like = 3,
+  Details = 4,
+  Share = 5
 }
 
 export interface PostTileEvent {
@@ -31,6 +41,9 @@ export interface PostTileEvent {
   styleUrl: './post-tile-card.component.scss'
 })
 export class PostTileCardComponent extends Unsubscribable {
+  @HostBinding('class')
+  className = 'relative';
+
   @Input()
   set post(_post: any) {
     this._post = _post;
@@ -40,10 +53,16 @@ export class PostTileCardComponent extends Unsubscribable {
   }
 
   @Input()
+  deletePostEnabled!: boolean;
+
+  @Input()
   editPostEnabled!: boolean;
 
   @Input()
-  deletePostEnabled!: boolean;
+  likePostEnabled!: boolean;
+
+  @Input()
+  scope!: number;
 
   @Output()
   action: EventEmitter<PostTileEvent> = new EventEmitter<PostTileEvent>();
@@ -55,6 +74,8 @@ export class PostTileCardComponent extends Unsubscribable {
   protected isProcessingEdit!: boolean;
 
   protected isProcessingDelete!: boolean;
+
+  protected isProcessingLike!: boolean;
 
   protected isSelfOwned!: boolean;
 
@@ -108,5 +129,26 @@ export class PostTileCardComponent extends Unsubscribable {
           this.isProcessingDelete = false;
         }
       });
+  }
+
+  onToggleBookPostLike(event: Event) {
+    this.action.emit({
+      event,
+      post: { type: ActionEvent.Delete, data: this.post }
+    });
+  }
+
+  onShowBookPostDetails(event: Event) {
+    this.action.emit({
+      event,
+      post: { type: ActionEvent.Details, data: this.post }
+    });
+  }
+
+  onShareBookPost(event: Event) {
+    this.action.emit({
+      event,
+      post: { type: ActionEvent.Share, data: this.post }
+    });
   }
 }

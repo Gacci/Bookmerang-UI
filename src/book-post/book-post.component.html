@@ -68,6 +68,8 @@
     [formGroup]="payload"
     (ngSubmit)="onSubmit($event)"
   >
+    <div></div>
+
     <div>
       <label for="price" class="block text-gray-700 font-medium mb-2">
         Selling Price
@@ -108,7 +110,7 @@
     </div>
 
     <!-- State -->
-    <div class="mb-8">
+    <section class="my-8">
       <label class="block text-gray-700 font-medium mb-2">
         Overall Condition
       </label>
@@ -222,93 +224,104 @@
           </div>
         </li>
       </ul>
+    </section>
 
-      <!-- <p class="text-sm text-gray-500 mb-2">Select the general condition of the book.</p> -->
-    </div>
+    <section class="my-16">
+      <div class="flex flex-row bg-blue-100 px-8 py-8 my-4 rounded-md">
+        <p class="text-sm text-blue-500">
+          This section lets you further describe your book's condition to help buyers
+          understand its quality. Select options for binding, cover, pages, and
+          markings to give an accurate overview.
+        </p>
+      </div>
+      <div class="relative">
+        <!-- Binding -->
+        <div class="mb-8">
+          <label class="block text-gray-700 font-medium mb-2">
+            Binding Condition
+          </label>
+          <select class="select bg-white w-full" formControlName="binding">
+            <option disabled value="SELECT">-- Select ---</option>
+            <option value="INTACT">
+              Intact - Good condition, fully functional
+            </option>
+            <option value="BROKEN">
+              Broken - Damaged binding, difficult to keep together
+            </option>
+            <option value="WEAK">
+              Weak - Slightly loose but holds the pages together
+            </option>
+            <option value="DAMAGED">
+              Damaged - Noticeably weakened but intact
+            </option>
+          </select>
 
-    <!-- Binding -->
-    <div class="mb-8">
-      <label class="block text-gray-700 font-medium mb-2">
-        Binding Condition
-      </label>
-      <select class="select bg-white" formControlName="binding">
-        <option disabled value="SELECT">-- Select ---</option>
-        <option value="INTACT">
-          Intact - Good condition, fully functional
-        </option>
-        <option value="BROKEN">
-          Broken - Damaged binding, difficult to keep together
-        </option>
-        <option value="WEAK">
-          Weak - Slightly loose but holds the pages together
-        </option>
-        <option value="DAMAGED">
-          Damaged - Noticeably weakened but intact
-        </option>
-      </select>
+          <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the book’s binding.</p> -->
+        </div>
 
-      <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the book’s binding.</p> -->
-    </div>
+        <!-- Cover -->
+        <div class="mb-8">
+          <label class="block text-gray-700 font-medium mb-2">
+            Cover Condition
+          </label>
+          <select class="select bg-white w-full" formControlName="cover">
+            <option disabled value="SELECT">-- Select ---</option>
+            <option value="CREASED">Creased - Visible creases or folds</option>
+            <option value="CUT">Cut - Physically cut or torn cover</option>
+            <option value="DISCOLORED">
+              Discolored - Noticeable discoloration present
+            </option>
+            <option value="FADED">Faded - Colors have faded from wear</option>
+            <option value="INTACT">Intact - No significant issues</option>
+            <option value="RIPPED">Ripped - Tears or rips in the cover</option>
+            <option value="SCRATCHED">
+              Scratched - Visible scratches on the cover
+            </option>
+            <option value="STAINED">Stained - Visible stains or marks</option>
+          </select>
 
-    <!-- Cover -->
-    <div class="mb-8">
-      <label class="block text-gray-700 font-medium mb-2">
-        Cover Condition
-      </label>
-      <select class="select bg-white" formControlName="cover">
-        <option disabled value="SELECT">-- Select ---</option>
-        <option value="CREASED">Creased - Visible creases or folds</option>
-        <option value="CUT">Cut - Physically cut or torn cover</option>
-        <option value="DISCOLORED">
-          Discolored - Noticeable discoloration present
-        </option>
-        <option value="FADED">Faded - Colors have faded from wear</option>
-        <option value="INTACT">Intact - No significant issues</option>
-        <option value="RIPPED">Ripped - Tears or rips in the cover</option>
-        <option value="SCRATCHED">
-          Scratched - Visible scratches on the cover
-        </option>
-        <option value="STAINED">Stained - Visible stains or marks</option>
-      </select>
+          <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the book’s cover.</p> -->
+        </div>
 
-      <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the book’s cover.</p> -->
-    </div>
+        <!-- Pages -->
+        <div class="mb-8">
+          <label class="block text-gray-700 font-medium mb-2">
+            Pages Condition
+          </label>
+          <select class="select bg-white w-full" formControlName="pages">
+            <option disabled value="SELECT">-- Select ---</option>
+            <option value="CREASED">Creased - Pages have visible folds</option>
+            <option value="FOLDED">Folded - Some pages are bent</option>
+            <option value="INTACT">Intact - No significant damage</option>
+            <option value="TORN">Torn - Pages are ripped or torn</option>
+          </select>
 
-    <!-- Pages -->
-    <div class="mb-8">
-      <label class="block text-gray-700 font-medium mb-2">
-        Pages Condition
-      </label>
-      <select class="select bg-white" formControlName="pages">
-        <option disabled value="SELECT">-- Select ---</option>
-        <option value="CREASED">Creased - Pages have visible folds</option>
-        <option value="FOLDED">Folded - Some pages are bent</option>
-        <option value="INTACT">Intact - No significant damage</option>
-        <option value="TORN">Torn - Pages are ripped or torn</option>
-      </select>
+          <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the pages inside the book.</p> -->
+        </div>
 
-      <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the pages inside the book.</p> -->
-    </div>
+        <!-- Markings -->
+        <div class="mb-8">
+          <label class="block text-gray-700 font-medium mb-2">Markings</label>
+          <select class="select bg-white w-full" formControlName="markings">
+            <option disabled value="SELECT">-- Select ---</option>
+            <option value="HIGHLIGHTING">
+              Highlighting - Pages have been highlighted
+            </option>
+            <option value="MINIMAL">Minimal - Barely any markings</option>
+            <option value="NONE">None - No markings present</option>
+            <option value="PEN">Pen - Some pages have pen markings</option>
+            <option value="PENCIL">
+              Pencil - Some pages have pencil markings
+            </option>
+          </select>
 
-    <!-- Markings -->
-    <div class="mb-8">
-      <label class="block text-gray-700 font-medium mb-2">Markings</label>
-      <select class="select bg-white" formControlName="markings">
-        <option disabled value="SELECT">-- Select ---</option>
-        <option value="HIGHLIGHTING">
-          Highlighting - Pages have been highlighted
-        </option>
-        <option value="MINIMAL">Minimal - Barely any markings</option>
-        <option value="NONE">None - No markings present</option>
-        <option value="PEN">Pen - Some pages have pen markings</option>
-        <option value="PENCIL">Pencil - Some pages have pencil markings</option>
-      </select>
-
-      <!-- <p class="text-sm text-gray-500 mb-2">Select the type of markings found inside the book.</p> -->
-    </div>
+          <!-- <p class="text-sm text-gray-500 mb-2">Select the type of markings found inside the book.</p> -->
+        </div>
+      </div>
+    </section>
 
     <!-- Notes -->
-    <div class="mb-8">
+    <section class="my-16">
       <label class="block text-gray-700 font-medium mb-2" for="notes">
         Additional Notes
       </label>
@@ -320,9 +333,7 @@
         placeholder="Add notes here..."
         formControlName="notes"
       ></textarea>
-
-      <!-- <p class="text-gray-500 mb-2">Share any relevant details about the book's condition.</p> -->
-    </div>
+    </section>
 
     <!-- Media -->
     <div class="flex items-center justify-center w-full">
@@ -407,6 +418,7 @@
 >
   <books-pricing
     [isbn13]="book.isbn13"
+    [scope]="scope"
     (loaded)="onMetricsLoaded($event)"
   ></books-pricing>
 </div>

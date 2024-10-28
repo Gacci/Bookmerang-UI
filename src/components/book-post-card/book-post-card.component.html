@@ -9,6 +9,7 @@
         <a
           class="post-card-user-name"
           [routerLink]="['/', 'books', 'inventories', _post.userId]"
+          [queryParams]="{scope}"
         >
           {{ _post.user.firstName }} {{ _post.user.lastName }}
         </a>
@@ -23,14 +24,14 @@
     <div class="post-card-book">
       <a
         class="post-card-book-cover-box"
-        [queryParams]="{ isbn13: _post.book.isbn13 }"
         [routerLink]="['/', 'books', 'markets']"
+        [queryParams]="{ scope, isbn13: _post.book.isbn13 }"
       >
         <img class="post-card-book-cover" [src]="_post.book.thumbnail" />
       </a>
       <a
         class="post-card-book-title"
-        [queryParams]="{ isbn13: _post.book.isbn13 }"
+        [queryParams]="{ scope, isbn13: _post.book.isbn13 }"
         [routerLink]="['/', 'books', 'markets']"
       >
         {{ _post.book.title }} {{ _post.book.subtitle }}
@@ -109,7 +110,7 @@
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          class="w-5 h-5"
+          class="size-6"
           [ngClass]="{
             'text-slate-400': !_post.savedBookOfferId,
             'text-red-600': isProcessingLike || !!_post.savedBookOfferId,
@@ -127,26 +128,6 @@
     <div class="post-card-info-middle">
       <button
         type="button"
-        class="post-card-share"
-        (click)="onSharePost($event)"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="w-6 h-6 text-slate-400"
-        >
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M13.803 5.33333C13.803 3.49238 15.3022 2 17.1515 2C19.0008 2 20.5 3.49238 20.5 5.33333C20.5 7.17428 19.0008 8.66667 17.1515 8.66667C16.2177 8.66667 15.3738 8.28596 14.7671 7.67347L10.1317 10.8295C10.1745 11.0425 10.197 11.2625 10.197 11.4872C10.197 11.9322 10.109 12.3576 9.94959 12.7464L15.0323 16.0858C15.6092 15.6161 16.3473 15.3333 17.1515 15.3333C19.0008 15.3333 20.5 16.8257 20.5 18.6667C20.5 20.5076 19.0008 22 17.1515 22C15.3022 22 13.803 20.5076 13.803 18.6667C13.803 18.1845 13.9062 17.7255 14.0917 17.3111L9.05007 13.9987C8.46196 14.5098 7.6916 14.8205 6.84848 14.8205C4.99917 14.8205 3.5 13.3281 3.5 11.4872C3.5 9.64623 4.99917 8.15385 6.84848 8.15385C7.9119 8.15385 8.85853 8.64725 9.47145 9.41518L13.9639 6.35642C13.8594 6.03359 13.803 5.6896 13.803 5.33333Z"
-          />
-        </svg>
-      </button>
-    </div>
-    <div class="post-card-info-right">
-      <button
-        type="button"
         class="post-card-chat"
         [disabled]="!userChatEnabled"
         (click)="onMessageSeller($event)"
@@ -161,6 +142,26 @@
             fill-rule="evenodd"
             d="M12 2C6.477 2 2 5.943 2 10.5c0 1.962.805 3.8 2.21 5.26a11.673 11.673 0 0 1-1.626 2.775c-.325.434-.523.835-.573 1.192-.06.437.267.825.738.825.635 0 1.597-.27 2.793-.85C8.098 20.836 9.988 21.5 12 21.5c5.523 0 10-3.943 10-9S17.523 2 12 2ZM8 9.75A.75.75 0 0 1 8.75 9h6.5a.75.75 0 0 1 0 1.5h-6.5A.75.75 0 0 1 8 9.75Zm0 3a.75.75 0 0 1 .75-.75h6.5a.75.75 0 0 1 0 1.5h-6.5A.75.75 0 0 1 8 12.75Z"
             clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+    <div class="post-card-info-right">
+      <button
+        type="button"
+        class="post-card-share"
+        (click)="onSharePost($event)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-6 text-slate-400"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M13.803 5.33333C13.803 3.49238 15.3022 2 17.1515 2C19.0008 2 20.5 3.49238 20.5 5.33333C20.5 7.17428 19.0008 8.66667 17.1515 8.66667C16.2177 8.66667 15.3738 8.28596 14.7671 7.67347L10.1317 10.8295C10.1745 11.0425 10.197 11.2625 10.197 11.4872C10.197 11.9322 10.109 12.3576 9.94959 12.7464L15.0323 16.0858C15.6092 15.6161 16.3473 15.3333 17.1515 15.3333C19.0008 15.3333 20.5 16.8257 20.5 18.6667C20.5 20.5076 19.0008 22 17.1515 22C15.3022 22 13.803 20.5076 13.803 18.6667C13.803 18.1845 13.9062 17.7255 14.0917 17.3111L9.05007 13.9987C8.46196 14.5098 7.6916 14.8205 6.84848 14.8205C4.99917 14.8205 3.5 13.3281 3.5 11.4872C3.5 9.64623 4.99917 8.15385 6.84848 8.15385C7.9119 8.15385 8.85853 8.64725 9.47145 9.41518L13.9639 6.35642C13.8594 6.03359 13.803 5.6896 13.803 5.33333Z"
           />
         </svg>
       </button>

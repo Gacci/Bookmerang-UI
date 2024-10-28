@@ -11,10 +11,10 @@ import { SettingsComponent } from '../settings/settings.component';
 import { SignInComponent } from '../auth/sign-in/sign-in.component';
 import { SignUpComponent } from '../auth/sign-up/sign-up.component';
 
+import { booksCollectionResolver } from '../resolvers/books-collection.resolver';
+import { bookFavoriteResolver } from '../resolvers/book-favorite.resolver';
 import { bookMarketResolver } from '../resolvers/book-market.resolver';
 import { bookResolver } from '../resolvers/book.resolver';
-import { booksCollectionResolver } from '../resolvers/books-collection.resolver';
-import { institutionResolver } from '../resolvers/institution.resolver';
 import { inventoryResolver } from '../resolvers/inventory.resolver';
 import { userResolver } from '../resolvers/user.resolver';
 
@@ -22,8 +22,6 @@ import { bookExistsGuard } from '../guards/book-exists.guard';
 import { isLoggedGuard } from '../guards/is-logged.guard';
 import { isNotLoggedGuard } from '../guards/is-not-logged.guard';
 import { isISBNGuard } from '../guards/is-isbn.guard';
-
-
 
 export const routes: Routes = [
   {
@@ -75,7 +73,10 @@ export const routes: Routes = [
   {
     canActivate: [isLoggedGuard],
     component: BooksFavoritesComponent,
-    path: 'books/favorites/:userId'
+    path: 'books/favorites/:userId',
+    resolve: {
+      favorites: bookFavoriteResolver
+    }
   },
   {
     canActivate: [isLoggedGuard, isISBNGuard, bookExistsGuard],
@@ -84,7 +85,6 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'always',
     resolve: {
       book: bookResolver,
-      institutions: institutionResolver,
       posts: bookMarketResolver
     }
   },

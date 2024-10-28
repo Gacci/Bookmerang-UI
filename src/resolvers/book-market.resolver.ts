@@ -7,6 +7,7 @@ import * as ISBN from 'isbn3';
 export const bookMarketResolver: ResolveFn<any> = (route, state) => {
   const params: any = { ...route.params, ...route.queryParams };
   return inject(BookMarketService).search({
+    ...(params.scope ? { institutionId: params.scope } : {}),
     ...(params.isbn13 ? { isbn13: [ISBN.asIsbn13(params.isbn13)] } : {}),
     ...(/^true|false$/.test(params.tradeable)
       ? { tradeable: JSON.parse(params.tradeable) }
@@ -28,15 +29,4 @@ export const bookMarketResolver: ResolveFn<any> = (route, state) => {
       ? { sorting: params.sorting }
       : {})
   });
-
-  /*
-      ...(['posted-on', 'review', 'price:asc', 'price:desc'].includes(
-        params.sorting
-      )
-        ? (([sortBy, sortDir = 'desc']) => ({ sortBy, sortDir }))(
-              params.sorting.split(':')
-            )
-          
-        : {})
-*/
 };
