@@ -14,7 +14,7 @@ export const loadingOverlayInterceptor: HttpInterceptorFn = (req, next) => {
     // new RegExp('/books/collections/isbn/\\d{13}'),
     // new RegExp('/books/markets/metrics'),
     // new RegExp('/users/\\d+')
-    new RegExp('/books/markets/posts/favorites')
+    new RegExp('/books/markets/favorites')
   ];
 
   // Check if the request URL matches any of the excluded routes

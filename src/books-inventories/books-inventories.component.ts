@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute, Data, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { takeUntil } from 'rxjs';
 
@@ -12,7 +12,9 @@ import {
   BookPostCardComponent,
   BookPostEvent
 } from '../components/book-post-card/book-post-card.component';
+
 import { BookOfferEditSheetComponent } from '../components/book-offer-edit-sheet/book-offer-edit-sheet.component';
+import { PostTileCardComponent } from '../components/post-tile-card/post-tile-card.component';
 
 import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
@@ -25,24 +27,24 @@ import { LoadingOverlayService } from '../services/loading-overlay.service';
     CommonModule,
     BookPostCardComponent,
     BookOfferEditSheetComponent,
-    InfiniteScrollDirective
+    RouterModule,
+    InfiniteScrollDirective,
+    PostTileCardComponent
   ],
   templateUrl: './books-inventories.component.html',
   styleUrl: './books-inventories.component.scss'
 })
 export class BooksInventoriesComponent
-  extends InfiniteScrollView<Data>
+  extends InfiniteScrollView<any>
   implements OnDestroy
 {
-  private route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
-  private auth = inject(AuthService);
+  private readonly bookMarketService = inject(BookMarketService);
 
-  private bookMarketService = inject(BookMarketService);
+  private readonly ngDialogService = inject(DialogService);
 
-  private ngDialogService = inject(DialogService);
-
-  private loadingOverlayService = inject(LoadingOverlayService);
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
 
   protected user!: any;
 
@@ -62,10 +64,7 @@ export class BooksInventoriesComponent
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resolved: any) => {
         this.data = resolved.posts;
-        this.user = {
-          ...resolved.user,
-          ...(!resolved.user.joinedOn ? { joinedOn: new Date() } : {})
-        };
+        this.user = resolved.user;
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
       });

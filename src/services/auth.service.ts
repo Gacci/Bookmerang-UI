@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, delay, map, of, tap } from 'rxjs';
+import { BehaviorSubject, delay, map, of, switchMap, tap } from 'rxjs';
 import { Data } from '@angular/router';
 
 import { Credentials } from '../interfaces/credentials.interface';
@@ -13,33 +13,31 @@ import * as JWT from 'jwt-decode';
 
 const JWT_TOKEN = '__tcn';
 
+type JwtPayloadPlus = JWT.JwtPayload & {
+  institutions: number[];
+};
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private authTokenSubject = new BehaviorSubject<any>(false);
+  private authTokenSubject = new BehaviorSubject<JwtPayloadPlus | null>(null);
 
   public $jwt = this.authTokenSubject.asObservable();
 
-  private primarySearchScope!: number;
+  private institutions: any[] = [];
 
   constructor(
     private readonly http: HttpClient,
     private cache: CacheService
   ) {
-    // this.jwtRawToken = this.getJwtTokenRaw();
-    // this.jwtDecodedToken = this.getJwtToken();
-
-    this.authTokenSubject.next(
-      this.getJwtTokenRaw()
-        ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '')
-        : undefined
-    );
-
-    const { institutions } = this.getJwtToken();
-    this.primarySearchScope = institutions?.length === 1 ? institutions[0] : 0;
-
-    // console.log(this.jwtDecodedToken)
+    if ( !this.authTokenSubject.value ) {
+      this.authTokenSubject.next(
+        this.getJwtTokenRaw()
+          ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '')
+          : null
+      );
+    }
   }
 
   register(payload: Registration) {
@@ -47,17 +45,26 @@ export class AuthService {
   }
 
   login(payload: Credentials) {
-    return this.http.post('http://127.0.0.1:3000/auth/login', payload).pipe(
-      tap((response: Data) => {
-        this.storeJwtToken(response);
-        this.authTokenSubject.next(
-          this.getJwtTokenRaw()
-            ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '')
-            : undefined
-        );
-      })
-    );
+    return this.http.post('http://127.0.0.1:3000/auth/login', payload)
+      .pipe(
+        tap((response: Data) => {
+          this.storeJwtToken(response);
+          this.authTokenSubject.next(
+            this.getJwtTokenRaw()
+              ? JWT.jwtDecode(this.getJwtTokenRaw() ?? '')
+              : null
+          );
+        }),
+        switchMap((login) => 
+          this.http.get(`http://127.0.0.1:3000/auth/institutions`)
+            .pipe(
+              tap((institutions) => this.institutions = <any[]>institutions),
+              map(() => login)
+            )
+        )
+      );
   }
+  
 
   logout() {
     const token = this.getJwtTokenRaw();
@@ -75,6 +82,7 @@ export class AuthService {
         tap(() => {
           this.removeJwtToken();
           this.authTokenSubject.next(null);
+          this.institutions = [];
         })
       );
   }
@@ -113,6 +121,7 @@ export class AuthService {
       payload
     );
   }
+  
   verifyCreateAccountCode(payload: Data) {
     return this.http.post(
       'http://127.0.0.1:3000/auth/accounts/verify',
@@ -124,12 +133,22 @@ export class AuthService {
     return this.http.post('', {});
   }
 
+  getUserInstitutions() {
+    return this.http.get(`http://127.0.0.1:3000/auth/institutions`);
+  }
+
+  updatePrimaryInstitution(institutionId: number) {
+    // this.primarySearchScope = primarySearchScope;
+  }
+
   isAuthenticated() {
-    return 1000 * (this.authTokenSubject?.value?.exp || 0) > Date.now();
+    return ((this.authTokenSubject?.value?.exp || 0) * 1000) > Date.now();
   }
 
   getUserId() {
-    return this.authTokenSubject?.value?.sub;
+    return this.authTokenSubject?.value?.sub
+      ? +this.authTokenSubject.value.sub
+      : 0;
   }
 
   getJwtTokenRaw() {
@@ -137,15 +156,11 @@ export class AuthService {
   }
 
   getJwtToken() {
-    return this.authTokenSubject.value;
+    return <JwtPayloadPlus>this.authTokenSubject.value;
   }
 
   getPreferredSearchScope() {
-    return this.primarySearchScope;
-  }
-
-  setPreferredSearchScope(primarySearchScope: number) {
-    this.primarySearchScope = primarySearchScope;
+  return this.institutions.find(() => true);
   }
 
   private storeJwtToken(token: any) {

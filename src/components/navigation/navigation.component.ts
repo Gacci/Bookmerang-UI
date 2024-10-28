@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-
 import { finalize, of, switchMap, takeUntil, tap } from 'rxjs';
 
 import { AuthService } from '../../services/auth.service';
@@ -13,8 +12,6 @@ import { Unsubscribable } from '../../classes/unsubscribable';
 
 import * as Hash from 'crypto-hash';
 import * as ISBN from 'isbn3';
-import { DialogService } from '@ngneat/dialog';
-import { InstitutionsDialogComponent } from '../institutions-dialog/institutions-dialog.component';
 
 type SearchEvent = {
   type: 'isbn' | 'keyword';
@@ -37,8 +34,6 @@ export class NavigationComponent
   private auth = inject(AuthService);
 
   private users = inject(UserService);
-
-  private ngDialogService = inject(DialogService);
 
   private lastHashedKeyword!: string;
 
@@ -126,20 +121,6 @@ export class NavigationComponent
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(response => {
         this.router.navigateByUrl('/sign-in');
-      });
-  }
-
-  handleInstitutionsDialog() {
-    const bottomSheetRef = this.ngDialogService.open(
-      InstitutionsDialogComponent
-    );
-
-    bottomSheetRef.afterClosed$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(result => {
-        this.auth.setPreferredSearchScope(result);
-
-        console.log('User selected:', result);
       });
   }
 

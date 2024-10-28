@@ -1,29 +1,46 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { takeUntil } from 'rxjs';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
+import { BookTileCardComponent } from '../components/book-tile-card/book-tile-card.component';
+import { InstitutionsDropdownComponent } from '../components/institutions-dropdown/institutions-dropdown.component';
+
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
-import { BookCollectionService } from '../services/book-collection.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
-import { Subject, takeUntil } from 'rxjs';
 import { BookMarketService } from '../services/book-market.service';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-collection',
+  selector: 'books-collection',
   standalone: true,
-  imports: [CommonModule, RouterModule, InfiniteScrollDirective],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    InfiniteScrollDirective,
+    BookTileCardComponent,
+    InstitutionsDropdownComponent
+  ],
   templateUrl: './books-collections.component.html',
   styleUrl: './books-collections.component.scss'
 })
 export class BooksCollectionsComponent extends InfiniteScrollView<any> {
-  private route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
-  private bookMarketService = inject(BookMarketService);
+  private readonly router = inject(Router);
 
-  private loadingOverlayService = inject(LoadingOverlayService);
+  private readonly bookMarketService = inject(BookMarketService);
+
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
+
+  protected filter = new FormGroup({
+    sorting: new FormControl('price:desc'),
+    institution: new FormControl(0)
+  });
 
   ngOnInit(): void {
     this.pageNumber += 1;
@@ -67,6 +84,17 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   }
 
   override onScrollUp(): void {}
+
+  protected onSubmit(e: Event) {
+    const { institution, sorting } = this.filter.value;
+    this.router.navigate(['books', 'collections'], {
+      queryParams: {
+        title: this.params.title,
+        ...(institution ? { institution } : {}),
+        ...(sorting ? { sorting } : {})
+      }
+    });
+  }
 
   ngOnDestroy() {
     this.unsubscribe();

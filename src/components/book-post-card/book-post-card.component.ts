@@ -8,22 +8,19 @@ import {
   Output
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { takeUntil } from 'rxjs';
 
 import { ISBN13Pipe } from '../../pipes/isbn13.pipe';
 import { DropdownDirective } from '../../directives/dropdown.directive';
+
 import { BookMarketService } from '../../services/book-market.service';
 import { AuthService } from '../../services/auth.service';
 import { Unsubscribable } from '../../classes/unsubscribable';
-import { takeUntil } from 'rxjs';
 
 export enum ActionEvent {
   Chat = 1,
-  Edit = 2,
-  List = 3,
-  Like = 4,
-  Unlike = 5,
-  Delete = 6,
-  Message = 7
+  Like = 2,
+  Unlike = 3
 }
 
 export interface BookPostEvent {
@@ -45,8 +42,6 @@ export class BookPostCardComponent extends Unsubscribable implements OnDestroy {
   private readonly auth = inject(AuthService);
 
   private readonly bookMarketService = inject(BookMarketService);
-
-  private readonly ActionEvents = ActionEvent;
 
   protected _post!: any;
 
@@ -155,60 +150,10 @@ export class BookPostCardComponent extends Unsubscribable implements OnDestroy {
       });
   }
 
-  onEditBookPost(event: Event) {
-    if (this.isProcessingDelete || this.isProcessingEdit) {
-      return;
-    }
-
-    this.isProcessingEdit = true;
-    this.action.emit({
-      event,
-      post: { data: this.post, type: ActionEvent.Edit }
-    });
-
-    this.bookMarketService
-      .update(this.post)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (response: any) => {
-          this.isProcessingEdit = false;
-        },
-        error: (error: any) => {
-          console.error('Error deleting post:', error);
-          this.isProcessingEdit = false;
-        }
-      });
-  }
-
-  onDeleteBookPost(event: Event) {
-    if (this.isProcessingDelete || this.isProcessingEdit) {
-      return;
-    }
-
-    this.isProcessingDelete = true;
-    this.action.emit({
-      event,
-      post: { type: ActionEvent.Delete, data: this.post }
-    });
-
-    this.bookMarketService
-      .remove(this._post.bookOfferId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (response: any) => {
-          this.isProcessingDelete = false;
-        },
-        error: (error: any) => {
-          console.error('Error deleting post:', error);
-          this.isProcessingDelete = false;
-        }
-      });
-  }
-
   onMessageSeller(event: Event) {
     this.action.emit({
       event,
-      post: { type: ActionEvent.Message, data: this.post }
+      post: { type: ActionEvent.Chat, data: this.post }
     });
   }
 

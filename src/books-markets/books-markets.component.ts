@@ -24,6 +24,7 @@ import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 import * as ISBN from 'isbn3';
 import * as Hash from 'crypto-hash';
+import { InstitutionsDropdownComponent } from '../components/institutions-dropdown/institutions-dropdown.component';
 
 console.log(Hash);
 @Component({
@@ -31,15 +32,14 @@ console.log(Hash);
   standalone: true,
   imports: [
     CommonModule,
-
     BookPostCardComponent,
     BooksPricingComponent,
     ConfirmDialogComponent,
     ISBN13Pipe,
     ReactiveFormsModule,
     RouterModule,
-
-    InfiniteScrollDirective
+    InfiniteScrollDirective,
+    InstitutionsDropdownComponent
   ],
   templateUrl: './books-markets.component.html',
   styleUrl: './books-markets.component.scss'
@@ -75,6 +75,7 @@ export class BooksMarketsComponent
   protected filters: FormGroup<any> = new FormGroup({
     tradeable: new FormControl('all'),
     sorting: new FormControl('price:desc'),
+    institution: new FormControl(0),
     state: new FormGroup({
       new: new FormControl(false),
       likeNew: new FormControl(false),
@@ -124,7 +125,8 @@ export class BooksMarketsComponent
             : { sorting: 'posted-on' }),
           ...(/^true|false$/.test(query.tradeable)
             ? { tradeable: JSON.parse(query.tradeable) }
-            : {})
+            : {}),
+          ...(query.institution ? { institution: +query.institution } : {})
         };
 
         this.filters.patchValue(patch);
@@ -153,6 +155,7 @@ export class BooksMarketsComponent
     const { state, tradeable, sorting, institution } = this.params;
     const params = {
       isbn13: ISBN.asIsbn13(this.params.isbn13),
+      ...(institution ? { institution } : {}),
       ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
       ...(['posted-on', 'review', 'price:asc', 'price:desc'].includes(sorting)
         ? { sorting }
@@ -188,7 +191,7 @@ export class BooksMarketsComponent
 
   protected onSubmit(e: Event) {
     console.log(this.filters.value);
-    const { state, tradeable, sorting } = this.filters.value;
+    const { state, tradeable, sorting, institution } = this.filters.value;
     const encoded =
       (state.new ? 1 : 0) +
       (state.likeNew ? 2 : 0) +
@@ -199,6 +202,7 @@ export class BooksMarketsComponent
     this.router.navigate(['books', 'markets'], {
       queryParams: {
         isbn13: this.book.isbn13,
+        ...(institution ? { institution } : {}),
         ...(encoded ? { state: encoded } : {}),
         ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
         ...(sorting ? { sorting } : {})

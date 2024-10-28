@@ -60,18 +60,7 @@ export class BookMarketService {
     });
   }
 
-  likeBookPost(body: Data) {
-    return this.http.post(
-      'http://127.0.0.1:3000/books/markets/posts/favorites',
-      body
-    );
-  }
 
-  unlikeBookPost(bookOfferId: number) {
-    return this.http.delete(
-      `http://127.0.0.1:3000/books/markets/posts/favorites/${bookOfferId}`
-    );
-  }
 
   collections(params: Data) {
     return this.http
@@ -82,6 +71,35 @@ export class BookMarketService {
         map((response: any) => ({
           data: response.data.map((book: any) => this.books.populate(book))
         }))
+      );
+  }
+
+
+
+
+  likeBookPost(body: Data) {
+    return this.http.post(
+      'http://127.0.0.1:3000/books/markets/favorites',
+      body
+    );
+  }
+
+  unlikeBookPost(bookOfferId: number) {
+    return this.http.delete(
+      `http://127.0.0.1:3000/books/markets/favorites/${bookOfferId}`
+    );
+  }
+
+  favorites(params: Data) {
+    return this.http.get('http://127.0.0.1:3000/books/markets/favorites/search', { params })
+      .pipe(
+        map((response: any) => {
+          console.log(response);
+          return response.map((post: any) => ({
+            ...post,
+            book: this.books.populate(post.book)
+          }));
+        })
       );
   }
 }
