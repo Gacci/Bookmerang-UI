@@ -19,9 +19,10 @@ import { inventoryResolver } from '../resolvers/inventory.resolver';
 import { userResolver } from '../resolvers/user.resolver';
 
 import { bookExistsGuard } from '../guards/book-exists.guard';
+import { isCollegeEnrolledGuard } from '../guards/is-college-enrolled.guard';
+import { isISBNGuard } from '../guards/is-isbn.guard';
 import { isLoggedGuard } from '../guards/is-logged.guard';
 import { isNotLoggedGuard } from '../guards/is-not-logged.guard';
-import { isISBNGuard } from '../guards/is-isbn.guard';
 
 export const routes: Routes = [
   {
@@ -53,7 +54,7 @@ export const routes: Routes = [
     }
   },
   {
-    canActivate: [isLoggedGuard],
+    canActivate: [isLoggedGuard, isCollegeEnrolledGuard],
     component: BooksCollectionsComponent,
     path: 'books/collections',
     resolve: {
@@ -79,7 +80,12 @@ export const routes: Routes = [
     }
   },
   {
-    canActivate: [isLoggedGuard, isISBNGuard, bookExistsGuard],
+    canActivate: [
+      isLoggedGuard,
+      isISBNGuard,
+      bookExistsGuard,
+      isCollegeEnrolledGuard
+    ],
     component: BooksMarketsComponent,
     path: 'books/markets',
     runGuardsAndResolvers: 'always',
@@ -91,7 +97,7 @@ export const routes: Routes = [
   {
     canActivate: [isLoggedGuard, isISBNGuard, bookExistsGuard],
     component: BookPostComponent,
-    path: 'books/markets/:isbn13',
+    path: 'books/markets/advertise',
     resolve: {
       book: bookResolver
     }

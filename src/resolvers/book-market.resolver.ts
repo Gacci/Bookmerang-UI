@@ -5,7 +5,7 @@ import { inject } from '@angular/core';
 import * as ISBN from 'isbn3';
 
 export const bookMarketResolver: ResolveFn<any> = (route, state) => {
-  const params: any = { ...route.params, ...route.queryParams };
+  const params: any = route.queryParams;
   return inject(BookMarketService).search({
     ...(params.scope ? { institutionId: params.scope } : {}),
     ...(params.isbn13 ? { isbn13: [ISBN.asIsbn13(params.isbn13)] } : {}),

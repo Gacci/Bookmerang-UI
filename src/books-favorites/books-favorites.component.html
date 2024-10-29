@@ -15,7 +15,8 @@
       class="group text-center w-full md:border md:-ml-[1px] md:-mt-[1px] md:w-1/2 lg:w-1/3 xl:w-1/4"
       *ngFor="let post of data"
       [post]="post"
-      [scope]="scope"
+      [routerLink]="['/', 'books', 'markets']"
+      [queryParams]="{ scope: params.scope, isbn13: post.book.isbn13 }"
       [likePostEnabled]="true"
     ></post-tile-card>
   </div>

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntil } from 'rxjs';
+import { forkJoin, takeUntil } from 'rxjs';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
@@ -29,15 +29,15 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
 
   private readonly loadingOverlayService = inject(LoadingOverlayService);
 
-  protected scope = <number>this.auth.getPrimarySearchScopeId();
-
   async ngOnInit() {
     this.pageNumber += 1;
-    this.route.queryParams
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
-        (params: any) => (this.params = { userId: this.auth.getUserId() })
-      );
+
+    forkJoin([
+      this.route.params,
+      this.route.queryParams
+    ]).subscribe(([params, query]) => {
+      this.params = { userId: params['userId'], scope: query['scope'] }
+    })
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))

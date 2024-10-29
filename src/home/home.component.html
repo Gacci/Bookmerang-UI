@@ -19,5 +19,12 @@
     (selection)="onSurveySelection($event)"
   ></confirm-dialog>
 
-  <book-post-card *ngFor="let post of data" [post]="post" [scope]="scope"></book-post-card>
+  <book-post-card
+    *ngFor="let post of data"
+    [post]="post"
+    [userRouterLink]="['/', 'books', 'inventories', post.userId]"
+    [userQueryParams]="{}"
+    [routerLink]="['/', 'books', 'markets']"
+    [queryParams]="{ scope: params.scope, isbn13: post.book.isbn13 }"
+  ></book-post-card>
 </div>

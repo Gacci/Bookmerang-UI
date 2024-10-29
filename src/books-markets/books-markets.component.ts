@@ -152,15 +152,15 @@ export class BooksMarketsComponent
     }
 
     console.log('onScrollDown');
-    const { state, tradeable, sorting, scope } = this.params;
+    const { isbn13, state, tradeable, sorting, scope } = this.params;
     const params = {
       institutionId: scope,
-      isbn13: ISBN.asIsbn13(this.params.isbn13),
+      isbn13: ISBN.asIsbn13(isbn13),
       ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
       ...(['posted-on', 'review', 'price:asc', 'price:desc'].includes(sorting)
         ? { sorting }
         : {}),
-      ...(+state
+      ...(!isNaN(+state)
         ? {
             'state[]': [
               ...(!!(+state & (1 << 0)) ? ['NEW'] : []),
@@ -201,8 +201,8 @@ export class BooksMarketsComponent
 
     this.router.navigate(['books', 'markets'], {
       queryParams: {
+        scope: scope,
         isbn13: this.book.isbn13,
-        ...(scope ? { scope } : {}),
         ...(encoded ? { state: encoded } : {}),
         ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
         ...(sorting ? { sorting } : {})

@@ -62,7 +62,10 @@ export class PostTileCardComponent extends Unsubscribable {
   likePostEnabled!: boolean;
 
   @Input()
-  scope!: number;
+  routerLink!: string | string[];
+
+  @Input()
+  queryParams!: any;
 
   @Output()
   action: EventEmitter<PostTileEvent> = new EventEmitter<PostTileEvent>();

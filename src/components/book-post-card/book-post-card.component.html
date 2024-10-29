@@ -8,8 +8,8 @@
       <div class="post-card-titling">
         <a
           class="post-card-user-name"
-          [routerLink]="['/', 'books', 'inventories', _post.userId]"
-          [queryParams]="{scope}"
+          [routerLink]="userRouterLink"
+          [queryParams]="userQueryParams"
         >
           {{ _post.user.firstName }} {{ _post.user.lastName }}
         </a>
@@ -24,15 +24,15 @@
     <div class="post-card-book">
       <a
         class="post-card-book-cover-box"
-        [routerLink]="['/', 'books', 'markets']"
-        [queryParams]="{ scope, isbn13: _post.book.isbn13 }"
+        [routerLink]="routerLink"
+        [queryParams]="queryParams"
       >
         <img class="post-card-book-cover" [src]="_post.book.thumbnail" />
       </a>
       <a
         class="post-card-book-title"
-        [queryParams]="{ scope, isbn13: _post.book.isbn13 }"
-        [routerLink]="['/', 'books', 'markets']"
+        [queryParams]="queryParams"
+        [routerLink]="routerLink"
       >
         {{ _post.book.title }} {{ _post.book.subtitle }}
       </a>

@@ -5,7 +5,10 @@ import { BookCollectionService } from '../services/book-collection.service';
 
 import * as ISBN from 'isbn3';
 
+// type BookQuery = { isbn13: string };
+
 export const bookResolver: ResolveFn<any> = (route, state) => {
-  const params: any = { ...route.params, ...route.queryParams };
-  return inject(BookCollectionService).read(ISBN.asIsbn13(params.isbn13));
+  return inject(BookCollectionService).read(
+    ISBN.asIsbn13(route.queryParams['isbn13'])
+  );
 };

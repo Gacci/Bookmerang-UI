@@ -28,7 +28,7 @@ import { SurveyService } from '../services/survey.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent extends InfiniteScrollView<Data> {
+export class HomeComponent extends InfiniteScrollView<any> {
   private auth = inject(AuthService);
 
   private route = inject(ActivatedRoute);
@@ -41,10 +41,10 @@ export class HomeComponent extends InfiniteScrollView<Data> {
 
   protected survey: any = this.surveyService.getAcademicSurveyQuestion();
 
-  protected scope = <number>this.auth.getPrimarySearchScopeId();
-
   ngOnInit(): void {
     // this.pageNumber += 1;
+    this.params = { scope: <number>this.auth.getPrimarySearchScopeId() };
+
     this.onScrollDown();
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
@@ -66,7 +66,7 @@ export class HomeComponent extends InfiniteScrollView<Data> {
 
     const params = {
       ...this.params,
-      institutionId: this.scope,
+      institutionId: this.params.scope,
       pageNumber: this.pageNumber,
       pageSize: this.pageSize
     };
@@ -74,15 +74,10 @@ export class HomeComponent extends InfiniteScrollView<Data> {
     this.bookMarketService
       .search(params)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (data: any) => {
-          this.data = this.data.concat(data);
-          this.hasNextPage =
-            !!this.data.length && !(data.length % this.pageSize);
-          this.pageNumber += 1;
-        },
-        error: e => {},
-        complete: () => {}
+      .subscribe((data: any) => {
+        this.data = this.data.concat(data);
+        this.hasNextPage = !!this.data.length && !(data.length % this.pageSize);
+        this.pageNumber += 1;
       });
   }
 

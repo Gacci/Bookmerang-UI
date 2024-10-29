@@ -51,13 +51,7 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
     this.pageNumber += 1;
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((params: any) => {
-        console.log('BooksCollectionsComponent.ngOnInit', params);
-        this.params = {
-          scope: params.scope,
-          title: params.title
-        };
-      });
+      .subscribe(({ scope, title }) => (this.params = { scope, title }));
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
@@ -65,8 +59,8 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
     this.route.data
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((resolved: any) => {
-        this.data = resolved.books.data;
+      .subscribe(({ books }) => {
+        this.data = books.data;
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
       });

@@ -50,15 +50,11 @@ export class BooksInventoriesComponent
 
   protected user!: any;
 
-  protected scope = <number>this.auth.getPrimarySearchScopeId();
-
   ngOnInit(): void {
     this.pageNumber += 1;
     this.route.params
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((params: any) => {
-        this.params = { userId: params.userId };
-      });
+      .subscribe(({ userId }) => (this.params = { userId }));
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))

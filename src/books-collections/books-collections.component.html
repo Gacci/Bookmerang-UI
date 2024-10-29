@@ -47,7 +47,8 @@
         class="group text-center w-full p-8 md:border md:-ml-[1px] md:-mt-[1px] md:w-1/2 lg:w-1/3 xl:w-1/4 md:px-4"
         *ngFor="let book of data"
         [book]="book"
-        [scope]="params.scope"
+        [routerLink]="['/', 'books', 'markets']"
+        [queryParams]="{ scope: params.scope, isbn13: book.isbn13 }"
       ></book-tile-card>
     </div>
   </div>

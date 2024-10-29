@@ -171,8 +171,8 @@
         <div class="flex flex-col my-6">
           <a
             class="block w-full bg-blue-600 text-white text-center px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
-            [routerLink]="['/', 'books', 'markets', book.isbn13]"
-            [queryParams]="{ scope: params.scope }"
+            [routerLink]="['/', 'books', 'markets', 'advertise']"
+            [queryParams]="{ scope: params.scope, isbn13: book.isbn13 }"
           >
             Sell my copy
           </a>
@@ -538,7 +538,10 @@
     *ngFor="let post of data"
     (action)="onActionClicked($event)"
     [post]="post"
-    [scope]="params.scope"
+    [userRouterLink]="['/', 'books', 'inventories', post.userId]"
+    [userQueryParams]="{}"
+    [routerLink]="['/', 'books', 'markets']"
+    [queryParams]="{ scope: params.scope, isbn13: post.book.isbn13 }"
   ></book-post-card>
 </div>
 
