@@ -23,8 +23,8 @@
     *ngFor="let post of data"
     [post]="post"
     [userRouterLink]="['/', 'books', 'inventories', post.userId]"
-    [userQueryParams]="{}"
-    [routerLink]="['/', 'books', 'markets']"
-    [queryParams]="{ scope: params.scope, isbn13: post.book.isbn13 }"
+    [userQueryParams]="{ scope: params.scope }"
+    [link]="['/', 'books', 'markets']"
+    [query]="{ scope: params.scope, isbn13: post.book.isbn13 }"
   ></book-post-card>
 </div>

@@ -525,23 +525,23 @@
     </div>
   </div>
 
-  <confirm-dialog
+  <!-- <confirm-dialog
     *ngIf="!isLoadingNext"
     [title]="survey.title"
     [contentType]="survey.contentType"
     [content]="survey.question"
     [value]="survey.value"
     (selection)="onSurveySelection($event)"
-  ></confirm-dialog>
+  ></confirm-dialog> -->
 
   <book-post-card
     *ngFor="let post of data"
     (action)="onActionClicked($event)"
     [post]="post"
     [userRouterLink]="['/', 'books', 'inventories', post.userId]"
-    [userQueryParams]="{}"
-    [routerLink]="['/', 'books', 'markets']"
-    [queryParams]="{ scope: params.scope, isbn13: post.book.isbn13 }"
+    [userQueryParams]="{ scope: params.scope }"
+    [link]="['/', 'books', 'markets']"
+    [query]="{ scope: params.scope, isbn13: post.book.isbn13 }"
   ></book-post-card>
 </div>
 

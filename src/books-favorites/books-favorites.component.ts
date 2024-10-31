@@ -1,17 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin, takeUntil } from 'rxjs';
+import { combineLatest, takeUntil } from 'rxjs';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { PostTileCardComponent } from '../components/post-tile-card/post-tile-card.component';
 
+import { AuthService } from '../services/auth.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 import { BookMarketService } from '../services/book-market.service';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
-import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'books-favorites',
@@ -32,12 +32,15 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
   async ngOnInit() {
     this.pageNumber += 1;
 
-    forkJoin([
-      this.route.params,
-      this.route.queryParams
-    ]).subscribe(([params, query]) => {
-      this.params = { userId: params['userId'], scope: query['scope'] }
-    })
+    combineLatest([this.route.params, this.route.queryParams])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(([params, query]) => {
+        console.log('params:', params, 'query:', query);
+        this.params = {
+          scope: query['scope'],
+          userId: params['userId']
+        };
+      });
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))

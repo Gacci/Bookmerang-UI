@@ -16,8 +16,8 @@ export class BookTileCardComponent extends Unsubscribable {
   book!: any;
 
   @Input()
-  queryParams!: any;
+  query!: any;
 
   @Input()
-  routerLink!: string | string[];
+  link!: string | string[];
 }

@@ -1,10 +1,13 @@
 <div class="post-card">
   <div class="post-card-header">
     <div class="post-card-main">
-      <img
-        class="post-card-user-pic"
-        src="https://pictures.abebooks.com/isbn/9780745647791-us.jpg"
-      />
+      <a 
+        class="rounded-full"
+        [routerLink]="userRouterLink"
+        [queryParams]="userQueryParams"
+      >
+        <img class="post-card-user-pic" [src]="_post.user.profilePictureUrl" />
+      </a>
       <div class="post-card-titling">
         <a
           class="post-card-user-name"
@@ -24,15 +27,15 @@
     <div class="post-card-book">
       <a
         class="post-card-book-cover-box"
-        [routerLink]="routerLink"
-        [queryParams]="queryParams"
+        [routerLink]="link"
+        [queryParams]="query"
       >
         <img class="post-card-book-cover" [src]="_post.book.thumbnail" />
       </a>
       <a
         class="post-card-book-title"
-        [queryParams]="queryParams"
-        [routerLink]="routerLink"
+        [routerLink]="link"
+        [queryParams]="query"
       >
         {{ _post.book.title }} {{ _post.book.subtitle }}
       </a>

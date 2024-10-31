@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Data, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { takeUntil } from 'rxjs';
+import { combineLatest, forkJoin, takeUntil } from 'rxjs';
 
 import { DialogService } from '@ngneat/dialog';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
@@ -51,10 +51,17 @@ export class BooksInventoriesComponent
   protected user!: any;
 
   ngOnInit(): void {
+    console.log('ngOnInit');
     this.pageNumber += 1;
-    this.route.params
+    combineLatest([this.route.params, this.route.queryParams])
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(({ userId }) => (this.params = { userId }));
+      .subscribe(([params, query]) => {
+        console.log('params:', params, 'query:', query);
+        this.params = {
+          institutionId: query['scope'],
+          userId: params['userId']
+        };
+      });
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))

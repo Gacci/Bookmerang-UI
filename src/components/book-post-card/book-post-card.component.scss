@@ -14,7 +14,7 @@
     @apply px-4 py-2;
   }
   .post-card-user-pic {
-    @apply w-11 h-11 rounded-full;
+    @apply block w-11 h-11 rounded-full;
   }
   .post-card-user-name {
     @apply font-bold text-gray-700 text-ellipsis whitespace-nowrap overflow-hidden;
@@ -52,7 +52,7 @@
     }
   }
   .post-card-book-cover-box {
-    @apply w-64 mx-auto relative block z-0 aspect-2/3;
+    @apply block w-64 mx-auto relative aspect-2/3 z-0;
 
     .post-card-book-cover {
       @apply absolute top-0 left-0 w-full h-full;

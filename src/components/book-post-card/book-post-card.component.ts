@@ -76,10 +76,10 @@ export class BookPostCardComponent extends Unsubscribable implements OnDestroy {
   deletePostEnabled!: boolean;
 
   @Input()
-  routerLink!: string | string[];
+  link!: string | string[];
 
   @Input()
-  queryParams!: any;
+  query!: any;
 
   @Input()
   userRouterLink!: string | string[];
@@ -98,9 +98,9 @@ export class BookPostCardComponent extends Unsubscribable implements OnDestroy {
 
   async onLikeBookPost(event: Event) {
     if (
+      this.isProcessingEdit ||
       this._post.savedBookOfferId ||
-      this.isProcessingDelete ||
-      this.isProcessingEdit
+      this.isProcessingDelete
     ) {
       return;
     }
@@ -171,11 +171,11 @@ export class BookPostCardComponent extends Unsubscribable implements OnDestroy {
 
   onSharePost(event: Event) {}
 
-  ngOnDestroy(): void {
-    this.unsubscribe();
-  }
-
   async pause(timeout: number) {
     await new Promise(resolve => setTimeout(resolve, timeout));
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe();
   }
 }
