@@ -92,7 +92,7 @@ export class PostTileCardComponent extends Unsubscribable {
     this.isProcessingEdit = true;
     this.action.emit({
       event,
-      post: { data: this.post, type: ActionEvent.Edit }
+      post: { type: ActionEvent.Edit, data: this._post }
     });
 
     this.bookMarketService
@@ -117,7 +117,7 @@ export class PostTileCardComponent extends Unsubscribable {
     this.isProcessingDelete = true;
     this.action.emit({
       event,
-      post: { type: ActionEvent.Delete, data: this.post }
+      post: { type: ActionEvent.Delete, data: this._post }
     });
 
     this.bookMarketService
@@ -137,21 +137,21 @@ export class PostTileCardComponent extends Unsubscribable {
   onToggleBookPostLike(event: Event) {
     this.action.emit({
       event,
-      post: { type: ActionEvent.Delete, data: this.post }
+      post: { type: ActionEvent.Delete, data: this._post }
     });
   }
 
   onShowBookPostDetails(event: Event) {
     this.action.emit({
       event,
-      post: { type: ActionEvent.Details, data: this.post }
+      post: { type: ActionEvent.Details, data: this._post }
     });
   }
 
   onShareBookPost(event: Event) {
     this.action.emit({
       event,
-      post: { type: ActionEvent.Share, data: this.post }
+      post: { type: ActionEvent.Share, data: this._post }
     });
   }
 }

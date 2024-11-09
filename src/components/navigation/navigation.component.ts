@@ -92,6 +92,8 @@ export class NavigationComponent
         ? ISBN.parse(value)
         : undefined;
 
+
+    this.scope = this.scope ?? this.auth.getPrimarySearchScopeId();
     if (json?.isValid) {
       console.log('Searching by isbn');
       this.router

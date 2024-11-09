@@ -5,7 +5,7 @@ import { combineLatest, takeUntil } from 'rxjs';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
-import { PostTileCardComponent } from '../components/post-tile-card/post-tile-card.component';
+import { PostTileCardComponent, PostTileEvent } from '../components/post-tile-card/post-tile-card.component';
 
 import { AuthService } from '../services/auth.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
@@ -37,8 +37,8 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
       .subscribe(([params, query]) => {
         console.log('params:', params, 'query:', query);
         this.params = {
-          scope: query['scope'],
-          userId: params['userId']
+          scope: +query['scope'],
+          userId: +params['userId']
         };
       });
 
@@ -80,6 +80,10 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
   }
   override onScrollUp(): void {
     throw new Error('Method not implemented.');
+  }
+
+  onActionClicked(event: PostTileEvent) {
+    console.log(event);
   }
 
   ngOnDestroy() {

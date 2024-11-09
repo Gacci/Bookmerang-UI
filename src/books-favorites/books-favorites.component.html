@@ -18,6 +18,7 @@
       [link]="['/', 'books', 'markets']"
       [query]="{ scope: params.scope, isbn13: post.book.isbn13 }"
       [likePostEnabled]="true"
+      (action)="onActionClicked($event)"
     ></post-tile-card>
   </div>
 </div>
