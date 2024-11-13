@@ -10,6 +10,6 @@ export const booksCollectionResolver: ResolveFn<any> = (route, state) => {
   return inject(BookMarketService).collections({
     institutionId: params.scope,
     ...(params.isbn13 ? { isbn13: ISBN.asIsbn13(params.isbn13) } : {}),
-    ...(params.title ? { title: params.title } : {})
+    ...(params.keyword ? { keyword: params.keyword } : {})
   });
 };

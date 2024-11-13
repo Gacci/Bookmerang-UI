@@ -1,22 +1,18 @@
 import { Component, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { combineLatest, forkJoin, takeUntil } from 'rxjs';
+import { combineLatest, takeUntil } from 'rxjs';
 
 import { DialogService } from '@ngneat/dialog';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
-import {
-  BookPostCardComponent,
-  BookPostEvent
-} from '../components/book-post-card/book-post-card.component';
+import { BookPostEvent } from '../components/book-post-card/book-post-card.component';
 
 import { BookOfferEditSheetComponent } from '../components/book-offer-edit-sheet/book-offer-edit-sheet.component';
 import { PostTileCardComponent } from '../components/post-tile-card/post-tile-card.component';
 
-import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 
@@ -25,8 +21,6 @@ import { LoadingOverlayService } from '../services/loading-overlay.service';
   standalone: true,
   imports: [
     CommonModule,
-    BookPostCardComponent,
-    BookOfferEditSheetComponent,
     RouterModule,
     InfiniteScrollDirective,
     PostTileCardComponent
@@ -38,8 +32,6 @@ export class BooksInventoriesComponent
   extends InfiniteScrollView<any>
   implements OnDestroy
 {
-  private auth = inject(AuthService);
-
   private readonly route = inject(ActivatedRoute);
 
   private readonly bookMarketService = inject(BookMarketService);

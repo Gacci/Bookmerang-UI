@@ -5,9 +5,11 @@ import { combineLatest, takeUntil } from 'rxjs';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
-import { PostTileCardComponent, PostTileEvent } from '../components/post-tile-card/post-tile-card.component';
+import {
+  PostTileCardComponent,
+  PostTileEvent
+} from '../components/post-tile-card/post-tile-card.component';
 
-import { AuthService } from '../services/auth.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 import { BookMarketService } from '../services/book-market.service';
 
@@ -21,8 +23,6 @@ import { InfiniteScrollView } from '../classes/infinite-scroll-view';
   styleUrl: './books-favorites.component.scss'
 })
 export class BooksFavoritesComponent extends InfiniteScrollView<any> {
-  private auth = inject(AuthService);
-
   private readonly route = inject(ActivatedRoute);
 
   private readonly bookMarketService = inject(BookMarketService);

@@ -7,6 +7,7 @@ import { inject } from '@angular/core';
 import { throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 export const jwtAuthInterceptor: HttpInterceptorFn = (
   request: HttpRequest<unknown>,
@@ -37,9 +38,12 @@ export const jwtAuthInterceptor: HttpInterceptorFn = (
             return next(request);
           }),
           catchError(err => {
-            // Handle refresh token failure (e.g., logout)
-            service.logout();
-            return throwError(err); // Adjusted to throwError(err)
+            service.logout().subscribe({
+              next: () => inject(Router).createUrlTree(['/login']),
+              error: () => inject(Router).createUrlTree(['/login'])
+            });
+
+            return throwError(() => err);
           })
         );
       }

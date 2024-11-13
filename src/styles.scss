@@ -6,9 +6,13 @@
 
 
 @import 'swiper/scss';
-@import "swiper/scss/effect-fade";
+@import 'swiper/scss/effect-fade';
 @import 'swiper/scss/navigation';
 @import 'swiper/scss/pagination';
+
+
+@import 'tippy.js/dist/tippy.css';
+@import 'tippy.js/themes/light.css';
 
 
 @import '@ngneat/hot-toast/src/styles/styles.scss';
@@ -37,20 +41,20 @@ a, .a-like {
   &:hover {
       @apply underline shadow-none;
   }
-
   &:focus {
     @apply outline-1 outline-offset-2 outline-solid outline-blue-500 rounded-sm;
   }
-
   &.mini {
     @apply text-sm;
   }
-
   &.muted {
     @apply text-gray-500;
   }
   &.muted:hover {
     @apply text-blue-600;
+  }
+  &.btn{
+    @apply h-12 text-center leading-12;
   }
 }
 

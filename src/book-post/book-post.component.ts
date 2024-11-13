@@ -2,6 +2,7 @@ import { Component, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
+  FormArray,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -10,7 +11,6 @@ import {
 
 import { takeUntil } from 'rxjs';
 
-import { NavigationComponent } from '../components/navigation/navigation.component';
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 import { StringService } from '../services/string.service';
 
@@ -23,6 +23,7 @@ import { AuthService } from '../services/auth.service';
 import { Unsubscribable } from '../classes/unsubscribable';
 
 import { ISBN13Pipe } from '../pipes/isbn13.pipe';
+import { NgxTippyModule } from 'ngx-tippy-wrapper';
 
 type FileBox = {
   base64: string;
@@ -36,27 +37,28 @@ type FileBox = {
   selector: 'book-post',
   standalone: true,
   imports: [
-    BooksPricingComponent,
     CommonModule,
-    ISBN13Pipe,
-    NavigationComponent,
+    NgxTippyModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+
+    BooksPricingComponent,
+    ISBN13Pipe
   ],
   templateUrl: './book-post.component.html',
   styleUrl: './book-post.component.scss'
 })
 export class BookPostComponent extends Unsubscribable implements OnDestroy {
-  private route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
-  private auth = inject(AuthService);
+  private readonly auth = inject(AuthService);
 
-  private bookMarketService = inject(BookMarketService);
+  private readonly bookMarketService = inject(BookMarketService);
 
-  private bookValuator = inject(BookValuatorService);
+  private readonly bookValuator = inject(BookValuatorService);
 
-  // private imageManagerService: ImageManagerService,
-  private strings = inject(StringService);
+  // private readonly imageManagerService: ImageManagerService,
+  private readonly strings = inject(StringService);
 
   private pricings: { [key: string]: string }[] = [];
 
@@ -68,25 +70,48 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
 
   protected scope = <number>this.auth.getPrimarySearchScopeId();
 
-  protected payload = new FormGroup({
-    price: new FormControl<number>(99, [
-      Validators.required,
-      Validators.min(1)
-    ]),
-    state: new FormControl('LIKE_NEW', [Validators.required]),
-    tradeable: new FormControl<boolean>(false),
-    binding: new FormControl('INTACT', [
-      selectionValidator({ not: ['SELECT'] })
-    ]),
-    cover: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
-    pages: new FormControl('INTACT', [selectionValidator({ not: ['SELECT'] })]),
-    markings: new FormControl('NONE', [
-      selectionValidator({ not: ['SELECT'] })
-    ]),
-    notes: new FormControl(null, [Validators.required]),
-    images: new FormControl(null, [Validators.min(1)]),
-    isbn13: new FormControl(null)
-  });
+  protected institutions: any[] = [];
+
+  protected payload = new FormGroup(
+    {
+      scope: new FormArray([]),
+      price: new FormControl<number>(99, [
+        Validators.required,
+        Validators.min(1)
+      ]),
+      state: new FormControl('LIKE_NEW', [Validators.required]),
+      tradeable: new FormControl<boolean>(false),
+      binding: new FormControl('INTACT', [
+        selectionValidator({ not: ['SELECT'] })
+      ]),
+      cover: new FormControl('INTACT', [
+        selectionValidator({ not: ['SELECT'] })
+      ]),
+      pages: new FormControl('INTACT', [
+        selectionValidator({ not: ['SELECT'] })
+      ]),
+      markings: new FormControl('NONE', [
+        selectionValidator({ not: ['SELECT'] })
+      ]),
+      notes: new FormControl(null, [Validators.required]),
+      images: new FormControl(null, [Validators.min(1)]),
+      isbn13: new FormControl(null)
+    },
+    {
+      updateOn: 'submit'
+    }
+  );
+
+  protected readonly tooltip = {
+    price:
+      "Use the pricing summary and your book's condition to help determine the optimal price for your book.",
+    scope:
+      'This will determine the "scope" of your post\'s visibility. Your post will be visible on the campuses you select.',
+    notes:
+      "Add any extra details about your book's charm! Mention highlights, unique features, or quirks—anything that might give it an edge in the buyer's eyes.",
+    state:
+      'The condition that best matches your book’s current state. Use the descriptions to find the closest fit for accurate pricing and buyer expectations.'
+  };
 
   ngOnInit(): void {
     this.route.data
@@ -103,6 +128,18 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
       .subscribe((value: any) => {
         console.log(value);
         this.updateRecommendedSellingPrice(value);
+      });
+
+    this.auth
+      .getUserInstitutions()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((institutions: any[]) => {
+        this.institutions = institutions;
+
+        const scope = <FormArray>this.payload.get('scope');
+        institutions.forEach((institution: any) =>
+          scope.push(new FormControl(institution.institutionId))
+        );
       });
   }
 
@@ -140,9 +177,13 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
   }
 
   onSubmit(e: Event) {
-    const { images, ...data } = this.payload.value;
+    const { images, scope, ...data } = this.payload.value;
+    console.log(data);
+    if (this.payload.invalid) {
+      return;
+    }
 
-    // const token = this.auth.getJwtToken();
+    // const { images, scope, ...data } = this.payload.value;
     this.bookMarketService
       .create(data)
       .pipe(takeUntil(this.unsubscribe$))

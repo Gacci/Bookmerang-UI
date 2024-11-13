@@ -1,26 +1,23 @@
 import { CommonModule } from '@angular/common';
 import {
+  CUSTOM_ELEMENTS_SCHEMA,
   Component,
   EventEmitter,
   Input,
+  inject,
+  OnDestroy,
+  OnChanges,
   OnInit,
   Output,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ViewChild,
-  ElementRef,
-  ChangeDetectorRef,
-  OnDestroy,
-  inject
+  SimpleChanges
 } from '@angular/core';
+import { takeUntil } from 'rxjs';
 
 import { BookMarketService } from '../../services/book-market.service';
 
-import { Swiper, SwiperOptions } from 'swiper/types';
-import { SwiperContainer } from 'swiper/element';
+import { Unsubscribable } from '../../classes/unsubscribable';
 
 import * as ISBN from 'isbn3';
-import { Subject, takeUntil } from 'rxjs';
-import { Unsubscribable } from '../../classes/unsubscribable';
 
 @Component({
   selector: 'books-pricing',
@@ -32,16 +29,9 @@ import { Unsubscribable } from '../../classes/unsubscribable';
 })
 export class BooksPricingComponent
   extends Unsubscribable
-  implements OnInit, OnDestroy
+  implements OnInit, OnChanges, OnDestroy
 {
-  @ViewChild('swiper', { read: ElementRef<SwiperContainer> })
-  private swiperRefElem!: ElementRef<SwiperContainer>;
-
-  private swiper!: Swiper;
-
   private bookMarketService = inject(BookMarketService);
-
-  private cdr = inject(ChangeDetectorRef);
 
   @Input()
   scope!: number;
@@ -52,67 +42,77 @@ export class BooksPricingComponent
   @Output()
   protected loaded: EventEmitter<any> = new EventEmitter<any>();
 
-  protected groups: any = {};
-
-  protected selectedSlideObject: any = {};
-
-  protected config: SwiperOptions = {
-    autoHeight: true
-  };
-
   protected loading: boolean = true;
 
+  protected data!: any;
+
   ngOnInit() {
-    console.log(this.scope, this.isbn13);
+    this.load();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['scope'] || changes['isbn13']) {
+      this.load();
+    }
+  }
+
+  private load() {
+    this.loading = true;
     this.bookMarketService
       .metrics({ scope: this.scope, isbn13: ISBN.asIsbn13(this.isbn13) })
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((groups: any) => {
-        this.groups = groups.map((group: any) => ({
-          ...group,
-          tradeables: group.metrics.reduce(
-            (sum: number, metrics: any) => (sum += metrics.tradeable),
-            0
-          ),
-          metrics: group.metrics.map((metric: any) => ({
+      .subscribe(([data = {}]) => {
+        const minPrice = Math.min(
+          ...data.metrics
+            ?.filter((metric: any) => !!metric.total)
+            .map((metric: any) => metric.minPrice)
+        );
+        const maxPrice = Math.max(
+          ...data.metrics
+            ?.filter((metric: any) => !!metric.total)
+            .map((metric: any) => metric.maxPrice)
+        );
+        const total = data.metrics?.reduce(
+          (sum: number, metric: any) => sum + metric.total,
+          0
+        );
+        const tradeables = data.metrics?.reduce(
+          (sum: number, metric: any) => sum + metric.tradeable,
+          0
+        );
+
+        this.data = {
+          ...data,
+          ...(total ? { range: this.getPriceRange(minPrice, maxPrice) } : {}),
+          minPrice,
+          maxPrice,
+          total,
+          tradeables,
+          metrics: data.metrics?.map((metric: any) => ({
             ...metric,
             ...(metric.total
-              ? metric.minPrice !== metric.maxPrice
-                ? {
-                    range:
-                      'from $' +
-                      [
-                        ...(metric.minPrice
-                          ? [metric.minPrice.toFixed(2)]
-                          : []),
-                        ...(metric.maxPrice ? [metric.maxPrice.toFixed(2)] : [])
-                      ].join(' to $')
-                  }
-                : { range: 'from $' + metric.minPrice }
+              ? {
+                  range: this.getPriceRange(metric.minPrice, metric.maxPrice)
+                }
               : {}),
             state: metric.state.replace('_', ' ')
           }))
-        }));
+        };
 
         this.loading = false;
-        this.loaded.emit(groups);
-
-        this.cdr.detectChanges();
-        this.selectedSlideObject = this.groups.find(() => true);
-
-        if (!this.swiperRefElem) {
-          return;
-        }
-
-        this.swiper = <Swiper>(
-          (<unknown>this.swiperRefElem.nativeElement.swiper)
-        );
-
-        this.swiper.on('slideChange', (swiper: Swiper) => {
-          this.selectedSlideObject = this.groups[swiper.activeIndex];
-          this.cdr.detectChanges();
-        });
+        this.loaded.emit(data);
+        console.log(minPrice, maxPrice, this.data);
       });
+  }
+
+  private getPriceRange(minPrice: number, maxPrice: number) {
+    return minPrice !== maxPrice
+      ? 'from $' +
+          [
+            ...(minPrice ? [minPrice.toFixed(2)] : []),
+            ...(maxPrice ? [maxPrice.toFixed(2)] : [])
+          ].join(' - $')
+      : 'from $' + minPrice;
   }
 
   ngOnDestroy() {

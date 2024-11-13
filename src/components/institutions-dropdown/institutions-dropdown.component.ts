@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, inject, OnInit } from '@angular/core';
+import { Component, forwardRef, inject, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { forkJoin, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 import { Unsubscribable } from '../../classes/unsubscribable';
 import { AuthService } from '../../services/auth.service';
-import { InstitutionService } from '../../services/institution.service';
 
 @Component({
   selector: 'institutions-dropdown',
@@ -25,13 +24,14 @@ export class InstitutionsDropdownComponent
   extends Unsubscribable
   implements OnInit, ControlValueAccessor
 {
+  @Input()
+  value!: number;
+
   private readonly auth = inject(AuthService);
-  private readonly service = inject(InstitutionService);
 
   protected institutions: any[] = [];
   protected isLoading!: boolean;
 
-  value!: number; // Holds the selected institution ID
   onChange = (value: any) => {};
   onTouched = () => {};
 
@@ -60,7 +60,8 @@ export class InstitutionsDropdownComponent
 
   onSelectInstitution(event: Event) {
     const target = event.target as HTMLSelectElement;
-    this.value = parseInt(target.value, 10);
+    this.value = +target.value;
+    console.log(this.value);
     this.onChange(this.value);
     this.onTouched();
   }

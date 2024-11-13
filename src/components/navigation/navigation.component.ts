@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { finalize, of, switchMap, takeUntil, tap } from 'rxjs';
+import { finalize, of, switchMap, takeUntil } from 'rxjs';
+
+import { NgxTippyModule } from 'ngx-tippy-wrapper';
 
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
@@ -21,7 +23,7 @@ type SearchEvent = {
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule, DropdownDirective, RouterModule],
+  imports: [CommonModule, DropdownDirective, NgxTippyModule, RouterModule],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss'
 })
@@ -92,7 +94,6 @@ export class NavigationComponent
         ? ISBN.parse(value)
         : undefined;
 
-
     this.scope = this.scope ?? this.auth.getPrimarySearchScopeId();
     if (json?.isValid) {
       console.log('Searching by isbn');
@@ -100,24 +101,16 @@ export class NavigationComponent
         .navigate(['books', 'markets'], {
           queryParams: { scope: this.scope, isbn13: <string>json.isbn13 }
         })
-        .then(() => {
-          this.lastHashedKeyword = '';
-        })
-        .catch(error => {
-          console.log('Could not run search', error);
-        });
+        .then(() => (this.lastHashedKeyword = ''))
+        .catch(() => (this.lastHashedKeyword = ''));
     } else {
       console.log('Searching by title or author');
       this.router
         .navigate(['books', 'collections'], {
-          queryParams: { scope: this.scope, title: value }
+          queryParams: { scope: this.scope, keyword: value }
         })
-        .then(() => {
-          this.lastHashedKeyword = '';
-        })
-        .catch(() => {
-          this.lastHashedKeyword = '';
-        });
+        .then(() => (this.lastHashedKeyword = ''))
+        .catch(() => (this.lastHashedKeyword = ''));
     }
   }
 

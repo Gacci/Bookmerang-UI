@@ -2,7 +2,7 @@
   class="collection"
   infiniteScroll
   [infiniteScrollUpDistance]="1"
-  [infiniteScrollDistance]="0.5"
+  [infiniteScrollDistance]="1.0"
   [infiniteScrollThrottle]="500"
   [immediateCheck]="true"
   [infiniteScrollDisabled]="isLoadingNext"
@@ -16,7 +16,7 @@
   >
     <form
       class="flex flex-row justify-between p-2 my-2 rounded-md bg-gray-50"
-      [formGroup]="filter"
+      [formGroup]="filters"
       (ngSubmit)="onSubmit($event)"
     >
       <div class="flex flex-row items-center space-x-2">
@@ -36,19 +36,26 @@
           <option value="authors:desc">Authors: Z - A</option>
           <option value="review">Avg. Seller Review</option>
         </select>
+        <input type="hidden" formControlName="title" />
         <button type="submit" class="btn btn-sm bg-blue-600 text-white">
           Apply
         </button>
       </div>
     </form>
 
-    <div class="flex flex-wrap justfy-start" *ngIf="params.scope">
+    <div
+      class="flex flex-wrap justfy-start"
+      *ngIf="filters.controls.scope.value"
+    >
       <book-tile-card
         class="group text-center w-full p-8 md:border md:-ml-[1px] md:-mt-[1px] md:w-1/2 lg:w-1/3 xl:w-1/4 md:px-4"
         *ngFor="let book of data"
         [book]="book"
         [routerLink]="['/', 'books', 'markets']"
-        [queryParams]="{ scope: params.scope, isbn13: book.isbn13 }"
+        [queryParams]="{
+          scope: filters.controls.scope.value,
+          isbn13: book.isbn13
+        }"
       ></book-tile-card>
     </div>
   </div>

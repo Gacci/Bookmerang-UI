@@ -1,5 +1,5 @@
 <aside
-  class="sticky top-[85px] flex-1 bg-white z-0 transition-transform -translate-x-full translate-x-0 h-[calc(100%-68px)]"
+  class="sticky top-[56px] flex-1 bg-white z-0 transition-transform -translate-x-full translate-x-0 h-[calc(100%-68px)]"
   aria-label="Sidebar"
 >
   <div class="flex flex-col overflow-y-auto md:px-8 xl:max-w-md">
@@ -14,10 +14,13 @@
 
     <!-- Book Information -->
     <div class="lg:w-52">
-      <h1 class="inline text-sm font-semibold text-gray-800">
+      <h1 class="inline-block text-sm font-semibold text-gray-800">
         {{ book.title }} {{ book.subtitle ?? '' }}
       </h1>
-      <p class="inline mt-2 text-sm text-gray-600" *ngIf="book.authors?.length">
+      <p
+        class="inline-block mt-2 text-sm text-gray-600"
+        *ngIf="book.authors?.length"
+      >
         by
         <span class="font-medium">{{ book.authors }}</span>
       </p>
@@ -30,32 +33,6 @@
         ISBN-10:
         <span class="font-medium">{{ book.isbn10 }}</span>
       </p>
-
-      <div class="mt-4">
-        <h2 class="text-xl font-medium text-gray-700">Details</h2>
-        <ul class="mt-2 text-gray-600 space-y-1">
-          <li class="text-sm">
-            <span class="font-medium" *ngIf="book.publishers?.length">
-              Publisher:
-            </span>
-            {{ book.publishers }}
-          </li>
-          <li class="text-sm">
-            <span class="font-medium" *ngIf="book.published">
-              Publication Date:
-            </span>
-            {{ book.published }}
-          </li>
-          <li class="text-sm">
-            <span class="font-medium" *ngIf="book.pages">Pages:</span>
-            {{ book.pages }}
-          </li>
-          <li class="text-sm">
-            <span class="font-medium" *ngIf="book.language">Language:</span>
-            {{ book.language }}
-          </li>
-        </ul>
-      </div>
     </div>
   </div>
 </aside>
@@ -68,11 +45,53 @@
     [formGroup]="payload"
     (ngSubmit)="onSubmit($event)"
   >
-    <div></div>
+    <section class="my-8" *ngIf="institutions?.length !== 1">
+      <h3 class="block text-gray-700 font-medium mb-2">
+        Select campuses where to sell
+        <span
+          class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
+          [ngxTippy]="tooltip.scope"
+        >
+          ?
+        </span>
+      </h3>
+      <div class="flex space-x-8">
+        <ul class="flex flex-col" formArrayName="scope">
+          <li
+            class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+            *ngFor="let institution of institutions; let i = index"
+          >
+            <div class="relative flex items-start w-full">
+              <div class="flex items-center h-5">
+                <input
+                  class="border-gray-200 rounded-full disabled:opacity-50"
+                  type="checkbox"
+                  [id]="institution.institutionId"
+                  [value]="institution.institutionId"
+                  [formControlName]="i"
+                />
+              </div>
+              <label
+                [for]="institution.institutionId"
+                class="ms-3 block w-full text-sm text-gray-600"
+              >
+                {{ institution.locationName }}
+              </label>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
 
-    <div>
+    <section class="my-8">
       <label for="price" class="block text-gray-700 font-medium mb-2">
         Selling Price
+        <span
+          class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
+          [ngxTippy]="tooltip.price"
+        >
+          ?
+        </span>
       </label>
       <div class="flex space-x-8">
         <!-- Price -->
@@ -107,12 +126,18 @@
           </label>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- State -->
     <section class="my-8">
       <label class="block text-gray-700 font-medium mb-2">
         Overall Condition
+        <span
+          class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
+          [ngxTippy]="tooltip.state"
+        >
+          ?
+        </span>
       </label>
       <ul class="flex flex-col">
         <li
@@ -324,6 +349,12 @@
     <section class="my-16">
       <label class="block text-gray-700 font-medium mb-2" for="notes">
         Additional Notes
+        <span
+          class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
+          [ngxTippy]="tooltip.notes"
+        >
+          ?
+        </span>
       </label>
       <textarea
         class="w-full h-48 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -405,8 +436,9 @@
 
     <input type="hidden" formControlName="isbn13" />
 
-    <div class="my-8">
-      <button type="submit" class="block btn btn-blue-600 md:mx-auto md:w-1/3">Submit</button>
+    <div class="mx-auto my-8 flex flex-row space-x-2 max-w-md">
+      <a class="flex-1 btn btn-gray-100" [routerLink]="['/', 'home']">Cancel</a>
+      <button type="submit" class="flex-1 btn btn-blue-600">Submit</button>
     </div>
   </form>
 </div>

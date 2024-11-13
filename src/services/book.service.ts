@@ -18,6 +18,13 @@ export class BookService {
       ...(book.isbn13 && !book.isbn10
         ? { isbn10: ISBN.asIsbn10(book.isbn13) }
         : {}),
+      ...(book.title || book.subtitle
+        ? {
+            edition: ((book.title ?? '') + (book.subtitle ?? '')).match(
+              /\b\d+(st|nd|rd) (edition|ed\.?)\b/gi
+            )?.pop()
+          }
+        : {}),
       ...(book.language
         ? {
             language:

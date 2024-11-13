@@ -24,6 +24,9 @@ module.exports = {
         '.tracking-widest-5xl': {
           'letter-spacing': "1.5rem"
         },
+        '.leading-12': {
+          'line-height': '3rem'
+        },
         '.w-120': {
           'width': "30rem"
         },

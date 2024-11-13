@@ -4,7 +4,10 @@ import {
   HostBinding,
   inject,
   Input,
-  Output
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -40,17 +43,15 @@ export interface PostTileEvent {
   templateUrl: './post-tile-card.component.html',
   styleUrl: './post-tile-card.component.scss'
 })
-export class PostTileCardComponent extends Unsubscribable {
+export class PostTileCardComponent
+  extends Unsubscribable
+  implements OnChanges, OnDestroy
+{
   @HostBinding('class')
   className = 'relative';
 
   @Input()
-  set post(_post: any) {
-    this._post = _post;
-    this.isSelfOwned = this._post.userId === this.auth.getUserId();
-    this.deletePostEnabled = this._post.userId === this.auth.getUserId();
-    this.editPostEnabled = this._post.userId === this.auth.getUserId();
-  }
+  post!: any;
 
   @Input()
   deletePostEnabled!: boolean;
@@ -82,7 +83,13 @@ export class PostTileCardComponent extends Unsubscribable {
 
   protected isSelfOwned!: boolean;
 
-  protected _post!: any;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['post']) {
+      this.isSelfOwned = this.post.userId === this.auth.getUserId();
+      this.deletePostEnabled = this.post.userId === this.auth.getUserId();
+      this.editPostEnabled = this.post.userId === this.auth.getUserId();
+    }
+  }
 
   onEditBookPost(event: Event) {
     if (this.isProcessingDelete || this.isProcessingEdit) {
@@ -92,11 +99,11 @@ export class PostTileCardComponent extends Unsubscribable {
     this.isProcessingEdit = true;
     this.action.emit({
       event,
-      post: { type: ActionEvent.Edit, data: this._post }
+      post: { type: ActionEvent.Edit, data: this.post }
     });
 
     this.bookMarketService
-      .update(this._post)
+      .update(this.post)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response: any) => {
@@ -117,11 +124,11 @@ export class PostTileCardComponent extends Unsubscribable {
     this.isProcessingDelete = true;
     this.action.emit({
       event,
-      post: { type: ActionEvent.Delete, data: this._post }
+      post: { type: ActionEvent.Delete, data: this.post }
     });
 
     this.bookMarketService
-      .remove(this._post.bookOfferId)
+      .remove(this.post.bookOfferId)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response: any) => {
@@ -137,21 +144,25 @@ export class PostTileCardComponent extends Unsubscribable {
   onToggleBookPostLike(event: Event) {
     this.action.emit({
       event,
-      post: { type: ActionEvent.Delete, data: this._post }
+      post: { type: ActionEvent.Delete, data: this.post }
     });
   }
 
   onShowBookPostDetails(event: Event) {
     this.action.emit({
       event,
-      post: { type: ActionEvent.Details, data: this._post }
+      post: { type: ActionEvent.Details, data: this.post }
     });
   }
 
   onShareBookPost(event: Event) {
     this.action.emit({
       event,
-      post: { type: ActionEvent.Share, data: this._post }
+      post: { type: ActionEvent.Share, data: this.post }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe();
   }
 }

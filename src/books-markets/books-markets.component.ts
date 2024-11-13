@@ -11,12 +11,13 @@ import {
   BookPostEvent
 } from '../components/book-post-card/book-post-card.component';
 
-import { BookMarketService } from '../services/book-market.service';
-import { LoadingOverlayService } from '../services/loading-overlay.service';
-
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 import { ConfirmDialogComponent } from '../components/confirm-dialog.component';
+import { InstitutionsDropdownComponent } from '../components/institutions-dropdown/institutions-dropdown.component';
 import { SurveyService } from '../services/survey.service';
+
+import { BookMarketService } from '../services/book-market.service';
+import { LoadingOverlayService } from '../services/loading-overlay.service';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
@@ -24,7 +25,19 @@ import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 import * as ISBN from 'isbn3';
 import * as Hash from 'crypto-hash';
-import { InstitutionsDropdownComponent } from '../components/institutions-dropdown/institutions-dropdown.component';
+
+type BookMarketsFilters = {
+  tradeable: FormControl;
+  sorting: FormControl;
+  scope: FormControl;
+  state: FormGroup<{
+    new: FormControl;
+    likeNew: FormControl;
+    veryGood: FormControl;
+    good: FormControl;
+    acceptable: FormControl;
+  }>;
+};
 
 console.log(Hash);
 @Component({
@@ -70,22 +83,26 @@ export class BooksMarketsComponent
 
   protected pricingViewState!: boolean;
 
+  protected pricingQueryParams: any = {};
+
   protected survey!: any;
 
-  protected filters: FormGroup<any> = new FormGroup({
-    tradeable: new FormControl('all'),
-    sorting: new FormControl('price:desc'),
-    scope: new FormControl(0),
-    state: new FormGroup({
-      new: new FormControl(false),
-      likeNew: new FormControl(false),
-      veryGood: new FormControl(false),
-      good: new FormControl(false),
-      acceptable: new FormControl(false)
-    })
-  });
+  protected filters: FormGroup<BookMarketsFilters> =
+    new FormGroup<BookMarketsFilters>({
+      tradeable: new FormControl<string>('all'),
+      sorting: new FormControl<string>('price:desc'),
+      scope: new FormControl<number>(0),
+      state: new FormGroup({
+        new: new FormControl<boolean>(false),
+        likeNew: new FormControl<boolean>(false),
+        veryGood: new FormControl<boolean>(false),
+        good: new FormControl<boolean>(false),
+        acceptable: new FormControl<boolean>(false)
+      })
+    });
 
   ngOnInit(): void {
+    console.log('BookMarketsComponents.onInit', this);
     this.pageNumber += 1;
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
@@ -99,15 +116,19 @@ export class BooksMarketsComponent
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
 
-        console.log(this);
+        console.log(this.book);
       });
 
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(async (query: any) => {
-        this.params = { ...query };
-        const patch = {
-          ...(query.scope ? { scope: +query.scope } : {}),
+        this.pricingQueryParams = {
+          scope: query.scope,
+          isbn13: query.isbn13
+        };
+
+        this.filters.patchValue({
+          ...(/^\d+$/.test(query.scope) ? { scope: +query.scope } : {}),
           ...(query.state
             ? {
                 state: {
@@ -123,13 +144,12 @@ export class BooksMarketsComponent
             query.sorting
           )
             ? { sorting: query.sorting }
-            : { sorting: 'posted-on' }),
-          ...(/^true|false$/.test(query.tradeable)
+            : {}),
+          ...(['true', 'false'].includes(query.tradeable)
             ? { tradeable: JSON.parse(query.tradeable) }
             : {})
-        };
+        });
 
-        this.filters.patchValue(patch);
         this.filtersHashedValue = await Hash.sha256(
           JSON.stringify(this.filters.value)
         );
@@ -151,23 +171,29 @@ export class BooksMarketsComponent
       return;
     }
 
-    console.log('onScrollDown');
-    const { isbn13, state, tradeable, sorting, scope } = this.params;
+    const { state, tradeable, sorting, scope } = this.filters.value;
     const params = {
       institutionId: scope,
-      isbn13: ISBN.asIsbn13(isbn13),
-      ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
-      ...(['posted-on', 'review', 'price:asc', 'price:desc'].includes(sorting)
+      isbn13: ISBN.asIsbn13(this.book.isbn13),
+      ...(tradeable && ['true', 'false'].includes(tradeable)
+        ? { tradeable }
+        : {}),
+      ...(sorting &&
+      ['posted-on', 'review', 'price:asc', 'price:desc'].includes(sorting)
         ? { sorting }
         : {}),
-      ...(!isNaN(+state)
+      ...(state?.new ||
+      state?.likeNew ||
+      state?.veryGood ||
+      state?.good ||
+      state?.acceptable
         ? {
             'state[]': [
-              ...(!!(+state & (1 << 0)) ? ['NEW'] : []),
-              ...(!!(+state & (1 << 1)) ? ['LIKE_NEW'] : []),
-              ...(!!(+state & (1 << 2)) ? ['VERY_GOOD'] : []),
-              ...(!!(+state & (1 << 3)) ? ['GOOD'] : []),
-              ...(!!(+state & (1 << 4)) ? ['ACCEPTABLE'] : [])
+              ...(state.new ? ['NEW'] : []),
+              ...(state.likeNew ? ['LIKE_NEW'] : []),
+              ...(state.veryGood ? ['VERY_GOOD'] : []),
+              ...(state.good ? ['GOOD'] : []),
+              ...(state.acceptable ? ['ACCEPTABLE'] : [])
             ]
           }
         : {}),
@@ -175,6 +201,7 @@ export class BooksMarketsComponent
       pageSize: this.pageSize
     };
 
+    console.log('onScrollDown', this.filters.value, params);
     this.bookMarketService
       .search(params)
       .pipe(takeUntil(this.unsubscribe$))
@@ -190,22 +217,22 @@ export class BooksMarketsComponent
   }
 
   protected onSubmit(e: Event) {
-    console.log(this.filters.value);
     const { state, tradeable, sorting, scope } = this.filters.value;
     const encoded =
-      (state.new ? 1 : 0) +
-      (state.likeNew ? 2 : 0) +
-      (state.veryGood ? 4 : 0) +
-      (state.good ? 8 : 0) +
-      (state.acceptable ? 16 : 0);
+      (state?.new ? 1 : 0) +
+      (state?.likeNew ? 2 : 0) +
+      (state?.veryGood ? 4 : 0) +
+      (state?.good ? 8 : 0) +
+      (state?.acceptable ? 16 : 0);
 
+    // this.pricingQueryParams.isbn13 = this.book.isbn13;
     this.router.navigate(['books', 'markets'], {
       queryParams: {
-        scope: scope,
+        scope,
         isbn13: this.book.isbn13,
         ...(encoded ? { state: encoded } : {}),
-        ...(/^true|false$/.test(tradeable) ? { tradeable } : {}),
-        ...(sorting ? { sorting } : {})
+        tradeable,
+        sorting
       }
     });
   }

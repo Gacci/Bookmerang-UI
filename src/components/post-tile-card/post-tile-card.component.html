@@ -9,8 +9,8 @@
   >
     <img
       class="absolute top-0 left-0 h-full w-full object-cover object-center group-hover:opacity-75"
-      [src]="_post.book.thumbnail"
-      [alt]="_post.book.title"
+      [src]="post.book.thumbnail"
+      [alt]="post.book.title"
     />
   </a>
   <a
@@ -19,12 +19,12 @@
     [queryParams]="query"
     [class.truncate]="likePostEnabled"
   >
-    {{ _post.book.title }} {{ _post.book.subtitle }}
+    {{ post.book.title }} {{ post.book.subtitle }}
   </a>
-  <span class="block text-sm text-gray-700">{{ _post.book.authors }}</span>
-  <span class="block text-sm text-gray-700">{{ _post.book.isbn13 }}</span>
+  <span class="block text-sm text-gray-700">{{ post.book.authors }}</span>
+  <span class="block text-sm text-gray-700">{{ post.book.isbn13 }}</span>
   <strong class="block text-sm">
-    {{ _post.price | currency }}
+    {{ post.price | currency }}
   </strong>
 </div>
 
@@ -127,6 +127,11 @@
         viewBox="0 0 24 24"
         fill="currentColor"
         class="w-5 h-5 text-gray-400"
+        [ngClass]="{
+          'text-slate-400': !post.savedBookOfferId,
+          'text-red-600': isProcessingLike || !!post.savedBookOfferId,
+          'animate-pulse': isProcessingLike
+        }"
       >
         <path
           fill-rule="evenodd"

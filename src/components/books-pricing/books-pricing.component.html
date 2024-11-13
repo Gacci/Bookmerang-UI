@@ -3,12 +3,22 @@
   <div class="relative bg-white" *ngIf="!loading">
     <!-- Modal header -->
     <div class="block">
-      <div
-        class="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
-      >
-        <h3 class="text-lg font-semibold text-gray-900">
-          {{ selectedSlideObject?.locationName }}
-        </h3>
+      <div class="flex items-center justify-between p-4 md:p-0 border-b">
+        <div
+          class="flex flex-row flex-1 space-x-2 mb-4"
+          *ngIf="data?.metrics?.length"
+        >
+          <span
+            class="flex flex-1 items-center text-xs font-semibold p-2 rounded-lg border-2 border-blue-500 text-blue-500"
+          >
+            ({{ data.total }}) {{ data.range }}
+          </span>
+          <span
+            class="flex flex-1 items-center text-xs font-semibold p-2 rounded-lg border-2 border-green-500 text-green-500"
+          >
+            ({{ data.tradeables }}) for trade
+          </span>
+        </div>
         <button
           type="button"
           class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center xl:hidden"
@@ -36,140 +46,119 @@
 
     <!-- Modal body -->
     <!-- navigation="true",     effect="fade",     pagination="true"   -->
-    <swiper-container
-      #swiper
-      [config]="config"
-      class="swiper"
-      no-swiping="false"
-      auto-height="false"
-      scrollbar="true"
-      pagination-clickable="true"
-      a11y="false"
-      *ngIf="groups?.length"
-    >
-      <swiper-slide
-        class="bg-white swiper-no-swiping"
-        *ngFor="let group of groups"
-      >
-        <div class="p-4 md:p-5">
-          <ol class="relative border-s border-gray-200 ms-3.5 mb-4 md:mb-5">
-            <li class="mb-6 ms-8" *ngFor="let metric of group.metrics">
-              <span
-                class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3.5 ring-8 ring-white"
-              >
-                <svg
-                  class="w-6 h-6"
-                  viewBox="0 0 64 64"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g fill="none" fill-rule="evenodd">
-                    <path
-                      fill="#80D25B"
-                      d="M42.1561026,48.217237 C50.904695,48.217237 59.3530187,39.6818331 59.3530187,30.9332407 C59.3530187,22.1846483 45.1894084,-1.74228695 45.1894084,-1.74228695 C45.1894084,-1.74228695 28.1191741,20.3680678 27.0857195,29.7665352 C26.0522649,39.1650025 33.4075102,48.217237 42.1561026,48.217237 Z"
-                      transform="rotate(36 43.17 23.237)"
-                    />
-                    <path
-                      stroke="#22BA8E"
-                      stroke-linecap="round"
-                      stroke-width="3"
-                      d="M49.7607359,15.8672252 C49.7607359,15.8672252 35.1835686,24.8145106 29.8825517,41.2933444 C24.5815349,57.7721783 8.88191352,55.9007026 8.88191352,55.9007026"
-                    />
-                    <polyline
-                      stroke="#22BA8E"
-                      stroke-linecap="round"
-                      stroke-width="2"
-                      points="41.946 36.659 32.202 36.245 27.486 27.936"
-                    />
-                    <polyline
-                      stroke="#22BA8E"
-                      stroke-linecap="round"
-                      stroke-width="2"
-                      points="44.938 27.965 38.294 26.606 36.16 21.188"
-                    />
-                  </g>
-                </svg>
-              </span>
-              <h5
-                class="flex items-start text-base font-semibold text-gray-900"
-              >
-                {{ metric.state }}
-                <span
-                  class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-3 py-0.5 rounded-full ms-3"
-                >
-                  {{ metric.total }}
-                </span>
-              </h5>
-              <span
-                class="block text-sm font-normal leading-none text-gray-900"
-              >
-                {{ metric.range }}
-              </span>
-            </li>
-            <li class="ms-8">
-              <span
-                class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3.5 ring-8 ring-white"
-              >
-                <svg
-                  class="w-6 h-6"
-                  viewBox="0 0 64 64"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g fill="none" fill-rule="evenodd">
-                    <g transform="rotate(110 4.339 30.802)">
-                      <polygon
-                        fill="#80D25B"
-                        points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
-                      />
-                      <path
-                        fill="#22BA8E"
-                        d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
-                      />
-                    </g>
-                    <g transform="scale(1 -1) rotate(-70 -11.107 -40.767)">
-                      <polygon
-                        fill="#80D25B"
-                        points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
-                      />
-                      <path
-                        fill="#22BA8E"
-                        d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
-                      />
-                    </g>
-                    <g transform="scale(1 -1) rotate(54 55.492 16.03)">
-                      <polygon
-                        fill="#80D25B"
-                        points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
-                      />
-                      <path
-                        fill="#22BA8E"
-                        d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
-                      />
-                    </g>
-                  </g>
-                </svg>
-              </span>
-              <h5
-                class="flex items-start mb-1 text-base font-semibold text-green-600"
-              >
-                Available for trade
-                <span
-                  class="bg-green-100 text-green-600 text-sm font-medium mr-2 px-3 py-0.5 rounded-full ms-3"
-                >
-                  {{ group.tradeables }}
-                </span>
-              </h5>
-              <span class="block mb-3 text-xs font-normal text-gray-500">
-                Trade Smart, Save Big: Swap Your Textbooks for Sustainable
-                Savings! Reduce Waste, Reuse Knowledge, and Keep Both Your
-                Wallet and the Planet Happy!
-              </span>
-            </li>
-          </ol>
-        </div>
-      </swiper-slide>
-    </swiper-container>
 
-    <div class="p-8" *ngIf="!groups?.length">
+    <div class="p-4 md:p-5" *ngIf="!!data?.metrics?.length">
+      <ol class="relative border-s border-gray-200 ms-3.5 mb-4 md:mb-5">
+        <li class="mb-6 ms-8" *ngFor="let metric of data.metrics">
+          <span
+            class="absolute flex items-center justify-center w-6 h-6 bg-white rounded-full -start-3.5 ring-8 ring-white"
+          >
+            <svg
+              class="w-6 h-6"
+              viewBox="0 0 64 64"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g fill="none" fill-rule="evenodd">
+                <path
+                  fill="#80D25B"
+                  d="M42.1561026,48.217237 C50.904695,48.217237 59.3530187,39.6818331 59.3530187,30.9332407 C59.3530187,22.1846483 45.1894084,-1.74228695 45.1894084,-1.74228695 C45.1894084,-1.74228695 28.1191741,20.3680678 27.0857195,29.7665352 C26.0522649,39.1650025 33.4075102,48.217237 42.1561026,48.217237 Z"
+                  transform="rotate(36 43.17 23.237)"
+                />
+                <path
+                  stroke="#22BA8E"
+                  stroke-linecap="round"
+                  stroke-width="3"
+                  d="M49.7607359,15.8672252 C49.7607359,15.8672252 35.1835686,24.8145106 29.8825517,41.2933444 C24.5815349,57.7721783 8.88191352,55.9007026 8.88191352,55.9007026"
+                />
+                <polyline
+                  stroke="#22BA8E"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                  points="41.946 36.659 32.202 36.245 27.486 27.936"
+                />
+                <polyline
+                  stroke="#22BA8E"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                  points="44.938 27.965 38.294 26.606 36.16 21.188"
+                />
+              </g>
+            </svg>
+          </span>
+          <h5 class="flex items-start text-base font-semibold text-gray-600">
+            {{ metric.state }}
+            <span
+              class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-3 py-0.5 rounded-full ms-3"
+            >
+              {{ metric.total }}
+            </span>
+          </h5>
+          <span class="block text-sm font-normal leading-none text-gray-500">
+            {{ metric.range }}
+          </span>
+        </li>
+      </ol>
+
+      <div>
+        <div class="flex flex-row items-center space-x-2">
+          <span
+            class="flex items-center justify-center w-6 h-6 bg-white rounded-full ring-white"
+          >
+            <svg
+              class="w-6 h-6"
+              viewBox="0 0 64 64"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g fill="none" fill-rule="evenodd">
+                <g transform="rotate(110 4.339 30.802)">
+                  <polygon
+                    fill="#80D25B"
+                    points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
+                  />
+                  <path
+                    fill="#22BA8E"
+                    d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
+                  />
+                </g>
+                <g transform="scale(1 -1) rotate(-70 -11.107 -40.767)">
+                  <polygon
+                    fill="#80D25B"
+                    points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
+                  />
+                  <path
+                    fill="#22BA8E"
+                    d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
+                  />
+                </g>
+                <g transform="scale(1 -1) rotate(54 55.492 16.03)">
+                  <polygon
+                    fill="#80D25B"
+                    points="12.83 3.573 22.112 .194 27.648 16 17.548 16.535"
+                  />
+                  <path
+                    fill="#22BA8E"
+                    d="M8.62749877,16 L27.6274988,16 L17.6274988,26 L8.62749877,26 L8.62749877,30 L0,21 L8.62749877,12 L8.62749877,16 Z"
+                  />
+                </g>
+              </g>
+            </svg>
+          </span>
+          <h5
+            class="flex items-start mb-1 text-sm font-semibold text-green-600"
+          >
+            Available for trade
+          </h5>
+        </div>
+
+        <span class="block mt-2 text-xs font-normal text-gray-500">
+          Trade Smart, Save Big: Swap Your Textbooks for Sustainable Savings!
+          Reduce Waste, Reuse Knowledge, and Keep Both Your Wallet and the
+          Planet Happy!
+        </span>
+      </div>
+    </div>
+
+    <div class="p-8" *ngIf="!data?.metrics?.length">
       <p class="text-center text-xl font-semibold">
         There is currently no price data
       </p>

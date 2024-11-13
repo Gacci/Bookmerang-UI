@@ -1,7 +1,7 @@
 <div class="post-card">
   <div class="post-card-header">
     <div class="post-card-main">
-      <a 
+      <a
         class="rounded-full"
         [routerLink]="userRouterLink"
         [queryParams]="userQueryParams"
@@ -32,11 +32,7 @@
       >
         <img class="post-card-book-cover" [src]="_post.book.thumbnail" />
       </a>
-      <a
-        class="post-card-book-title"
-        [routerLink]="link"
-        [queryParams]="query"
-      >
+      <a class="post-card-book-title" [routerLink]="link" [queryParams]="query">
         {{ _post.book.title }} {{ _post.book.subtitle }}
       </a>
 

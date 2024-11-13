@@ -6,6 +6,7 @@ import { BooksInventoriesComponent } from '../books-inventories/books-inventorie
 import { BooksMarketsComponent } from '../books-markets/books-markets.component';
 import { BookPostComponent } from '../book-post/book-post.component';
 import { HomeComponent } from '../home/home.component';
+import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 import { PasswordRecoveryStartComponent } from '../auth/password-recovery-start/password-recovery-start.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { SignInComponent } from '../auth/sign-in/sign-in.component';
@@ -103,8 +104,13 @@ export const routes: Routes = [
     }
   },
   {
+    path: '404',
+    component: PageNotFoundComponent,
+    data: { queryParams: {} }
+  },
+  {
     path: '**',
-    // pathMatch: 'full',
-    redirectTo: 'home'
+    redirectTo: '404',
+    pathMatch: 'full'
   }
 ];

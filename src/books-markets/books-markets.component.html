@@ -1,11 +1,14 @@
 <aside
-  class="sticky top-[75px] flex-1 bg-white z-0 transition-transform -translate-x-full translate-x-0 h-[calc(100%-68px)]"
+  class="sticky top-[56px] flex-1 bg-white z-0 transition-transform -translate-x-full translate-x-0 h-[calc(100%-68px)]"
   aria-label="Sidebar"
 >
   <form class="m-8" [formGroup]="filters" (ngSubmit)="onSubmit($event)">
     <div class="mb-8">
       <label class="mb-1 font-semibold text-gray-900">Search in</label>
-      <institutions-dropdown formControlName="scope"></institutions-dropdown>
+      <institutions-dropdown
+        formControlName="scope"
+        [value]="filters.controls.scope.value"
+      ></institutions-dropdown>
     </div>
 
     <div class="my-4">
@@ -151,7 +154,7 @@
   class="border-x max-w-xl mx-auto mt-10 p-6 rounded-lg lg:max-w-2xl xl:max-w-4xl"
   infiniteScroll
   [infiniteScrollUpDistance]="1"
-  [infiniteScrollDistance]="0.5"
+  [infiniteScrollDistance]="1.0"
   [infiniteScrollThrottle]="500"
   [immediateCheck]="hasNextPage"
   [infiniteScrollDisabled]="isLoadingNext"
@@ -184,44 +187,30 @@
         <h1 class="text-2xl font-semibold text-gray-800">
           {{ book.title }} {{ book.subtitle ?? '' }}
         </h1>
-        <p class="mt-2 text-lg text-gray-600" *ngIf="book.authors?.length">
+        <p class="text-lg text-gray-600 -mt-1" *ngIf="book.authors?.length">
           By
           <span class="font-medium">{{ book.authors }}</span>
         </p>
-        <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn13">
-          ISBN-13:
-          <span class="font-medium">{{ book.isbn13 | isbn13 }}</span>
-        </p>
-        <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn13">
-          ISBN-10:
-          <span class="font-medium">{{ book.isbn10 }}</span>
-        </p>
-
-        <div class="mt-4">
-          <h2 class="text-xl font-medium text-gray-700">Details</h2>
-          <ul class="mt-2 text-gray-600 space-y-1">
-            <li>
-              <span class="font-medium" *ngIf="book.publishers?.length">
-                Publisher:
-              </span>
-              {{ book.publishers }}
-            </li>
-            <li>
-              <span class="font-medium" *ngIf="book.published">
-                Publication Date:
-              </span>
-              {{ book.published }}
-            </li>
-            <li>
-              <span class="font-medium" *ngIf="book.pages">Pages:</span>
-              {{ book.pages }}
-            </li>
-            <li>
-              <span class="font-medium" *ngIf="book.language">Language:</span>
-              {{ book.language }}
-            </li>
-          </ul>
+        <div class="text-sm text-gray-500 mt-2" *ngIf="book.publishers?.length">
+          <span>Published by: {{ book.publishers }}</span>
+          <span *ngIf="book.edition">; {{ book.edition }}</span>
+          <span *ngIf="book.published">
+            ({{ book.published | date: 'MMM dd, YYYY' }})
+          </span>
         </div>
+        <div class="text-sm text-gray-500 mt-2">
+          <span *ngIf="book.isbn13">
+            ISBN-13:
+            <a>{{ book.isbn13 | isbn13 }}</a>
+          </span>
+          <span *ngIf="book.isbn10">
+            ISBN-10:
+            <a>{{ book.isbn10 }}</a>
+          </span>
+        </div>
+        <p class="text-sm text-gray-500" *ngIf="book.language">
+          Language: {{ book.language }}
+        </p>
       </div>
     </div>
 
@@ -230,7 +219,7 @@
       <div class="overflow-x-auto border-y">
         <ul class="flex text-center my-4">
           <li class="w-44 flex-shrink-0 px-1" *ngIf="book.isbn10">
-            <span class="text-sm">ISBN-10</span>
+            <span class="text-xs">ISBN-10</span>
             <svg
               class="size-1/4 block mx-auto mt-3 mb-1"
               viewBox="-0.5 0 25 25"
@@ -301,10 +290,12 @@
                 stroke-linejoin="round"
               />
             </svg>
-            <span class="text-sm font-bold">{{ book.isbn10 }}</span>
+            <span class="inline-block text-xs font-bold">
+              {{ book.isbn10 }}
+            </span>
           </li>
           <li class="w-44 flex-shrink-0 border-l px-1" *ngIf="book.isbn13">
-            <span class="text-sm">ISBN-13</span>
+            <span class="text-xs">ISBN-13</span>
             <svg
               class="size-1/4 block mx-auto mt-3 mb-1"
               viewBox="-0.5 0 25 25"
@@ -375,13 +366,15 @@
                 stroke-linejoin="round"
               />
             </svg>
-            <span class="text-sm font-bold">{{ book.isbn13 | isbn13 }}</span>
+            <span class="inline-block text-xs font-bold">
+              {{ book.isbn13 | isbn13 }}
+            </span>
           </li>
           <li
             class="w-44 flex-shrink-0 border-l px-1"
             *ngIf="book.publishers?.length"
           >
-            <span class="text-sm">Publisher</span>
+            <span class="text-xs">Publisher</span>
             <svg
               class="size-1/4 block mx-auto mt-3 mb-1"
               viewBox="0 0 24 24"
@@ -395,10 +388,12 @@
                 fill="#000000"
               />
             </svg>
-            <span class="text-sm font-bold">{{ book.publishers }}</span>
+            <span class="inline-block text-xs font-bold">
+              {{ book.publishers }}
+            </span>
           </li>
           <li class="w-44 flex-shrink-0 border-l px-1" *ngIf="book.published">
-            <span class="text-sm">Publication date</span>
+            <span class="text-xs">Publication date</span>
             <svg
               class="size-1/4 block mx-auto mt-3 mb-1"
               viewBox="0 0 24 24"
@@ -443,12 +438,12 @@
                 stroke-linecap="round"
               />
             </svg>
-            <span class="text-sm font-bold">
+            <span class="inline-block text-xs font-bold">
               {{ book.published | date: 'MMM dd, YYYY' }}
             </span>
           </li>
           <li class="w-44 flex-shrink-0 border-l px-1" *ngIf="book.language">
-            <span class="text-sm">Language</span>
+            <span class="text-xs">Language</span>
             <svg
               class="size-1/4 block mx-auto mt-3 mb-1"
               viewBox="0 0 24 24"
@@ -469,10 +464,12 @@
                 fill="#000000"
               />
             </svg>
-            <span class="text-sm font-bold">{{ book.language }}</span>
+            <span class="inline-block text-xs font-bold">
+              {{ book.language }}
+            </span>
           </li>
           <li class="w-44 flex-shrink-0 border-l px-1" *ngIf="book.dimensions">
-            <span class="text-sm">Dimensions</span>
+            <span class="text-xs">Dimensions</span>
             <svg
               class="size-1/4 block mx-auto mt-3 mb-1"
               viewBox="0 0 15 15"
@@ -486,10 +483,12 @@
                 fill="#000000"
               />
             </svg>
-            <span class="text-sm font-bold">{{ book.dimensions }}</span>
+            <span class="inline-block text-xs font-bold">
+              {{ book.dimensions }}
+            </span>
           </li>
           <li class="w-44 flex-shrink-0 px-1" *ngIf="book.pages">
-            <span class="text-sm">Print lenght</span>
+            <span class="text-xs">Print lenght</span>
             <svg
               class="size-1/4 block mx-auto mt-3 mb-1"
               viewBox="0 0 21 21"
@@ -511,7 +510,7 @@
                 />
               </g>
             </svg>
-            <span class="text-sm font-bold">{{ book.pages }}</span>
+            <span class="inline-block text-xs font-bold">{{ book.pages }}</span>
           </li>
         </ul>
       </div>
@@ -519,7 +518,7 @@
 
     <div class="pb-8 border-b">
       <h2 class="text-xl font-medium text-gray-700">Description</h2>
-      <p class="mx-4 my-2 text-sm font-normal text-gray-600">
+      <p class="mx-4 my-2 text-sm font-light text-gray-600">
         {{ book.notes ?? 'N/A' }}
       </p>
     </div>
@@ -533,15 +532,15 @@
     [value]="survey.value"
     (selection)="onSurveySelection($event)"
   ></confirm-dialog> -->
-
+  <!-- {{ pricingQueryParams | json }} -->
   <book-post-card
     *ngFor="let post of data"
     (action)="onActionClicked($event)"
     [post]="post"
     [userRouterLink]="['/', 'books', 'inventories', post.userId]"
-    [userQueryParams]="{ scope: params.scope }"
+    [userQueryParams]="{ scope: filters.controls.scope.value }"
     [link]="['/', 'books', 'markets']"
-    [query]="{ scope: params.scope, isbn13: post.book.isbn13 }"
+    [query]="{ scope: filters.controls.scope.value, isbn13: post.book.isbn13 }"
   ></book-post-card>
 </div>
 
@@ -552,8 +551,8 @@
   tabindex="-1"
 >
   <books-pricing
-    [isbn13]="params.isbn13"
-    [scope]="params.scope"
+    [isbn13]="pricingQueryParams.isbn13"
+    [scope]="pricingQueryParams.scope"
     (visibility)="pricingViewState = !pricingViewState"
   ></books-pricing>
 </div>
