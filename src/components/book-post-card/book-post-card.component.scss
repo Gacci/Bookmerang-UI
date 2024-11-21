@@ -1,5 +1,5 @@
 .post-card {
-    @apply relative block w-128 mx-auto my-8 border; // shadow-md rounded-md
+    @apply relative block w-120 mx-auto my-8 border rounded-md; // shadow-md rounded-md
   }
   .post-card-tradeable {
     @apply font-semibold text-sm text-green-600;
@@ -52,7 +52,7 @@
     }
   }
   .post-card-book-cover-box {
-    @apply block w-64 mx-auto relative aspect-2/3 z-0;
+    @apply relative block w-48 mx-auto rounded-md overflow-hidden aspect-2/3 z-0;
 
     .post-card-book-cover {
       @apply absolute top-0 left-0 w-full h-full;

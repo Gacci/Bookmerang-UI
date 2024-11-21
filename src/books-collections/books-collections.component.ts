@@ -16,9 +16,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 
 type BookCollectionFilter = {
+  keyword: FormControl<string | null>;
   scope: FormControl<number | null>;
   sorting: FormControl<string | null>;
-  title: FormControl<string | null>;
 };
 
 @Component({
@@ -49,7 +49,7 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   private readonly loadingOverlayService = inject(LoadingOverlayService);
 
   protected filters = new FormGroup<BookCollectionFilter>({
-    title: new FormControl(),
+    keyword: new FormControl(),
     scope: new FormControl(),
     sorting: new FormControl('price:desc')
   });
@@ -60,7 +60,7 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((query: any) => {
         this.filters.patchValue({
-          ...(query.keyword ? { title: query.keyword } : {}),
+          ...(query.keyword ? { keyword: query.keyword } : {}),
           ...(query.scope
             ? { scope: +query.scope }
             : { scope: this.auth.getPrimarySearchScopeId() }),
@@ -91,8 +91,10 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
       return;
     }
 
+
     const params = {
-      ...this.filters.value,
+      institutionId: this.filters.value.scope,
+      keyword: this.filters.value.keyword,
       pageNumber: this.pageNumber,
       pageSize: this.pageSize
     };

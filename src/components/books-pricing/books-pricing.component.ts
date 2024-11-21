@@ -58,50 +58,53 @@ export class BooksPricingComponent
 
   private load() {
     this.loading = true;
+    this.data = {};
+    
     this.bookMarketService
       .metrics({ scope: this.scope, isbn13: ISBN.asIsbn13(this.isbn13) })
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(([data = {}]) => {
-        const minPrice = Math.min(
-          ...data.metrics
-            ?.filter((metric: any) => !!metric.total)
-            .map((metric: any) => metric.minPrice)
-        );
-        const maxPrice = Math.max(
-          ...data.metrics
-            ?.filter((metric: any) => !!metric.total)
-            .map((metric: any) => metric.maxPrice)
-        );
-        const total = data.metrics?.reduce(
-          (sum: number, metric: any) => sum + metric.total,
-          0
-        );
-        const tradeables = data.metrics?.reduce(
-          (sum: number, metric: any) => sum + metric.tradeable,
-          0
-        );
-
-        this.data = {
-          ...data,
-          ...(total ? { range: this.getPriceRange(minPrice, maxPrice) } : {}),
-          minPrice,
-          maxPrice,
-          total,
-          tradeables,
-          metrics: data.metrics?.map((metric: any) => ({
-            ...metric,
-            ...(metric.total
-              ? {
-                  range: this.getPriceRange(metric.minPrice, metric.maxPrice)
-                }
-              : {}),
-            state: metric.state.replace('_', ' ')
-          }))
-        };
+      .subscribe(([data]) => {
+        if ( data ) {
+          const minPrice = Math.min(
+            ...data.metrics
+              ?.filter((metric: any) => !!metric.total)
+              .map((metric: any) => metric.minPrice)
+          );
+          const maxPrice = Math.max(
+            ...data.metrics
+              ?.filter((metric: any) => !!metric.total)
+              .map((metric: any) => metric.maxPrice)
+          );
+          const total = data.metrics?.reduce(
+            (sum: number, metric: any) => sum + metric.total,
+            0
+          );
+          const tradeables = data.metrics?.reduce(
+            (sum: number, metric: any) => sum + metric.tradeable,
+            0
+          );
+  
+          this.data = {
+            ...data,
+            ...(total ? { range: this.getPriceRange(minPrice, maxPrice) } : {}),
+            minPrice,
+            maxPrice,
+            total,
+            tradeables,
+            metrics: data.metrics?.map((metric: any) => ({
+              ...metric,
+              ...(metric.total
+                ? {
+                    range: this.getPriceRange(metric.minPrice, metric.maxPrice)
+                  }
+                : {}),
+              state: metric.state.replace('_', ' ')
+            }))
+          };
+        }
 
         this.loading = false;
         this.loaded.emit(data);
-        console.log(minPrice, maxPrice, this.data);
       });
   }
 

@@ -30,6 +30,9 @@ module.exports = {
         '.w-120': {
           'width': "30rem"
         },
+        '.w-124': {
+          'width': "31rem"
+        },
         '.w-128': {
           'width': "32rem"
         },

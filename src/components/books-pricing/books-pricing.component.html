@@ -5,16 +5,16 @@
     <div class="block">
       <div class="flex items-center justify-between p-4 md:p-0 border-b">
         <div
-          class="flex flex-row flex-1 space-x-2 mb-4"
+          class="flex flex-col flex-1 p-2 mb-2"
           *ngIf="data?.metrics?.length"
         >
           <span
-            class="flex flex-1 items-center text-xs font-semibold p-2 rounded-lg border-2 border-blue-500 text-blue-500"
+            class="flex flex-1 items-center text-xs font-semibold text-gray-700"
           >
             ({{ data.total }}) {{ data.range }}
           </span>
           <span
-            class="flex flex-1 items-center text-xs font-semibold p-2 rounded-lg border-2 border-green-500 text-green-500"
+            class="flex flex-1 items-center text-xs font-semibold text-green-500"
           >
             ({{ data.tradeables }}) for trade
           </span>

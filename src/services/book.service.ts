@@ -20,9 +20,12 @@ export class BookService {
         : {}),
       ...(book.title || book.subtitle
         ? {
-            edition: ((book.title ?? '') + (book.subtitle ?? '')).match(
-              /\b\d+(st|nd|rd) (edition|ed\.?)\b/gi
-            )?.pop()
+            edition: ((book.title ?? '') + (book.subtitle ?? ''))
+              .match(/\d+(st|nd|rd|th) (edition|ed\.?)/ig)
+              ?.join(' '),
+            volume: ((book.title ?? '') + (book.subtitle ?? ''))
+              .match(/(volume|vol\.) \d+/ig)
+              ?.join(' ')
           }
         : {}),
       ...(book.language
