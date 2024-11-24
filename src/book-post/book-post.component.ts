@@ -41,7 +41,6 @@ type FileBox = {
     NgxTippyModule,
     ReactiveFormsModule,
     RouterModule,
-
     BooksPricingComponent,
     ISBN13Pipe
   ],
@@ -74,23 +73,21 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
 
   protected payload = new FormGroup(
     {
+      userId: new FormControl(),
       scope: new FormArray([]),
-      price: new FormControl<number>(99, [
-        Validators.required,
-        Validators.min(1)
-      ]),
-      state: new FormControl('LIKE_NEW', [Validators.required]),
+      price: new FormControl(null, [Validators.required, Validators.min(1)]),
+      state: new FormControl(null, [Validators.required]),
       tradeable: new FormControl<boolean>(false),
-      binding: new FormControl('INTACT', [
+      binding: new FormControl('SELECT', [
         selectionValidator({ not: ['SELECT'] })
       ]),
-      cover: new FormControl('INTACT', [
+      cover: new FormControl('SELECT', [
         selectionValidator({ not: ['SELECT'] })
       ]),
-      pages: new FormControl('INTACT', [
+      pages: new FormControl('SELECT', [
         selectionValidator({ not: ['SELECT'] })
       ]),
-      markings: new FormControl('NONE', [
+      markings: new FormControl('SELECT', [
         selectionValidator({ not: ['SELECT'] })
       ]),
       notes: new FormControl(null, [Validators.required]),
@@ -126,7 +123,6 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
     this.payload.valueChanges
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((value: any) => {
-        console.log(value);
         this.updateRecommendedSellingPrice(value);
       });
 
@@ -135,6 +131,9 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((institutions: any[]) => {
         this.institutions = institutions;
+        this.payload.patchValue({
+          userId: this.auth.getUserId()
+        });
 
         const scope = <FormArray>this.payload.get('scope');
         institutions.forEach((institution: any) =>
@@ -177,13 +176,12 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
   }
 
   onSubmit(e: Event) {
-    const { images, scope, ...data } = this.payload.value;
-    console.log(data);
+    this.payload.markAllAsTouched();
     if (this.payload.invalid) {
       return;
     }
 
-    // const { images, scope, ...data } = this.payload.value;
+    const { images, ...data } = this.payload.value;
     this.bookMarketService
       .create(data)
       .pipe(takeUntil(this.unsubscribe$))
@@ -202,16 +200,12 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
       });
   }
 
-  trackBy(index: number, item: any) {
-    return item.id;
-  }
-
   onMetricsLoaded(metrics: any) {
     this.pricings = [].concat(metrics);
   }
 
   private updateRecommendedSellingPrice(value: any) {
-    console.log('updateRecommendedSellingPrice', this.pricings);
+    // console.log('updateRecommendedSellingPrice', this.pricings);
     if (!this.pricings || !value.state) {
       return;
     }
@@ -236,6 +230,10 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
         };
       })
     );
+  }
+
+  trackBy(index: number, item: any) {
+    return item.id;
   }
 
   ngOnDestroy() {

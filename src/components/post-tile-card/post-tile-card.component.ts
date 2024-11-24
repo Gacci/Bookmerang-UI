@@ -21,19 +21,17 @@ import { BookMarketService } from '../../services/book-market.service';
 import { DropdownDirective } from '../../directives/dropdown.directive';
 
 export enum ActionEvent {
-  Edit = 1,
-  Delete = 2,
-  Like = 3,
-  Details = 4,
-  Share = 5
+  Delete = 1,
+  Details = 2,
+  Edit = 3,
+  Like = 4,
+  Share = 5,
+  Unlike = 6
 }
 
 export interface PostTileEvent {
-  event: Event;
-  post: {
-    type: ActionEvent;
-    data: any;
-  };
+  type: ActionEvent;
+  data: any;
 }
 
 @Component({
@@ -98,8 +96,8 @@ export class PostTileCardComponent
 
     this.isProcessingEdit = true;
     this.action.emit({
-      event,
-      post: { type: ActionEvent.Edit, data: this.post }
+      type: ActionEvent.Edit,
+      data: this.post
     });
 
     this.bookMarketService
@@ -123,8 +121,8 @@ export class PostTileCardComponent
 
     this.isProcessingDelete = true;
     this.action.emit({
-      event,
-      post: { type: ActionEvent.Delete, data: this.post }
+      type: ActionEvent.Delete,
+      data: this.post
     });
 
     this.bookMarketService
@@ -135,7 +133,6 @@ export class PostTileCardComponent
           this.isProcessingDelete = false;
         },
         error: (error: any) => {
-          console.error('Error deleting post:', error);
           this.isProcessingDelete = false;
         }
       });
@@ -143,22 +140,24 @@ export class PostTileCardComponent
 
   onToggleBookPostLike(event: Event) {
     this.action.emit({
-      event,
-      post: { type: ActionEvent.Delete, data: this.post }
+      data: this.post,
+      type: this.post.userRefSavedBookOfferId
+        ? ActionEvent.Unlike
+        : ActionEvent.Like
     });
   }
 
   onShowBookPostDetails(event: Event) {
     this.action.emit({
-      event,
-      post: { type: ActionEvent.Details, data: this.post }
+      data: this.post,
+      type: ActionEvent.Details
     });
   }
 
   onShareBookPost(event: Event) {
     this.action.emit({
-      event,
-      post: { type: ActionEvent.Share, data: this.post }
+      data: this.post,
+      type: ActionEvent.Share
     });
   }
 

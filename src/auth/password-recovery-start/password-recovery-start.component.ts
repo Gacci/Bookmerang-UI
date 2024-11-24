@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
 
-import { PasswordCheckerComponent } from '../../components/password-checker/password-checker.component';
+// import { PasswordCheckerComponent } from '../../components/password-checker/password-checker.component';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 import { passwordMatchValidator } from '../../validators/password-match.validator';
@@ -38,7 +38,7 @@ import { SwiperContainer } from 'swiper/element';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
-    PasswordCheckerComponent,
+    // PasswordCheckerComponent,
     ReactiveFormsModule,
     RouterModule,
     SpinnerComponent

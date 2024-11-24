@@ -202,9 +202,7 @@
           <span *ngIf="book.isbn13">
             {{ book.isbn13 | isbn13 }}
           </span>
-          <span *ngIf="book.isbn10">
-            &#124; {{ book.isbn10 }}
-          </span>
+          <span *ngIf="book.isbn10">&#124; {{ book.isbn10 }}</span>
         </div>
         <p class="text-sm text-gray-500" *ngIf="book.language">
           Language: {{ book.language }}
@@ -508,7 +506,9 @@
                 />
               </g>
             </svg>
-            <span class="inline-block text-xs font-bold">{{ book.pages }}</span>
+            <span class="inline-block text-xs font-bold">
+              {{ book.pages }}
+            </span>
           </li>
         </ul>
       </div>
@@ -532,13 +532,12 @@
   ></confirm-dialog> -->
   <!-- {{ pricingQueryParams | json }} -->
   <book-post-card
-    *ngFor="let post of data"
-    (action)="onActionClicked($event)"
+    *ngFor="let post of data; trackBy: trackBy"
+    (action)="onActionClicked($event, post)"
+    [isProcessingLike]="post.isProcessingLike"
     [post]="post"
     [userRouterLink]="['/', 'books', 'inventories', post.userId]"
     [userQueryParams]="{ scope: filters.controls.scope.value }"
-    [link]="['/', 'books', 'markets']"
-    [query]="{ scope: filters.controls.scope.value, isbn13: post.book.isbn13 }"
   ></book-post-card>
 </div>
 

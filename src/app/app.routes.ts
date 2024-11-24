@@ -84,8 +84,8 @@ export const routes: Routes = [
     canActivate: [
       isLoggedGuard,
       isISBNGuard,
-      bookExistsGuard,
-      isCollegeEnrolledGuard
+      isCollegeEnrolledGuard,
+      bookExistsGuard
     ],
     component: BooksMarketsComponent,
     path: 'books/markets',

@@ -9,11 +9,12 @@
   [scrollWindow]="true"
   (scrolled)="onScrollDown()"
   (scrolledUp)="onScrollUp()"
+  *ngIf="!!data?.length"
 >
   <div class="flex flex-wrap justfy-start">
     <post-tile-card
       class="group text-center w-full md:border md:-ml-[1px] md:-mt-[1px] md:w-1/2 lg:w-1/3 xl:w-1/4"
-      *ngFor="let post of data"
+      *ngFor="let post of data; trackBy: trackBy"
       [post]="post"
       [link]="['/', 'books', 'markets']"
       [query]="{ scope: params.institutionId, isbn13: post.book.isbn13 }"

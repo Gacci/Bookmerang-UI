@@ -58,7 +58,9 @@ export class AuthService {
           <JwtPayloadPlus>JWT.jwtDecode(login.access_token)
         );
       }),
-      switchMap(login => this.getUserInstitutions().pipe(map(() => login)))
+      switchMap(login =>
+        this.getUserInstitutions().pipe(map(() => this.authTokenSubject.value))
+      )
     );
   }
 

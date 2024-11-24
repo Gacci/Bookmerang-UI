@@ -43,12 +43,10 @@ export class BooksInventoriesComponent
   protected user!: any;
 
   ngOnInit(): void {
-    console.log('ngOnInit');
     this.pageNumber += 1;
     combineLatest([this.route.params, this.route.queryParams])
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(([params, query]) => {
-        console.log('params:', params, 'query:', query);
         this.params = {
           institutionId: query['scope'],
           userId: params['userId']
@@ -73,7 +71,7 @@ export class BooksInventoriesComponent
     console.log('Scrolling up');
   }
 
-  override async onScrollDown() {
+  override onScrollDown() {
     if (this.isLoadingNext || !this.hasNextPage) {
       return;
     }
@@ -108,6 +106,10 @@ export class BooksInventoriesComponent
         console.log('User dismissed the bottom sheet.');
       }
     });
+  }
+
+  trackBy(index: number, item: any) {
+    return item.bookOfferId;
   }
 
   ngOnDestroy() {

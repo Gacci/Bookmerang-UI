@@ -102,10 +102,19 @@
             placeholder="Enter price"
             formControlName="price"
           />
-
-          <!-- <p class="text-sm text-gray-500 mb-2">
-                    Specify the price if the book is for sale. Leave blank if not applicable.
-                </p> -->
+          <p class="text-xs text-red-500 mb-2">
+            {{
+              payload.controls.price.invalid &&
+              payload.controls.price.touched &&
+              payload.controls.price.getError('required')
+                ? 'Please specify a price for your book'
+                : payload.controls.price.invalid &&
+                    payload.controls.price.touched &&
+                    payload.controls.price.getError('min')
+                  ? 'Price must be at least 0.01'
+                  : ' '
+            }}
+          </p>
         </div>
 
         <!-- Tradeable -->
@@ -249,6 +258,16 @@
           </div>
         </li>
       </ul>
+
+      <p class="text-xs text-red-500 mb-2">
+        {{
+          payload.controls.state.invalid &&
+          payload.controls.state.touched &&
+          payload.controls.state.getError('required')
+            ? 'Please specify a price for your book'
+            : ' '
+        }}
+      </p>
     </section>
 
     <section class="my-16">
@@ -281,7 +300,15 @@
             </option>
           </select>
 
-          <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the book’s binding.</p> -->
+          <p class="text-xs text-red-500 mb-2">
+            {{
+              payload.controls.binding.invalid &&
+              payload.controls.binding.touched &&
+              payload.controls.binding.getError('invalidSelection')
+                ? "Select the option best describes your books's binding condition"
+                : ' '
+            }}
+          </p>
         </div>
 
         <!-- Cover -->
@@ -305,7 +332,15 @@
             <option value="STAINED">Stained - Visible stains or marks</option>
           </select>
 
-          <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the book’s cover.</p> -->
+          <p class="text-xs text-red-500 mb-2">
+            {{
+              payload.controls.cover.invalid &&
+              payload.controls.cover.touched &&
+              payload.controls.cover.getError('invalidSelection')
+                ? "Select the option best describes your books's cover condition"
+                : ' '
+            }}
+          </p>
         </div>
 
         <!-- Pages -->
@@ -321,7 +356,15 @@
             <option value="TORN">Torn - Pages are ripped or torn</option>
           </select>
 
-          <!-- <p class="text-sm text-gray-500 mb-2">Describe the condition of the pages inside the book.</p> -->
+          <p class="text-xs text-red-500 mb-2">
+            {{
+              payload.controls.pages.invalid &&
+              payload.controls.pages.touched &&
+              payload.controls.pages.getError('invalidSelection')
+                ? "Select the option best describes your books's pages condition"
+                : ' '
+            }}
+          </p>
         </div>
 
         <!-- Markings -->
@@ -340,7 +383,15 @@
             </option>
           </select>
 
-          <!-- <p class="text-sm text-gray-500 mb-2">Select the type of markings found inside the book.</p> -->
+          <p class="text-xs text-red-500 mb-2">
+            {{
+              payload.controls.markings.invalid &&
+              payload.controls.markings.touched &&
+              payload.controls.markings.getError('invalidSelection')
+                ? "Select the option best describes your books's pages condition"
+                : ' '
+            }}
+          </p>
         </div>
       </div>
     </section>
@@ -435,6 +486,7 @@
     </div>
 
     <input type="hidden" formControlName="isbn13" />
+    <input type="hidden" formControlName="userId" />
 
     <div class="mx-auto my-8 flex flex-row space-x-2 max-w-md">
       <a class="flex-1 btn btn-gray-100" [routerLink]="['/', 'home']">Cancel</a>

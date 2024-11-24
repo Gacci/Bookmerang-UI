@@ -7,12 +7,13 @@ import { takeUntil } from 'rxjs';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import {
+  ActionEvent,
   BookPostCardComponent,
   BookPostEvent
 } from '../components/book-post-card/book-post-card.component';
 
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
-import { ConfirmDialogComponent } from '../components/confirm-dialog.component';
+// import { ConfirmDialogComponent } from '../components/confirm-dialog.component';
 import { InstitutionsDropdownComponent } from '../components/institutions-dropdown/institutions-dropdown.component';
 import { SurveyService } from '../services/survey.service';
 
@@ -39,7 +40,6 @@ type BookMarketsFilters = {
   }>;
 };
 
-console.log(Hash);
 @Component({
   selector: 'books-market',
   standalone: true,
@@ -47,7 +47,7 @@ console.log(Hash);
     CommonModule,
     BookPostCardComponent,
     BooksPricingComponent,
-    ConfirmDialogComponent,
+    // ConfirmDialogComponent,
     ISBN13Pipe,
     ReactiveFormsModule,
     RouterModule,
@@ -102,7 +102,6 @@ export class BooksMarketsComponent
     });
 
   ngOnInit(): void {
-    console.log('BookMarketsComponents.onInit', this);
     this.pageNumber += 1;
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
@@ -115,8 +114,6 @@ export class BooksMarketsComponent
         this.data = resolved.posts;
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
-
-        console.log(this.book);
       });
 
     this.route.queryParams
@@ -166,7 +163,7 @@ export class BooksMarketsComponent
     this.survey = this.surveyService.getAcademicSurveyQuestion();
   }
 
-  override async onScrollDown() {
+  override onScrollDown() {
     if (this.isLoadingNext || !this.hasNextPage) {
       return;
     }
@@ -201,7 +198,6 @@ export class BooksMarketsComponent
       pageSize: this.pageSize
     };
 
-    console.log('onScrollDown', this.filters.value, params);
     this.bookMarketService
       .search(params)
       .pipe(takeUntil(this.unsubscribe$))
@@ -225,7 +221,6 @@ export class BooksMarketsComponent
       (state?.good ? 8 : 0) +
       (state?.acceptable ? 16 : 0);
 
-    // this.pricingQueryParams.isbn13 = this.book.isbn13;
     this.router.navigate(['books', 'markets'], {
       queryParams: {
         scope,
@@ -237,6 +232,45 @@ export class BooksMarketsComponent
     });
   }
 
+  onActionClicked(event: BookPostEvent, item: any) {
+    if (ActionEvent.Like === event.type) {
+      this.onLikeBookPost(item);
+    } else if (ActionEvent.Unlike === event.type) {
+      this.onUnlikeBookPost(item);
+    }
+  }
+
+  onLikeBookPost(item: any) {
+    item.isProcessingLike = true;
+    this.bookMarketService
+      .likeBookPost(item.bookOfferId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response: any) => {
+          item.savedBookOfferId = response.savedBookOfferId;
+          item.isProcessingLike = false;
+        },
+        error: (error: any) => {
+          item.isProcessingLike = false;
+        }
+      });
+  }
+
+  onUnlikeBookPost(item: any) {
+    this.bookMarketService
+      .unlikeBookPost(item.savedBookOfferId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response: any) => {
+          item.savedBookOfferId = null;
+          item.isProcessingLike = false;
+        },
+        error: (error: any) => {
+          item.isProcessingLike = false;
+        }
+      });
+  }
+
   onSurveySelection(selection: boolean | null) {
     setTimeout(() => {
       this.survey = this.surveyService.getAcademicSurveyQuestion();
@@ -244,8 +278,8 @@ export class BooksMarketsComponent
     }, 3000);
   }
 
-  onActionClicked(event: BookPostEvent) {
-    console.log(event);
+  trackBy(index: number, item: any) {
+    return item.bookOfferId;
   }
 
   ngOnDestroy() {

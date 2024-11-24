@@ -45,13 +45,40 @@ export const SUBJECTS = [
 ];
 
 export const LEVELS = [
-  ...Array.from({ length: 99 }).map((v, i) => ({ level: i + 100, weight: 10 })),
-  ...Array.from({ length: 99 }).map((v, i) => ({ level: i + 200, weight: 8 })),
-  ...Array.from({ length: 99 }).map((v, i) => ({ level: i + 300, weight: 5 })),
-  ...Array.from({ length: 99 }).map((v, i) => ({ level: i + 400, weight: 4 })),
-  ...Array.from({ length: 99 }).map((v, i) => ({ level: i + 500, weight: 3 })),
-  ...Array.from({ length: 99 }).map((v, i) => ({ level: i + 600, weight: 3 })),
-  ...Array.from({ length: 99 }).map((v, i) => ({ level: i + 700, weight: 2 })),
-  ...Array.from({ length: 99 }).map((v, i) => ({ level: i + 800, weight: 1 })),
-  ...Array.from({ length: 99 }).map((v, i) => ({ level: i + 900, weight: 1 }))
+  ...Array.from({ length: 99 }).map((v, i) => ({
+    level: i + 100,
+    weight: 10
+  })),
+  ...Array.from({ length: 99 }).map((v, i) => ({
+    level: i + 200,
+    weight: 8
+  })),
+  ...Array.from({ length: 99 }).map((v, i) => ({
+    level: i + 300,
+    weight: 5
+  })),
+  ...Array.from({ length: 99 }).map((v, i) => ({
+    level: i + 400,
+    weight: 4
+  })),
+  ...Array.from({ length: 99 }).map((v, i) => ({
+    level: i + 500,
+    weight: 3
+  })),
+  ...Array.from({ length: 99 }).map((v, i) => ({
+    level: i + 600,
+    weight: 3
+  })),
+  ...Array.from({ length: 99 }).map((v, i) => ({
+    level: i + 700,
+    weight: 2
+  })),
+  ...Array.from({ length: 99 }).map((v, i) => ({
+    level: i + 800,
+    weight: 1
+  })),
+  ...Array.from({ length: 99 }).map((v, i) => ({
+    level: i + 900,
+    weight: 1
+  }))
 ];

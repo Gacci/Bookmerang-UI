@@ -57,9 +57,9 @@
     .post-card-book-cover {
       @apply absolute top-0 left-0 w-full h-full;
     }
-    &:hover {
-      @apply opacity-75;
-    }
+    // &:hover {
+    //   @apply opacity-75;
+    // }
   }
   .post-card-chat,
   .post-card-sell,

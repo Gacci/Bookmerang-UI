@@ -59,12 +59,12 @@ export class BooksPricingComponent
   private load() {
     this.loading = true;
     this.data = {};
-    
+
     this.bookMarketService
       .metrics({ scope: this.scope, isbn13: ISBN.asIsbn13(this.isbn13) })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(([data]) => {
-        if ( data ) {
+        if (data) {
           const minPrice = Math.min(
             ...data.metrics
               ?.filter((metric: any) => !!metric.total)
@@ -83,7 +83,7 @@ export class BooksPricingComponent
             (sum: number, metric: any) => sum + metric.tradeable,
             0
           );
-  
+
           this.data = {
             ...data,
             ...(total ? { range: this.getPriceRange(minPrice, maxPrice) } : {}),

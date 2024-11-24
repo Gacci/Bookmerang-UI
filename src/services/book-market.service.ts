@@ -15,37 +15,34 @@ export class BookMarketService {
   ) {}
 
   create(body: Data) {
-    return this.http.post('http://127.0.0.1:3000/books/markets/posts', body);
+    return this.http.post('http://127.0.0.1:3000/books/markets', body);
   }
 
   read(bookOfferId: number) {
-    return this.http.get(
-      `http://127.0.0.1:3000/books/markets/posts/${bookOfferId}`
-    );
+    return this.http.get(`http://127.0.0.1:3000/books/markets/${bookOfferId}`);
   }
 
   update(body: any) {
     return this.http.delete(
-      `http://127.0.0.1:3000/books/markets/posts/${body.bookOfferId}`,
+      `http://127.0.0.1:3000/books/markets/${body.bookOfferId}`,
       body
     );
   }
 
   remove(bookOfferId: number) {
     return this.http.delete(
-      `http://127.0.0.1:3000/books/markets/posts/${bookOfferId}`
+      `http://127.0.0.1:3000/books/markets/${bookOfferId}`
     );
   }
 
   // ONLY COVER on populate
   search(params: Data) {
     return this.http
-      .get('http://127.0.0.1:3000/books/markets/posts/search', {
+      .get('http://127.0.0.1:3000/books/markets/search', {
         params
       })
       .pipe(
         map((response: any) => {
-          console.log(response);
           return response.map((post: any) => ({
             ...post,
             book: this.books.populate(post.book)
@@ -55,12 +52,9 @@ export class BookMarketService {
   }
 
   metrics(params: any) {
-    return this.http.get<any[]>(
-      'http://127.0.0.1:3000/books/markets/posts/metrics',
-      {
-        params: { institutionId: params.scope, isbn13: params.isbn13 }
-      }
-    );
+    return this.http.get<any[]>('http://127.0.0.1:3000/books/markets/metrics', {
+      params: { institutionId: params.scope, isbn13: params.isbn13 }
+    });
   }
 
   collections(params: Data) {
@@ -75,11 +69,10 @@ export class BookMarketService {
       );
   }
 
-  likeBookPost(body: Data) {
-    return this.http.post(
-      'http://127.0.0.1:3000/books/markets/favorites',
-      body
-    );
+  likeBookPost(bookOfferId: number) {
+    return this.http.post('http://127.0.0.1:3000/books/markets/favorites', {
+      bookOfferId
+    });
   }
 
   unlikeBookPost(bookOfferId: number) {
@@ -90,10 +83,11 @@ export class BookMarketService {
 
   favorites(params: Data) {
     return this.http
-      .get('http://127.0.0.1:3000/books/markets/favorites/search', { params })
+      .get('http://127.0.0.1:3000/books/markets/favorites/search', {
+        params
+      })
       .pipe(
         map((response: any) => {
-          console.log(response);
           return response.map((post: any) => ({
             ...post,
             book: this.books.populate(post.book)

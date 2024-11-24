@@ -68,8 +68,6 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
             ? { sorting: query.sorting }
             : {})
         });
-
-        console.log(this.filters.controls.scope.value);
       });
 
     this.loadingOverlayService.$isLoading
@@ -85,12 +83,10 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
       });
   }
 
-  override async onScrollDown() {
-    console.log('BooksCollectionsComponent', this.params);
+  override onScrollDown() {
     if (this.isLoadingNext || !this.hasNextPage) {
       return;
     }
-
 
     const params = {
       institutionId: this.filters.value.scope,
@@ -116,6 +112,10 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
     this.router.navigate(['books', 'collections'], {
       queryParams: this.filters.value
     });
+  }
+
+  trackBy(index: number, item: any) {
+    return item.isbn13;
   }
 
   ngOnDestroy() {
