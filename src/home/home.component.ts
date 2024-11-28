@@ -66,18 +66,18 @@ export class HomeComponent extends InfiniteScrollView<any> {
   ngOnInit(): void {
     // this.pageNumber += 1;
     this.params = { scope: <number>this.auth.getPrimarySearchScopeId() };
+    this.loadingOverlayService.$isLoading
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(isLoadingNext => (this.isLoadingNext = isLoadingNext));
+
+    /*
     this.bookMarketService
-      .collections({ institutionId: this.params.scope, sorting: 'price:desc' })
+      .search({ institutionId: this.params.scope, sorting: 'price:desc' })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response: any) => {
         console.log(response);
         this.cheaps = response.data;
       });
-
-    this.onScrollDown();
-    this.loadingOverlayService.$isLoading
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(isLoadingNext => (this.isLoadingNext = isLoadingNext));
 
     // this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
     //   next: (resolved: any) => {
@@ -86,6 +86,9 @@ export class HomeComponent extends InfiniteScrollView<any> {
     //       !!this.data?.length && !(this.data?.length % this.pageSize);
     //   }
     // });
+    */
+
+    this.onScrollDown();
   }
 
   override onScrollDown() {

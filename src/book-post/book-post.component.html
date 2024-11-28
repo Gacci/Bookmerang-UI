@@ -38,461 +38,517 @@
 </aside>
 
 <div class="w-full max-w-3xl bg-white mx-auto p-16 border-x">
-  <h1 class="text-3xl font-semibold text-gray-800 mb-6">Book Condition Form</h1>
+  <ng-container *ngIf="!offerRequestState.sent && !offerRequestState.done">
+    <h1 class="text-3xl font-semibold text-gray-800 mb-6">
+      Book Condition Form
+    </h1>
 
-  <form
-    enctype="multipart/form-data"
-    [formGroup]="payload"
-    (ngSubmit)="onSubmit($event)"
-  >
-    <section class="my-8" *ngIf="institutions?.length !== 1">
-      <h3 class="block text-gray-700 font-medium mb-2">
-        Select campuses where to sell
-        <span
-          class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
-          [ngxTippy]="tooltip.scope"
-        >
-          ?
-        </span>
-      </h3>
-      <div class="flex space-x-8">
-        <ul class="flex flex-col" formArrayName="scope">
+    <form
+      enctype="multipart/form-data"
+      [formGroup]="payload"
+      (ngSubmit)="onSubmit($event)"
+    >
+      <section class="my-8" *ngIf="institutions?.length !== 1">
+        <h3 class="block text-gray-700 font-medium mb-2">
+          Select campuses where to sell
+          <span
+            class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
+            [ngxTippy]="tooltip.scope"
+          >
+            ?
+          </span>
+        </h3>
+        <div class="flex space-x-8">
+          <ul class="flex flex-col" formArrayName="scope">
+            <li
+              class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+              *ngFor="let institution of institutions; let i = index"
+            >
+              <div class="relative flex items-start w-full">
+                <div class="flex items-center h-5">
+                  <input
+                    class="border-gray-200 rounded-full disabled:opacity-50"
+                    type="checkbox"
+                    [id]="institution.institutionId"
+                    [value]="institution.institutionId"
+                    [formControlName]="i"
+                  />
+                </div>
+                <label
+                  [for]="institution.institutionId"
+                  class="ms-3 block w-full text-sm text-gray-600"
+                >
+                  {{ institution.locationName }}
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="my-8">
+        <label for="price" class="block text-gray-700 font-medium mb-2">
+          Selling Price
+          <span
+            class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
+            [ngxTippy]="tooltip.price"
+          >
+            ?
+          </span>
+        </label>
+        <div class="flex space-x-8">
+          <!-- Price -->
+          <div class="mb-6 lg:w-1/2">
+            <input
+              class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              type="text"
+              placeholder="Enter price"
+              formControlName="price"
+            />
+            <p class="text-xs text-red-500 mb-2">
+              {{
+                payload.controls.price.invalid &&
+                payload.controls.price.touched &&
+                payload.controls.price.getError('required')
+                  ? 'Please specify a price for your book'
+                  : payload.controls.price.invalid &&
+                      payload.controls.price.touched &&
+                      payload.controls.price.getError('min')
+                    ? 'Price must be at least 0.01'
+                    : ' '
+              }}
+            </p>
+          </div>
+
+          <!-- Tradeable -->
+          <div class="mb-6 py-2">
+            <label class="inline-flex items-center cursor-pointer">
+              <input
+                class="sr-only peer"
+                type="checkbox"
+                value="1"
+                formControlName="tradeable"
+              />
+              <div
+                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+              ></div>
+              <p class="text-sm text-gray-500 ml-2">
+                Are you open to trading this book?
+              </p>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- State -->
+      <section class="my-8">
+        <label class="block text-gray-700 font-medium mb-2">
+          Overall Condition
+          <span
+            class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
+            [ngxTippy]="tooltip.state"
+          >
+            ?
+          </span>
+        </label>
+        <ul class="flex flex-col">
           <li
             class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
-            *ngFor="let institution of institutions; let i = index"
           >
             <div class="relative flex items-start w-full">
               <div class="flex items-center h-5">
                 <input
                   class="border-gray-200 rounded-full disabled:opacity-50"
-                  type="checkbox"
-                  [id]="institution.institutionId"
-                  [value]="institution.institutionId"
-                  [formControlName]="i"
+                  id="new"
+                  name="state"
+                  type="radio"
+                  value="NEW"
+                  formControlName="state"
+                />
+              </div>
+              <label for="new" class="ms-3 block w-full text-sm text-gray-600">
+                New - Perfect condition, as if just purchased.
+              </label>
+            </div>
+          </li>
+
+          <li
+            class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+          >
+            <div class="relative flex items-start w-full">
+              <div class="flex items-center h-5">
+                <input
+                  class="border-gray-200 rounded-full disabled:opacity-50"
+                  id="like-new"
+                  name="state"
+                  type="radio"
+                  value="LIKE_NEW"
+                  formControlName="state"
                 />
               </div>
               <label
-                [for]="institution.institutionId"
+                for="like-new"
                 class="ms-3 block w-full text-sm text-gray-600"
               >
-                {{ institution.locationName }}
+                Like New - Minimal wear, barely used.
+              </label>
+            </div>
+          </li>
+
+          <li
+            class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+          >
+            <div class="relative flex items-start w-full">
+              <div class="flex items-center h-5">
+                <input
+                  class="border-gray-200 rounded-full disabled:opacity-50"
+                  id="very-good"
+                  name="state"
+                  type="radio"
+                  value="VERY_GOOD"
+                  formControlName="state"
+                />
+              </div>
+              <label
+                for="very-good"
+                class="ms-3 block w-full text-sm text-gray-600"
+              >
+                Very Good - Minor signs of use, but overall excellent.
+              </label>
+            </div>
+          </li>
+
+          <li
+            class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+          >
+            <div class="relative flex items-start w-full">
+              <div class="flex items-center h-5">
+                <input
+                  class="border-gray-200 rounded-full disabled:opacity-50"
+                  id="good"
+                  name="state"
+                  type="radio"
+                  value="GOOD"
+                  formControlName="state"
+                />
+              </div>
+              <label for="good" class="ms-3 block w-full text-sm text-gray-600">
+                Good - Noticeable wear but still in decent shape.
+              </label>
+            </div>
+          </li>
+
+          <li
+            class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
+          >
+            <div class="relative flex items-start w-full">
+              <div class="flex items-center h-5">
+                <input
+                  class="border-gray-200 rounded-full disabled:opacity-50"
+                  id="acceptable"
+                  name="state"
+                  type="radio"
+                  value="ACCEPTABLE"
+                  formControlName="state"
+                />
+              </div>
+              <label
+                for="acceptable"
+                class="ms-3 block w-full text-sm text-gray-600"
+              >
+                Acceptable - Noticeable wear, fully functional, may have flaws.
               </label>
             </div>
           </li>
         </ul>
-      </div>
-    </section>
 
-    <section class="my-8">
-      <label for="price" class="block text-gray-700 font-medium mb-2">
-        Selling Price
-        <span
-          class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
-          [ngxTippy]="tooltip.price"
-        >
-          ?
-        </span>
-      </label>
-      <div class="flex space-x-8">
-        <!-- Price -->
-        <div class="mb-6 lg:w-1/2">
-          <input
-            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            type="text"
-            placeholder="Enter price"
-            formControlName="price"
-          />
-          <p class="text-xs text-red-500 mb-2">
-            {{
-              payload.controls.price.invalid &&
-              payload.controls.price.touched &&
-              payload.controls.price.getError('required')
-                ? 'Please specify a price for your book'
-                : payload.controls.price.invalid &&
-                    payload.controls.price.touched &&
-                    payload.controls.price.getError('min')
-                  ? 'Price must be at least 0.01'
-                  : ' '
-            }}
-          </p>
-        </div>
-
-        <!-- Tradeable -->
-        <div class="mb-6 py-2">
-          <label class="inline-flex items-center cursor-pointer">
-            <input
-              class="sr-only peer"
-              type="checkbox"
-              value="1"
-              formControlName="tradeable"
-            />
-            <div
-              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-            ></div>
-            <p class="text-sm text-gray-500 ml-2">
-              Are you open to trading this book?
-            </p>
-          </label>
-        </div>
-      </div>
-    </section>
-
-    <!-- State -->
-    <section class="my-8">
-      <label class="block text-gray-700 font-medium mb-2">
-        Overall Condition
-        <span
-          class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
-          [ngxTippy]="tooltip.state"
-        >
-          ?
-        </span>
-      </label>
-      <ul class="flex flex-col">
-        <li
-          class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
-        >
-          <div class="relative flex items-start w-full">
-            <div class="flex items-center h-5">
-              <input
-                class="border-gray-200 rounded-full disabled:opacity-50"
-                id="new"
-                name="state"
-                type="radio"
-                value="NEW"
-                formControlName="state"
-              />
-            </div>
-            <label for="new" class="ms-3 block w-full text-sm text-gray-600">
-              New - Perfect condition, as if just purchased.
-            </label>
-          </div>
-        </li>
-
-        <li
-          class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
-        >
-          <div class="relative flex items-start w-full">
-            <div class="flex items-center h-5">
-              <input
-                class="border-gray-200 rounded-full disabled:opacity-50"
-                id="like-new"
-                name="state"
-                type="radio"
-                value="LIKE_NEW"
-                formControlName="state"
-              />
-            </div>
-            <label
-              for="like-new"
-              class="ms-3 block w-full text-sm text-gray-600"
-            >
-              Like New - Minimal wear, barely used.
-            </label>
-          </div>
-        </li>
-
-        <li
-          class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
-        >
-          <div class="relative flex items-start w-full">
-            <div class="flex items-center h-5">
-              <input
-                class="border-gray-200 rounded-full disabled:opacity-50"
-                id="very-good"
-                name="state"
-                type="radio"
-                value="VERY_GOOD"
-                formControlName="state"
-              />
-            </div>
-            <label
-              for="very-good"
-              class="ms-3 block w-full text-sm text-gray-600"
-            >
-              Very Good - Minor signs of use, but overall excellent.
-            </label>
-          </div>
-        </li>
-
-        <li
-          class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
-        >
-          <div class="relative flex items-start w-full">
-            <div class="flex items-center h-5">
-              <input
-                class="border-gray-200 rounded-full disabled:opacity-50"
-                id="good"
-                name="state"
-                type="radio"
-                value="GOOD"
-                formControlName="state"
-              />
-            </div>
-            <label for="good" class="ms-3 block w-full text-sm text-gray-600">
-              Good - Noticeable wear but still in decent shape.
-            </label>
-          </div>
-        </li>
-
-        <li
-          class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
-        >
-          <div class="relative flex items-start w-full">
-            <div class="flex items-center h-5">
-              <input
-                class="border-gray-200 rounded-full disabled:opacity-50"
-                id="acceptable"
-                name="state"
-                type="radio"
-                value="ACCEPTABLE"
-                formControlName="state"
-              />
-            </div>
-            <label
-              for="acceptable"
-              class="ms-3 block w-full text-sm text-gray-600"
-            >
-              Acceptable - Noticeable wear, fully functional, may have flaws.
-            </label>
-          </div>
-        </li>
-      </ul>
-
-      <p class="text-xs text-red-500 mb-2">
-        {{
-          payload.controls.state.invalid &&
-          payload.controls.state.touched &&
-          payload.controls.state.getError('required')
-            ? 'Please specify a price for your book'
-            : ' '
-        }}
-      </p>
-    </section>
-
-    <section class="my-16">
-      <div class="flex flex-row bg-blue-100 px-8 py-8 my-4 rounded-md">
-        <p class="text-sm text-blue-500">
-          This section lets you further describe your book's condition to help
-          buyers understand its quality. Select options for binding, cover,
-          pages, and markings to give an accurate overview.
+        <p class="text-xs text-red-500 mb-2">
+          {{
+            payload.controls.state.invalid &&
+            payload.controls.state.touched &&
+            payload.controls.state.getError('required')
+              ? 'Please specify a price for your book'
+              : ' '
+          }}
         </p>
-      </div>
-      <div class="relative lg:w-2/3">
-        <!-- Binding -->
-        <div class="mb-8">
-          <label class="block text-gray-700 font-medium mb-2">
-            Binding Condition
-          </label>
-          <select class="select bg-white w-full" formControlName="binding">
-            <option disabled value="SELECT">-- Select ---</option>
-            <option value="INTACT">
-              Intact - Good condition, fully functional
-            </option>
-            <option value="BROKEN">
-              Broken - Damaged binding, difficult to keep together
-            </option>
-            <option value="WEAK">
-              Weak - Slightly loose but holds the pages together
-            </option>
-            <option value="DAMAGED">
-              Damaged - Noticeably weakened but intact
-            </option>
-          </select>
+      </section>
 
-          <p class="text-xs text-red-500 mb-2">
-            {{
-              payload.controls.binding.invalid &&
-              payload.controls.binding.touched &&
-              payload.controls.binding.getError('invalidSelection')
-                ? "Select the option best describes your books's binding condition"
-                : ' '
-            }}
+      <section class="my-16">
+        <div class="flex flex-row bg-blue-100 px-8 py-8 my-4 rounded-md">
+          <p class="text-sm text-blue-500">
+            This section lets you further describe your book's condition to help
+            buyers understand its quality. Select options for binding, cover,
+            pages, and markings to give an accurate overview.
           </p>
         </div>
+        <div class="relative lg:w-2/3">
+          <!-- Binding -->
+          <div class="mb-8">
+            <label class="block text-gray-700 font-medium mb-2">
+              Binding Condition
+            </label>
+            <select class="select bg-white w-full" formControlName="binding">
+              <option disabled value="SELECT">-- Select ---</option>
+              <option value="INTACT">
+                Intact - Good condition, fully functional
+              </option>
+              <option value="BROKEN">
+                Broken - Damaged binding, difficult to keep together
+              </option>
+              <option value="WEAK">
+                Weak - Slightly loose but holds the pages together
+              </option>
+              <option value="DAMAGED">
+                Damaged - Noticeably weakened but intact
+              </option>
+            </select>
 
-        <!-- Cover -->
-        <div class="mb-8">
-          <label class="block text-gray-700 font-medium mb-2">
-            Cover Condition
-          </label>
-          <select class="select bg-white w-full" formControlName="cover">
-            <option disabled value="SELECT">-- Select ---</option>
-            <option value="CREASED">Creased - Visible creases or folds</option>
-            <option value="CUT">Cut - Physically cut or torn cover</option>
-            <option value="DISCOLORED">
-              Discolored - Noticeable discoloration present
-            </option>
-            <option value="FADED">Faded - Colors have faded from wear</option>
-            <option value="INTACT">Intact - No significant issues</option>
-            <option value="RIPPED">Ripped - Tears or rips in the cover</option>
-            <option value="SCRATCHED">
-              Scratched - Visible scratches on the cover
-            </option>
-            <option value="STAINED">Stained - Visible stains or marks</option>
-          </select>
+            <p class="text-xs text-red-500 mb-2">
+              {{
+                payload.controls.binding.invalid &&
+                payload.controls.binding.touched &&
+                payload.controls.binding.getError('invalidSelection')
+                  ? "Select the option best describes your books's binding condition"
+                  : ' '
+              }}
+            </p>
+          </div>
 
-          <p class="text-xs text-red-500 mb-2">
-            {{
-              payload.controls.cover.invalid &&
-              payload.controls.cover.touched &&
-              payload.controls.cover.getError('invalidSelection')
-                ? "Select the option best describes your books's cover condition"
-                : ' '
-            }}
-          </p>
+          <!-- Cover -->
+          <div class="mb-8">
+            <label class="block text-gray-700 font-medium mb-2">
+              Cover Condition
+            </label>
+            <select class="select bg-white w-full" formControlName="cover">
+              <option disabled value="SELECT">-- Select ---</option>
+              <option value="CREASED">
+                Creased - Visible creases or folds
+              </option>
+              <option value="CUT">Cut - Physically cut or torn cover</option>
+              <option value="DISCOLORED">
+                Discolored - Noticeable discoloration present
+              </option>
+              <option value="FADED">Faded - Colors have faded from wear</option>
+              <option value="INTACT">Intact - No significant issues</option>
+              <option value="RIPPED">
+                Ripped - Tears or rips in the cover
+              </option>
+              <option value="SCRATCHED">
+                Scratched - Visible scratches on the cover
+              </option>
+              <option value="STAINED">Stained - Visible stains or marks</option>
+            </select>
+
+            <p class="text-xs text-red-500 mb-2">
+              {{
+                payload.controls.cover.invalid &&
+                payload.controls.cover.touched &&
+                payload.controls.cover.getError('invalidSelection')
+                  ? "Select the option best describes your books's cover condition"
+                  : ' '
+              }}
+            </p>
+          </div>
+
+          <!-- Pages -->
+          <div class="mb-8">
+            <label class="block text-gray-700 font-medium mb-2">
+              Pages Condition
+            </label>
+            <select class="select bg-white w-full" formControlName="pages">
+              <option disabled value="SELECT">-- Select ---</option>
+              <option value="CREASED">
+                Creased - Pages have visible folds
+              </option>
+              <option value="FOLDED">Folded - Some pages are bent</option>
+              <option value="INTACT">Intact - No significant damage</option>
+              <option value="TORN">Torn - Pages are ripped or torn</option>
+            </select>
+
+            <p class="text-xs text-red-500 mb-2">
+              {{
+                payload.controls.pages.invalid &&
+                payload.controls.pages.touched &&
+                payload.controls.pages.getError('invalidSelection')
+                  ? "Select the option best describes your books's pages condition"
+                  : ' '
+              }}
+            </p>
+          </div>
+
+          <!-- Markings -->
+          <div class="mb-8">
+            <label class="block text-gray-700 font-medium mb-2">Markings</label>
+            <select class="select bg-white w-full" formControlName="markings">
+              <option disabled value="SELECT">-- Select ---</option>
+              <option value="HIGHLIGHTING">
+                Highlighting - Pages have been highlighted
+              </option>
+              <option value="MINIMAL">Minimal - Barely any markings</option>
+              <option value="NONE">None - No markings present</option>
+              <option value="PEN">Pen - Some pages have pen markings</option>
+              <option value="PENCIL">
+                Pencil - Some pages have pencil markings
+              </option>
+            </select>
+
+            <p class="text-xs text-red-500 mb-2">
+              {{
+                payload.controls.markings.invalid &&
+                payload.controls.markings.touched &&
+                payload.controls.markings.getError('invalidSelection')
+                  ? "Select the option best describes your books's pages condition"
+                  : ' '
+              }}
+            </p>
+          </div>
         </div>
+      </section>
 
-        <!-- Pages -->
-        <div class="mb-8">
-          <label class="block text-gray-700 font-medium mb-2">
-            Pages Condition
-          </label>
-          <select class="select bg-white w-full" formControlName="pages">
-            <option disabled value="SELECT">-- Select ---</option>
-            <option value="CREASED">Creased - Pages have visible folds</option>
-            <option value="FOLDED">Folded - Some pages are bent</option>
-            <option value="INTACT">Intact - No significant damage</option>
-            <option value="TORN">Torn - Pages are ripped or torn</option>
-          </select>
-
-          <p class="text-xs text-red-500 mb-2">
-            {{
-              payload.controls.pages.invalid &&
-              payload.controls.pages.touched &&
-              payload.controls.pages.getError('invalidSelection')
-                ? "Select the option best describes your books's pages condition"
-                : ' '
-            }}
-          </p>
-        </div>
-
-        <!-- Markings -->
-        <div class="mb-8">
-          <label class="block text-gray-700 font-medium mb-2">Markings</label>
-          <select class="select bg-white w-full" formControlName="markings">
-            <option disabled value="SELECT">-- Select ---</option>
-            <option value="HIGHLIGHTING">
-              Highlighting - Pages have been highlighted
-            </option>
-            <option value="MINIMAL">Minimal - Barely any markings</option>
-            <option value="NONE">None - No markings present</option>
-            <option value="PEN">Pen - Some pages have pen markings</option>
-            <option value="PENCIL">
-              Pencil - Some pages have pencil markings
-            </option>
-          </select>
-
-          <p class="text-xs text-red-500 mb-2">
-            {{
-              payload.controls.markings.invalid &&
-              payload.controls.markings.touched &&
-              payload.controls.markings.getError('invalidSelection')
-                ? "Select the option best describes your books's pages condition"
-                : ' '
-            }}
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Notes -->
-    <section class="my-16">
-      <label class="block text-gray-700 font-medium mb-2" for="notes">
-        Additional Notes
-        <span
-          class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
-          [ngxTippy]="tooltip.notes"
-        >
-          ?
-        </span>
-      </label>
-      <textarea
-        class="w-full h-48 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        id="notes"
-        name="notes"
-        maxlength="516"
-        placeholder="Add notes here..."
-        formControlName="notes"
-      ></textarea>
-    </section>
-
-    <!-- Media -->
-    <div class="flex items-center justify-center w-full">
-      <label
-        for="dropzone"
-        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
-      >
-        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-          <svg
-            class="w-8 h-8 mb-4 text-gray-500"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 20 16"
+      <!-- Notes -->
+      <section class="my-16">
+        <label class="block text-gray-700 font-medium mb-2" for="notes">
+          Additional Notes
+          <span
+            class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
+            [ngxTippy]="tooltip.notes"
           >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-            />
-          </svg>
-          <p class="mb-2 text-sm text-gray-500">
-            <span class="font-semibold">Click to upload</span>
-            or drag and drop
-          </p>
-          <p class="text-xs text-gray-500">
-            SVG, PNG, JPG or GIF (MAX. 800x400px)
-          </p>
-        </div>
-        <input
-          id="dropzone"
-          type="file"
-          class="hidden"
-          accept="image/png, image/jpeg"
-          multiple
-          formControlName="images"
-          (change)="onInputChange($event)"
-        />
-      </label>
-    </div>
-    <div class="h-96 py-8 bg-gray-50 rounded-lg text-center my-2 overflow-auto">
-      <div
-        class="relative inline-block m-2 group"
-        *ngFor="let box of images; trackBy: trackBy"
-      >
-        <!-- Image with opacity on hover -->
-        <img
-          class="h-32 w-32 object-cover rounded-lg group-hover:bg-black group-hover:opacity-50 transition-opacity duration-200"
-          [src]="box.base64"
-        />
+            ?
+          </span>
+        </label>
+        <textarea
+          class="w-full h-48 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          id="notes"
+          name="notes"
+          maxlength="516"
+          placeholder="Add notes here..."
+          formControlName="notes"
+        ></textarea>
+      </section>
 
-        <!-- Black overlay on hover -->
-        <div
-          class="absolute rounded-lg inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-200"
-        ></div>
-
-        <!-- Button visible only on hover -->
-        <button
-          class="absolute bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 px-3 py-0.5 text-xs text-red-500 bg-red-100 rounded-full z-10"
-          type="button"
-          (click)="onRemoveThumbnail(box.id)"
+      <!-- Media -->
+      <div class="flex items-center justify-center w-full">
+        <label
+          for="dropzone"
+          class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
         >
-          Delete
-        </button>
+          <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <svg
+              class="w-8 h-8 mb-4 text-gray-500"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 16"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+              />
+            </svg>
+            <p class="mb-2 text-sm text-gray-500">
+              <span class="font-semibold">Click to upload</span>
+              or drag and drop
+            </p>
+            <p class="text-xs text-gray-500">
+              SVG, PNG, JPG or GIF (MAX. 800x400px)
+            </p>
+          </div>
+          <input
+            id="dropzone"
+            type="file"
+            class="hidden"
+            accept="image/png, image/jpeg"
+            multiple
+            formControlName="images"
+            (change)="onInputChange($event)"
+          />
+        </label>
+      </div>
+      <div
+        class="h-96 py-8 bg-gray-50 rounded-lg text-center my-2 overflow-auto"
+      >
+        <div
+          class="relative inline-block m-2 group"
+          *ngFor="let box of images; trackBy: trackBy"
+        >
+          <!-- Image with opacity on hover -->
+          <img
+            class="h-32 w-32 object-cover rounded-lg group-hover:bg-black group-hover:opacity-50 transition-opacity duration-200"
+            [src]="box.base64"
+          />
+
+          <!-- Black overlay on hover -->
+          <div
+            class="absolute rounded-lg inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-200"
+          ></div>
+
+          <!-- Button visible only on hover -->
+          <button
+            class="absolute bottom-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 px-3 py-0.5 text-xs text-red-500 bg-red-100 rounded-full z-10"
+            type="button"
+            (click)="onRemoveThumbnail(box.id)"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <input type="hidden" formControlName="isbn13" />
+      <input type="hidden" formControlName="userId" />
+
+      <div class="mx-auto my-8 flex flex-row space-x-2 max-w-md">
+        <a class="flex-1 btn btn-gray-100" [routerLink]="['/', 'home']">
+          Cancel
+        </a>
+        <button type="submit" class="flex-1 btn btn-blue-600">Submit</button>
+      </div>
+    </form>
+  </ng-container>
+
+  <!-- Success message -->
+  <div
+    class="w-full max-w-3xl bg-white mx-auto p-16 mt-10"
+    *ngIf="
+      offerRequestState.sent && offerRequestState.done && offerRequestState.ok
+    "
+  >
+    <div class="flex flex-col items-center">
+      <!-- Success Icon -->
+      <div class="mb-6">
+        <svg
+          class="w-16 h-16 text-green-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 13l4 4L19 7"
+          ></path>
+        </svg>
+      </div>
+
+      <!-- Success Message -->
+      <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+        Form Submitted Successfully!
+      </h2>
+      <p class="text-md text-gray-600 text-center">
+        Thank you for providing the details about your book. Your information
+        has been successfully submitted.
+      </p>
+
+      <!-- Action Button -->
+      <div class="mt-8">
+        <a class="btn btn-blue-600">Return to Home</a>
       </div>
     </div>
-
-    <input type="hidden" formControlName="isbn13" />
-    <input type="hidden" formControlName="userId" />
-
-    <div class="mx-auto my-8 flex flex-row space-x-2 max-w-md">
-      <a class="flex-1 btn btn-gray-100" [routerLink]="['/', 'home']">Cancel</a>
-      <button type="submit" class="flex-1 btn btn-blue-600">Submit</button>
-    </div>
-  </form>
+  </div>
 </div>
 
 <!-- Main modal -->

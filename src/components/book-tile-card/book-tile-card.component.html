@@ -19,7 +19,7 @@
   </a>
 
   <span class="block text-sm text-gray-700">{{ book.authors }}</span>
-  <span class="block text-sm text-gray-700">{{ book.isbn13 }}</span>
+  <span class="block text-sm text-gray-700">{{ book.isbn13 | isbn13 }}</span>
   <strong class="block text-sm">
     {{ book.pricing.min | currency }}
   </strong>

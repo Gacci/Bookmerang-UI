@@ -22,7 +22,7 @@
     {{ post.book.title }} {{ post.book.subtitle }}
   </a>
   <span class="block text-sm text-gray-700">{{ post.book.authors }}</span>
-  <span class="block text-sm text-gray-700">{{ post.book.isbn13 }}</span>
+  <span class="block text-sm text-gray-700">{{ post.book.isbn13 | isbn13 }}</span>
   <strong class="block text-sm">
     {{ post.price | currency }}
   </strong>

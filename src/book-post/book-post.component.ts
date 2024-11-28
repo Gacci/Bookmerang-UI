@@ -10,20 +10,22 @@ import {
 } from '@angular/forms';
 
 import { takeUntil } from 'rxjs';
+import { NgxTippyModule } from 'ngx-tippy-wrapper';
 
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
-import { StringService } from '../services/string.service';
 
 import { selectionValidator } from '../validators/selection.validator';
+
+import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
 import { BookValuatorService } from '../services/book-valuator.service';
 import { ImageManagerService } from '../services/image-manager.service';
-import { AuthService } from '../services/auth.service';
+import { StringService } from '../services/string.service';
 
 import { Unsubscribable } from '../classes/unsubscribable';
 
 import { ISBN13Pipe } from '../pipes/isbn13.pipe';
-import { NgxTippyModule } from 'ngx-tippy-wrapper';
+import { HttpRequest } from '../interfaces/http-request.interface';
 
 type FileBox = {
   base64: string;
@@ -70,6 +72,8 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
   protected scope = <number>this.auth.getPrimarySearchScopeId();
 
   protected institutions: any[] = [];
+
+  protected offerRequestState: HttpRequest = {};
 
   protected payload = new FormGroup(
     {
@@ -182,11 +186,18 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
     }
 
     const { images, ...data } = this.payload.value;
+
+    this.offerRequestState.sent = true;
     this.bookMarketService
       .create(data)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: response => {
+          this.offerRequestState = {
+            ...this.offerRequestState,
+            done: true,
+            ok: true
+          };
           console.log(response);
 
           // this.imageManagerService

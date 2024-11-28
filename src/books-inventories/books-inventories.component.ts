@@ -11,7 +11,7 @@ import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 import { BookPostEvent } from '../components/book-post-card/book-post-card.component';
 
 import { BookOfferEditSheetComponent } from '../components/book-offer-edit-sheet/book-offer-edit-sheet.component';
-import { PostTileCardComponent } from '../components/post-tile-card/post-tile-card.component';
+import { ActionEvent, PostTileCardComponent, PostTileEvent } from '../components/post-tile-card/post-tile-card.component';
 
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
@@ -93,19 +93,49 @@ export class BooksInventoriesComponent
       });
   }
 
-  onActionClicked(e: BookPostEvent) {
-    const bottomSheetRef = this.ngDialogService.open(
-      BookOfferEditSheetComponent,
-      {}
-    );
+  onActionClicked(e: PostTileEvent) {
+    console.log(e);
+    // const bottomSheetRef = this.ngDialogService.open(
+    //   BookOfferEditSheetComponent,
+    //   {}
+    // );
 
-    bottomSheetRef.afterClosed$.subscribe(result => {
-      if (result) {
-        console.log('User confirmed:', result);
-      } else {
-        console.log('User dismissed the bottom sheet.');
-      }
-    });
+    // bottomSheetRef.afterClosed$.subscribe(result => {
+    //   if (result) {
+    //     console.log('User confirmed:', result);
+    //   } else {
+    //     console.log('User dismissed the bottom sheet.');
+    //   }
+    // });
+
+    /*
+    if ( ActionEvent.Edit === e.type ) {
+      this.bookMarketService
+        .update(e.post)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe({
+          next: (response: any) => {
+            // this.isProcessingEdit = false;
+          },
+          error: (error: any) => {
+            // this.isProcessingEdit = false;
+          }
+        });
+    }
+    else if ( ActionEvent.Delete === e.type ) {
+      this.bookMarketService
+        .remove(e.post.bookOfferId)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe({
+          next: (response: any) => {
+            // this.isProcessingDelete = false;
+          },
+          error: (error: any) => {
+            // this.isProcessingDelete = false;
+          }
+        });
+    }
+        */
   }
 
   trackBy(index: number, item: any) {

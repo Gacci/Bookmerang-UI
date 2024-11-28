@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { Unsubscribable } from '../../classes/unsubscribable';
+import { ISBN13Pipe } from '../../pipes/isbn13.pipe';
 
 @Component({
   selector: 'book-tile-card',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ISBN13Pipe],
   templateUrl: './book-tile-card.component.html',
   styleUrl: './book-tile-card.component.scss'
 })

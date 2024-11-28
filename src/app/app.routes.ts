@@ -24,6 +24,7 @@ import { isCollegeEnrolledGuard } from '../guards/is-college-enrolled.guard';
 import { isISBNGuard } from '../guards/is-isbn.guard';
 import { isLoggedGuard } from '../guards/is-logged.guard';
 import { isNotLoggedGuard } from '../guards/is-not-logged.guard';
+import { isCollegeScopeSetGuard } from '../guards/is-college-scope-set.guard';
 
 export const routes: Routes = [
   {
@@ -47,7 +48,7 @@ export const routes: Routes = [
     path: 'settings'
   },
   {
-    canActivate: [isLoggedGuard],
+    canActivate: [isLoggedGuard, isCollegeScopeSetGuard],
     component: HomeComponent,
     path: 'home',
     resolve: {
@@ -55,7 +56,11 @@ export const routes: Routes = [
     }
   },
   {
-    canActivate: [isLoggedGuard, isCollegeEnrolledGuard],
+    canActivate: [
+      isLoggedGuard,
+      isCollegeScopeSetGuard,
+      isCollegeEnrolledGuard
+    ],
     component: BooksCollectionsComponent,
     path: 'books/collections',
     resolve: {
@@ -64,7 +69,11 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'always'
   },
   {
-    canActivate: [isLoggedGuard],
+    canActivate: [
+      isLoggedGuard,
+      isCollegeScopeSetGuard,
+      isCollegeEnrolledGuard
+    ],
     component: BooksInventoriesComponent,
     path: 'books/inventories/:userId',
     resolve: {
@@ -73,7 +82,11 @@ export const routes: Routes = [
     }
   },
   {
-    canActivate: [isLoggedGuard],
+    canActivate: [
+      isLoggedGuard,
+      isCollegeScopeSetGuard,
+      isCollegeEnrolledGuard
+    ],
     component: BooksFavoritesComponent,
     path: 'books/favorites/:userId',
     resolve: {
@@ -83,8 +96,9 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isISBNGuard,
+      isCollegeScopeSetGuard,
       isCollegeEnrolledGuard,
+      isISBNGuard,
       bookExistsGuard
     ],
     component: BooksMarketsComponent,
@@ -96,7 +110,13 @@ export const routes: Routes = [
     }
   },
   {
-    canActivate: [isLoggedGuard, isISBNGuard, bookExistsGuard],
+    canActivate: [
+      isLoggedGuard,
+      isCollegeScopeSetGuard,
+      // isCollegeEnrolledGuard,
+      isISBNGuard,
+      bookExistsGuard
+    ],
     component: BookPostComponent,
     path: 'books/markets/advertise',
     resolve: {

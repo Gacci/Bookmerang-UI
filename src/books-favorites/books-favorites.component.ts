@@ -127,7 +127,7 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
   }
 
   override onScrollUp(): void {
-    throw new Error('Method not implemented.');
+    
   }
 
   /**
@@ -199,7 +199,7 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response: any) => {
-          item.savedBookOfferId = null;
+          item.userRefSavedBookOfferId = null;
           item.isProcessingLike = false;
         },
         error: (error: any) => {

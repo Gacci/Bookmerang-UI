@@ -11,14 +11,13 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { takeUntil } from 'rxjs';
 
 import { Unsubscribable } from '../../classes/unsubscribable';
 
 import { AuthService } from '../../services/auth.service';
-import { BookMarketService } from '../../services/book-market.service';
 
 import { DropdownDirective } from '../../directives/dropdown.directive';
+import { ISBN13Pipe } from '../../pipes/isbn13.pipe';
 
 export enum ActionEvent {
   Delete = 1,
@@ -31,13 +30,13 @@ export enum ActionEvent {
 
 export interface PostTileEvent {
   type: ActionEvent;
-  data: any;
+  post: any;
 }
 
 @Component({
   selector: 'post-tile-card',
   standalone: true,
-  imports: [CommonModule, RouterModule, DropdownDirective],
+  imports: [CommonModule, RouterModule, DropdownDirective, ISBN13Pipe],
   templateUrl: './post-tile-card.component.html',
   styleUrl: './post-tile-card.component.scss'
 })
@@ -50,6 +49,15 @@ export class PostTileCardComponent
 
   @Input()
   post!: any;
+
+  @Input()
+  isProcessingEdit!: boolean;
+
+  @Input()
+  isProcessingDelete!: boolean;
+
+  @Input()
+  isProcessingLike!: boolean;
 
   @Input()
   deletePostEnabled!: boolean;
@@ -71,14 +79,6 @@ export class PostTileCardComponent
 
   private readonly auth = inject(AuthService);
 
-  private readonly bookMarketService = inject(BookMarketService);
-
-  protected isProcessingEdit!: boolean;
-
-  protected isProcessingDelete!: boolean;
-
-  protected isProcessingLike!: boolean;
-
   protected isSelfOwned!: boolean;
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -90,57 +90,26 @@ export class PostTileCardComponent
   }
 
   onEditBookPost(event: Event) {
-    if (this.isProcessingDelete || this.isProcessingEdit) {
-      return;
-    }
-
-    this.isProcessingEdit = true;
-    this.action.emit({
-      type: ActionEvent.Edit,
-      data: this.post
-    });
-
-    this.bookMarketService
-      .update(this.post)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (response: any) => {
-          this.isProcessingEdit = false;
-        },
-        error: (error: any) => {
-          console.error('Error deleting post:', error);
-          this.isProcessingEdit = false;
-        }
+    if (!this.isProcessingDelete && !this.isProcessingEdit) {
+      this.action.emit({
+        post: this.post,
+        type: ActionEvent.Edit
       });
+    }
   }
 
   onDeleteBookPost(event: Event) {
-    if (this.isProcessingDelete || this.isProcessingEdit) {
-      return;
-    }
-
-    this.isProcessingDelete = true;
-    this.action.emit({
-      type: ActionEvent.Delete,
-      data: this.post
-    });
-
-    this.bookMarketService
-      .remove(this.post.bookOfferId)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (response: any) => {
-          this.isProcessingDelete = false;
-        },
-        error: (error: any) => {
-          this.isProcessingDelete = false;
-        }
+    if (!this.isProcessingDelete && !this.isProcessingEdit) {
+      this.action.emit({
+        post: this.post,
+        type: ActionEvent.Delete
       });
+    }
   }
 
   onToggleBookPostLike(event: Event) {
     this.action.emit({
-      data: this.post,
+      post: this.post,
       type: this.post.userRefSavedBookOfferId
         ? ActionEvent.Unlike
         : ActionEvent.Like
@@ -149,14 +118,14 @@ export class PostTileCardComponent
 
   onShowBookPostDetails(event: Event) {
     this.action.emit({
-      data: this.post,
+      post: this.post,
       type: ActionEvent.Details
     });
   }
 
   onShareBookPost(event: Event) {
     this.action.emit({
-      data: this.post,
+      post: this.post,
       type: ActionEvent.Share
     });
   }
