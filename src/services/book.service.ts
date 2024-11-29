@@ -10,6 +10,9 @@ export class BookService {
   constructor() {}
 
   populate(book: any) {
+    const haystack = ((book.title ?? '') +
+      (book.subtitle ?? '') +
+      (book.notes ?? ''));
     return {
       ...book,
       ...(book.isbn10 && !book.isbn13
@@ -21,12 +24,10 @@ export class BookService {
       ...(book.title || book.subtitle || book.notes
         ? {
             edition:
-              (book.title ?? '') +
-              (book.subtitle ?? '') +
-              (book.notes ?? '')
+              haystack
                 .match(/\d+(st|nd|rd|th) (edition|ed\.?)/gi)
                 ?.join(' '),
-            volume: ((book.title ?? '') + (book.subtitle ?? ''))
+            volume: haystack
               .match(/(volume|vol\.) \d+/gi)
               ?.join(' ')
           }

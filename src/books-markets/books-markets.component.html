@@ -184,10 +184,13 @@
 
       <!-- Book Information -->
       <div class="md:w-2/3 md:pl-8">
-        <h1 class="text-2xl font-semibold text-gray-800">
+        <h1 class="text-2xl font-semibold text-gray-800 leading-7">
           {{ book.title }} {{ book.subtitle ?? '' }}
         </h1>
-        <p class="text-md text-gray-600 font-medium -mt-1" *ngIf="book.authors?.length">
+        <p
+          class="text-md text-gray-600 font-medium mt-1"
+          *ngIf="book.authors?.length"
+        >
           {{ book.authors }}
         </p>
         <span class="block my-2"></span>
@@ -199,17 +202,17 @@
           </span>
         </div>
         <div class="text-sm text-gray-500">
-          <span *ngIf="book.isbn13">
-            ISBN 13: {{ book.isbn13 | isbn13 }}
-          </span>
-          <span *ngIf="book.isbn10 && book.isbn13"> / </span>
+          <span *ngIf="book.isbn13">ISBN 13: {{ book.isbn13 | isbn13 }}</span>
+          <span *ngIf="book.isbn10 && book.isbn13" class="mx-1">/</span>
           <span *ngIf="book.isbn10">ISBN 10: {{ book.isbn10 }}</span>
         </div>
       </div>
     </div>
 
     <div class="my-8 border rounded-md">
-      <h5 class="px-4 py-1 text-xl font-medium text-gray-700 border-b">Book details</h5>
+      <h5 class="px-4 py-1 text-xl font-medium text-gray-700 border-b">
+        Book details
+      </h5>
       <div class="overflow-x-auto">
         <ul class="flex text-center my-4">
           <li class="w-44 flex-shrink-0 px-1" *ngIf="book.isbn10">
@@ -513,13 +516,13 @@
     </div>
 
     <div class="my-8 border rounded-md">
-      <h2 class="px-4 py-1 text-xl font-medium text-gray-700 border-b">Description</h2>
+      <h2 class="px-4 py-1 text-xl font-medium text-gray-700 border-b">
+        Description
+      </h2>
       <p class="p-4 mx-4 my-2 text-sm font-light text-gray-600">
         {{ book.notes ?? 'N/A' }}
       </p>
     </div>
-
-    
   </div>
 
   <!-- <confirm-dialog

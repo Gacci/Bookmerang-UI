@@ -1,3 +1,12 @@
+<ng-template #undoRemoveOfferTemplate let-data>
+  <div
+    class="toast-content cursor-pointer text-blue-500"
+    (click)="undoRemoveOffer(data)"
+  >
+    Undo &#x21B6;
+  </div>
+</ng-template>
+
 <div
   class="mx-auto max-w-2xl px-4 py-16 sm:w-auto sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
   infiniteScroll
@@ -18,7 +27,7 @@
       [post]="post"
       [link]="['/', 'books', 'markets']"
       [query]="{ scope: params.institutionId, isbn13: post.book.isbn13 }"
-      (action)="onActionClicked($event)"
+      (action)="onActionClicked($event, post)"
     ></post-tile-card>
   </div>
 </div>

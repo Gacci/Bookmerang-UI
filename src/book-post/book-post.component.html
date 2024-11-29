@@ -1,44 +1,13 @@
-<aside
-  class="sticky top-[56px] flex-1 bg-white z-0 transition-transform -translate-x-full translate-x-0 h-[calc(100%-68px)]"
-  aria-label="Sidebar"
->
-  <div class="flex flex-col overflow-y-auto md:px-8 xl:max-w-md">
-    <!-- Book Cover -->
-    <div class="md:w-40 my-4">
-      <img
-        class="w-full rounded-lg shadow-md"
-        [alt]="book.title"
-        src="{{ book.thumbnail }}"
-      />
-    </div>
-
-    <!-- Book Information -->
-    <div class="lg:w-52">
-      <h1 class="inline-block text-sm font-semibold text-gray-800">
-        {{ book.title }} {{ book.subtitle ?? '' }}
-      </h1>
-      <p
-        class="inline-block mt-2 text-sm text-gray-600"
-        *ngIf="book.authors?.length"
-      >
-        by
-        <span class="font-medium">{{ book.authors }}</span>
-      </p>
-
-      <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn13">
-        ISBN-13:
-        <span class="font-medium">{{ book.isbn13 | isbn13 }}</span>
-      </p>
-      <p class="mt-1 text-sm text-gray-500" *ngIf="book.isbn10">
-        ISBN-10:
-        <span class="font-medium">{{ book.isbn10 }}</span>
-      </p>
-    </div>
-  </div>
-</aside>
-
 <div class="w-full max-w-3xl bg-white mx-auto p-16 border-x">
   <ng-container *ngIf="!offerRequestState.sent && !offerRequestState.done">
+    <div class="flex flex-row space-x-2 max-w-4xl mx-auto mt-2 mb-12 border-b overflow-hidden">
+      <img class="w-16 h-20" [src]="book.thumbnail">
+      <div>
+        <p class="text-sm font-medium text-gray-800">{{ book.title }} {{ book.subtitle ?? ''}}</p>
+        <h6 class="text-sm text-gray-500 font-medium">{{ book.authors }}</h6>
+      </div>
+    </div>
+
     <h1 class="text-3xl font-semibold text-gray-800 mb-6">
       Book Condition Form
     </h1>
@@ -155,7 +124,7 @@
           <li
             class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
           >
-            <div class="relative flex items-start w-full">
+            <div class="flex items-start w-full">
               <div class="flex items-center h-5">
                 <input
                   class="border-gray-200 rounded-full disabled:opacity-50"
@@ -175,7 +144,7 @@
           <li
             class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
           >
-            <div class="relative flex items-start w-full">
+            <div class="flex items-start w-full">
               <div class="flex items-center h-5">
                 <input
                   class="border-gray-200 rounded-full disabled:opacity-50"
@@ -198,7 +167,7 @@
           <li
             class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
           >
-            <div class="relative flex items-start w-full">
+            <div class="flex items-start w-full">
               <div class="flex items-center h-5">
                 <input
                   class="border-gray-200 rounded-full disabled:opacity-50"
@@ -241,7 +210,7 @@
           <li
             class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
           >
-            <div class="relative flex items-start w-full">
+            <div class="flex items-start w-full">
               <div class="flex items-center h-5">
                 <input
                   class="border-gray-200 rounded-full disabled:opacity-50"
@@ -281,7 +250,7 @@
             pages, and markings to give an accurate overview.
           </p>
         </div>
-        <div class="relative lg:w-2/3">
+        <div class="lg:w-2/3">
           <!-- Binding -->
           <div class="mb-8">
             <label class="block text-gray-700 font-medium mb-2">
@@ -549,17 +518,4 @@
       </div>
     </div>
   </div>
-</div>
-
-<!-- Main modal -->
-<div
-  class="sticky top-[85px] flex-1 bg-white overflow-x-auto overflow-y-hidden transition h-[calc(100%-68px)]"
-  aria-hidden="true"
-  tabindex="-1"
->
-  <books-pricing
-    [isbn13]="book.isbn13"
-    [scope]="scope"
-    (loaded)="onMetricsLoaded($event)"
-  ></books-pricing>
 </div>

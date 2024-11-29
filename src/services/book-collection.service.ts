@@ -4,9 +4,10 @@ import { Injectable } from '@angular/core';
 import { Data } from '@angular/router';
 import { map } from 'rxjs';
 
+import { BookService } from './book.service';
+
 import ISO6391 from 'iso-639-1';
 import * as ISBN from 'isbn3';
-import { BookService } from './book.service';
 
 @Injectable({
   providedIn: 'root'

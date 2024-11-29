@@ -28,6 +28,10 @@ export enum ActionEvent {
   Unlike = 6
 }
 
+export interface PostTile {
+  bookOfferId: number;
+}
+
 export interface PostTileEvent {
   type: ActionEvent;
   post: any;

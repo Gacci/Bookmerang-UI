@@ -1,20 +1,32 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { combineLatest, takeUntil } from 'rxjs';
 
-import { DialogService } from '@ngneat/dialog';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
-import { BookPostEvent } from '../components/book-post-card/book-post-card.component';
-
-import { BookOfferEditSheetComponent } from '../components/book-offer-edit-sheet/book-offer-edit-sheet.component';
-import { ActionEvent, PostTileCardComponent, PostTileEvent } from '../components/post-tile-card/post-tile-card.component';
+import {
+  ActionEvent,
+  PostTile,
+  PostTileCardComponent,
+  PostTileEvent
+} from '../components/post-tile-card/post-tile-card.component';
 
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
+import {
+  CreateHotToastRef,
+  HotToastClose,
+  HotToastService
+} from '@ngneat/hot-toast';
 
 @Component({
   selector: 'books-inventory',
@@ -32,13 +44,18 @@ export class BooksInventoriesComponent
   extends InfiniteScrollView<any>
   implements OnDestroy
 {
+  @ViewChild('undoRemoveOfferTemplate')
+  private undoRemoveOfferTemplate!: TemplateRef<any>;
+
   private readonly route = inject(ActivatedRoute);
 
   private readonly bookMarketService = inject(BookMarketService);
 
-  private readonly ngDialogService = inject(DialogService);
+  private readonly alerts = inject(HotToastService);
 
   private readonly loadingOverlayService = inject(LoadingOverlayService);
+
+  private hotToastRef!: CreateHotToastRef<any>;
 
   protected user!: any;
 
@@ -93,22 +110,98 @@ export class BooksInventoriesComponent
       });
   }
 
-  onActionClicked(e: PostTileEvent) {
-    console.log(e);
-    // const bottomSheetRef = this.ngDialogService.open(
-    //   BookOfferEditSheetComponent,
-    //   {}
-    // );
+  onActionClicked(event: PostTileEvent, item: PostTile) {
+    console.log(this.undoRemoveOfferTemplate);
+    if (ActionEvent.Delete !== event.type) {
+      return;
+    }
 
-    // bottomSheetRef.afterClosed$.subscribe(result => {
-    //   if (result) {
-    //     console.log('User confirmed:', result);
-    //   } else {
-    //     console.log('User dismissed the bottom sheet.');
-    //   }
-    // });
+    if (this.hotToastRef) {
+      this.hotToastRef.close();
+    }
 
-    /*
+    const indexOfRemoved = this.data.findIndex(
+      post => post.bookOfferId === item.bookOfferId
+    );
+    if (!~indexOfRemoved) {
+      return;
+    }
+
+    this.hotToastRef = this.alerts.show(this.undoRemoveOfferTemplate, {
+      autoClose: true,
+      className: 'text-xs',
+      data: {
+        ...(~indexOfRemoved ? { index: indexOfRemoved } : {}),
+        ...(~indexOfRemoved ? this.data[indexOfRemoved] : {}),
+        undo: false
+      },
+      duration: 5000,
+      dismissible: true,
+      position: 'bottom-center'
+    });
+
+    this.data.splice(indexOfRemoved, 1);
+    this.hotToastRef.afterClosed
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response: HotToastClose) => {
+        if (!this.hotToastRef.data.undo) {
+          this.bookMarketService
+            .remove(item.bookOfferId)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+              next: (response: any) => {
+                // this.isProcessingDelete = false;
+              },
+              error: (error: any) => {
+                // this.isProcessingDelete = false;
+              }
+            });
+        }
+      });
+  }
+
+  undoRemoveOffer(e: any) {
+    this.hotToastRef.data = {
+      ...this.hotToastRef.data,
+      undo: true
+    };
+
+    this.data.splice(e.data.index, 0, e.data);
+    this.hotToastRef.close();
+  }
+
+  onUnlikeBookOffer(item: any) {
+    // await this.pause(3000);
+    this.bookMarketService
+      .unlikeBookPost(item.userRefSavedBookOfferId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response: any) => {
+          item.userRefSavedBookOfferId = null;
+          item.isProcessingLike = false;
+        },
+        error: (error: any) => {
+          item.isProcessingLike = false;
+        }
+      });
+  }
+
+  // onActionClicked(e: PostTileEvent) {
+  // console.log(e);
+  // const bottomSheetRef = this.ngDialogService.open(
+  //   BookOfferEditSheetComponent,
+  //   {}
+  // );
+
+  // bottomSheetRef.afterClosed$.subscribe(result => {
+  //   if (result) {
+  //     console.log('User confirmed:', result);
+  //   } else {
+  //     console.log('User dismissed the bottom sheet.');
+  //   }
+  // });
+
+  /*
     if ( ActionEvent.Edit === e.type ) {
       this.bookMarketService
         .update(e.post)
@@ -136,7 +229,7 @@ export class BooksInventoriesComponent
         });
     }
         */
-  }
+  // }
 
   trackBy(index: number, item: any) {
     return item.bookOfferId;

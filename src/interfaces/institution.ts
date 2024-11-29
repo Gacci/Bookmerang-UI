@@ -1,2 +1,1 @@
-export interface Institution {
-}
+export interface Institution {}

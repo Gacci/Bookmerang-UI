@@ -21,7 +21,7 @@ import { BookMarketService } from '../services/book-market.service';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
-interface BookPost {
+interface BookOffer {
   bookOfferId: number;
   userId: number;
   isbn13: string;
@@ -54,7 +54,7 @@ interface BookPost {
   updatedOn: Date;
 }
 
-interface BookPostLikeable {
+interface Likeable {
   userRefSavedBookOfferId: number;
 }
 
@@ -126,9 +126,7 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
       });
   }
 
-  override onScrollUp(): void {
-    
-  }
+  override onScrollUp(): void {}
 
   /**
    * If items state is "Liked" clicking will cause to immeditely remove element from view
@@ -143,7 +141,7 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
    * @param item
    * @returns
    */
-  onActionClicked(event: PostTileEvent, item: BookPost & BookPostLikeable) {
+  onActionClicked(event: PostTileEvent, item: BookOffer & Likeable) {
     if (ActionEvent.Unlike !== event.type) {
       return;
     }
@@ -177,7 +175,7 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response: HotToastClose) => {
         if (!this.hotToastRef.data.undo) {
-          this.onUnlikeBookPost(item);
+          this.onUnlikeBookOffer(item);
         }
       });
   }
@@ -192,7 +190,7 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
     this.hotToastRef.close();
   }
 
-  onUnlikeBookPost(item: any) {
+  onUnlikeBookOffer(item: any) {
     // await this.pause(3000);
     this.bookMarketService
       .unlikeBookPost(item.userRefSavedBookOfferId)

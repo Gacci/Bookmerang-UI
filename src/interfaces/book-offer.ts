@@ -1,2 +1,1 @@
-export interface BookOffer {
-}
+export interface BookOffer {}

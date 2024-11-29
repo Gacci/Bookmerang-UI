@@ -1,2 +1,1 @@
-export interface Book {
-}
+export interface Book {}
