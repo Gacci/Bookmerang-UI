@@ -43,8 +43,8 @@ type FileBox = {
     NgxTippyModule,
     ReactiveFormsModule,
     RouterModule,
-    BooksPricingComponent,
-    ISBN13Pipe
+    // BooksPricingComponent,
+    // ISBN13Pipe
   ],
   templateUrl: './book-post.component.html',
   styleUrl: './book-post.component.scss'
@@ -79,7 +79,7 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
     {
       userId: new FormControl(),
       scope: new FormArray([]),
-      price: new FormControl(null, [Validators.required, Validators.min(1)]),
+      price: new FormControl(null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+(\.\d+)$/g)]),
       state: new FormControl(null, [Validators.required]),
       tradeable: new FormControl<boolean>(false),
       binding: new FormControl('SELECT', [

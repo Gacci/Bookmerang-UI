@@ -1,6 +1,6 @@
 <div class="w-full max-w-3xl bg-white mx-auto p-16 border-x">
   <ng-container *ngIf="!offerRequestState.sent && !offerRequestState.done">
-    <div class="flex flex-row space-x-2 max-w-4xl mx-auto mt-2 mb-12 border-b overflow-hidden">
+    <div class="flex flex-row space-x-2 max-w-4xl mx-auto mt-2 mb-8 pb-6 border-b overflow-hidden">
       <img class="w-16 h-20" [src]="book.thumbnail">
       <div>
         <p class="text-sm font-medium text-gray-800">{{ book.title }} {{ book.subtitle ?? ''}}</p>
@@ -79,12 +79,16 @@
                 payload.controls.price.invalid &&
                 payload.controls.price.touched &&
                 payload.controls.price.getError('required')
-                  ? 'Please specify a price for your book'
+                  ? "* Please specify a price for your book"
                   : payload.controls.price.invalid &&
                       payload.controls.price.touched &&
+                      payload.controls.price.getError('pattern')
+                    ? "* Price must be numeric"
+                    : payload.controls.price.invalid &&
+                      payload.controls.price.touched &&
                       payload.controls.price.getError('min')
-                    ? 'Price must be at least 0.01'
-                    : ' '
+                      ? "* Price must be at least 0.01"
+                      : " "
               }}
             </p>
           </div>
@@ -236,8 +240,8 @@
             payload.controls.state.invalid &&
             payload.controls.state.touched &&
             payload.controls.state.getError('required')
-              ? 'Please specify a price for your book'
-              : ' '
+              ? "* Please specify a price for your book"
+              : " "
           }}
         </p>
       </section>
@@ -277,8 +281,8 @@
                 payload.controls.binding.invalid &&
                 payload.controls.binding.touched &&
                 payload.controls.binding.getError('invalidSelection')
-                  ? "Select the option best describes your books's binding condition"
-                  : ' '
+                  ? "* Select the option best describes your books's binding condition"
+                  : " " 
               }}
             </p>
           </div>
@@ -313,8 +317,8 @@
                 payload.controls.cover.invalid &&
                 payload.controls.cover.touched &&
                 payload.controls.cover.getError('invalidSelection')
-                  ? "Select the option best describes your books's cover condition"
-                  : ' '
+                  ? "* Select the option best describes your books's cover condition"
+                  : " "
               }}
             </p>
           </div>
@@ -339,8 +343,8 @@
                 payload.controls.pages.invalid &&
                 payload.controls.pages.touched &&
                 payload.controls.pages.getError('invalidSelection')
-                  ? "Select the option best describes your books's pages condition"
-                  : ' '
+                  ? "* Select the option best describes your books's pages condition"
+                  : " "
               }}
             </p>
           </div>
@@ -366,8 +370,8 @@
                 payload.controls.markings.invalid &&
                 payload.controls.markings.touched &&
                 payload.controls.markings.getError('invalidSelection')
-                  ? "Select the option best describes your books's pages condition"
-                  : ' '
+                  ? "* Select the option best describes your books's pages condition"
+                  : " "
               }}
             </p>
           </div>
@@ -393,6 +397,7 @@
           placeholder="Add notes here..."
           formControlName="notes"
         ></textarea>
+        <span>{{ payload.value.notes }}</span>
       </section>
 
       <!-- Media -->
@@ -477,6 +482,8 @@
     </form>
   </ng-container>
 
+
+  
   <!-- Success message -->
   <div
     class="w-full max-w-3xl bg-white mx-auto p-16 mt-10"
