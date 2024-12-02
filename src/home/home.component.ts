@@ -1,6 +1,6 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { takeUntil } from 'rxjs';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
@@ -43,6 +43,8 @@ import { SwiperModule, SwiperOptions } from 'swiper/types';
 export class HomeComponent extends InfiniteScrollView<any> {
   private readonly auth = inject(AuthService);
 
+  private readonly route = inject(ActivatedRoute);
+
   private readonly bookMarketService = inject(BookMarketService);
 
   private readonly loadingOverlayService = inject(LoadingOverlayService);
@@ -65,7 +67,7 @@ export class HomeComponent extends InfiniteScrollView<any> {
 
   ngOnInit(): void {
     // this.pageNumber += 1;
-    this.params = { scope: <number>this.auth.getPrimarySearchScopeId() };
+    this.params = { scope: <number>this.auth.getPrimaryScope() };
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(isLoadingNext => (this.isLoadingNext = isLoadingNext));
@@ -79,16 +81,17 @@ export class HomeComponent extends InfiniteScrollView<any> {
         this.cheaps = response.data;
       });
 
-    // this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
-    //   next: (resolved: any) => {
-    //     this.data = resolved.posts;
-    //     this.hasNextPage =
-    //       !!this.data?.length && !(this.data?.length % this.pageSize);
-    //   }
-    // });
     */
 
-    this.onScrollDown();
+    this.route.data.pipe(takeUntil(this.unsubscribe$)).subscribe({
+      next: (resolved: any) => {
+        this.data = resolved.posts;
+        this.hasNextPage =
+          !!this.data?.length && !(this.data?.length % this.pageSize);
+      }
+    });
+
+    // this.onScrollDown();
   }
 
   override onScrollDown() {

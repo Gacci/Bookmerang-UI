@@ -20,7 +20,7 @@
 
   <span class="block text-sm text-gray-700">{{ book.authors }}</span>
   <span class="block text-sm text-gray-700">{{ book.isbn13 | isbn13 }}</span>
-  <strong class="block text-sm">
+  <strong class="block text-sm" *ngIf="!!book.pricing.min">
     {{ book.pricing.min | currency }}
   </strong>
 </div>

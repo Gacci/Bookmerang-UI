@@ -1,18 +1,23 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { takeUntil, tap } from 'rxjs';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import { combineLatest, takeUntil } from 'rxjs';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { BookTileCardComponent } from '../components/book-tile-card/book-tile-card.component';
-import { InstitutionsDropdownComponent } from '../components/institutions-dropdown/institutions-dropdown.component';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 import { BookMarketService } from '../services/book-market.service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+import {
+  AccordionComponent,
+  AccordionViewComponent
+} from '../components/accordion/accordion.component';
 import { AuthService } from '../services/auth.service';
 
 type BookCollectionFilter = {
@@ -25,13 +30,12 @@ type BookCollectionFilter = {
   selector: 'books-collection',
   standalone: true,
   imports: [
+    AccordionComponent,
+    AccordionViewComponent,
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-
     BookTileCardComponent,
-    InstitutionsDropdownComponent,
-
     InfiniteScrollDirective
   ],
   templateUrl: './books-collections.component.html',
@@ -39,7 +43,6 @@ type BookCollectionFilter = {
 })
 export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   private readonly auth = inject(AuthService);
-
   private readonly route = inject(ActivatedRoute);
 
   private readonly router = inject(Router);
@@ -47,6 +50,8 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   private readonly bookMarketService = inject(BookMarketService);
 
   private readonly loadingOverlayService = inject(LoadingOverlayService);
+
+  protected institutions: any[] = [];
 
   protected filters = new FormGroup<BookCollectionFilter>({
     keyword: new FormControl(),
@@ -56,31 +61,38 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
   ngOnInit(): void {
     this.pageNumber += 1;
-    this.route.queryParams
+    this.route.data
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((query: any) => {
+      .subscribe(({ books, institutions }) => {});
+
+    combineLatest([this.route.data, this.route.queryParams])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(([resolved, query]: [any, any]) => {
+        this.data = resolved.books.data;
+        this.hasNextPage =
+          !!this.data?.length && !(this.data?.length % this.pageSize);
+
+        this.institutions = this.auth.getUserCampuses();
         this.filters.patchValue({
           ...(query.keyword ? { keyword: query.keyword } : {}),
-          ...(query.scope
-            ? { scope: +query.scope }
-            : { scope: this.auth.getPrimarySearchScopeId() }),
+          ...(query.scope ? { scope: query.scope } : {}),
           ...(['price:desc'].includes(query.sorting)
             ? { sorting: query.sorting }
             : {})
         });
       });
 
+    this.filters.valueChanges
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(filters => {
+        this.router.navigate(['books', 'collections'], {
+          queryParams: filters
+        });
+      });
+
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(isLoadingNext => (this.isLoadingNext = isLoadingNext));
-
-    this.route.data
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(({ books }) => {
-        this.data = books.data;
-        this.hasNextPage =
-          !!this.data?.length && !(this.data?.length % this.pageSize);
-      });
   }
 
   override onScrollDown() {
@@ -91,6 +103,7 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
     const params = {
       institutionId: this.filters.value.scope,
       keyword: this.filters.value.keyword,
+      sorting: this.filters.value.sorting,
       pageNumber: this.pageNumber,
       pageSize: this.pageSize
     };
@@ -107,12 +120,6 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   }
 
   override onScrollUp(): void {}
-
-  protected onSubmit(e: Event) {
-    this.router.navigate(['books', 'collections'], {
-      queryParams: this.filters.value
-    });
-  }
 
   trackBy(index: number, item: any) {
     return item.isbn13;

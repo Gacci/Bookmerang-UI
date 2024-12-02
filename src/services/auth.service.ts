@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, delay, map, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, of, switchMap, tap } from 'rxjs';
 import { Data } from '@angular/router';
 
 import { Credentials } from '../interfaces/credentials.interface';
@@ -10,6 +10,7 @@ import { Registration } from '../interfaces/registration.interface';
 import { CacheService } from './cache.service';
 
 import * as JWT from 'jwt-decode';
+import { Institution } from '../interfaces/institution.interface';
 
 const JWT_TOKEN = '__tcn';
 
@@ -20,23 +21,27 @@ type UserRefInstitutions = {
 };
 
 type JwtPayloadPlus = JWT.JwtPayload & {
-  institutions: UserRefInstitutions[];
+  scope: number[];
 };
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private institutions: Institution[] = [];
+
   private authTokenSubject = new BehaviorSubject<JwtPayloadPlus | null>(null);
 
   public $jwt = this.authTokenSubject.asObservable();
 
-  private institutions: any[] = [];
-
   constructor(
     private readonly http: HttpClient,
     private cache: CacheService
-  ) {
+  ) {}
+
+  async init() {
+    console.log('Auth.init');
+
     if (!this.authTokenSubject.value) {
       this.authTokenSubject.next(
         this.getJwtTokenRaw()
@@ -44,6 +49,14 @@ export class AuthService {
           : null
       );
     }
+
+    if (this.authTokenSubject.value) {
+      this.institutions = !!this.authTokenSubject.value?.scope?.length
+        ? await firstValueFrom(this.loadUserInstitutions())
+        : this.institutions;
+    }
+
+    console.log('Auth.institutions', this.institutions);
   }
 
   register(payload: Registration) {
@@ -58,7 +71,12 @@ export class AuthService {
           <JwtPayloadPlus>JWT.jwtDecode(login.access_token)
         );
       }),
-      switchMap(login => this.getUserInstitutions().pipe(map(() => this.authTokenSubject.value)))
+      switchMap(login =>
+        this.loadUserInstitutions().pipe(
+          tap(institutions => (this.institutions = institutions)),
+          map(() => this.authTokenSubject.value)
+        )
+      )
     );
   }
 
@@ -128,25 +146,38 @@ export class AuthService {
     return this.http.post('', {});
   }
 
-  getUserInstitutions() {
-    return this.http.get<any[]>('http://127.0.0.1:3000/auth/institutions').pipe(
-      tap((institutions: any[]) => {
-        this.institutions = institutions;
-      })
+  loadUserInstitutions() {
+    return this.http.get<Institution[]>(
+      'http://127.0.0.1:3000/auth/institutions'
     );
   }
 
-  updatePrimaryInstitution(institutionId: number) {
-    // this.primarySearchScope = primarySearchScope;
+  isAuthenticated() {
+    return this.authTokenSubject?.value?.exp
+      ? this.authTokenSubject.value.exp * 1000 > Date.now()
+      : false;
   }
 
-  isAuthenticated() {
-    return (this.authTokenSubject?.value?.exp || 0) * 1000 > Date.now();
+  getUserCampuses() {
+    return !!this.authTokenSubject?.value?.scope?.length
+      ? this.institutions
+      : [];
+  }
+
+  getUserScope() {
+    console.log(this.authTokenSubject?.value?.scope);
+    return this.authTokenSubject?.value?.scope;
   }
 
   getUserId() {
     return this.authTokenSubject?.value?.sub
       ? +this.authTokenSubject.value.sub
+      : 0;
+  }
+
+  getPrimaryScope() {
+    return !!this.authTokenSubject?.value?.scope?.length
+      ? +this.authTokenSubject.value.scope?.[0]
       : 0;
   }
 
@@ -156,14 +187,5 @@ export class AuthService {
 
   getJwtToken() {
     return <JwtPayloadPlus>this.authTokenSubject.value;
-  }
-
-  getPrimarySearchScopeId() {
-    const { institutions } = this.authTokenSubject?.value ?? {};
-    if (institutions?.length) {
-      return institutions.find(() => true)?.institutionId;
-    }
-
-    return null;
   }
 }

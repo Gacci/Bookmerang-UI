@@ -13,8 +13,11 @@ export class InstitutionService {
   }
 
   search(params: Data) {
-    return this.http.get('http://127.0.0.1:3000/academics/institutions', {
-      params
-    });
+    return this.http.get<any[]>(
+      'http://127.0.0.1:3000/academics/institutions',
+      {
+        params
+      }
+    );
   }
 }

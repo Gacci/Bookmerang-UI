@@ -1,47 +1,139 @@
-<div
-  class="collection"
-  infiniteScroll
-  [infiniteScrollUpDistance]="1"
-  [infiniteScrollDistance]="1.0"
-  [infiniteScrollThrottle]="500"
-  [infiniteScrollDisabled]="isLoadingNext"
-  [immediateCheck]="true"
-  [scrollWindow]="true"
-  (scrolled)="onScrollDown()"
-  (scrolledUp)="onScrollUp()"
-  *ngIf="!!data?.length"
->
+<div class="flex flex-row" *ngIf="!!data.length">
+  <form class="w-1/5" [formGroup]="filters">
+    <accordion>
+      <accordion-view title="Search in" [isOpen]="true">
+        <ul class="pl-4 pb-3">
+          <li *ngFor="let institution of institutions">
+            <input
+              class="sr-only peer"
+              type="checkbox"
+              formControlName="scope"
+              [value]="institution.institutionId"
+            />
+            <label
+              class="flex items-center w-full font-light text-sm cursor-pointer px-2 py-1 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+            >
+              {{ institution.locationName }}
+            </label>
+          </li>
+        </ul>
+      </accordion-view>
+
+      <accordion-view title="Sort by" [isOpen]="true">
+        <ul class="pl-4 pb-3 w-full">
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="price-asc"
+              value="price:asc"
+              formControlName="sorting"
+            />
+
+            <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer px-2 py-1 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="price-asc"
+            >
+              Price: Lowest to Highest
+            </label>
+          </li>
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="price-desc"
+              value="price:desc"
+              formControlName="sorting"
+            />
+            <label
+              class="flex items-center w-full font-light text-sm cursor-pointer px-2 py-1 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="price-desc"
+            >
+              Price: Highest to Lowest
+            </label>
+          </li>
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="posted-on"
+              value="posted-on"
+              formControlName="sorting"
+            />
+            <label
+              class="flex items-center w-full font-light text-sm cursor-pointer px-2 py-1 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="posted-on"
+            >
+              Most Recently Listed
+            </label>
+          </li>
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="authors-asc"
+              value="authors:asc"
+              formControlName="sorting"
+            />
+
+            <label
+              class="flex items-center w-full font-light text-sm cursor-pointer px-2 py-1 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="authors-asc"
+            >
+              Authors: A - Z
+            </label>
+          </li>
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="authors-desc"
+              value="authors:desc"
+              formControlName="sorting"
+            />
+            <label
+              class="flex items-center w-full font-light text-sm cursor-pointer px-2 py-1 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="authors-desc"
+            >
+              Authors: Z - A
+            </label>
+          </li>
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="reviews"
+              value="reviews"
+              formControlName="sorting"
+            />
+            <label
+              class="flex items-center w-full font-light text-sm cursor-pointer px-2 py-1 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="reviews"
+            >
+              Avg. Seller Review
+            </label>
+          </li>
+        </ul>
+      </accordion-view>
+    </accordion>
+
+    <input type="hidden" formControlName="keyword" />
+  </form>
+
   <div
-    class="bg-white mx-auto max-w-2xl px-4 py-16 sm:w-auto sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
+    class="flex-1 bg-white mx-auto max-w-2xl px-4 sm:w-auto sm:px-6 lg:max-w-7xl lg:px-8"
+    infiniteScroll
+    [infiniteScrollUpDistance]="1"
+    [infiniteScrollDistance]="1.0"
+    [infiniteScrollThrottle]="500"
+    [infiniteScrollDisabled]="isLoadingNext"
+    [immediateCheck]="true"
+    [scrollWindow]="true"
+    (scrolled)="onScrollDown()"
+    (scrolledUp)="onScrollUp()"
+    *ngIf="!!data?.length"
   >
-    <form
-      class="flex flex-row justify-between p-2 my-2 rounded-md bg-gray-50"
-      [formGroup]="filters"
-      (ngSubmit)="onSubmit($event)"
-    >
-      <div class="flex flex-row items-center space-x-2">
-        <h3 class="text-sm font-semibold text-gray-900">Search in</h3>
-        <institutions-dropdown
-          class="max-w-72"
-          formControlName="scope"
-        ></institutions-dropdown>
-      </div>
-      <div class="flex flex-row items-center space-x-2">
-        <h3 class="text-sm font-semibold text-gray-900">Sort by</h3>
-        <select class="select bg-white" formControlName="sorting">
-          <option value="price:asc">Price: Lowest to Highest</option>
-          <option value="price:desc">Price: Highest to Lowest</option>
-          <option value="posted-on">Most Recently Listed</option>
-          <option value="authors-asc">Authors: A - Z</option>
-          <option value="authors:desc">Authors: Z - A</option>
-          <option value="review">Avg. Seller Review</option>
-        </select>
-        <input type="hidden" formControlName="keyword" />
-        <button type="submit" class="btn btn-sm bg-blue-600 text-white">
-          Apply
-        </button>
-      </div>
-    </form>
+    <!-- "bg-white mx-auto max-w-2xl px-4 py-16 sm:w-auto sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8" -->
 
     <div
       class="flex flex-wrap justfy-start"

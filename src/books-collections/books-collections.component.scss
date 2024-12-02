@@ -1,3 +1,7 @@
 // .collection {
 //     @apply w-screen h-screen overflow-scroll;
 // }
+
+:host {
+    @apply block pt-16;
+}

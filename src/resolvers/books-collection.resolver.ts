@@ -6,10 +6,11 @@ import { BookMarketService } from '../services/book-market.service';
 import * as ISBN from 'isbn3';
 
 export const booksCollectionResolver: ResolveFn<any> = (route, state) => {
-  const params: any = route.queryParams;
+  const query: any = route.queryParams;
   return inject(BookMarketService).collections({
-    institutionId: params.scope,
-    ...(params.isbn13 ? { isbn13: ISBN.asIsbn13(params.isbn13) } : {}),
-    ...(params.keyword ? { keyword: params.keyword } : {})
+    institutionId: query.scope,
+    ...(query.isbn13 ? { isbn13: ISBN.asIsbn13(query.isbn13) } : {}),
+    ...(query.keyword ? { keyword: query.keyword } : {}),
+    ...(query.sorting ? { sorting: query.sorting } : {})
   });
 };

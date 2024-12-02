@@ -1,15 +1,19 @@
 <div class="w-full max-w-3xl bg-white mx-auto p-16 border-x">
   <ng-container *ngIf="!offerRequestState.sent && !offerRequestState.done">
-    <div class="flex flex-row space-x-2 max-w-4xl mx-auto mt-2 mb-8 pb-6 border-b overflow-hidden">
-      <img class="w-16 h-20" [src]="book.thumbnail">
+    <div
+      class="flex flex-row space-x-2 max-w-4xl mx-auto mt-2 mb-8 pb-6 border-b overflow-hidden"
+    >
+      <img class="w-16 h-20" [src]="book.thumbnail" />
       <div>
-        <p class="text-sm font-medium text-gray-800">{{ book.title }} {{ book.subtitle ?? ''}}</p>
+        <p class="text-sm font-medium text-gray-800">
+          {{ book.title }} {{ book.subtitle ?? '' }}
+        </p>
         <h6 class="text-sm text-gray-500 font-medium">{{ book.authors }}</h6>
       </div>
     </div>
 
     <h1 class="text-3xl font-semibold text-gray-800 mb-6">
-      Book Condition Form
+      Tell us about your book
     </h1>
 
     <form
@@ -17,17 +21,17 @@
       [formGroup]="payload"
       (ngSubmit)="onSubmit($event)"
     >
-      <section class="my-8" *ngIf="institutions?.length !== 1">
-        <h3 class="block text-gray-700 font-medium mb-2">
-          Select campuses where to sell
+      <section class="my-8">
+        <label class="block text-gray-700 font-medium mb-2">
+          Select campuses
           <span
             class="inline-block size-5 p-0.5 text-xs text-center font-medium text-slate-100 bg-slate-500 rounded-full"
             [ngxTippy]="tooltip.scope"
           >
             ?
           </span>
-        </h3>
-        <div class="flex space-x-8">
+        </label>
+        <div class="flex flex-col">
           <ul class="flex flex-col" formArrayName="scope">
             <li
               class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
@@ -52,6 +56,15 @@
               </div>
             </li>
           </ul>
+          <p class="text-xs text-red-500 mb-2">
+            {{
+              payload.controls.scope.invalid &&
+              payload.controls.scope.touched &&
+              payload.controls.scope.getError('withMinSelections')
+                ? '* Please select at least one campus'
+                : ''
+            }}
+          </p>
         </div>
       </section>
 
@@ -65,9 +78,9 @@
             ?
           </span>
         </label>
-        <div class="flex space-x-8">
+        <div class="flex flex-col md:space-x-8 md:flex-row">
           <!-- Price -->
-          <div class="mb-6 lg:w-1/2">
+          <div class="mb-6 md:mb-0 md:w-1/2">
             <input
               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
               type="text"
@@ -79,16 +92,16 @@
                 payload.controls.price.invalid &&
                 payload.controls.price.touched &&
                 payload.controls.price.getError('required')
-                  ? "* Please specify a price for your book"
+                  ? '* Please specify a price for your book'
                   : payload.controls.price.invalid &&
                       payload.controls.price.touched &&
                       payload.controls.price.getError('pattern')
-                    ? "* Price must be numeric"
+                    ? '* Price must be numeric, i.e, 79.99'
                     : payload.controls.price.invalid &&
-                      payload.controls.price.touched &&
-                      payload.controls.price.getError('min')
-                      ? "* Price must be at least 0.01"
-                      : " "
+                        payload.controls.price.touched &&
+                        payload.controls.price.getError('min')
+                      ? '* Price must be at least 0.01'
+                      : ''
               }}
             </p>
           </div>
@@ -240,8 +253,8 @@
             payload.controls.state.invalid &&
             payload.controls.state.touched &&
             payload.controls.state.getError('required')
-              ? "* Please specify a price for your book"
-              : " "
+              ? '* Please specify a price for your book'
+              : ''
           }}
         </p>
       </section>
@@ -282,7 +295,7 @@
                 payload.controls.binding.touched &&
                 payload.controls.binding.getError('invalidSelection')
                   ? "* Select the option best describes your books's binding condition"
-                  : " " 
+                  : ''
               }}
             </p>
           </div>
@@ -318,7 +331,7 @@
                 payload.controls.cover.touched &&
                 payload.controls.cover.getError('invalidSelection')
                   ? "* Select the option best describes your books's cover condition"
-                  : " "
+                  : ''
               }}
             </p>
           </div>
@@ -344,7 +357,7 @@
                 payload.controls.pages.touched &&
                 payload.controls.pages.getError('invalidSelection')
                   ? "* Select the option best describes your books's pages condition"
-                  : " "
+                  : ''
               }}
             </p>
           </div>
@@ -371,7 +384,7 @@
                 payload.controls.markings.touched &&
                 payload.controls.markings.getError('invalidSelection')
                   ? "* Select the option best describes your books's pages condition"
-                  : " "
+                  : ''
               }}
             </p>
           </div>
@@ -482,8 +495,6 @@
     </form>
   </ng-container>
 
-
-  
   <!-- Success message -->
   <div
     class="w-full max-w-3xl bg-white mx-auto p-16 mt-10"

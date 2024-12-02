@@ -3,5 +3,5 @@ import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 
 export const isCollegeSelectedGuard: CanActivateFn = (route, state) => {
-  return !!inject(AuthService).getPrimarySearchScopeId();
+  return !!inject(AuthService).getPrimaryScope();
 };

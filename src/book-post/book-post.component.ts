@@ -12,20 +12,18 @@ import {
 import { takeUntil } from 'rxjs';
 import { NgxTippyModule } from 'ngx-tippy-wrapper';
 
-import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
-
 import { selectionValidator } from '../validators/selection.validator';
+import { withMinSelections } from '../validators/with-min-selections.validator';
 
 import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
-import { BookValuatorService } from '../services/book-valuator.service';
 import { ImageManagerService } from '../services/image-manager.service';
 import { StringService } from '../services/string.service';
 
 import { Unsubscribable } from '../classes/unsubscribable';
 
-import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 import { HttpRequest } from '../interfaces/http-request.interface';
+import { Institution } from '../interfaces/institution.interface';
 
 type FileBox = {
   base64: string;
@@ -38,14 +36,7 @@ type FileBox = {
 @Component({
   selector: 'book-post',
   standalone: true,
-  imports: [
-    CommonModule,
-    NgxTippyModule,
-    ReactiveFormsModule,
-    RouterModule,
-    // BooksPricingComponent,
-    // ISBN13Pipe
-  ],
+  imports: [CommonModule, NgxTippyModule, ReactiveFormsModule, RouterModule],
   templateUrl: './book-post.component.html',
   styleUrl: './book-post.component.scss'
 })
@@ -56,8 +47,6 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
 
   private readonly bookMarketService = inject(BookMarketService);
 
-  private readonly bookValuator = inject(BookValuatorService);
-
   // private readonly imageManagerService: ImageManagerService,
   private readonly strings = inject(StringService);
 
@@ -67,19 +56,19 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
 
   protected images: FileBox[] = [];
 
-  protected recommendedSellingPriceRange: any = {};
-
-  protected scope = <number>this.auth.getPrimarySearchScopeId();
-
-  protected institutions: any[] = [];
+  protected institutions: Institution[] = [];
 
   protected offerRequestState: HttpRequest = {};
 
   protected payload = new FormGroup(
     {
       userId: new FormControl(),
-      scope: new FormArray([]),
-      price: new FormControl(null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+(\.\d+)$/g)]),
+      scope: new FormArray([], withMinSelections(1)),
+      price: new FormControl(null, [
+        Validators.required,
+        Validators.min(1),
+        Validators.pattern(/^\d+(\.\d+)$/g)
+      ]),
       state: new FormControl(null, [Validators.required]),
       tradeable: new FormControl<boolean>(false),
       binding: new FormControl('SELECT', [
@@ -120,27 +109,13 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
       .subscribe(({ book }: any) => {
         this.book = book;
         this.payload.patchValue({
-          isbn13: book.isbn13
-        });
-      });
-
-    this.payload.valueChanges
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((value: any) => {
-        this.updateRecommendedSellingPrice(value);
-      });
-
-    this.auth
-      .getUserInstitutions()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((institutions: any[]) => {
-        this.institutions = institutions;
-        this.payload.patchValue({
+          isbn13: book.isbn13,
           userId: this.auth.getUserId()
         });
 
         const scope = <FormArray>this.payload.get('scope');
-        institutions.forEach((institution: any) =>
+        this.institutions = this.auth.getUserCampuses();
+        this.institutions.forEach((institution: Institution) =>
           scope.push(new FormControl(institution.institutionId))
         );
       });
@@ -180,6 +155,7 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
   }
 
   onSubmit(e: Event) {
+    console.log(this.payload);
     this.payload.markAllAsTouched();
     if (this.payload.invalid) {
       return;
@@ -213,34 +189,6 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
 
   onMetricsLoaded(metrics: any) {
     this.pricings = [].concat(metrics);
-  }
-
-  private updateRecommendedSellingPrice(value: any) {
-    // console.log('updateRecommendedSellingPrice', this.pricings);
-    if (!this.pricings || !value.state) {
-      return;
-    }
-
-    console.log(
-      this.pricings.map((pricing: any) => {
-        const bookPricingStats = pricing.metrics.find(
-          (metric: any) => metric.state === <string>value.state
-        );
-
-        if (!bookPricingStats) {
-          return null;
-        }
-
-        return {
-          ...pricing,
-          recommended: this.bookValuator.computeEstimateRange(
-            value,
-            bookPricingStats.minPrice,
-            bookPricingStats.maxPrice
-          )
-        };
-      })
-    );
   }
 
   trackBy(index: number, item: any) {

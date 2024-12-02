@@ -45,7 +45,15 @@ export class BookMarketService {
         map((response: any) => {
           return response.map((post: any) => ({
             ...post,
-            ...(!post.user?.profilePictureUrl ? { user: { ...post.user, profilePictureUrl: './assets/images/user-image-unavailable.png' } } : {}),
+            ...(!post.user?.profilePictureUrl
+              ? {
+                  user: {
+                    ...post.user,
+                    profilePictureUrl:
+                      './assets/images/user-image-unavailable.png'
+                  }
+                }
+              : {}),
             book: this.books.populate(post.book)
           }));
         })

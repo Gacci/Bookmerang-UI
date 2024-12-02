@@ -16,6 +16,7 @@ import { booksCollectionResolver } from '../resolvers/books-collection.resolver'
 import { bookFavoriteResolver } from '../resolvers/book-favorite.resolver';
 import { bookMarketResolver } from '../resolvers/book-market.resolver';
 import { bookResolver } from '../resolvers/book.resolver';
+import { institutionResolver } from '../resolvers/institution.resolver';
 import { inventoryResolver } from '../resolvers/inventory.resolver';
 import { userResolver } from '../resolvers/user.resolver';
 
@@ -49,11 +50,25 @@ export const routes: Routes = [
   },
   {
     canActivate: [isLoggedGuard, isCollegeScopeSetGuard],
-    component: HomeComponent,
-    path: 'home',
-    resolve: {
-      // posts: bookMarketResolver
-    }
+    path: '',
+    children: [
+      {
+        path: 'home',
+        component: HomeComponent,
+        runGuardsAndResolvers: 'always',
+        resolve: {
+          posts: bookMarketResolver
+        }
+      },
+      {
+        path: '', // Matches the root path '' (no path specified)
+        component: HomeComponent,
+        runGuardsAndResolvers: 'always',
+        resolve: {
+          posts: bookMarketResolver
+        }
+      }
+    ]
   },
   {
     canActivate: [
@@ -64,9 +79,10 @@ export const routes: Routes = [
     component: BooksCollectionsComponent,
     path: 'books/collections',
     resolve: {
-      books: booksCollectionResolver
+      books: booksCollectionResolver,
+      institutions: institutionResolver
     },
-    runGuardsAndResolvers: 'always'
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange'
   },
   {
     canActivate: [

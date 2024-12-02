@@ -45,7 +45,7 @@ export class NavigationComponent
 
   protected user!: any;
 
-  protected scope = this.auth.getPrimarySearchScopeId();
+  protected scope = this.auth.getPrimaryScope();
 
   ngOnInit(): void {
     this.isLoadingUser = true;
@@ -94,7 +94,6 @@ export class NavigationComponent
         ? ISBN.parse(value)
         : undefined;
 
-    this.scope = this.scope ?? this.auth.getPrimarySearchScopeId();
     if (json?.isValid) {
       console.log('Searching by isbn');
       this.router

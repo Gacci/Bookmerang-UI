@@ -36,10 +36,7 @@ export class InstitutionsDropdownComponent
   onTouched = () => {};
 
   ngOnInit() {
-    this.auth
-      .getUserInstitutions()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((institutions: any[]) => (this.institutions = institutions));
+    this.institutions = this.auth.getUserCampuses();
   }
 
   writeValue(value: any): void {

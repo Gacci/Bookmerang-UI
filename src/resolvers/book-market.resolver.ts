@@ -3,11 +3,16 @@ import { BookMarketService } from '../services/book-market.service';
 import { inject } from '@angular/core';
 
 import * as ISBN from 'isbn3';
+import { AuthService } from '../services/auth.service';
 
 export const bookMarketResolver: ResolveFn<any> = (route, state) => {
   const params: any = route.queryParams;
   return inject(BookMarketService).search({
-    ...(params.scope ? { institutionId: params.scope } : {}),
+    ...(params.scope
+      ? { institutionId: params.scope }
+      : {
+          institutionId: inject(AuthService).getPrimaryScope()
+        }),
     ...(params.isbn13 ? { isbn13: [ISBN.asIsbn13(params.isbn13)] } : {}),
     ...(['true', 'false'].includes(params.tradeable)
       ? { tradeable: JSON.parse(params.tradeable) }
