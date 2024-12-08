@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { finalize, of, switchMap, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 import { NgxTippyModule } from 'ngx-tippy-wrapper';
 
 import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
 
 import { DropdownDirective } from '../../directives/dropdown.directive';
 
@@ -35,44 +34,23 @@ export class NavigationComponent
 
   private auth = inject(AuthService);
 
-  private users = inject(UserService);
-
   private lastHashedKeyword!: string;
-
-  protected isLoadingUser!: boolean;
 
   protected isAuthenticated!: boolean;
 
   protected user!: any;
 
-  protected scope = this.auth.getPrimaryScope();
+  protected scope!: number;
 
   ngOnInit(): void {
-    this.isLoadingUser = true;
+    this.scope = this.auth.getPrimaryScope();
     this.auth.$jwt
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        switchMap((token: any) => {
-          this.isAuthenticated = !!token?.sub;
-          if (this.isAuthenticated) {
-            return this.users.profile(this.auth.getUserId());
-          } else {
-            return of(null); // Handle unauthenticated state
-          }
-        }),
-        finalize(() => {
-          this.isLoadingUser = false;
-        })
-      )
-      .subscribe({
-        next: (user: any) => {
-          this.user = user;
-          this.isLoadingUser = false;
-        },
-        error: err => {
-          this.isLoadingUser = false;
-        }
-      });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((token) => this.isAuthenticated = !!token?.sub);
+
+    this.auth.$user
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((user) => this.user = user);
   }
 
   async handleEnterKeyUp(e: Event) {

@@ -1,7 +1,7 @@
 <div class="container mx-auto px-10 py-8 max-w-2xl">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-12">
+  <form class="space-y-12" [formGroup]="information" (ngSubmit)="onBasicInfoSubmit()">
     <!-- Profile Header -->
-    <div class="flex items-center mb-6">
+    <div class="flex items-center mb-6" *ngIf="!!user">
       <img
         [src]="user.profilePictureUrl"
         alt="Profile Picture"
@@ -39,6 +39,19 @@
             formControlName="firstName"
             class="input mt-1 w-full"
           />
+
+          <span class="content-space text-xs text-red-500">
+            &#160;
+            {{ 
+              information.controls.personal.controls.firstName.invalid && 
+              information.controls.personal.controls.firstName.errors?.['minLength']
+                ? '* Name too short'
+                : information.controls.personal.controls.firstName.invalid && 
+                  information.controls.personal.controls.firstName.errors?.['pattern']
+                  ? '* Invalid characters'
+                  : ' '
+            }}
+          </span>
         </div>
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700">
@@ -49,16 +62,38 @@
             formControlName="lastName"
             class="input mt-1 w-full"
           />
+
+          <span class="text-xs text-red-500">
+            {{ 
+              information.controls.personal.controls.lastName.invalid && 
+              information.controls.personal.controls.lastName.errors?.['minLength']
+                ? '* Last name too short'
+                : information.controls.personal.controls.lastName.invalid && 
+                  information.controls.personal.controls.lastName.errors?.['pattern']
+                  ? '* Invalid characters'
+                  : ' '
+            }}
+          </span>
         </div>
         <div class="col-span-1 w-full">
           <label class="block text-sm font-medium text-gray-700">
-            Phone Number
+            Cell Phone Number
           </label>
           <input
             type="text"
-            formControlName="phone"
+            formControlName="mobile"
             class="input mt-1 w-full"
           />
+
+          <span class="text-xs text-red-500">
+            &#160;
+            {{ 
+              information.controls.personal.controls.mobile.invalid && 
+              information.controls.personal.controls.mobile.errors?.['pattern']
+                ? '* Please type a valid phone number'
+                : ' '
+            }}
+          </span>
         </div>
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700">
@@ -69,6 +104,16 @@
             formControlName="alternativeEmail"
             class="input mt-1 w-full"
           />
+
+          <span class="text-xs text-red-500">
+            &#160;
+            {{ 
+              information.controls.personal.controls.alternativeEmail.invalid && 
+              information.controls.personal.controls.alternativeEmail.errors?.['email']
+                ? '* Please type a valid email'
+                : ' '
+            }}
+          </span>
         </div>
 
         <div class="col-span-2">
@@ -86,7 +131,7 @@
                     id="male"
                     name="gender"
                     type="radio"
-                    value="male"
+                    value="MALE"
                     formControlName="gender"
                     class="border-gray-200 rounded-full"
                   />
@@ -110,7 +155,7 @@
                     id="female"
                     name="gender"
                     type="radio"
-                    value="female"
+                    value="FEMALE"
                     formControlName="gender"
                     class="border-gray-200 rounded-full"
                   />
@@ -134,7 +179,7 @@
                     id="other"
                     name="gender"
                     type="radio"
-                    value="other"
+                    value="OTHER"
                     formControlName="gender"
                     class="border-gray-200 rounded-full"
                   />
@@ -158,7 +203,7 @@
                     id="unspecified"
                     name="gender"
                     type="radio"
-                    value="unspecified"
+                    value="UNSPECIFIED"
                     formControlName="gender"
                     class="border-gray-200 rounded-full"
                   />
@@ -172,10 +217,20 @@
               </div>
             </li>
           </ul>
+
+          <span class="text-xs text-red-500">
+            &#160;
+            {{
+              information.controls.personal.controls.gender.touched &&
+              information.controls.personal.controls.gender.hasError('required')
+                ? '* Please make a selection'
+                : ' '
+            }}
+          </span>
         </div>
 
         <!-- Section 2: Bio -->
-        <div class="col-span-2">
+        <!-- <div class="col-span-2">
           <div class="col-span-4">
             <label class="block text-sm font-medium text-gray-700">
               Tell us about yourself
@@ -187,7 +242,7 @@
               placeholder="Write a short bio..."
             ></textarea>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -205,42 +260,7 @@
             autocomplete="password"
             placeholder="********"
             formControlName="password"
-            [class.error-on]="
-              password.invalid && password.dirty && !!password.value
-            "
           />
-
-          <!-- <password-checker 
-              class="password-checker"
-              [input]="password.value"></password-checker> -->
-
-          <ng-container
-            *ngIf="
-              (password.dirty || password.touched) &&
-              password.value &&
-              password.invalid
-            "
-          >
-            <small
-              class="input-error"
-              *ngIf="
-                password.hasError('pattern') &&
-                !password.hasError('passwordMismatch')
-              "
-            >
-              Password does not meet requirements
-            </small>
-            <small
-              class="input-error"
-              *ngIf="
-                confirmed.value &&
-                !password.hasError('pattern') &&
-                password.hasError('passwordMismatch')
-              "
-            >
-              Passwords don't match
-            </small>
-          </ng-container>
         </div>
         <div class="input-box w-full md:w-2/3">
           <label class="block text-sm font-medium text-gray-700">
@@ -252,80 +272,96 @@
             autocomplete="email"
             placeholder="********"
             formControlName="confirmed"
-            [class.error-on]="
-              confirmed.invalid && confirmed.dirty && !!confirmed.value
-            "
           />
 
-          <!-- <password-checker 
-              class="password-checker"
-              [input]="confirmed.value"></password-checker> -->
-
-          <ng-container
-            *ngIf="
-              (confirmed.dirty || confirmed.touched) &&
-              confirmed.value &&
-              confirmed.invalid
-            "
-          >
-            <small
-              class="input-error"
-              *ngIf="
-                confirmed.hasError('pattern') &&
-                !confirmed.hasError('passwordMismatch')
-              "
-            >
-              Password does not meet requirements
+            <small class="text-xs text-red-500">
+              &#160;
+              {{
+                information.controls.security.value.password !== information.controls.security.value.confirmed 
+                ? "Passwords don't match"
+                : ' '
+              }}
             </small>
-            <small
-              class="input-error"
-              *ngIf="
-                password.value &&
-                !confirmed.hasError('pattern') &&
-                confirmed.hasError('passwordMismatch')
-              "
-            >
-              Passwords don't match
-            </small>
-          </ng-container>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 3: Education Info -->
-    <div>
-      <h2 class="text-lg font-semibold">Education Info</h2>
-      <div class="grid grid-cols-2 gap-6" formGroupName="academic">
-        <div class="col-span-1">
-          <label class="block text-sm font-medium text-gray-700">
-            College Campus
-          </label>
-          <select class="select bg-white w-full" formControlName="campus">
-            <option value="" disabled>Select your campus</option>
-            <option value="csusm">
-              California State University San Marcos
-            </option>
-            <option value="ucla">University of California, Los Angeles</option>
-            <option value="ucsd">University of California, San Diego</option>
-            <option value="sdsu">San Diego State University</option>
-          </select>
-        </div>
-        <div class="col-span-1">
-          <label class="block text-sm font-medium text-gray-700">Major</label>
-          <select class="select bg-white w-full" formControlName="major">
-            <option
-              *ngFor="let program of academicProgramsList"
-              [disabled]="!program.academicProgramId"
-              [value]="program.academicProgramId"
-            >
-              {{ program.name }}
-            </option>
-          </select>
         </div>
       </div>
     </div>
 
     <!-- Save Button -->
+    <!-- [disabled]="form.invalid" -->
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+      >
+        Save Changes
+      </button>
+    </div>
+  </form>
+
+
+  <form class="space-y-12 my-8" [formGroup]="academics" (ngSubmit)="onAcademicInfoSubmit()">
+        <!-- Section 3: Education Info -->
+        <div>
+          <div
+            class="my-2"
+            *ngIf="!hasScopeSet"
+          >
+            <p
+              class="bg-blue-100 text-blue-600 text-sm strong px-6 py-4 rounded-md"
+              *ngIf="institutions.length === 1"
+            >
+              Please confirm your campus
+            </p>
+            <p
+              class="bg-yellow-100 text-yellow-600 text-sm strong px-6 py-4 rounded-md"
+              *ngIf="institutions.length > 1"
+            >
+              We have found more than one college associated with your email. Please
+              select your campus. This will determine where your textbooks will be published.
+            </p>
+          </div>
+    
+          <h2 class="text-lg font-semibold">Education Info</h2>
+          <div class="grid grid-cols-2 gap-6">
+            <div class="col-span-1">
+              <label class="block text-sm font-medium text-gray-700">
+                College Campus
+              </label>
+              <select class="select bg-white w-full" formControlName="scope">
+                <option
+                  *ngFor="let institution of institutions"
+                  [value]="institution.institutionId"
+                >
+                  {{ institution.locationName }}
+                </option>
+              </select>
+              <span class="text-xs text-red-500">
+                &#160;
+                {{
+                  academics.controls.scope.invalid &&
+                  academics.controls.scope.touched &&
+                  academics.controls.scope.errors?.['required'] 
+                    ? '* Select your campus'
+                    : ''
+                }}
+              </span>
+            </div>
+            <div class="col-span-1">
+              <label class="block text-sm font-medium text-gray-700">Major</label>
+              <select class="select bg-white w-full" formControlName="major">
+                <option
+                  *ngFor="let program of academicProgramsList"
+                  [disabled]="!program.academicProgramId"
+                  [value]="program.academicProgramId"
+                >
+                  {{ program.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+            <!-- Save Button -->
     <!-- [disabled]="form.invalid" -->
     <div class="flex justify-end">
       <button

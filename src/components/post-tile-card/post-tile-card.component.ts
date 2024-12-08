@@ -87,9 +87,9 @@ export class PostTileCardComponent
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['post']) {
-      this.isSelfOwned = this.post.userId === this.auth.getUserId();
-      this.deletePostEnabled = this.post.userId === this.auth.getUserId();
-      this.editPostEnabled = this.post.userId === this.auth.getUserId();
+      this.isSelfOwned = this.post.userId === this.auth.getAuthId();
+      this.deletePostEnabled = this.post.userId === this.auth.getAuthId();
+      this.editPostEnabled = this.post.userId === this.auth.getAuthId();
     }
   }
 

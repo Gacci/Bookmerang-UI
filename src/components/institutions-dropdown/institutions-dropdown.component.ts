@@ -36,7 +36,7 @@ export class InstitutionsDropdownComponent
   onTouched = () => {};
 
   ngOnInit() {
-    this.institutions = this.auth.getUserCampuses();
+    this.institutions = this.auth.getAuthCampuses();
   }
 
   writeValue(value: any): void {

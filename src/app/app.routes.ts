@@ -49,7 +49,7 @@ export const routes: Routes = [
     path: 'settings'
   },
   {
-    canActivate: [isLoggedGuard, isCollegeScopeSetGuard],
+    canActivate: [isLoggedGuard, isCollegeEnrolledGuard, isCollegeScopeSetGuard],
     path: '',
     children: [
       {

@@ -4,5 +4,5 @@ import { AuthService } from '../services/auth.service';
 import { Institution } from '../interfaces/institution.interface';
 
 export const institutionResolver: ResolveFn<Institution[]> = (route, state) => {
-  return inject(AuthService).getUserCampuses();
+  return inject(AuthService).getAuthCampuses();
 };

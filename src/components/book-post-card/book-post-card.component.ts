@@ -43,11 +43,11 @@ export class BookPostCardComponent extends Unsubscribable implements OnDestroy {
   @Input()
   set post(_post: any) {
     this._post = _post;
-    this.isSelfOwned = this._post.userId === this.auth.getUserId();
-    this.deletePostEnabled = this._post.userId === this.auth.getUserId();
-    this.editPostEnabled = this._post.userId === this.auth.getUserId();
-    this.likePostEnabled = this._post.userId !== this.auth.getUserId();
-    this.userChatEnabled = this._post.userId !== this.auth.getUserId();
+    this.isSelfOwned = this._post.userId === this.auth.getAuthId();
+    this.deletePostEnabled = this._post.userId === this.auth.getAuthId();
+    this.editPostEnabled = this._post.userId === this.auth.getAuthId();
+    this.likePostEnabled = this._post.userId !== this.auth.getAuthId();
+    this.userChatEnabled = this._post.userId !== this.auth.getAuthId();
   }
 
   @Input()

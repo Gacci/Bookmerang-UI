@@ -110,11 +110,11 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
         this.book = book;
         this.payload.patchValue({
           isbn13: book.isbn13,
-          userId: this.auth.getUserId()
+          userId: this.auth.getAuthId()
         });
 
         const scope = <FormArray>this.payload.get('scope');
-        this.institutions = this.auth.getUserCampuses();
+        this.institutions = this.auth.getAuthCampuses();
         this.institutions.forEach((institution: Institution) =>
           scope.push(new FormControl(institution.institutionId))
         );

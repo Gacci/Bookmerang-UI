@@ -72,7 +72,7 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
 
-        this.institutions = this.auth.getUserCampuses();
+        this.institutions = this.auth.getAuthCampuses();
         this.filters.patchValue({
           ...(query.keyword ? { keyword: query.keyword } : {}),
           ...(query.scope ? { scope: query.scope } : {}),
