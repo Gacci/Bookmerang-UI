@@ -2,16 +2,18 @@
   <form class="w-1/6" [formGroup]="filters">
     <accordion>
       <accordion-view title="Search in" [isOpen]="true">
-        <ul class="pl-4 pb-3">
+        <ul class="pl-2 pb-3">
           <li *ngFor="let institution of institutions">
             <input
               class="sr-only peer"
-              type="checkbox"
+              type="radio"
               formControlName="scope"
+              [id]="institution.institutionId"
               [value]="institution.institutionId"
             />
             <label
               class="flex items-center w-full font-light text-sm cursor-pointer px-2 py-1 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              [for]="institution.institutionId"
             >
               {{ institution.locationName }}
             </label>
@@ -20,7 +22,7 @@
       </accordion-view>
 
       <accordion-view title="Sort by" [isOpen]="true">
-        <ul class="pl-4 pb-3 w-full">
+        <ul class="pl-2 pb-3 w-full">
           <li>
             <input
               class="sr-only peer"

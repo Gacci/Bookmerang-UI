@@ -54,8 +54,8 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   protected institutions: any[] = [];
 
   protected filters = new FormGroup<BookCollectionFilter>({
-    keyword: new FormControl(),
-    scope: new FormControl(),
+    keyword: new FormControl(null),
+    scope: new FormControl(null),
     sorting: new FormControl('price:desc')
   });
 
@@ -75,7 +75,7 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
         this.institutions = this.auth.getAuthCampuses();
         this.filters.patchValue({
           ...(query.keyword ? { keyword: query.keyword } : {}),
-          ...(query.scope ? { scope: query.scope } : {}),
+          ...(query.scope ? { scope: +query.scope } : {}),
           ...(['price:desc'].includes(query.sorting)
             ? { sorting: query.sorting }
             : {})

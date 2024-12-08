@@ -22,6 +22,7 @@ export const httpErrorsInterceptor: HttpInterceptorFn = (
   const alerts = inject(HotToastService);
   return next(req).pipe(
     catchError(({ error: response }: HttpErrorResponse) => {
+      console.log(response);
       if (!(response.error instanceof ErrorEvent)) {
         if (response.error.status === 401) {
           const router = inject(Router);

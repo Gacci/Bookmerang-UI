@@ -1,4 +1,7 @@
 import { Routes } from '@angular/router';
+// import { inject } from '@angular/core';
+
+// import { AuthService } from '../services/auth.service';
 
 import { BooksCollectionsComponent } from '../books-collections/books-collections.component';
 import { BooksFavoritesComponent } from '../books-favorites/books-favorites.component';
@@ -51,7 +54,6 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isCollegeEnrolledGuard,
       isCollegeScopeSetGuard
     ],
     path: '',
@@ -132,7 +134,6 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isCollegeEnrolledGuard,
       isCollegeScopeSetGuard,
       isISBNGuard,
       bookExistsGuard

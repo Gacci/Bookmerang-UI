@@ -32,11 +32,10 @@ export class NavigationComponent
 {
   private router = inject(Router);
 
-  private auth = inject(AuthService);
+  protected auth = inject(AuthService);
 
   private lastHashedKeyword!: string;
 
-  protected isAuthenticated!: boolean;
 
   protected user!: any;
 
@@ -44,9 +43,7 @@ export class NavigationComponent
 
   ngOnInit(): void {
     this.scope = this.auth.getPrimaryScope();
-    this.auth.$jwt
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(token => (this.isAuthenticated = !!token?.sub));
+    // this.isAuthenticated = this.auth.isAuthenticated();
 
     this.auth.$user
       .pipe(takeUntil(this.unsubscribe$))
@@ -73,7 +70,7 @@ export class NavigationComponent
         : undefined;
 
     if (json?.isValid) {
-      console.log('Searching by isbn');
+      console.log('Searching by isbn', { scope: this.scope, isbn13: <string>json.isbn13 });
       this.router
         .navigate(['books', 'markets'], {
           queryParams: { scope: this.scope, isbn13: <string>json.isbn13 }

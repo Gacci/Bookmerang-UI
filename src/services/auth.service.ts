@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import {
   BehaviorSubject,
   combineLatest,
+  delay,
   firstValueFrom,
   map,
   of,
@@ -14,25 +15,15 @@ import { Data } from '@angular/router';
 import { Credentials } from '../interfaces/credentials.interface';
 import { EmailOnly } from '../interfaces/email-only.interface';
 import { Registration } from '../interfaces/registration.interface';
+import { Scope } from '../interfaces/scope.interface';
+import { User } from '../interfaces/user';
 
 import { CacheService } from './cache.service';
 
 import * as JWT from 'jwt-decode';
-import { Institution } from '../interfaces/institution.interface';
-import { User } from '../interfaces/user';
-import { Scope } from '../interfaces/scope.interface';
 
 const JWT_TOKEN = '__tcn';
 
-type UserRefInstitutions = {
-  userId: number;
-  institutionId: number;
-  primary: boolean;
-};
-
-type JwtPayloadPlus = JWT.JwtPayload & {
-  scope: number[];
-};
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +31,7 @@ type JwtPayloadPlus = JWT.JwtPayload & {
 export class AuthService {
   private scoping: Scope[] = [];
 
-  private authTokenSubject = new BehaviorSubject<JwtPayloadPlus | null>(null);
+  private authTokenSubject = new BehaviorSubject<JWT.JwtPayload| null>(null);
 
   private userProfileSubject = new BehaviorSubject<User | null>(null);
 
@@ -65,19 +56,19 @@ export class AuthService {
     }
 
     if (this.isAuthenticated()) {
+      this.scoping = await firstValueFrom(this.fetchAuthScope());
       this.userProfileSubject.next(
         await firstValueFrom(this.fetchAuthProfile())
       );
-      this.scoping = !!this.authTokenSubject.value?.scope?.length
-        ? await firstValueFrom(this.fetchAuthScope())
-        : this.scoping;
     }
 
     console.log(
       'Auth.institutions',
-      this.scoping,
-      this.userProfileSubject.value,
-      this.authTokenSubject
+      '\nisAuthenticated: ', this.isAuthenticated(),
+      '\nscoping: ', this.scoping,
+      '\nuser: ', this.userProfileSubject.value,
+      '\nauth: ', this.authTokenSubject.value,
+      '\ndocument.cookie', document.cookie
     );
   }
 
@@ -91,12 +82,13 @@ export class AuthService {
       tap((login: any) => {
         localStorage.setItem(JWT_TOKEN, login.access_token);
         this.authTokenSubject.next(
-          <JwtPayloadPlus>JWT.jwtDecode(login.access_token)
+          <JWT.JwtPayload>JWT.jwtDecode(login.access_token)
         );
       }),
       switchMap(login =>
         combineLatest([this.fetchAuthProfile(), this.fetchAuthScope()]).pipe(
           tap(([user, scoping]: [User, Scope[]]) => {
+            console.log('Auth.user', user, '\nScope: ', scoping);
             this.scoping = scoping;
             this.userProfileSubject.next(user);
           }),
@@ -109,25 +101,33 @@ export class AuthService {
   logout() {
     const token = this.getJwtTokenRaw();
     if (!token) {
-      return of(true);
+      return of(true)
+        .pipe(
+          tap(() => {
+            console.log('logout.of(true)');
+            this.authTokenSubject.next(null);
+            this.userProfileSubject.next(null);
+          })
+        );
     }
 
-    return this.revokeToken(token);
+    return this.revokeToken(token)
+      .pipe(
+        tap(() => {
+          localStorage.removeItem(JWT_TOKEN);
+          this.authTokenSubject.next(null);
+          this.userProfileSubject.next(null);
+        })
+      );
   }
 
   refreshAccessToken() {
-    return this.http.post('', {});
+    return this.http.post(`http://127.0.0.1:3000/auth/tokens`, {});
   }
 
   revokeToken(token: string) {
     return this.http
-      .delete(`http://127.0.0.1:3000/auth/tokens/revoke`, { body: { token } })
-      .pipe(
-        tap(() => {
-          this.authTokenSubject.next(null);
-          localStorage.removeItem(JWT_TOKEN);
-        })
-      );
+      .delete(`http://127.0.0.1:3000/auth/tokens`, { body: { token } });
   }
 
   /************************************** PASSWORD RECOVERY **************************************/
@@ -226,6 +226,10 @@ export class AuthService {
     return this.scoping?.find((e: Scope) => e.isPrimary)?.institutionId ?? 0;
   }
 
+  getAuthProfile() {
+    return <User>this.userProfileSubject.value;
+  }
+
   getAuthId() {
     return this.authTokenSubject?.value?.sub
       ? +this.authTokenSubject.value.sub
@@ -243,6 +247,6 @@ export class AuthService {
   }
 
   getJwtToken() {
-    return <JwtPayloadPlus>this.authTokenSubject.value;
+    return <JWT.JwtPayload>this.authTokenSubject.value;
   }
 }

@@ -15,7 +15,7 @@
         Flowbite
       </span>
     </a>
-    <ng-container *ngIf="isAuthenticated">
+    <ng-container *ngIf="this.auth.$user | async">
       <div class="flex space-x-4 items-center md:order-2">
         <button
           type="button"
@@ -132,7 +132,7 @@
                 </svg>
 
                 <a
-                  class="text-slate-800 font-medium ml-2"
+                  class="block text-slate-800 font-medium ml-2"
                   [routerLink]="['settings']"
                 >
                   Settings
@@ -157,7 +157,7 @@
                 </svg>
 
                 <a
-                  class="text-slate-800 font-medium ml-2"
+                  class="block text-slate-800 font-medium ml-2"
                   [routerLink]="['books', 'favorites', user.userId]"
                   [queryParams]="{ scope }"
                 >
@@ -202,7 +202,7 @@
                 </svg>
 
                 <a
-                  class="text-slate-800 font-medium ml-2"
+                  class="block text-slate-800 font-medium ml-2"
                   [routerLink]="['books', 'inventories', user.userId]"
                   [queryParams]="{ scope }"
                 >
@@ -248,7 +248,7 @@
                   />
                 </svg>
 
-                <p class="text-slate-800 font-medium ml-2">Help</p>
+                <p class="block text-slate-800 font-medium ml-2">Help</p>
               </li>
 
               <hr class="my-2 border-slate-200" role="menuitem" />
@@ -275,7 +275,7 @@
                 </svg>
 
                 <p
-                  class="text-slate-800 font-medium ml-2"
+                  class="block text-slate-800 font-medium ml-2"
                   (click)="handleSignOut()"
                 >
                   Sign Out

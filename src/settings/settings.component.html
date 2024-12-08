@@ -1,5 +1,6 @@
 <div class="container mx-auto px-10 py-8 max-w-2xl">
   <form
+    autocomplete="off"
     class="space-y-12"
     [formGroup]="information"
     (ngSubmit)="onBasicInfoSubmit()"
@@ -269,11 +270,11 @@
             Choose Password
           </label>
           <input
+            autocomplete="off"
             class="w-full"
-            type="password"
-            autocomplete="password"
             placeholder="********"
             formControlName="password"
+            type="password"
           />
         </div>
         <div class="input-box w-full md:w-2/3">
@@ -281,11 +282,11 @@
             Confirm Password
           </label>
           <input
+            autocomplete="off"
             class="w-full"
-            type="password"
-            autocomplete="email"
             placeholder="********"
             formControlName="confirmed"
+            type="password"
           />
 
           <small class="text-xs text-red-500">

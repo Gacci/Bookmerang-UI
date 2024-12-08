@@ -17,7 +17,7 @@ import { Unsubscribable } from '../classes/unsubscribable';
 import { InstitutionService } from '../services/institution.service';
 import { Institution } from '../interfaces/institution.interface';
 
-import * as Hash from 'crypto-hash';
+// import * as Hash from 'crypto-hash';
 import { User } from '../interfaces/user';
 
 @Component({
@@ -33,8 +33,6 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
   protected instServ = inject(InstitutionService);
 
   protected programs = inject(AcademicProgramService);
-
-  protected users = inject(UserService);
 
   protected academicProgramsList: any[] = [];
 
@@ -82,15 +80,11 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
 
   ngOnInit(): void {
     this.hasScopeSet = !!this.auth.getPrimaryScope();
-    this.users
-      .profile(this.auth.getAuthId())
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(async (user: User) => {
-        this.user = user;
-        this.information.patchValue({
-          personal: user
-        });
-      });
+    this.user = this.auth.getAuthProfile();
+    this.information.patchValue({
+      personal: this.user
+    });
+  
 
     this.programs
       .dump()
@@ -103,8 +97,15 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
         }
       });
 
+    const user = this.auth.getAuthProfile();
     this.instServ
-      .search({ website: 'csusm.edu' })
+      .search({ 
+        website: user.email
+          .replace(/^.+@/ig, '') 
+          .split('.')
+          .slice(-2)
+          .join('.')
+      })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(({ data }) => {
         this.institutions = data;

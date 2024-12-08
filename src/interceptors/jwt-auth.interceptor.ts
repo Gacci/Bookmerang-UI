@@ -17,6 +17,7 @@ export const jwtAuthInterceptor: HttpInterceptorFn = (
   if (service.isAuthenticated()) {
     const token = service.getJwtTokenRaw();
     request = request.clone({
+      // withCredentials: true,
       setHeaders: {
         Authorization: `Bearer ${token}`
       }
@@ -31,6 +32,7 @@ export const jwtAuthInterceptor: HttpInterceptorFn = (
           switchMap(() => {
             const newJwtAuthToken = service.getJwtToken();
             request = request.clone({
+              // withCredentials: true,
               setHeaders: {
                 Authorization: `Bearer ${newJwtAuthToken}`
               }
@@ -47,7 +49,7 @@ export const jwtAuthInterceptor: HttpInterceptorFn = (
           })
         );
       }
-      return throwError(error);
+      return throwError(() => error);
     })
   );
 };
