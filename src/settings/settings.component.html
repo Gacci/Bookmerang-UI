@@ -1,5 +1,9 @@
 <div class="container mx-auto px-10 py-8 max-w-2xl">
-  <form class="space-y-12" [formGroup]="information" (ngSubmit)="onBasicInfoSubmit()">
+  <form
+    class="space-y-12"
+    [formGroup]="information"
+    (ngSubmit)="onBasicInfoSubmit()"
+  >
     <!-- Profile Header -->
     <div class="flex items-center mb-6" *ngIf="!!user">
       <img
@@ -42,12 +46,16 @@
 
           <span class="content-space text-xs text-red-500">
             &#160;
-            {{ 
-              information.controls.personal.controls.firstName.invalid && 
-              information.controls.personal.controls.firstName.errors?.['minLength']
+            {{
+              information.controls.personal.controls.firstName.invalid &&
+              information.controls.personal.controls.firstName.errors?.[
+                'minLength'
+              ]
                 ? '* Name too short'
-                : information.controls.personal.controls.firstName.invalid && 
-                  information.controls.personal.controls.firstName.errors?.['pattern']
+                : information.controls.personal.controls.firstName.invalid &&
+                    information.controls.personal.controls.firstName.errors?.[
+                      'pattern'
+                    ]
                   ? '* Invalid characters'
                   : ' '
             }}
@@ -64,12 +72,16 @@
           />
 
           <span class="text-xs text-red-500">
-            {{ 
-              information.controls.personal.controls.lastName.invalid && 
-              information.controls.personal.controls.lastName.errors?.['minLength']
+            {{
+              information.controls.personal.controls.lastName.invalid &&
+              information.controls.personal.controls.lastName.errors?.[
+                'minLength'
+              ]
                 ? '* Last name too short'
-                : information.controls.personal.controls.lastName.invalid && 
-                  information.controls.personal.controls.lastName.errors?.['pattern']
+                : information.controls.personal.controls.lastName.invalid &&
+                    information.controls.personal.controls.lastName.errors?.[
+                      'pattern'
+                    ]
                   ? '* Invalid characters'
                   : ' '
             }}
@@ -87,8 +99,8 @@
 
           <span class="text-xs text-red-500">
             &#160;
-            {{ 
-              information.controls.personal.controls.mobile.invalid && 
+            {{
+              information.controls.personal.controls.mobile.invalid &&
               information.controls.personal.controls.mobile.errors?.['pattern']
                 ? '* Please type a valid phone number'
                 : ' '
@@ -107,9 +119,11 @@
 
           <span class="text-xs text-red-500">
             &#160;
-            {{ 
-              information.controls.personal.controls.alternativeEmail.invalid && 
-              information.controls.personal.controls.alternativeEmail.errors?.['email']
+            {{
+              information.controls.personal.controls.alternativeEmail.invalid &&
+              information.controls.personal.controls.alternativeEmail.errors?.[
+                'email'
+              ]
                 ? '* Please type a valid email'
                 : ' '
             }}
@@ -274,14 +288,15 @@
             formControlName="confirmed"
           />
 
-            <small class="text-xs text-red-500">
-              &#160;
-              {{
-                information.controls.security.value.password !== information.controls.security.value.confirmed 
+          <small class="text-xs text-red-500">
+            &#160;
+            {{
+              information.controls.security.value.password !==
+              information.controls.security.value.confirmed
                 ? "Passwords don't match"
                 : ' '
-              }}
-            </small>
+            }}
+          </small>
         </div>
       </div>
     </div>
@@ -298,70 +313,71 @@
     </div>
   </form>
 
+  <form
+    class="space-y-12 my-8"
+    [formGroup]="academics"
+    (ngSubmit)="onAcademicInfoSubmit()"
+  >
+    <!-- Section 3: Education Info -->
+    <div>
+      <div class="my-2" *ngIf="!hasScopeSet">
+        <p
+          class="bg-blue-100 text-blue-600 text-sm strong px-6 py-4 rounded-md"
+          *ngIf="institutions.length === 1"
+        >
+          Please confirm your campus
+        </p>
+        <p
+          class="bg-yellow-100 text-yellow-600 text-sm strong px-6 py-4 rounded-md"
+          *ngIf="institutions.length > 1"
+        >
+          We have found more than one college associated with your email. Please
+          select your campus. This will determine where your textbooks will be
+          published.
+        </p>
+      </div>
 
-  <form class="space-y-12 my-8" [formGroup]="academics" (ngSubmit)="onAcademicInfoSubmit()">
-        <!-- Section 3: Education Info -->
-        <div>
-          <div
-            class="my-2"
-            *ngIf="!hasScopeSet"
-          >
-            <p
-              class="bg-blue-100 text-blue-600 text-sm strong px-6 py-4 rounded-md"
-              *ngIf="institutions.length === 1"
+      <h2 class="text-lg font-semibold">Education Info</h2>
+      <div class="grid grid-cols-2 gap-6">
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700">
+            College Campus
+          </label>
+          <select class="select bg-white w-full" formControlName="scope">
+            <option
+              *ngFor="let institution of institutions"
+              [value]="institution.institutionId"
             >
-              Please confirm your campus
-            </p>
-            <p
-              class="bg-yellow-100 text-yellow-600 text-sm strong px-6 py-4 rounded-md"
-              *ngIf="institutions.length > 1"
-            >
-              We have found more than one college associated with your email. Please
-              select your campus. This will determine where your textbooks will be published.
-            </p>
-          </div>
-    
-          <h2 class="text-lg font-semibold">Education Info</h2>
-          <div class="grid grid-cols-2 gap-6">
-            <div class="col-span-1">
-              <label class="block text-sm font-medium text-gray-700">
-                College Campus
-              </label>
-              <select class="select bg-white w-full" formControlName="scope">
-                <option
-                  *ngFor="let institution of institutions"
-                  [value]="institution.institutionId"
-                >
-                  {{ institution.locationName }}
-                </option>
-              </select>
-              <span class="text-xs text-red-500">
-                &#160;
-                {{
-                  academics.controls.scope.invalid &&
-                  academics.controls.scope.touched &&
-                  academics.controls.scope.errors?.['required'] 
-                    ? '* Select your campus'
-                    : ''
-                }}
-              </span>
-            </div>
-            <div class="col-span-1">
-              <label class="block text-sm font-medium text-gray-700">Major</label>
-              <select class="select bg-white w-full" formControlName="major">
-                <option
-                  *ngFor="let program of academicProgramsList"
-                  [disabled]="!program.academicProgramId"
-                  [value]="program.academicProgramId"
-                >
-                  {{ program.name }}
-                </option>
-              </select>
-            </div>
-          </div>
+              {{ institution.locationName }}
+            </option>
+          </select>
+          <span class="text-xs text-red-500">
+            &#160;
+            {{
+              academics.controls.scope.invalid &&
+              academics.controls.scope.touched &&
+              academics.controls.scope.errors?.['required']
+                ? '* Select your campus'
+                : ''
+            }}
+          </span>
         </div>
+        <div class="col-span-1">
+          <label class="block text-sm font-medium text-gray-700">Major</label>
+          <select class="select bg-white w-full" formControlName="major">
+            <option
+              *ngFor="let program of academicProgramsList"
+              [disabled]="!program.academicProgramId"
+              [value]="program.academicProgramId"
+            >
+              {{ program.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
 
-            <!-- Save Button -->
+    <!-- Save Button -->
     <!-- [disabled]="form.invalid" -->
     <div class="flex justify-end">
       <button

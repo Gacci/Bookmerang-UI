@@ -49,7 +49,11 @@ export const routes: Routes = [
     path: 'settings'
   },
   {
-    canActivate: [isLoggedGuard, isCollegeEnrolledGuard, isCollegeScopeSetGuard],
+    canActivate: [
+      isLoggedGuard,
+      isCollegeEnrolledGuard,
+      isCollegeScopeSetGuard
+    ],
     path: '',
     children: [
       {
@@ -73,8 +77,8 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isCollegeScopeSetGuard,
-      isCollegeEnrolledGuard
+      isCollegeEnrolledGuard,
+      isCollegeScopeSetGuard
     ],
     component: BooksCollectionsComponent,
     path: 'books/collections',
@@ -87,8 +91,8 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isCollegeScopeSetGuard,
-      isCollegeEnrolledGuard
+      isCollegeEnrolledGuard,
+      isCollegeScopeSetGuard
     ],
     component: BooksInventoriesComponent,
     path: 'books/inventories/:userId',
@@ -100,8 +104,8 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isCollegeScopeSetGuard,
-      isCollegeEnrolledGuard
+      isCollegeEnrolledGuard,
+      isCollegeScopeSetGuard
     ],
     component: BooksFavoritesComponent,
     path: 'books/favorites/:userId',
@@ -112,8 +116,8 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isCollegeScopeSetGuard,
       isCollegeEnrolledGuard,
+      isCollegeScopeSetGuard,
       isISBNGuard,
       bookExistsGuard
     ],
@@ -128,8 +132,8 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
+      isCollegeEnrolledGuard,
       isCollegeScopeSetGuard,
-      // isCollegeEnrolledGuard,
       isISBNGuard,
       bookExistsGuard
     ],

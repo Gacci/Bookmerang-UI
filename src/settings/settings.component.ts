@@ -52,10 +52,18 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
 
   protected information = new FormGroup({
     personal: new FormGroup({
-      alternativeEmail: new FormControl<string | null>(null, [Validators.email]),
-      firstName: new FormControl<string | null>(null, [Validators.minLength(2), Validators.pattern(/^[A-Z]+$/i)]),
+      alternativeEmail: new FormControl<string | null>(null, [
+        Validators.email
+      ]),
+      firstName: new FormControl<string | null>(null, [
+        Validators.minLength(2),
+        Validators.pattern(/^[A-Z]+$/i)
+      ]),
       gender: new FormControl<string | null>(null, [Validators.required]),
-      lastName: new FormControl<string | null>(null, [Validators.minLength(2), Validators.pattern(/^[A-Z]+$/i)]),
+      lastName: new FormControl<string | null>(null, [
+        Validators.minLength(2),
+        Validators.pattern(/^[A-Z]+$/i)
+      ]),
       mobile: new FormControl<string | null>(null, [
         Validators.pattern(/^(\+1|1)?[0-9]{10}$/)
       ])
@@ -64,12 +72,12 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
       confirmed: new FormControl<string | null>(null, []),
       oldPassword: new FormControl(null, []),
       password: new FormControl(null, [])
-    }),
+    })
   });
 
   protected academics = new FormGroup({
-    major: new FormControl<number | undefined>(undefined, [ ]),
-    scope: new FormControl<number | undefined>(undefined, [ Validators.required ])
+    major: new FormControl<number | undefined>(undefined, []),
+    scope: new FormControl<number | undefined>(undefined, [Validators.required])
   });
 
   ngOnInit(): void {
@@ -77,11 +85,11 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     this.users
       .profile(this.auth.getAuthId())
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(async(user: User) => { 
+      .subscribe(async (user: User) => {
         this.user = user;
         this.information.patchValue({
           personal: user
-        }) 
+        });
       });
 
     this.programs
@@ -98,49 +106,51 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     this.instServ
       .search({ website: 'csusm.edu' })
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(({ data }) => (this.institutions = data));
+      .subscribe(({ data }) => {
+        this.institutions = data;
+        this.academics.patchValue({
+          scope: this.auth.getPrimaryScope()
+        });
+      });
   }
-
 
   onBasicInfoSubmit(): void {
     this.information.markAllAsTouched();
     console.log(this.information.invalid);
-    
+
     if (this.information.invalid) {
-      return; 
+      return;
     }
 
-    this.auth.updateAuthProfile(<Partial<User>>{
-      ...this.information.value.personal,
-      ...(this.information.value.security?.password 
-        ? { password: this.information.value.security?.password} 
-        : {})
-    })
+    this.auth
+      .updateAuthProfile(<Partial<User>>{
+        ...this.information.value.personal,
+        ...(this.information.value.security?.password
+          ? { password: this.information.value.security?.password }
+          : {})
+      })
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((response) => {
-
-      });
+      .subscribe(response => {});
   }
 
   onAcademicInfoSubmit() {
     this.academics.markAllAsTouched();
     console.log(this.academics.invalid);
-    
+
     if (this.academics.invalid) {
-      return; 
+      return;
     }
 
-    this.auth.addAuthInstitution({
-      institutionId: this.academics.value.scope
-        ? +this.academics.value.scope
-        : null,
-      isPrimary: true,
-      userId: this.auth.getAuthId()
-    })
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((response) => {
-
-    })
+    this.auth
+      .addAuthInstitution({
+        institutionId: this.academics.value.scope
+          ? +this.academics.value.scope
+          : null,
+        isPrimary: true,
+        userId: this.auth.getAuthId()
+      })
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(response => {});
   }
 
   onInputChange(e: Event) {

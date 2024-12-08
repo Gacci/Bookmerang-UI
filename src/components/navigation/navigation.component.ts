@@ -46,11 +46,11 @@ export class NavigationComponent
     this.scope = this.auth.getPrimaryScope();
     this.auth.$jwt
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((token) => this.isAuthenticated = !!token?.sub);
+      .subscribe(token => (this.isAuthenticated = !!token?.sub));
 
     this.auth.$user
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((user) => this.user = user);
+      .subscribe(user => (this.user = user));
   }
 
   async handleEnterKeyUp(e: Event) {

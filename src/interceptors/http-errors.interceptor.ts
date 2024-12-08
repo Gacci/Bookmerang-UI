@@ -34,12 +34,14 @@ export const httpErrorsInterceptor: HttpInterceptorFn = (
         }
 
         alerts.error(
-          Array.isArray(response.message) 
-            ? response.message.join(', ') 
-            : response.message , {
-          className: 'text-xs',
-          position: 'bottom-center'
-        });
+          Array.isArray(response.message)
+            ? response.message.join(', ')
+            : response.message,
+          {
+            className: 'text-xs',
+            position: 'bottom-center'
+          }
+        );
       }
 
       return throwError(() => new Error(response.message));

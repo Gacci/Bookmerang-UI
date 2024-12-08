@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, combineLatest, firstValueFrom, map, of, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  firstValueFrom,
+  map,
+  of,
+  switchMap,
+  tap
+} from 'rxjs';
 import { Data } from '@angular/router';
 
 import { Credentials } from '../interfaces/credentials.interface';
@@ -12,6 +20,7 @@ import { CacheService } from './cache.service';
 import * as JWT from 'jwt-decode';
 import { Institution } from '../interfaces/institution.interface';
 import { User } from '../interfaces/user';
+import { Scope } from '../interfaces/scope.interface';
 
 const JWT_TOKEN = '__tcn';
 
@@ -29,7 +38,7 @@ type JwtPayloadPlus = JWT.JwtPayload & {
   providedIn: 'root'
 })
 export class AuthService {
-  private institutions: Institution[] = [];
+  private scoping: Scope[] = [];
 
   private authTokenSubject = new BehaviorSubject<JwtPayloadPlus | null>(null);
 
@@ -56,13 +65,20 @@ export class AuthService {
     }
 
     if (this.isAuthenticated()) {
-      this.userProfileSubject.next(await firstValueFrom(this.getAuthProfile()));
-      this.institutions = !!this.authTokenSubject.value?.scope?.length
-        ? await firstValueFrom(this.getAuthInstitutions())
-        : this.institutions;
+      this.userProfileSubject.next(
+        await firstValueFrom(this.fetchAuthProfile())
+      );
+      this.scoping = !!this.authTokenSubject.value?.scope?.length
+        ? await firstValueFrom(this.fetchAuthScope())
+        : this.scoping;
     }
 
-    console.log('Auth.institutions', this.institutions);
+    console.log(
+      'Auth.institutions',
+      this.scoping,
+      this.userProfileSubject.value,
+      this.authTokenSubject
+    );
   }
 
   /**************************************** AUTHENTICATION ***************************************/
@@ -79,13 +95,9 @@ export class AuthService {
         );
       }),
       switchMap(login =>
-        combineLatest([
-          this.getAuthProfile(),
-          this.getAuthInstitutions()
-        ]).pipe(
-          tap(([user, institutions]: [User, Institution[]]) => {
-            // console.log('User settings loaded:', settings);
-            this.institutions = institutions;
+        combineLatest([this.fetchAuthProfile(), this.fetchAuthScope()]).pipe(
+          tap(([user, scoping]: [User, Scope[]]) => {
+            this.scoping = scoping;
             this.userProfileSubject.next(user);
           }),
           map(() => this.authTokenSubject.value)
@@ -93,7 +105,7 @@ export class AuthService {
       )
     );
   }
-  
+
   logout() {
     const token = this.getJwtTokenRaw();
     if (!token) {
@@ -163,54 +175,55 @@ export class AuthService {
 
   /******************************************* PROFILE *******************************************/
   updateAuthProfile(update: Partial<User>) {
-    return this.http.put(`http://127.0.0.1:3000/auth/${this.getAuthId()}`, update);
-  }
-
-  getAuthProfile() {
-    return this.http.get<User>(`http://127.0.0.1:3000/auth/${this.getAuthId()}`).pipe(
-      map((user: User) => ({
-        ...user,
-        ...(!user.profilePictureUrl
-          ? { profilePictureUrl: './assets/images/user-image-unavailable.png' }
-          : {})
-      }))
+    return this.http.put(
+      `http://127.0.0.1:3000/auth/${this.getAuthId()}`,
+      update
     );
   }
 
-  /******************************************** SCOPE ********************************************/
+  fetchAuthProfile() {
+    return this.http
+      .get<User>(`http://127.0.0.1:3000/auth/${this.getAuthId()}`)
+      .pipe(
+        map((user: User) => ({
+          ...user,
+          ...(!user.profilePictureUrl
+            ? {
+                profilePictureUrl: './assets/images/user-image-unavailable.png'
+              }
+            : {})
+        }))
+      );
+  }
+
+  /******************************************* SCOPING *******************************************/
   addAuthInstitution(data: any) {
-    return this.http.post('http://127.0.0.1:3000/auth/institutions', data);
+    return this.http.post('http://127.0.0.1:3000/auth/scoping', data);
   }
 
-  getAuthInstitutions() {
-    return this.http.get<Institution[]>(
-      'http://127.0.0.1:3000/auth/institutions'
-    );
+  fetchAuthScope() {
+    return this.http.get<Scope[]>('http://127.0.0.1:3000/auth/scoping');
   }
 
   updateAuthInstitutions(id: number, data: any) {
-    return this.http.post(`http://127.0.0.1:3000/auth/institutions/${id}`, data);
+    return this.http.post(`http://127.0.0.1:3000/auth/scoping/${id}`, data);
   }
 
   deleteAuthInstitution(id: number) {
-    return this.http.delete(`http://127.0.0.1:3000/auth/institutions/${id}`);
+    return this.http.delete(`http://127.0.0.1:3000/auth/scoping/${id}`);
   }
 
   /*************************************** LOCAL METHODS *****************************************/
-  isAuthenticated() {
-    return this.authTokenSubject?.value?.exp
-      ? this.authTokenSubject.value.exp * 1000 > Date.now()
-      : false;
-  }
-
   getAuthCampuses() {
-    return !!this.authTokenSubject?.value?.scope?.length
-      ? this.institutions
-      : [];
+    return this.scoping ?? [];
   }
 
   getAuthScope() {
-    return this.authTokenSubject?.value?.scope;
+    return this.scoping.map((e: Scope) => e.institutionId);
+  }
+
+  getPrimaryScope() {
+    return this.scoping?.find((e: Scope) => e.isPrimary)?.institutionId ?? 0;
   }
 
   getAuthId() {
@@ -219,10 +232,10 @@ export class AuthService {
       : 0;
   }
 
-  getPrimaryScope() {
-    return !!this.authTokenSubject?.value?.scope?.length
-      ? +this.authTokenSubject.value.scope?.[0]
-      : 0;
+  isAuthenticated() {
+    return this.authTokenSubject?.value?.exp
+      ? this.authTokenSubject.value.exp * 1000 > Date.now()
+      : false;
   }
 
   getJwtTokenRaw() {

@@ -24,6 +24,7 @@ import { Unsubscribable } from '../classes/unsubscribable';
 
 import { HttpRequest } from '../interfaces/http-request.interface';
 import { Institution } from '../interfaces/institution.interface';
+import { Scope } from '../interfaces/scope.interface';
 
 type FileBox = {
   base64: string;
@@ -56,7 +57,7 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
 
   protected images: FileBox[] = [];
 
-  protected institutions: Institution[] = [];
+  protected scoping: Scope[] = [];
 
   protected offerRequestState: HttpRequest = {};
 
@@ -114,8 +115,8 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
         });
 
         const scope = <FormArray>this.payload.get('scope');
-        this.institutions = this.auth.getAuthCampuses();
-        this.institutions.forEach((institution: Institution) =>
+        this.scoping = this.auth.getAuthCampuses();
+        this.scoping.forEach((institution: Scope) =>
           scope.push(new FormControl(institution.institutionId))
         );
       });
