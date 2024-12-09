@@ -45,9 +45,8 @@
             class="input mt-1 w-full"
           />
 
-          <span class="content-space text-xs text-red-500">
-            &#160;
-            {{
+          <span class="content-space text-xs text-red-500"
+            [innerHTML]="
               information.controls.personal.controls.firstName.invalid &&
               information.controls.personal.controls.firstName.errors?.[
                 'minLength'
@@ -58,9 +57,8 @@
                       'pattern'
                     ]
                   ? '* Invalid characters'
-                  : ' '
-            }}
-          </span>
+                  : '&nbsp;'
+            "></span>
         </div>
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700">
@@ -72,8 +70,8 @@
             class="input mt-1 w-full"
           />
 
-          <span class="text-xs text-red-500">
-            {{
+          <span class="text-xs text-red-500"
+            [innerHTML]="
               information.controls.personal.controls.lastName.invalid &&
               information.controls.personal.controls.lastName.errors?.[
                 'minLength'
@@ -84,9 +82,8 @@
                       'pattern'
                     ]
                   ? '* Invalid characters'
-                  : ' '
-            }}
-          </span>
+                  : '&nbsp;'
+            "></span>
         </div>
         <div class="col-span-1 w-full">
           <label class="block text-sm font-medium text-gray-700">
@@ -98,15 +95,12 @@
             class="input mt-1 w-full"
           />
 
-          <span class="text-xs text-red-500">
-            &#160;
-            {{
-              information.controls.personal.controls.mobile.invalid &&
-              information.controls.personal.controls.mobile.errors?.['pattern']
-                ? '* Please type a valid phone number'
-                : ' '
-            }}
-          </span>
+          <span class="text-xs text-red-500"
+            [innerHTML]="
+            information.controls.personal.controls.mobile.invalid &&
+            information.controls.personal.controls.mobile.errors?.['pattern']
+              ? '* Please type a valid phone number'
+              : '&nbsp;'"></span>
         </div>
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700">
@@ -118,17 +112,14 @@
             class="input mt-1 w-full"
           />
 
-          <span class="text-xs text-red-500">
-            &#160;
-            {{
-              information.controls.personal.controls.alternativeEmail.invalid &&
+          <span class="text-xs text-red-500"
+            [innerHTML]="
+            information.controls.personal.controls.alternativeEmail.invalid &&
               information.controls.personal.controls.alternativeEmail.errors?.[
                 'email'
               ]
                 ? '* Please type a valid email'
-                : ' '
-            }}
-          </span>
+                : '&nbsp;'"></span>
         </div>
 
         <div class="col-span-2">
@@ -233,15 +224,12 @@
             </li>
           </ul>
 
-          <span class="text-xs text-red-500">
-            &#160;
-            {{
-              information.controls.personal.controls.gender.touched &&
+          <span class="text-xs text-red-500"
+            [innerHTML]="
+            information.controls.personal.controls.gender.touched &&
               information.controls.personal.controls.gender.hasError('required')
                 ? '* Please make a selection'
-                : ' '
-            }}
-          </span>
+                : '&nbsp;'"></span>
         </div>
 
         <!-- Section 2: Bio -->
@@ -289,15 +277,12 @@
             type="password"
           />
 
-          <small class="text-xs text-red-500">
-            &#160;
-            {{
-              information.controls.security.value.password !==
-              information.controls.security.value.confirmed
-                ? "Passwords don't match"
-                : ' '
-            }}
-          </small>
+          <small class="text-xs text-red-500"
+            [innerHTML]="
+            information.controls.security.value.password !==
+            information.controls.security.value.confirmed
+              ? 'Passwords don\'t match'
+              : '&nbsp;'"></small>
         </div>
       </div>
     </div>
@@ -352,16 +337,13 @@
               {{ institution.locationName }}
             </option>
           </select>
-          <span class="text-xs text-red-500">
-            &#160;
-            {{
+          <span class="text-xs text-red-500"
+            [innerHTML]="
               academics.controls.scope.invalid &&
               academics.controls.scope.touched &&
               academics.controls.scope.errors?.['required']
                 ? '* Select your campus'
-                : ''
-            }}
-          </span>
+                : '&nbsp;'"></span>
         </div>
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700">Major</label>
