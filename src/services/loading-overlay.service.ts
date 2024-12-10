@@ -5,15 +5,15 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class LoadingOverlayService {
-  private loadingSubject = new BehaviorSubject<boolean>(false);
-  public $isLoading = this.loadingSubject.asObservable();
+  private isLoadingSubject = new BehaviorSubject<boolean>(false);
+  public $isLoading = this.isLoadingSubject.asObservable();
 
   private activeRequestCount: number = 0;
 
   show() {
     this.activeRequestCount++;
     if (this.activeRequestCount === 1) {
-      this.loadingSubject.next(true);
+      this.isLoadingSubject.next(true);
     }
   }
 
@@ -23,7 +23,7 @@ export class LoadingOverlayService {
     }
 
     if (this.activeRequestCount === 0) {
-      this.loadingSubject.next(false);
+      this.isLoadingSubject.next(false);
     }
   }
 }

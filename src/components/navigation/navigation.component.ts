@@ -37,17 +37,15 @@ export class NavigationComponent
   private lastHashedKeyword!: string;
 
 
-  protected user!: any;
-
   protected scope!: number;
 
   ngOnInit(): void {
-    this.scope = this.auth.getPrimaryScope();
+    
     // this.isAuthenticated = this.auth.isAuthenticated();
 
     this.auth.$user
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(user => (this.user = user));
+      .subscribe(user => this.scope = this.auth.getPrimaryScope());
   }
 
   async handleEnterKeyUp(e: Event) {

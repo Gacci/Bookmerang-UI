@@ -15,7 +15,7 @@
         Flowbite
       </span>
     </a>
-    <ng-container *ngIf="this.auth.$user | async">
+    <ng-container *ngIf="auth.$user | async as user">
       <div class="flex space-x-4 items-center md:order-2">
         <button
           type="button"
