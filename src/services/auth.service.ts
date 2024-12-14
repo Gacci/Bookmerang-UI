@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import {
   BehaviorSubject,
   combineLatest,
-  delay,
   firstValueFrom,
   map,
   of,
@@ -18,7 +17,6 @@ import { Registration } from '../interfaces/registration.interface';
 import { Scope } from '../interfaces/scope.interface';
 import { User } from '../interfaces/user';
 
-import { CacheService } from './cache.service';
 
 import * as JWT from 'jwt-decode';
 
@@ -39,8 +37,7 @@ export class AuthService {
   public $user = this.userProfileSubject.asObservable();
 
   constructor(
-    private readonly http: HttpClient,
-    private cache: CacheService
+    private readonly http: HttpClient
   ) {}
 
   async init() {

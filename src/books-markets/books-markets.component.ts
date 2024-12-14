@@ -12,27 +12,30 @@ import {
   BookPostEvent
 } from '../components/book-post-card/book-post-card.component';
 
+import {
+  AccordionComponent,
+  AccordionViewComponent
+} from '../components/accordion/accordion.component';
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 // import { ConfirmDialogComponent } from '../components/confirm-dialog.component';
 import { InstitutionsDropdownComponent } from '../components/institutions-dropdown/institutions-dropdown.component';
-import { SurveyService } from '../services/survey.service';
 
+
+import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
+import { SurveyService } from '../services/survey.service';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
+
+import { Scope } from '../interfaces/scope.interface';
 
 import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 import * as ISBN from 'isbn3';
 import * as Hash from 'crypto-hash';
-import { AuthService } from '../services/auth.service';
-import {
-  AccordionComponent,
-  AccordionViewComponent
-} from '../components/accordion/accordion.component';
-import { Institution } from '../interfaces/institution.interface';
-import { Scope } from '../interfaces/scope.interface';
+
+
 
 type BookMarketsFilters = {
   tradeable: FormControl;

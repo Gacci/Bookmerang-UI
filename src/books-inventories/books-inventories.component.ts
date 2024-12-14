@@ -236,6 +236,11 @@ export class BooksInventoriesComponent
   }
 
   ngOnDestroy() {
+    const { undo, index, ...item } = this.hotToastRef?.data ?? {};
+    if (!undo && !!index) {
+      this.onUnlikeBookOffer(item);
+    }
+
     this.unsubscribe();
   }
 }

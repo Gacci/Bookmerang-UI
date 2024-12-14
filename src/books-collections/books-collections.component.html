@@ -1,5 +1,5 @@
 <div class="flex flex-row" *ngIf="!!data.length">
-  <form class="w-1/6" [formGroup]="filters">
+  <form class="w-1/6" [formGroup]="filters" (ngSubmit)="onSubmit($event)">
     <accordion>
       <accordion-view title="Search in" [isOpen]="true">
         <ul class="pl-2 pb-3">
@@ -100,26 +100,20 @@
               Authors: Z - A
             </label>
           </li>
-          <li>
-            <input
-              class="sr-only peer"
-              type="radio"
-              id="reviews"
-              value="reviews"
-              formControlName="sorting"
-            />
-            <label
-              class="flex items-center w-full font-light text-sm cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-              for="reviews"
-            >
-              Avg. Seller Review
-            </label>
-          </li>
         </ul>
       </accordion-view>
     </accordion>
 
     <input type="hidden" formControlName="keyword" />
+    <div class="mt-6">
+      <button
+        class="relative w-full btn btn-blue-600 mt-8"
+        type="submit"
+        [disabled]="!filtersHashChanged"
+      >
+        Apply Filters
+      </button>
+    </div>
   </form>
 
   <div

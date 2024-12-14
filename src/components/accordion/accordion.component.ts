@@ -18,7 +18,7 @@ import {
         class="flex justify-between items-center py-5 cursor-pointer"
         (click)="onToggleVisibility($event)"
       >
-        <span class="font-semibold text-gray-800">{{ title }}</span>
+        <span class="font-semibold text-gray-800 select-none">{{ title }}</span>
         <button type="button" class="text-gray-500">
           <svg
             class="w-3 h-3 shrink-0 transition-transform duration-300"
@@ -60,6 +60,9 @@ export class AccordionViewComponent {
     this.isOpen = !this.isOpen;
   }
 }
+
+
+
 
 @Component({
   selector: 'accordion',

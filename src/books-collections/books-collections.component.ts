@@ -19,6 +19,10 @@ import {
   AccordionViewComponent
 } from '../components/accordion/accordion.component';
 import { AuthService } from '../services/auth.service';
+import { Scope } from '../interfaces/scope.interface';
+
+
+import * as Hash from 'crypto-hash';
 
 type BookCollectionFilter = {
   keyword: FormControl<string | null>;
@@ -51,12 +55,16 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
   private readonly loadingOverlayService = inject(LoadingOverlayService);
 
-  protected institutions: any[] = [];
+  protected filtersHashChanged!: boolean;
+
+  protected filtersHashedValue!: string;
+
+  protected institutions: Scope[] = [];
 
   protected filters = new FormGroup<BookCollectionFilter>({
     keyword: new FormControl(null),
     scope: new FormControl(null),
-    sorting: new FormControl('price:desc')
+    sorting: new FormControl(null)
   });
 
   ngOnInit(): void {
@@ -67,7 +75,7 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
     combineLatest([this.route.data, this.route.queryParams])
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(([resolved, query]: [any, any]) => {
+      .subscribe(async ([resolved, query]: [any, any]) => {
         this.data = resolved.books.data;
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
@@ -76,18 +84,22 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
         this.filters.patchValue({
           ...(query.keyword ? { keyword: query.keyword } : {}),
           ...(query.scope ? { scope: +query.scope } : {}),
-          ...(['price:desc'].includes(query.sorting)
+          ...(['price:asc'].includes(query.sorting)
             ? { sorting: query.sorting }
-            : {})
+            : { sorting: 'price:asc' })
         });
+
+        this.filtersHashedValue = await Hash.sha256(
+          JSON.stringify(this.filters.value)
+        );
       });
 
     this.filters.valueChanges
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(filters => {
-        this.router.navigate(['books', 'collections'], {
-          queryParams: filters
-        });
+      .subscribe(async (filter: any) => {
+        this.filtersHashChanged =
+          this.filtersHashedValue !==
+          (await Hash.sha256(JSON.stringify(this.filters.value)));
       });
 
     this.loadingOverlayService.$isLoading
@@ -120,6 +132,12 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
   }
 
   override onScrollUp(): void {}
+
+  onSubmit(e: Event) {
+    this.router.navigate(['books', 'collections'], {
+      queryParams: this.filters.value
+    });
+  }
 
   trackBy(index: number, item: any) {
     return item.isbn13;

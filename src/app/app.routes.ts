@@ -52,26 +52,22 @@ export const routes: Routes = [
     path: 'settings'
   },
   {
+    path: 'home',
+    component: HomeComponent,
     canActivate: [isLoggedGuard, isCollegeScopeSetGuard],
-    path: '',
-    children: [
-      {
-        path: 'home',
-        component: HomeComponent,
-        runGuardsAndResolvers: 'always',
-        resolve: {
-          posts: bookMarketResolver
-        }
-      },
-      {
-        path: '', // Matches the root path '' (no path specified)
-        component: HomeComponent,
-        runGuardsAndResolvers: 'always',
-        resolve: {
-          posts: bookMarketResolver
-        }
-      }
-    ]
+    runGuardsAndResolvers: 'always',
+    resolve: {
+      posts: bookMarketResolver
+    }
+  },
+  {
+    path: '', // Matches the root path '' (no path specified)
+    component: HomeComponent,
+    canActivate: [isNotLoggedGuard],
+    runGuardsAndResolvers: 'always',
+    resolve: {
+      posts: bookMarketResolver
+    }
   },
   {
     canActivate: [

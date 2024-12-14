@@ -31,3 +31,25 @@
     ></post-tile-card>
   </div>
 </div>
+
+
+<div
+  class="bg-gray-100 flex items-center justify-center min-h-screen"
+  *ngIf="!data?.length"
+>
+  <div class="text-center max-w-lg px-4">
+    <!-- Optional illustration -->
+    <div class="mb-8">
+      <img
+        src="https://via.placeholder.com/150"
+        alt="No results"
+        class="mx-auto mb-4"
+      />
+    </div>
+
+    <h1 class="text-xl font-bold mb-2">Start making cash</h1>
+    <h3 class="text-base md:text-lg font-light text-gray-700">
+      Your books are plotting against you—sell them before they start collecting dust and resentment
+    </h3>
+  </div>
+</div>
