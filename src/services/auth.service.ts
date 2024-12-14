@@ -24,14 +24,13 @@ import * as JWT from 'jwt-decode';
 
 const JWT_TOKEN = '__tcn';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private scoping: Scope[] = [];
 
-  private authTokenSubject = new BehaviorSubject<JWT.JwtPayload| null>(null);
+  private authTokenSubject = new BehaviorSubject<JWT.JwtPayload | null>(null);
 
   private userProfileSubject = new BehaviorSubject<User | null>(null);
 
@@ -64,11 +63,16 @@ export class AuthService {
 
     console.log(
       'Auth.institutions',
-      '\nisAuthenticated: ', this.isAuthenticated(),
-      '\nscoping: ', this.scoping,
-      '\nuser: ', this.userProfileSubject.value,
-      '\nauth: ', this.authTokenSubject.value,
-      '\ndocument.cookie', document.cookie
+      '\nisAuthenticated: ',
+      this.isAuthenticated(),
+      '\nscoping: ',
+      this.scoping,
+      '\nuser: ',
+      this.userProfileSubject.value,
+      '\nauth: ',
+      this.authTokenSubject.value,
+      '\ndocument.cookie',
+      document.cookie
     );
   }
 
@@ -101,24 +105,22 @@ export class AuthService {
   logout() {
     const token = this.getJwtTokenRaw();
     if (!token) {
-      return of(true)
-        .pipe(
-          tap(() => {
-            console.log('logout.of(true)');
-            this.authTokenSubject.next(null);
-            this.userProfileSubject.next(null);
-          })
-        );
-    }
-
-    return this.revokeToken(token)
-      .pipe(
+      return of(true).pipe(
         tap(() => {
-          localStorage.removeItem(JWT_TOKEN);
+          console.log('logout.of(true)');
           this.authTokenSubject.next(null);
           this.userProfileSubject.next(null);
         })
       );
+    }
+
+    return this.revokeToken(token).pipe(
+      tap(() => {
+        localStorage.removeItem(JWT_TOKEN);
+        this.authTokenSubject.next(null);
+        this.userProfileSubject.next(null);
+      })
+    );
   }
 
   refreshAccessToken() {
@@ -126,8 +128,9 @@ export class AuthService {
   }
 
   revokeToken(token: string) {
-    return this.http
-      .delete(`http://127.0.0.1:3000/auth/tokens`, { body: { token } });
+    return this.http.delete(`http://127.0.0.1:3000/auth/tokens`, {
+      body: { token }
+    });
   }
 
   /************************************** PASSWORD RECOVERY **************************************/

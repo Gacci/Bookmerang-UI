@@ -3,125 +3,213 @@
   aria-label="Sidebar"
 >
   <form class="m-8" [formGroup]="filters" (ngSubmit)="onSubmit($event)">
-    <div class="mb-8">
-      <label class="mb-1 font-semibold text-gray-900">Search in</label>
-      <institutions-dropdown
-        formControlName="scope"
-        [value]="filters.controls.scope.value"
-      ></institutions-dropdown>
-    </div>
-
-    <div class="my-4">
-      <h3 class="mb-1 font-semibold text-gray-900">Sort by</h3>
-      <select class="select w-full bg-white" formControlName="sorting">
-        <option value="price:asc">Price: Lowest to Highest</option>
-        <option value="price:desc">Price: Highest to Lowest</option>
-        <option value="posted-on">Most Recently Listed</option>
-        <option value="review">Avg. Seller Review</option>
-      </select>
-    </div>
-
-    <div class="my-4">
-      <h3 class="mb-1 font-semibold text-gray-900">Trade options</h3>
-      <select class="select w-full bg-white" formControlName="tradeable">
-        <option value="all">All</option>
-        <option value="true">Trade Option Only</option>
-        <option value="false">Non-trade Option Only</option>
-      </select>
-    </div>
-
-    <div class="my-4" formGroupName="state">
-      <h3 class="m2-4 font-semibold text-gray-900">Book Condition</h3>
-      <ul
-        class="text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg"
-      >
-        <li class="w-full border-b border-gray-200 rounded-t-lg">
-          <div class="flex items-center ps-3">
+    <accordion>
+      <accordion-view title="Search in" [isOpen]="true">
+        <ul class="pl-2 pb-3">
+          <li *ngFor="let institution of institutions">
             <input
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              class="sr-only peer"
+              type="radio"
+              formControlName="scope"
+              [id]="institution.institutionId"
+              [value]="institution.institutionId"
+            />
+            <label
+              class="flex items-center w-full font-light text-sm cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              [for]="institution.institutionId"
+            >
+              {{ institution.locationName }}
+            </label>
+          </li>
+        </ul>
+      </accordion-view>
+
+      <accordion-view title="Sort by">
+        <ul class="pl-2 pb-3 w-full">
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="price-asc"
+              value="price:asc"
+              formControlName="sorting"
+            />
+
+            <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="price-asc"
+            >
+              Price: Lowest to Highest
+            </label>
+          </li>
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="price-desc"
+              value="price:desc"
+              formControlName="sorting"
+            />
+
+            <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="price-desc"
+            >
+              Price: Highest to Lowest
+            </label>
+          </li>
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="posted-on"
+              value="posted-on"
+              formControlName="sorting"
+            />
+
+            <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="posted-on"
+            >
+              Most Recently Listed
+            </label>
+          </li>
+        </ul>
+      </accordion-view>
+
+      <accordion-view title="Trade options">
+        <ul class="pl-2 pb-3 w-full">
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="all"
+              value="all"
+              formControlName="tradeable"
+            />
+
+            <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="all"
+            >
+              All
+            </label>
+          </li>
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="trade"
+              value="true"
+              formControlName="tradeable"
+            />
+
+            <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="trade"
+            >
+              Trade Option Only
+            </label>
+          </li>
+          <li>
+            <input
+              class="sr-only peer"
+              type="radio"
+              id="non-trade"
+              value="false"
+              formControlName="tradeable"
+            />
+
+            <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+              for="non-trade"
+            >
+              Non-Trade Option Only
+            </label>
+          </li>
+        </ul>
+      </accordion-view>
+
+      <accordion-view title="Book Condition" formGroupName="state">
+        <ul class="pl-2 pb-3 w-full">
+          <li>
+            <input
+              class="sr-only peer"
               id="new"
               type="checkbox"
               value="1"
               formControlName="new"
             />
             <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
               for="new"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
             >
               New
             </label>
-          </div>
-        </li>
-        <li class="w-full border-b border-gray-200 rounded-t-lg">
-          <div class="flex items-center ps-3">
+          </li>
+          <li>
             <input
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              class="sr-only peer"
               type="checkbox"
               id="like-new"
               value="2"
               formControlName="likeNew"
             />
             <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
               for="like-new"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
             >
               Like New
             </label>
-          </div>
-        </li>
-        <li class="w-full border-b border-gray-200 rounded-t-lg">
-          <div class="flex items-center ps-3">
+          </li>
+          <li>
             <input
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              class="sr-only peer"
               type="checkbox"
               id="very-good"
               value="4"
               formControlName="veryGood"
             />
             <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
               for="very-good"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
             >
               Very Good
             </label>
-          </div>
-        </li>
-        <li class="w-full border-b border-gray-200 rounded-t-lg">
-          <div class="flex items-center ps-3">
+          </li>
+          <li>
             <input
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              class="sr-only peer"
               type="checkbox"
               id="good"
               value="8"
               formControlName="good"
             />
             <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
               for="good"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
             >
               Good
             </label>
-          </div>
-        </li>
-        <li class="w-full border-gray-200 rounded-t-lg">
-          <div class="flex items-center ps-3">
+          </li>
+          <li>
             <input
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+              class="sr-only peer"
               type="checkbox"
               id="acceptable"
               value="16"
               formControlName="acceptable"
             />
             <label
+              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
               for="acceptable"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900"
             >
               Acceptable
             </label>
-          </div>
-        </li>
-      </ul>
-    </div>
+          </li>
+        </ul>
+      </accordion-view>
+    </accordion>
 
     <!-- <div class="my-4">
       <label class="inline-flex items-center mb-5 cursor-pointer">

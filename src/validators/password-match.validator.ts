@@ -5,8 +5,10 @@ export const passwordMatchValidator = (
   confirmed: string
 ): ValidatorFn => {
   return (formGroup: AbstractControl): ValidationErrors | null => {
+    console.log(formGroup);
     const pwdCtrl = formGroup.get(password);
     const confCtrl = formGroup.get(confirmed);
+    console.log(pwdCtrl?.value, confCtrl?.value);
     if (!pwdCtrl || !confCtrl) {
       return null;
     }

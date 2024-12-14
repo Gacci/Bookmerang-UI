@@ -36,16 +36,14 @@ export class NavigationComponent
 
   private lastHashedKeyword!: string;
 
-
   protected scope!: number;
 
   ngOnInit(): void {
-    
     // this.isAuthenticated = this.auth.isAuthenticated();
 
     this.auth.$user
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(user => this.scope = this.auth.getPrimaryScope());
+      .subscribe(user => (this.scope = this.auth.getPrimaryScope()));
   }
 
   async handleEnterKeyUp(e: Event) {
@@ -68,7 +66,10 @@ export class NavigationComponent
         : undefined;
 
     if (json?.isValid) {
-      console.log('Searching by isbn', { scope: this.scope, isbn13: <string>json.isbn13 });
+      console.log('Searching by isbn', {
+        scope: this.scope,
+        isbn13: <string>json.isbn13
+      });
       this.router
         .navigate(['books', 'markets'], {
           queryParams: { scope: this.scope, isbn13: <string>json.isbn13 }

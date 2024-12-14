@@ -5,15 +5,14 @@ import { map, of, tap } from 'rxjs';
 
 export const isLoggedGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
-  if( !auth.isAuthenticated() ) {
+  if (!auth.isAuthenticated()) {
     const router = inject(Router);
-    return auth.logout()
-      .pipe(
-        tap(() => of(router.navigate(['/sign-in']))),
-        map(() => false) // Return `false`
-      );
+    return auth.logout().pipe(
+      tap(() => of(router.navigate(['/sign-in']))),
+      map(() => false) // Return `false`
+    );
   }
-    
-  console.log('Authenticated', auth.getPrimaryScope())
+
+  console.log('Authenticated', auth.getPrimaryScope());
   return true;
 };

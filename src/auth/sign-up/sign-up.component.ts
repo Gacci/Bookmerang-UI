@@ -17,7 +17,7 @@ import { EmailOnly } from '../../interfaces/email-only.interface';
 import { HttpRequest } from '../../interfaces/http-request.interface';
 import { Registration } from '../../interfaces/registration.interface';
 
-import { PasswordCheckerComponent } from '../../components/password-checker/password-checker.component';
+// import { PasswordCheckerComponent } from '../../components/password-checker/password-checker.component';
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 import { passwordMatchValidator } from '../../validators/password-match.validator';
@@ -29,7 +29,7 @@ import { signUpGroup, verifyRegisterCodeGroup } from '../form-groups';
   standalone: true,
   imports: [
     CommonModule,
-    PasswordCheckerComponent,
+    // PasswordCheckerComponent,
     ReactiveFormsModule,
     RouterModule,
     SpinnerComponent

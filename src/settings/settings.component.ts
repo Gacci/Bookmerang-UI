@@ -7,7 +7,7 @@ import {
   Validators
 } from '@angular/forms';
 
-import { takeUntil, zip } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 import { AcademicProgramService } from '../services/academic-program.service';
 import { AuthService } from '../services/auth.service';
@@ -19,6 +19,7 @@ import { Institution } from '../interfaces/institution.interface';
 
 // import * as Hash from 'crypto-hash';
 import { User } from '../interfaces/user';
+import { passwordMatchValidator } from '../validators/password-match.validator';
 
 @Component({
   selector: 'profile-settings',
@@ -49,42 +50,39 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
   protected securityHashedValue!: string;
 
   protected information = new FormGroup({
-    personal: new FormGroup({
-      alternativeEmail: new FormControl<string | null>(null, [
-        Validators.email
-      ]),
-      firstName: new FormControl<string | null>(null, [
-        Validators.minLength(2),
-        Validators.pattern(/^[A-Z]+$/i)
-      ]),
-      gender: new FormControl<string | null>(null, [Validators.required]),
-      lastName: new FormControl<string | null>(null, [
-        Validators.minLength(2),
-        Validators.pattern(/^[A-Z]+$/i)
-      ]),
-      mobile: new FormControl<string | null>(null, [
-        Validators.pattern(/^(\+1|1)?[0-9]{10}$/)
-      ])
-    }),
-    security: new FormGroup({
-      confirmed: new FormControl<string | null>(null, []),
-      oldPassword: new FormControl(null, []),
-      password: new FormControl(null, [])
-    })
+    alternativeEmail: new FormControl<string | null>(null, [Validators.email]),
+    firstName: new FormControl<string | null>(null, [
+      Validators.minLength(2),
+      Validators.pattern(/^[A-Z]+$/i)
+    ]),
+    gender: new FormControl<string | null>(null, [Validators.required]),
+    lastName: new FormControl<string | null>(null, [
+      Validators.minLength(2),
+      Validators.pattern(/^[A-Z]+$/i)
+    ]),
+    mobile: new FormControl<string | null>(null, [
+      Validators.pattern(/^(\+1|1)?[0-9]{10}$/)
+    ]),
+
+    confirmed: new FormControl<string | null>(null, [
+      passwordMatchValidator('password', 'confirmed')
+    ]),
+    oldPassword: new FormControl(null, []),
+    password: new FormControl<string | null>(null, [
+      passwordMatchValidator('password', 'confirmed')
+    ])
   });
 
   protected academics = new FormGroup({
-    major: new FormControl<number | undefined>(undefined, []),
-    scope: new FormControl<number | undefined>(undefined, [Validators.required])
+    major: new FormControl<number | null>(null, []),
+    scope: new FormControl<number | null>(null, [Validators.required]),
+    isPrimary: new FormControl<boolean | null>(null)
   });
 
   ngOnInit(): void {
     this.hasScopeSet = !!this.auth.getPrimaryScope();
     this.user = this.auth.getAuthProfile();
-    this.information.patchValue({
-      personal: this.user
-    });
-  
+    this.information.patchValue(this.user);
 
     this.programs
       .dump()
@@ -99,12 +97,8 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
 
     const user = this.auth.getAuthProfile();
     this.instServ
-      .search({ 
-        website: user.email
-          .replace(/^.+@/ig, '') 
-          .split('.')
-          .slice(-2)
-          .join('.')
+      .search({
+        website: user.email.replace(/^.+@/gi, '').split('.').slice(-2).join('.')
       })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(({ data }) => {
@@ -125,9 +119,9 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
 
     this.auth
       .updateAuthProfile(<Partial<User>>{
-        ...this.information.value.personal,
-        ...(this.information.value.security?.password
-          ? { password: this.information.value.security?.password }
+        ...this.information.value,
+        ...(this.information.value?.password
+          ? { password: this.information.value?.password }
           : {})
       })
       .pipe(takeUntil(this.unsubscribe$))

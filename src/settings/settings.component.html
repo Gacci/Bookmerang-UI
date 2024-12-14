@@ -34,7 +34,7 @@
     <!-- Section 1: Personal Information -->
     <div>
       <h2 class="text-lg font-semibold">Personal Information</h2>
-      <div class="grid grid-cols-2 gap-4" formGroupName="personal">
+      <div class="grid grid-cols-2 gap-4">
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700">
             First Name
@@ -45,20 +45,18 @@
             class="input mt-1 w-full"
           />
 
-          <span class="content-space text-xs text-red-500"
+          <span
+            class="content-space text-xs text-red-500"
             [innerHTML]="
-              information.controls.personal.controls.firstName.invalid &&
-              information.controls.personal.controls.firstName.errors?.[
-                'minLength'
-              ]
+              information.controls.firstName.invalid &&
+              information.controls.firstName.errors?.['minLength']
                 ? '* Name too short'
-                : information.controls.personal.controls.firstName.invalid &&
-                    information.controls.personal.controls.firstName.errors?.[
-                      'pattern'
-                    ]
+                : information.controls.firstName.invalid &&
+                    information.controls.firstName.errors?.['pattern']
                   ? '* Invalid characters'
                   : '&nbsp;'
-            "></span>
+            "
+          ></span>
         </div>
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700">
@@ -70,20 +68,18 @@
             class="input mt-1 w-full"
           />
 
-          <span class="text-xs text-red-500"
+          <span
+            class="text-xs text-red-500"
             [innerHTML]="
-              information.controls.personal.controls.lastName.invalid &&
-              information.controls.personal.controls.lastName.errors?.[
-                'minLength'
-              ]
+              information.controls.lastName.invalid &&
+              information.controls.lastName.errors?.['minLength']
                 ? '* Last name too short'
-                : information.controls.personal.controls.lastName.invalid &&
-                    information.controls.personal.controls.lastName.errors?.[
-                      'pattern'
-                    ]
+                : information.controls.lastName.invalid &&
+                    information.controls.lastName.errors?.['pattern']
                   ? '* Invalid characters'
                   : '&nbsp;'
-            "></span>
+            "
+          ></span>
         </div>
         <div class="col-span-1 w-full">
           <label class="block text-sm font-medium text-gray-700">
@@ -95,12 +91,15 @@
             class="input mt-1 w-full"
           />
 
-          <span class="text-xs text-red-500"
+          <span
+            class="text-xs text-red-500"
             [innerHTML]="
-            information.controls.personal.controls.mobile.invalid &&
-            information.controls.personal.controls.mobile.errors?.['pattern']
-              ? '* Please type a valid phone number'
-              : '&nbsp;'"></span>
+              information.controls.mobile.invalid &&
+              information.controls.mobile.errors?.['pattern']
+                ? '* Please type a valid phone number'
+                : '&nbsp;'
+            "
+          ></span>
         </div>
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700">
@@ -112,14 +111,15 @@
             class="input mt-1 w-full"
           />
 
-          <span class="text-xs text-red-500"
+          <span
+            class="text-xs text-red-500"
             [innerHTML]="
-            information.controls.personal.controls.alternativeEmail.invalid &&
-              information.controls.personal.controls.alternativeEmail.errors?.[
-                'email'
-              ]
+              information.controls.alternativeEmail.invalid &&
+              information.controls.alternativeEmail.errors?.['email']
                 ? '* Please type a valid email'
-                : '&nbsp;'"></span>
+                : '&nbsp;'
+            "
+          ></span>
         </div>
 
         <div class="col-span-2">
@@ -224,12 +224,15 @@
             </li>
           </ul>
 
-          <span class="text-xs text-red-500"
+          <span
+            class="text-xs text-red-500"
             [innerHTML]="
-            information.controls.personal.controls.gender.touched &&
-              information.controls.personal.controls.gender.hasError('required')
+              information.controls.gender.touched &&
+              information.controls.gender.hasError('required')
                 ? '* Please make a selection'
-                : '&nbsp;'"></span>
+                : '&nbsp;'
+            "
+          ></span>
         </div>
 
         <!-- Section 2: Bio -->
@@ -252,7 +255,7 @@
     <!-- Section 2: Password Management -->
     <div>
       <h2 class="text-lg font-semibold">Password Management</h2>
-      <div class="space-y-4" formGroupName="security">
+      <div class="space-y-4">
         <div class="input-box mb-4 w-full md:w-2/3">
           <label class="block text-sm font-medium text-gray-700">
             Choose Password
@@ -264,7 +267,18 @@
             formControlName="password"
             type="password"
           />
+
+          <span
+            class="text-xs text-red-500"
+            [innerHTML]="
+              information.controls.password.value &&
+              information.controls.password.hasError('passwordMismatch')
+                ? '* Passwords don\'t match'
+                : '&nbsp;'
+            "
+          ></span>
         </div>
+
         <div class="input-box w-full md:w-2/3">
           <label class="block text-sm font-medium text-gray-700">
             Confirm Password
@@ -277,12 +291,15 @@
             type="password"
           />
 
-          <small class="text-xs text-red-500"
+          <span
+            class="text-xs text-red-500"
             [innerHTML]="
-            information.controls.security.value.password !==
-            information.controls.security.value.confirmed
-              ? 'Passwords don\'t match'
-              : '&nbsp;'"></small>
+              information.controls.confirmed.value &&
+              information.controls.confirmed.hasError('passwordMismatch')
+                ? '* Passwords don\'t match'
+                : '&nbsp;'
+            "
+          ></span>
         </div>
       </div>
     </div>
@@ -337,13 +354,16 @@
               {{ institution.locationName }}
             </option>
           </select>
-          <span class="text-xs text-red-500"
+          <span
+            class="text-xs text-red-500"
             [innerHTML]="
               academics.controls.scope.invalid &&
               academics.controls.scope.touched &&
               academics.controls.scope.errors?.['required']
                 ? '* Select your campus'
-                : '&nbsp;'"></span>
+                : '&nbsp;'
+            "
+          ></span>
         </div>
         <div class="col-span-1">
           <label class="block text-sm font-medium text-gray-700">Major</label>
@@ -358,6 +378,21 @@
           </select>
         </div>
       </div>
+
+      <label class="inline-flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          value=""
+          class="sr-only peer"
+          formControlName="isPrimary"
+        />
+        <div
+          class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+        ></div>
+        <span class="ms-3 text-sm text-gray-900">
+          Make this campus my primary campus
+        </span>
+      </label>
     </div>
 
     <!-- Save Button -->

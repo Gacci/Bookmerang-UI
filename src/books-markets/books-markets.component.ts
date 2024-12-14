@@ -26,6 +26,13 @@ import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 import * as ISBN from 'isbn3';
 import * as Hash from 'crypto-hash';
+import { AuthService } from '../services/auth.service';
+import {
+  AccordionComponent,
+  AccordionViewComponent
+} from '../components/accordion/accordion.component';
+import { Institution } from '../interfaces/institution.interface';
+import { Scope } from '../interfaces/scope.interface';
 
 type BookMarketsFilters = {
   tradeable: FormControl;
@@ -45,6 +52,9 @@ type BookMarketsFilters = {
   standalone: true,
   imports: [
     CommonModule,
+
+    AccordionComponent,
+    AccordionViewComponent,
     BookPostCardComponent,
     BooksPricingComponent,
     // ConfirmDialogComponent,
@@ -61,6 +71,8 @@ export class BooksMarketsComponent
   extends InfiniteScrollView<any>
   implements OnDestroy
 {
+  private auth = inject(AuthService);
+
   private route = inject(ActivatedRoute);
 
   private router = inject(Router);
@@ -76,6 +88,8 @@ export class BooksMarketsComponent
   protected filtersHashChanged!: boolean;
 
   protected isLoadingMetrics!: boolean;
+
+  protected institutions: Scope[] = [];
 
   protected metrics!: any;
 
@@ -112,6 +126,7 @@ export class BooksMarketsComponent
       .subscribe((resolved: any) => {
         this.book = resolved.book;
         this.data = resolved.posts;
+        this.institutions = this.auth.getAuthCampuses();
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
       });
