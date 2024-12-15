@@ -18,6 +18,7 @@ import { Unsubscribable } from '../../classes/unsubscribable';
 
 import * as Hash from 'crypto-hash';
 import * as ISBN from 'isbn3';
+import { NgxPopperjsModule } from 'ngx-popperjs';
 
 type SearchEvent = {
   type: 'isbn' | 'keyword';
@@ -27,7 +28,7 @@ type SearchEvent = {
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule, NgxTippyModule, RouterModule],
+  imports: [CommonModule, NgxTippyModule, NgxPopperjsModule, RouterModule],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss'
 })

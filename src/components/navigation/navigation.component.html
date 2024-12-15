@@ -112,20 +112,16 @@
               class="relative inline-block h-10 w-10 cursor-pointer rounded-full object-cover object-center"
     
               [src]="user?.profilePictureUrl"
-              [ngxTippy]="menu"
-              [tippyProps]="{
-                arrow: false,
-                hideOnClick: true,
-                interactive: true,
-                placement: 'bottom-end',
-                trigger: 'click'
-              }"
+              [popper]="menu"
+              [popperApplyClass]="'bg-white'"
+              [popperHideOnScroll]="true"
+              [popperHideOnClickOutside]="true"
             />
 
-            <ul
-              #menu
+            <popper-content #menu class="bg-white">
+              <ul
               role="menu"
-              class="w-52 rounded-lg border border-slate-100 bg-white shadow-lg shadow-lg"
+              class="w-52 rounded-lg"
             >
               <li class="p-2">
                 <span class="block text-sm">{{ user.email }}</span>
@@ -154,6 +150,7 @@
                 <a
                   class="block text-slate-800 font-medium ml-2"
                   routerLink="settings"
+                  (click)="menu.hide()"
                 >
                   Settings
                 </a>
@@ -180,6 +177,7 @@
                   class="block text-slate-800 font-medium ml-2"
                   [queryParams]="{ scope: this.auth.getPrimaryScope() }"
                   [routerLink]="['books', 'favorites', user.userId]"
+                  (click)="menu.hide()"
                 >
                   Favorites
                 </a>
@@ -225,6 +223,7 @@
                   class="block text-slate-800 font-medium ml-2"
                   [queryParams]="{ scope: this.auth.getPrimaryScope() }"
                   [routerLink]="['books', 'inventories', user.userId]"
+                  (click)="menu.hide()"
                 >
                   Inventory
                 </a>
@@ -247,7 +246,7 @@
                   />
                 </svg>
 
-                <p class="text-slate-800 font-medium ml-2">Inbox</p>
+                <p class="text-slate-800 font-medium ml-2" (click)="menu.hide()">Inbox</p>
               </li>
 
               <hr class="my-2 border-slate-200" role="menuitem" />
@@ -268,7 +267,7 @@
                   />
                 </svg>
 
-                <p class="block text-slate-800 font-medium ml-2">Help</p>
+                <p class="block text-slate-800 font-medium ml-2" (click)="menu.hide()">Help</p>
               </li>
               <li
                 role="menuitem"
@@ -287,7 +286,9 @@
                   />
                 </svg>
 
-                <a routerLink="about" class="block text-slate-800 font-medium ml-2">
+                <a routerLink="about" 
+                  class="block text-slate-800 font-medium ml-2"
+                  (click)="menu.hide()">
                 About
                 </a>
               </li>
@@ -323,6 +324,7 @@
                 </p>
               </li>
             </ul>
+            </popper-content>
           </ng-container>
         </div>
       </div>
