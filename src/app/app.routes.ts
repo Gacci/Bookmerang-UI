@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
-// import { inject } from '@angular/core';
 
-// import { AuthService } from '../services/auth.service';
-
+import { AboutComponent } from '../about/about.component';
 import { BooksCollectionsComponent } from '../books-collections/books-collections.component';
 import { BooksFavoritesComponent } from '../books-favorites/books-favorites.component';
 import { BooksInventoriesComponent } from '../books-inventories/books-inventories.component';
@@ -54,20 +52,11 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [isLoggedGuard, isCollegeScopeSetGuard],
-    runGuardsAndResolvers: 'always',
-    resolve: {
-      posts: bookMarketResolver
-    }
+    runGuardsAndResolvers: 'always'
   },
   {
-    path: '', // Matches the root path '' (no path specified)
-    component: HomeComponent,
-    canActivate: [isNotLoggedGuard],
-    runGuardsAndResolvers: 'always',
-    resolve: {
-      posts: bookMarketResolver
-    }
+    path: 'about',
+    component: AboutComponent
   },
   {
     canActivate: [

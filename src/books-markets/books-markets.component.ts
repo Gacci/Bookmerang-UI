@@ -17,9 +17,6 @@ import {
   AccordionViewComponent
 } from '../components/accordion/accordion.component';
 import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
-// import { ConfirmDialogComponent } from '../components/confirm-dialog.component';
-import { InstitutionsDropdownComponent } from '../components/institutions-dropdown/institutions-dropdown.component';
-
 
 import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
@@ -34,8 +31,6 @@ import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 import * as ISBN from 'isbn3';
 import * as Hash from 'crypto-hash';
-
-
 
 type BookMarketsFilters = {
   tradeable: FormControl;
@@ -60,12 +55,11 @@ type BookMarketsFilters = {
     AccordionViewComponent,
     BookPostCardComponent,
     BooksPricingComponent,
-    // ConfirmDialogComponent,
+
     ISBN13Pipe,
     ReactiveFormsModule,
     RouterModule,
-    InfiniteScrollDirective,
-    InstitutionsDropdownComponent
+    InfiniteScrollDirective
   ],
   templateUrl: './books-markets.component.html',
   styleUrl: './books-markets.component.scss'
@@ -74,17 +68,17 @@ export class BooksMarketsComponent
   extends InfiniteScrollView<any>
   implements OnDestroy
 {
-  private auth = inject(AuthService);
+  private readonly auth = inject(AuthService);
 
-  private route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
-  private bookMarketService = inject(BookMarketService);
+  private readonly bookMarketService = inject(BookMarketService);
 
-  private loadingOverlayService = inject(LoadingOverlayService);
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
 
-  private surveyService = inject(SurveyService);
+  private readonly surveyService = inject(SurveyService);
 
   private filtersHashedValue!: string;
 

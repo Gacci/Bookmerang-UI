@@ -12,8 +12,11 @@
 @import 'swiper/scss/virtual';
 
 
+/** Arrow */
 @import 'tippy.js/dist/tippy.css';
-@import 'tippy.js/themes/light.css';
+@import 'tippy.js/dist/svg-arrow.css';
+@import 'tippy.js/dist/backdrop.css';
+@import 'tippy.js/themes/light-border.css';
 
 
 @import '@ngneat/hot-toast/src/styles/styles.scss';

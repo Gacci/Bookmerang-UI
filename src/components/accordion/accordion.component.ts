@@ -61,9 +61,6 @@ export class AccordionViewComponent {
   }
 }
 
-
-
-
 @Component({
   selector: 'accordion',
   standalone: true,

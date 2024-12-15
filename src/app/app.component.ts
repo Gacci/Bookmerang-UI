@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayComponent } from '../components/loading-overlay/loading-overlay.component';
 import { NavigationComponent } from '../components/navigation/navigation.component';
-import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +20,5 @@ import { AuthService } from '../services/auth.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  protected readonly auth = inject(AuthService);
-
   title = 'frontend';
 }

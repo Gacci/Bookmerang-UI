@@ -24,59 +24,6 @@
         </ul>
       </accordion-view>
 
-      <accordion-view title="Sort by">
-        <ul class="pl-2 pb-3 w-full">
-          <li>
-            <input
-              class="sr-only peer"
-              type="radio"
-              id="price-asc"
-              value="price:asc"
-              formControlName="sorting"
-            />
-
-            <label
-              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-              for="price-asc"
-            >
-              Price: Lowest to Highest
-            </label>
-          </li>
-          <li>
-            <input
-              class="sr-only peer"
-              type="radio"
-              id="price-desc"
-              value="price:desc"
-              formControlName="sorting"
-            />
-
-            <label
-              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-              for="price-desc"
-            >
-              Price: Highest to Lowest
-            </label>
-          </li>
-          <li>
-            <input
-              class="sr-only peer"
-              type="radio"
-              id="posted-on"
-              value="posted-on"
-              formControlName="sorting"
-            />
-
-            <label
-              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-              for="posted-on"
-            >
-              Most Recently Listed
-            </label>
-          </li>
-        </ul>
-      </accordion-view>
-
       <accordion-view title="Trade options">
         <ul class="pl-2 pb-3 w-full">
           <li>
@@ -210,6 +157,59 @@
         </ul>
       </accordion-view>
     </accordion>
+
+    <accordion-view title="Sort by">
+      <ul class="pl-2 pb-3 w-full">
+        <li>
+          <input
+            class="sr-only peer"
+            type="radio"
+            id="price-asc"
+            value="price:asc"
+            formControlName="sorting"
+          />
+
+          <label
+            class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+            for="price-asc"
+          >
+            Price: Lowest to Highest
+          </label>
+        </li>
+        <li>
+          <input
+            class="sr-only peer"
+            type="radio"
+            id="price-desc"
+            value="price:desc"
+            formControlName="sorting"
+          />
+
+          <label
+            class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+            for="price-desc"
+          >
+            Price: Highest to Lowest
+          </label>
+        </li>
+        <li>
+          <input
+            class="sr-only peer"
+            type="radio"
+            id="posted-on"
+            value="posted-on"
+            formControlName="sorting"
+          />
+
+          <label
+            class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
+            for="posted-on"
+          >
+            Most Recently Listed
+          </label>
+        </li>
+      </ul>
+    </accordion-view>
 
     <div class="mt-6">
       <button

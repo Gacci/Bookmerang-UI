@@ -17,7 +17,6 @@ import { Registration } from '../interfaces/registration.interface';
 import { Scope } from '../interfaces/scope.interface';
 import { User } from '../interfaces/user';
 
-
 import * as JWT from 'jwt-decode';
 
 const JWT_TOKEN = '__tcn';
@@ -36,9 +35,7 @@ export class AuthService {
 
   public $user = this.userProfileSubject.asObservable();
 
-  constructor(
-    private readonly http: HttpClient
-  ) {}
+  constructor(private readonly http: HttpClient) {}
 
   async init() {
     console.log('Auth.init');

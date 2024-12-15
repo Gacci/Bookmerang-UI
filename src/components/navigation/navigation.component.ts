@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterModule
+} from '@angular/router';
 import { takeUntil } from 'rxjs';
 
 import { NgxTippyModule } from 'ngx-tippy-wrapper';
@@ -22,7 +27,7 @@ type SearchEvent = {
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule, DropdownDirective, NgxTippyModule, RouterModule],
+  imports: [CommonModule, NgxTippyModule, RouterModule],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss'
 })
@@ -30,20 +35,25 @@ export class NavigationComponent
   extends Unsubscribable
   implements OnInit, OnDestroy
 {
-  private router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
-  protected auth = inject(AuthService);
+  private readonly router = inject(Router);
+
+  protected readonly auth = inject(AuthService);
+
+  protected isRegisterOrLoginPage!: boolean;
 
   private lastHashedKeyword!: string;
 
-  protected scope!: number;
-
   ngOnInit(): void {
-    // this.isAuthenticated = this.auth.isAuthenticated();
-
-    this.auth.$user
+    this.router.events
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(user => (this.scope = this.auth.getPrimaryScope()));
+      .subscribe(
+        event =>
+          (this.isRegisterOrLoginPage = /(sign-in|sign-up)/.test(
+            this.router.url
+          ))
+      );
   }
 
   async handleEnterKeyUp(e: Event) {
@@ -67,12 +77,15 @@ export class NavigationComponent
 
     if (json?.isValid) {
       console.log('Searching by isbn', {
-        scope: this.scope,
+        scope: this.auth.getPrimaryScope(),
         isbn13: <string>json.isbn13
       });
       this.router
         .navigate(['books', 'markets'], {
-          queryParams: { scope: this.scope, isbn13: <string>json.isbn13 }
+          queryParams: {
+            isbn13: <string>json.isbn13,
+            scope: this.auth.getPrimaryScope()
+          }
         })
         .then(() => (this.lastHashedKeyword = ''))
         .catch(() => (this.lastHashedKeyword = ''));
@@ -80,7 +93,10 @@ export class NavigationComponent
       console.log('Searching by title or author');
       this.router
         .navigate(['books', 'collections'], {
-          queryParams: { scope: this.scope, keyword: value }
+          queryParams: {
+            keyword: value,
+            scope: this.auth.getPrimaryScope()
+          }
         })
         .then(() => (this.lastHashedKeyword = ''))
         .catch(() => (this.lastHashedKeyword = ''));

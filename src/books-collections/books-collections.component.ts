@@ -21,7 +21,6 @@ import {
 import { AuthService } from '../services/auth.service';
 import { Scope } from '../interfaces/scope.interface';
 
-
 import * as Hash from 'crypto-hash';
 
 type BookCollectionFilter = {

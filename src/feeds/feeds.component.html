@@ -1,0 +1,86 @@
+<confirm-dialog
+  *ngIf="!isLoadingNext"
+  [title]="survey.title"
+  [contentType]="survey.contentType"
+  [content]="survey.question"
+  [value]="survey.value"
+  (selection)="onSurveySelection($event)"
+></confirm-dialog>
+
+<div class="px-1 my-8 lg:mx-8 border-y" *ngIf="!!cheaps?.length">
+  <h6 class="mt-2">Lowest priced</h6>
+  <swiper-container
+    #swiper
+    [config]="config"
+    [slidesPerView]="8"
+    [spaceBetween]="50"
+    [navigation]="true"
+    [loop]="true"
+    class="swiper"
+    a11y="false"
+  >
+    <ng-container *ngFor="let book of cheaps">
+      <swiper-slide class="bg-white" lazy="true">
+        <div class="relative">
+          <a
+            class="relative block aspect-2/3 overflow-hidden mx-auto my-4 rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7"
+            [routerLink]="['/', 'books', 'markets']"
+            [queryParams]="{
+              isbn13: book.isbn13,
+              scope: params.scope,
+              sorting: 'price:asc'
+            }"
+          >
+            <img
+              lazy="laoding"
+              class="absolute top-0 left-0 h-full w-full object-cover object-center group-hover:opacity-75"
+              [src]="book.thumbnail"
+              [alt]="book.title"
+            />
+          </a>
+          <a
+            class="block mt-2 text-sm font-medium text-blue-500 tracking-tight"
+            [routerLink]="['/', 'books', 'markets']"
+            [queryParams]="{
+              isbn13: book.isbn13,
+              scope: params.scope,
+              sorting: 'price:asc'
+            }"
+          >
+            {{ book.title }} {{ book.subtitle }}
+          </a>
+
+          <strong class="block text-sm">
+            {{ book.pricing.min | currency }}
+          </strong>
+        </div>
+      </swiper-slide>
+    </ng-container>
+    <!-- <div class="custom-prev" slot="container-start">XXXXX</div>
+  <div class="custom-next" slot="container-end"></div> -->
+  </swiper-container>
+</div>
+
+<div
+  class="feed"
+  infiniteScroll
+  [infiniteScrollUpDistance]="1"
+  [infiniteScrollDistance]="1.0"
+  [infiniteScrollThrottle]="500"
+  [immediateCheck]="hasNextPage"
+  [infiniteScrollDisabled]="isLoadingNext"
+  [scrollWindow]="true"
+  (scrolled)="onScrollDown()"
+  (scrolledUp)="onScrollUp()"
+>
+  <book-post-card
+    *ngFor="let post of data; trackBy: trackBy"
+    [post]="post"
+    [isProcessingLike]="post.isProcessingLike"
+    (action)="onActionClicked($event, post)"
+    [userRouterLink]="['/', 'books', 'inventories', post.userId]"
+    [userQueryParams]="{ scope: params.scope }"
+    [link]="['/', 'books', 'markets']"
+    [query]="{ scope: params.scope, isbn13: post.book.isbn13 }"
+  ></book-post-card>
+</div>

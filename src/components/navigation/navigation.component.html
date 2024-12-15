@@ -15,6 +15,18 @@
         Flowbite
       </span>
     </a>
+
+    <ng-container *ngIf="!(auth.$user | async)">
+      <div
+        class="flex flex-row space-x-2 justify-end"
+        *ngIf="!isRegisterOrLoginPage"
+      >
+        <a [routerLink]="['sign-in']">Login</a>
+        <span>|</span>
+        <a [routerLink]="['sign-up']">Register</a>
+      </div>
+    </ng-container>
+
     <ng-container *ngIf="auth.$user | async as user">
       <div class="flex space-x-4 items-center md:order-2">
         <button
@@ -98,14 +110,22 @@
             <img
               alt="Profile picture"
               class="relative inline-block h-10 w-10 cursor-pointer rounded-full object-cover object-center"
+    
               [src]="user?.profilePictureUrl"
-              [tcnDropdown]="profileDropdownContent"
+              [ngxTippy]="menu"
+              [tippyProps]="{
+                arrow: false,
+                hideOnClick: true,
+                interactive: true,
+                placement: 'bottom-end',
+                trigger: 'click'
+              }"
             />
 
             <ul
-              #profileDropdownContent
+              #menu
               role="menu"
-              class="absolute z-10 min-w-[260px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg shadow-sm focus:outline-none"
+              class="w-52 rounded-lg border border-slate-100 bg-white shadow-lg shadow-lg"
             >
               <li class="p-2">
                 <span class="block text-sm">{{ user.email }}</span>
@@ -133,7 +153,7 @@
 
                 <a
                   class="block text-slate-800 font-medium ml-2"
-                  [routerLink]="['settings']"
+                  routerLink="settings"
                 >
                   Settings
                 </a>
@@ -158,8 +178,8 @@
 
                 <a
                   class="block text-slate-800 font-medium ml-2"
+                  [queryParams]="{ scope: this.auth.getPrimaryScope() }"
                   [routerLink]="['books', 'favorites', user.userId]"
-                  [queryParams]="{ scope }"
                 >
                   Favorites
                 </a>
@@ -203,8 +223,8 @@
 
                 <a
                   class="block text-slate-800 font-medium ml-2"
+                  [queryParams]="{ scope: this.auth.getPrimaryScope() }"
                   [routerLink]="['books', 'inventories', user.userId]"
-                  [queryParams]="{ scope }"
                 >
                   Inventory
                 </a>
@@ -249,6 +269,27 @@
                 </svg>
 
                 <p class="block text-slate-800 font-medium ml-2">Help</p>
+              </li>
+              <li
+                role="menuitem"
+                class="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="w-5 h-5 text-slate-400"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0ZM8.94 6.94a.75.75 0 1 1-1.061-1.061 3 3 0 1 1 2.871 5.026v.345a.75.75 0 0 1-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 1 0 8.94 6.94ZM10 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+
+                <a routerLink="about" class="block text-slate-800 font-medium ml-2">
+                About
+                </a>
               </li>
 
               <hr class="my-2 border-slate-200" role="menuitem" />
@@ -361,7 +402,7 @@
               class="relative block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:px-12 md:py-3 md:text-gray-400 md:hover:bg-gray-100"
               aria-current="page"
               ngxTippy="Inventory"
-              [tippyProps]="{ placement: 'bottom' }"
+              [queryParams]="{ scope: this.auth.getPrimaryScope() }"
               [routerLinkActive]="[
                 'content-space',
                 'before:absolute',
@@ -374,7 +415,7 @@
               ]"
               [routerLinkActiveOptions]="{ exact: true }"
               [routerLink]="['books', 'inventories', user.userId]"
-              [queryParams]="{ scope }"
+              [tippyProps]="{ placement: 'bottom' }"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -394,6 +435,7 @@
               aria-current="page"
               ngxTippy="Favorites"
               [tippyProps]="{ placement: 'bottom' }"
+              [queryParams]="{ scope: this.auth.getPrimaryScope() }"
               [routerLinkActive]="[
                 'content-space',
                 'before:absolute',
@@ -406,7 +448,6 @@
               ]"
               [routerLinkActiveOptions]="{ exact: true }"
               [routerLink]="['books', 'favorites', user.userId]"
-              [queryParams]="{ scope }"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
