@@ -38,8 +38,6 @@ export class AuthService {
   constructor(private readonly http: HttpClient) {}
 
   async init() {
-    console.log('Auth.init');
-
     if (!this.authTokenSubject.value) {
       this.authTokenSubject.next(
         this.getJwtTokenRaw()
@@ -54,20 +52,6 @@ export class AuthService {
         await firstValueFrom(this.fetchAuthProfile())
       );
     }
-
-    console.log(
-      'Auth.institutions',
-      '\nisAuthenticated: ',
-      this.isAuthenticated(),
-      '\nscoping: ',
-      this.scoping,
-      '\nuser: ',
-      this.userProfileSubject.value,
-      '\nauth: ',
-      this.authTokenSubject.value,
-      '\ndocument.cookie',
-      document.cookie
-    );
   }
 
   /**************************************** AUTHENTICATION ***************************************/
@@ -86,7 +70,7 @@ export class AuthService {
       switchMap(login =>
         combineLatest([this.fetchAuthProfile(), this.fetchAuthScope()]).pipe(
           tap(([user, scoping]: [User, Scope[]]) => {
-            console.log('Auth.user', user, '\nScope: ', scoping);
+            // console.log('Auth.user', user, '\nScope: ', scoping);
             this.scoping = scoping;
             this.userProfileSubject.next(user);
           }),

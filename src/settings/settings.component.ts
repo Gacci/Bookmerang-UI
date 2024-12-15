@@ -58,7 +58,7 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     gender: new FormControl<string | null>(null, [Validators.required]),
     lastName: new FormControl<string | null>(null, [
       Validators.minLength(2),
-      Validators.pattern(/^[A-Z]+$/i)
+      Validators.pattern(/^[A-Z\-]+$/i)
     ]),
     mobile: new FormControl<string | null>(null, [
       Validators.pattern(/^(\+1|1)?[0-9]{10}$/)

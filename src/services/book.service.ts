@@ -25,9 +25,7 @@ export class BookService {
             edition: haystack
               .match(/\d+(st|nd|rd|th) (edition|ed\.?)/gi)
               ?.pop(),
-            volume: haystack
-              .match(/(volume|vol\.) \d+/gi)
-              ?.pop()
+            volume: haystack.match(/(volume|vol\.) \d+/gi)?.pop()
           }
         : {}),
       ...(book.language

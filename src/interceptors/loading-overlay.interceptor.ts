@@ -6,21 +6,16 @@ import { finalize } from 'rxjs/operators';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 
 export const loadingOverlayInterceptor: HttpInterceptorFn = (req, next) => {
-  // Inject the LoadingService instance
   const loadingOverlayService = inject(LoadingOverlayService);
 
-  // Define the routes or patterns that should skip the loading overlay
   const excludedRoutes: RegExp[] = [
     new RegExp('/auth/([a-z-]+|d+)$', 'ig'),
     new RegExp('/books/markets/posts/metrics'),
     new RegExp('/books/markets/favorites')
   ];
 
-  // Check if the request URL matches any of the excluded routes
   const shouldExcludeRoute = excludedRoutes.some(route => route.test(req.url));
-
   if (!shouldExcludeRoute) {
-    console.log('Showing for: ', req.url);
     loadingOverlayService.show();
   }
 

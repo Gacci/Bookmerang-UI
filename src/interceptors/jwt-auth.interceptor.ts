@@ -26,8 +26,8 @@ export const jwtAuthInterceptor: HttpInterceptorFn = (
 
   return next(request).pipe(
     catchError(error => {
+      console.log('JwtAuth.interceptor', error);
       if (error.status === 401 && service.isAuthenticated()) {
-        // Token might be expired, attempt to refresh
         return service.refreshAccessToken().pipe(
           switchMap(() => {
             const newJwtAuthToken = service.getJwtToken();

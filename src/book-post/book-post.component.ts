@@ -12,7 +12,6 @@ import {
 import { takeUntil } from 'rxjs';
 import { NgxTippyModule } from 'ngx-tippy-wrapper';
 
-import { selectionValidator } from '../validators/selection.validator';
 import { withMinSelections } from '../validators/with-min-selections.validator';
 
 import { AuthService } from '../services/auth.service';
@@ -23,7 +22,6 @@ import { StringService } from '../services/string.service';
 import { Unsubscribable } from '../classes/unsubscribable';
 
 import { HttpRequest } from '../interfaces/http-request.interface';
-import { Institution } from '../interfaces/institution.interface';
 import { Scope } from '../interfaces/scope.interface';
 
 type FileBox = {
@@ -61,37 +59,24 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
 
   protected offerRequestState: HttpRequest = {};
 
-  protected payload = new FormGroup(
-    {
-      userId: new FormControl(),
-      scope: new FormArray([], withMinSelections(1)),
-      price: new FormControl(null, [
-        Validators.required,
-        Validators.min(1),
-        Validators.pattern(/^\d+(\.\d+)$/g)
-      ]),
-      state: new FormControl(null, [Validators.required]),
-      tradeable: new FormControl<boolean>(false),
-      binding: new FormControl('SELECT', [
-        selectionValidator({ not: ['SELECT'] })
-      ]),
-      cover: new FormControl('SELECT', [
-        selectionValidator({ not: ['SELECT'] })
-      ]),
-      pages: new FormControl('SELECT', [
-        selectionValidator({ not: ['SELECT'] })
-      ]),
-      markings: new FormControl('SELECT', [
-        selectionValidator({ not: ['SELECT'] })
-      ]),
-      notes: new FormControl(null, [Validators.required]),
-      images: new FormControl(null, [Validators.min(1)]),
-      isbn13: new FormControl(null)
-    },
-    {
-      updateOn: 'submit'
-    }
-  );
+  protected payload = new FormGroup({
+    userId: new FormControl(),
+    scope: new FormArray([], withMinSelections(1)),
+    price: new FormControl(null, [
+      Validators.required,
+      Validators.min(0.01),
+      Validators.pattern(/^\d+(\.\d+)?$/)
+    ]),
+    state: new FormControl(null, [Validators.required]),
+    tradeable: new FormControl<boolean>(false),
+    binding: new FormControl(null, [Validators.required]),
+    cover: new FormControl(null, [Validators.required]),
+    pages: new FormControl(null, [Validators.required]),
+    markings: new FormControl(null, [Validators.required]),
+    notes: new FormControl(null, [Validators.required]),
+    images: new FormControl(null, [Validators.min(1)]),
+    isbn13: new FormControl(null)
+  });
 
   protected readonly tooltip = {
     price:
@@ -157,7 +142,7 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
 
   onSubmit(e: Event) {
     console.log(this.payload);
-    this.payload.markAllAsTouched();
+    // this.payload.markAllAsTouched();
     if (this.payload.invalid) {
       return;
     }

@@ -56,15 +56,16 @@
               </div>
             </li>
           </ul>
-          <p class="text-xs text-red-500 mb-2">
-            {{
+          <p
+            class="text-xs text-red-500 mb-2"
+            [innerHTML]="
               payload.controls.scope.invalid &&
               payload.controls.scope.touched &&
               payload.controls.scope.getError('withMinSelections')
                 ? '* Please select at least one campus'
-                : ''
-            }}
-          </p>
+                : '&nbsp;'
+            "
+          ></p>
         </div>
       </section>
 
@@ -87,23 +88,24 @@
               placeholder="Enter price"
               formControlName="price"
             />
-            <p class="text-xs text-red-500 mb-2">
-              {{
+            <p
+              class="text-xs text-red-500 mb-2"
+              [innerHTML]="
                 payload.controls.price.invalid &&
                 payload.controls.price.touched &&
                 payload.controls.price.getError('required')
                   ? '* Please specify a price for your book'
                   : payload.controls.price.invalid &&
-                      payload.controls.price.touched &&
-                      payload.controls.price.getError('pattern')
+                    payload.controls.price.touched &&
+                    payload.controls.price.getError('pattern')
                     ? '* Price must be numeric, i.e, 79.99'
                     : payload.controls.price.invalid &&
-                        payload.controls.price.touched &&
-                        payload.controls.price.getError('min')
+                      payload.controls.price.touched &&
+                      payload.controls.price.getError('min')
                       ? '* Price must be at least 0.01'
-                      : ''
-              }}
-            </p>
+                      : '&nbsp;'
+              "
+            ></p>
           </div>
 
           <!-- Tradeable -->
@@ -248,15 +250,16 @@
           </li>
         </ul>
 
-        <p class="text-xs text-red-500 mb-2">
-          {{
+        <p
+          class="text-xs text-red-500 mb-2"
+          [innerHTML]="
             payload.controls.state.invalid &&
             payload.controls.state.touched &&
             payload.controls.state.getError('required')
               ? '* Please specify a price for your book'
-              : ''
-          }}
-        </p>
+              : '&nbsp;'
+          "
+        ></p>
       </section>
 
       <section class="my-16">
@@ -274,7 +277,7 @@
               Binding Condition
             </label>
             <select class="select bg-white w-full" formControlName="binding">
-              <option disabled value="SELECT">-- Select ---</option>
+              <option disabled value>-- Select --</option>
               <option value="INTACT">
                 Intact - Good condition, fully functional
               </option>
@@ -289,15 +292,16 @@
               </option>
             </select>
 
-            <p class="text-xs text-red-500 mb-2">
-              {{
+            <p
+              class="text-xs text-red-500 mb-2"
+              [innerHTML]="
                 payload.controls.binding.invalid &&
                 payload.controls.binding.touched &&
-                payload.controls.binding.getError('invalidSelection')
-                  ? "* Select the option best describes your books's binding condition"
-                  : ''
-              }}
-            </p>
+                payload.controls.binding.getError('required')
+                  ? '* Select the option best describes your books\'s binding condition'
+                  : '&nbsp;'
+              "
+            ></p>
           </div>
 
           <!-- Cover -->
@@ -306,7 +310,7 @@
               Cover Condition
             </label>
             <select class="select bg-white w-full" formControlName="cover">
-              <option disabled value="SELECT">-- Select ---</option>
+              <option disabled value>-- Select --</option>
               <option value="CREASED">
                 Creased - Visible creases or folds
               </option>
@@ -325,15 +329,16 @@
               <option value="STAINED">Stained - Visible stains or marks</option>
             </select>
 
-            <p class="text-xs text-red-500 mb-2">
-              {{
+            <p
+              class="text-xs text-red-500 mb-2"
+              [innerHTML]="
                 payload.controls.cover.invalid &&
                 payload.controls.cover.touched &&
-                payload.controls.cover.getError('invalidSelection')
-                  ? "* Select the option best describes your books's cover condition"
-                  : ''
-              }}
-            </p>
+                payload.controls.cover.getError('required')
+                  ? '* Select the option best describes your books\' cover condition'
+                  : '&nbsp;'
+              "
+            ></p>
           </div>
 
           <!-- Pages -->
@@ -342,7 +347,7 @@
               Pages Condition
             </label>
             <select class="select bg-white w-full" formControlName="pages">
-              <option disabled value="SELECT">-- Select ---</option>
+              <option disabled value>-- Select ---</option>
               <option value="CREASED">
                 Creased - Pages have visible folds
               </option>
@@ -351,22 +356,23 @@
               <option value="TORN">Torn - Pages are ripped or torn</option>
             </select>
 
-            <p class="text-xs text-red-500 mb-2">
-              {{
+            <p
+              class="text-xs text-red-500 mb-2"
+              [innerHTML]="
                 payload.controls.pages.invalid &&
                 payload.controls.pages.touched &&
-                payload.controls.pages.getError('invalidSelection')
-                  ? "* Select the option best describes your books's pages condition"
-                  : ''
-              }}
-            </p>
+                payload.controls.pages.getError('required')
+                  ? '* Select the option best describes your books\' pages condition'
+                  : '&nbsp;'
+              "
+            ></p>
           </div>
 
           <!-- Markings -->
           <div class="mb-8">
             <label class="block text-gray-700 font-medium mb-2">Markings</label>
             <select class="select bg-white w-full" formControlName="markings">
-              <option disabled value="SELECT">-- Select ---</option>
+              <option disabled value>-- Select --</option>
               <option value="HIGHLIGHTER">
                 Highlighter - Pages have been highlighted
               </option>
@@ -378,15 +384,16 @@
               </option>
             </select>
 
-            <p class="text-xs text-red-500 mb-2">
-              {{
+            <p
+              class="text-xs text-red-500 mb-2"
+              [innerHTML]="
                 payload.controls.markings.invalid &&
                 payload.controls.markings.touched &&
-                payload.controls.markings.getError('invalidSelection')
-                  ? "* Select the option best describes your books's pages condition"
-                  : ''
-              }}
-            </p>
+                payload.controls.markings.getError('required')
+                  ? '* Select the option best describes your books\' pages condition'
+                  : '&nbsp;'
+              "
+            ></p>
           </div>
         </div>
       </section>

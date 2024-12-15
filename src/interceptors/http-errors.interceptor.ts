@@ -25,7 +25,7 @@ export const httpErrorsInterceptor: HttpInterceptorFn = (
       console.log(response);
       if (!(response.error instanceof ErrorEvent)) {
         console.log('Error NOT of type ErrorEvent', response);
-        if (response.error.status === 401) {
+        if (response.statusCode === 401) {
           console.log('Redirecting ... ');
           const router = inject(Router);
           inject(AuthService)
