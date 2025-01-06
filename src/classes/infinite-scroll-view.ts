@@ -10,7 +10,7 @@ export abstract class InfiniteScrollView<T> extends Unsubscribable {
 
   protected isLoadingNext: boolean = false;
 
-  protected hasNextPage: boolean = true;
+  protected hasNextPage: boolean = false;
 
   protected params: any = {};
 

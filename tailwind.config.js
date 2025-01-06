@@ -43,7 +43,10 @@ module.exports = {
           'content': "'\\0020'",
           'display': "block",
           'padding-top': "120%"
-        }
+        },
+        // '.max-w-8xl': {
+        //   'max-width': '88rem'
+        // }
       }
 
       addUtilities(newUtilities, ['before', 'after'])

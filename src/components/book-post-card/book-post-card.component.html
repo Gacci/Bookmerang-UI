@@ -120,8 +120,8 @@
           fill="currentColor"
           class="size-6"
           [ngClass]="{
-            'text-slate-400': !_post.savedBookOfferId,
-            'text-red-600': isProcessingLike || !!_post.savedBookOfferId,
+            'text-slate-400': !_post.userRefSavedBookOfferId,
+            'text-red-600': isProcessingLike || !!_post.userRefSavedBookOfferId,
             'animate-pulse': isProcessingLike
           }"
         >

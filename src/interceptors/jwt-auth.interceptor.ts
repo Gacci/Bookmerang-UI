@@ -3,46 +3,50 @@ import {
   HttpInterceptorFn,
   HttpHandlerFn
 } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { throwError } from 'rxjs';
+
 import { catchError, switchMap } from 'rxjs/operators';
+
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
 
 export const jwtAuthInterceptor: HttpInterceptorFn = (
   request: HttpRequest<unknown>,
   next: HttpHandlerFn
 ) => {
-  const service = inject(AuthService);
-  if (service.isAuthenticated()) {
-    const token = service.getJwtTokenRaw();
-    request = request.clone({
-      // withCredentials: true,
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-  }
+  const auth = inject(AuthService);
+  request = request.clone({
+    ...(auth.isAuthenticated()
+      ? {
+          // withCredentials: true,
+          setHeaders: {
+            Authorization: `Bearer ${auth.getJwtTokenRaw()}`
+          }
+        }
+      : {})
+  });
 
   return next(request).pipe(
     catchError(error => {
       console.log('JwtAuth.interceptor', error);
-      if (error.status === 401 && service.isAuthenticated()) {
-        return service.refreshAccessToken().pipe(
+      if (error.status === 401 && auth.$jwt !== undefined) {
+        const router = inject(Router);
+        return auth.refreshAccessToken().pipe(
           switchMap(() => {
-            const newJwtAuthToken = service.getJwtToken();
-            request = request.clone({
-              // withCredentials: true,
-              setHeaders: {
-                Authorization: `Bearer ${newJwtAuthToken}`
-              }
-            });
-            return next(request);
+            return next(
+              request.clone({
+                // withCredentials: true,
+                setHeaders: {
+                  Authorization: `Bearer ${auth.getJwtToken()}`
+                }
+              })
+            );
           }),
           catchError(err => {
-            service.logout().subscribe({
-              next: () => inject(Router).createUrlTree(['/login']),
-              error: () => inject(Router).createUrlTree(['/login'])
+            auth.logout().subscribe({
+              error: () => router.createUrlTree(['/login']),
+              next: () => router.createUrlTree(['/login'])
             });
 
             return throwError(() => err);

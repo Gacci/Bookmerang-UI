@@ -9,8 +9,8 @@ import { FeedsComponent } from '../feeds/feeds.component';
   standalone: true,
   imports: [CommonModule, AboutComponent, FeedsComponent],
   template: `
-    <feeds *ngIf="auth.$jwt | async"></feeds>
-    <about *ngIf="!(auth.$jwt | async)"></about>
+    <feeds *ngIf="auth.isAuthenticated()"></feeds>
+    <about *ngIf="!auth.isAuthenticated()"></about>
   `,
   styles: []
 })

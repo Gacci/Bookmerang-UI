@@ -8,7 +8,12 @@
         <p class="text-sm font-medium text-gray-800">
           {{ book.title }} {{ book.subtitle ?? '' }}
         </p>
-        <h6 class="text-sm text-gray-500 font-medium">{{ book.authors }}</h6>
+        <h6
+          class="text-sm text-gray-500 font-medium"
+          *ngIf="!!book.authors?.length"
+        >
+          {{ book.authors.join(', ') }}
+        </h6>
       </div>
     </div>
 
@@ -59,7 +64,6 @@
           <p
             class="text-xs text-red-500 mb-2"
             [innerHTML]="
-              payload.controls.scope.invalid &&
               payload.controls.scope.touched &&
               payload.controls.scope.getError('withMinSelections')
                 ? '* Please select at least one campus'
@@ -91,17 +95,14 @@
             <p
               class="text-xs text-red-500 mb-2"
               [innerHTML]="
-                payload.controls.price.invalid &&
                 payload.controls.price.touched &&
                 payload.controls.price.getError('required')
                   ? '* Please specify a price for your book'
-                  : payload.controls.price.invalid &&
-                    payload.controls.price.touched &&
-                    payload.controls.price.getError('pattern')
+                  : payload.controls.price.touched &&
+                      payload.controls.price.getError('pattern')
                     ? '* Price must be numeric, i.e, 79.99'
-                    : payload.controls.price.invalid &&
-                      payload.controls.price.touched &&
-                      payload.controls.price.getError('min')
+                    : payload.controls.price.touched &&
+                        payload.controls.price.getError('min')
                       ? '* Price must be at least 0.01'
                       : '&nbsp;'
               "
@@ -253,7 +254,6 @@
         <p
           class="text-xs text-red-500 mb-2"
           [innerHTML]="
-            payload.controls.state.invalid &&
             payload.controls.state.touched &&
             payload.controls.state.getError('required')
               ? '* Please specify a price for your book'
@@ -295,7 +295,6 @@
             <p
               class="text-xs text-red-500 mb-2"
               [innerHTML]="
-                payload.controls.binding.invalid &&
                 payload.controls.binding.touched &&
                 payload.controls.binding.getError('required')
                   ? '* Select the option best describes your books\'s binding condition'
@@ -332,7 +331,6 @@
             <p
               class="text-xs text-red-500 mb-2"
               [innerHTML]="
-                payload.controls.cover.invalid &&
                 payload.controls.cover.touched &&
                 payload.controls.cover.getError('required')
                   ? '* Select the option best describes your books\' cover condition'
@@ -359,7 +357,6 @@
             <p
               class="text-xs text-red-500 mb-2"
               [innerHTML]="
-                payload.controls.pages.invalid &&
                 payload.controls.pages.touched &&
                 payload.controls.pages.getError('required')
                   ? '* Select the option best describes your books\' pages condition'
@@ -387,7 +384,6 @@
             <p
               class="text-xs text-red-500 mb-2"
               [innerHTML]="
-                payload.controls.markings.invalid &&
                 payload.controls.markings.touched &&
                 payload.controls.markings.getError('required')
                   ? '* Select the option best describes your books\' pages condition'
@@ -417,7 +413,6 @@
           placeholder="Add notes here..."
           formControlName="notes"
         ></textarea>
-        <span>{{ payload.value.notes }}</span>
       </section>
 
       <!-- Media -->
@@ -456,7 +451,6 @@
             class="hidden"
             accept="image/png, image/jpeg"
             multiple
-            formControlName="images"
             (change)="onInputChange($event)"
           />
         </label>
@@ -497,7 +491,13 @@
         <a class="flex-1 btn btn-gray-100" [routerLink]="['/', 'home']">
           Cancel
         </a>
-        <button type="submit" class="flex-1 btn btn-blue-600">Submit</button>
+        <button
+          type="submit"
+          class="flex-1 btn btn-blue-600"
+          [disabled]="payload.invalid || !images.length"
+        >
+          Submit
+        </button>
       </div>
     </form>
   </ng-container>
@@ -539,7 +539,9 @@
 
       <!-- Action Button -->
       <div class="mt-8">
-        <a class="btn btn-blue-600">Return to Home</a>
+        <a class="btn btn-blue-600" [routerLink]="['/', 'home']">
+          Return to Home
+        </a>
       </div>
     </div>
   </div>

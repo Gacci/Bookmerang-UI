@@ -88,14 +88,14 @@ export class NavigationComponent
             scope: this.auth.getPrimaryScope()
           }
         })
-        .then((response) => {
+        .then(response => {
           // 9780387981307
           console.log(response);
           this.lastHashedKeyword = '';
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
-          this.lastHashedKeyword = ''
+          this.lastHashedKeyword = '';
         });
     } else {
       console.log('Searching by title or author');
@@ -106,14 +106,14 @@ export class NavigationComponent
             scope: this.auth.getPrimaryScope()
           }
         })
-        .then((response) => {
+        .then(response => {
           // 9780387981307
           console.log(response);
           this.lastHashedKeyword = '';
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
-          this.lastHashedKeyword = ''
+          this.lastHashedKeyword = '';
         });
     }
   }

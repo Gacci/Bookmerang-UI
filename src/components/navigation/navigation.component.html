@@ -106,7 +106,7 @@
         </button>
 
         <div>
-          <ng-container *ngIf="!!user">
+          <ng-container *ngIf="this.auth.isAuthenticated()">
             <img
               alt="Profile picture"
               class="relative inline-block h-10 w-10 cursor-pointer rounded-full object-cover object-center"
@@ -458,6 +458,7 @@
               ]"
               [routerLinkActiveOptions]="{ exact: true }"
               [routerLink]="['books', 'favorites', user.userId]"
+              [queryParams]="{ scope: auth.getPrimaryScope() }"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

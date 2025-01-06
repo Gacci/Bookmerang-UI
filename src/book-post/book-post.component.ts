@@ -74,7 +74,6 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
     pages: new FormControl(null, [Validators.required]),
     markings: new FormControl(null, [Validators.required]),
     notes: new FormControl(null, [Validators.required]),
-    images: new FormControl(null, [Validators.min(1)]),
     isbn13: new FormControl(null)
   });
 
@@ -141,17 +140,17 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
   }
 
   onSubmit(e: Event) {
-    console.log(this.payload);
-    // this.payload.markAllAsTouched();
     if (this.payload.invalid) {
       return;
     }
 
-    const { images, ...data } = this.payload.value;
-
     this.offerRequestState.sent = true;
     this.bookMarketService
-      .create(data)
+      .create({
+        ...this.payload.value,
+        price: +(this.payload.value?.price ?? 0),
+        scope: this.payload.value.scope?.filter(Boolean)
+      })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: response => {

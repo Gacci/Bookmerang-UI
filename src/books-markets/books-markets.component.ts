@@ -2,7 +2,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { takeUntil } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
@@ -31,6 +31,7 @@ import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
 import * as ISBN from 'isbn3';
 import * as Hash from 'crypto-hash';
+import { BookOffer, BookOfferState } from '../interfaces/book-offer.interface';
 
 type BookMarketsFilters = {
   tradeable: FormControl;
@@ -244,7 +245,7 @@ export class BooksMarketsComponent
     });
   }
 
-  onActionClicked(event: BookPostEvent, item: any) {
+  onActionClicked(event: BookPostEvent, item: BookOffer & BookOfferState) {
     if (ActionEvent.Like === event.type) {
       this.onLikeBookPost(item);
     } else if (ActionEvent.Unlike === event.type) {
@@ -252,33 +253,38 @@ export class BooksMarketsComponent
     }
   }
 
-  onLikeBookPost(item: any) {
+  onLikeBookPost(item: BookOffer & BookOfferState) {
     item.isProcessingLike = true;
     this.bookMarketService
-      .likeBookPost(item.bookOfferId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .likeBookPost({
+        bookOfferId: +item.bookOfferId,
+        institutionId: +this.filters.value.scope
+      })
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        finalize(() => {
+          item.isProcessingLike = false;
+        })
+      )
       .subscribe({
         next: (response: any) => {
-          item.savedBookOfferId = response.savedBookOfferId;
-          item.isProcessingLike = false;
-        },
-        error: (error: any) => {
-          item.isProcessingLike = false;
+          item.userRefSavedBookOfferId = response.userRefSavedBookOfferId;
         }
       });
   }
 
-  onUnlikeBookPost(item: any) {
+  onUnlikeBookPost(item: BookOffer & BookOfferState) {
     this.bookMarketService
-      .unlikeBookPost(item.savedBookOfferId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .unlikeBookPost(<number>item.userRefSavedBookOfferId)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        finalize(() => {
+          item.isProcessingLike = false;
+        })
+      )
       .subscribe({
         next: (response: any) => {
-          item.savedBookOfferId = null;
-          item.isProcessingLike = false;
-        },
-        error: (error: any) => {
-          item.isProcessingLike = false;
+          item.userRefSavedBookOfferId = null;
         }
       });
   }
@@ -290,7 +296,7 @@ export class BooksMarketsComponent
     }, 3000);
   }
 
-  trackBy(index: number, item: any) {
+  trackBy(index: number, item: BookOffer) {
     return item.bookOfferId;
   }
 

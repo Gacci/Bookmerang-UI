@@ -13,7 +13,7 @@ import {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="border-b">
+    <div class="border-t">
       <div
         class="flex justify-between items-center py-5 cursor-pointer"
         (click)="onToggleVisibility($event)"

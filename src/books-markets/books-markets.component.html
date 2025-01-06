@@ -224,7 +224,7 @@
 </aside>
 
 <div
-  class="border-x max-w-xl mx-auto mt-10 p-6 rounded-lg lg:max-w-2xl xl:max-w-4xl"
+  class="border-x max-w-xl mx-auto mt-10 p-6 lg:max-w-2xl xl:max-w-4xl"
   infiniteScroll
   [infiniteScrollUpDistance]="1"
   [infiniteScrollDistance]="1.0"
@@ -264,7 +264,7 @@
           class="text-md text-gray-600 font-medium mt-1"
           *ngIf="book.authors?.length"
         >
-          {{ book.authors }}
+          {{ book.authors.join(', ') }}
         </p>
         <span class="block my-2"></span>
         <div class="text-sm text-gray-500 mt-2" *ngIf="book.publishers?.length">

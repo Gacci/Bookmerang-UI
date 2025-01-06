@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Data } from '@angular/router';
-import { map } from 'rxjs';
+import { delay, map } from 'rxjs';
 import { BookService } from './book.service';
 
 @Injectable({
@@ -78,15 +78,18 @@ export class BookMarketService {
       );
   }
 
-  likeBookPost(bookOfferId: number) {
-    return this.http.post('http://127.0.0.1:3000/books/markets/favorites', {
-      bookOfferId
-    });
+  likeBookPost(body: any) {
+    return this.http.post('http://127.0.0.1:3000/books/markets/favorites', body)
+    .pipe(
+      delay(3000)
+    );
   }
 
   unlikeBookPost(bookOfferId: number) {
     return this.http.delete(
       `http://127.0.0.1:3000/books/markets/favorites/${bookOfferId}`
+    ).pipe(
+      delay(3000)
     );
   }
 

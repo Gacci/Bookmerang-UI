@@ -14,6 +14,8 @@ import { ISBN13Pipe } from '../../pipes/isbn13.pipe';
 import { AuthService } from '../../services/auth.service';
 import { Unsubscribable } from '../../classes/unsubscribable';
 
+import { BookOffer } from '../../interfaces/book-offer.interface';
+
 export enum ActionEvent {
   Like = 1,
   Message = 2,
@@ -23,7 +25,7 @@ export enum ActionEvent {
 
 export interface BookPostEvent {
   type: ActionEvent;
-  data: any;
+  data: BookOffer;
 }
 
 @Component({
