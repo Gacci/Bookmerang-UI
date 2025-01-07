@@ -80,7 +80,7 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
   });
 
   ngOnInit(): void {
-    this.hasScopeSet = !!this.auth.getPrimaryScope();
+    this.hasScopeSet = !!this.auth.getAuthScopeId();
     this.user = this.auth.getAuthProfile();
     this.information.patchValue(this.user);
 
@@ -104,7 +104,7 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
       .subscribe(({ data }) => {
         this.institutions = data;
         this.academics.patchValue({
-          scope: this.auth.getPrimaryScope()
+          scope: this.auth.getAuthScopeId()
         });
       });
   }
@@ -135,17 +135,6 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     if (this.academics.invalid) {
       return;
     }
-
-    this.auth
-      .addAuthInstitution({
-        institutionId: this.academics.value.scope
-          ? +this.academics.value.scope
-          : null,
-        isPrimary: true,
-        userId: this.auth.getAuthId()
-      })
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(response => {});
   }
 
   onInputChange(e: Event) {

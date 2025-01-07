@@ -3,7 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 export const isCollegeScopeSetGuard: CanActivateFn = (route, state) => {
-  return !inject(AuthService).getPrimaryScope()
+  return !inject(AuthService).getAuthScopeId()
     ? inject(Router).createUrlTree(['/settings'])
     : true;
 };

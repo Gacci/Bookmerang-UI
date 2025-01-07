@@ -8,11 +8,8 @@ import { AuthService } from '../services/auth.service';
 export const bookMarketResolver: ResolveFn<any> = (route, state) => {
   const params: any = route.queryParams;
   return inject(BookMarketService).search({
-    ...(params.scope
-      ? { institutionId: params.scope }
-      : {
-          institutionId: inject(AuthService).getPrimaryScope()
-        }),
+    institutionId: inject(AuthService)
+      .getAuthScopeId(),
     ...(params.isbn13 ? { isbn13: [ISBN.asIsbn13(params.isbn13)] } : {}),
     ...(['true', 'false'].includes(params.tradeable)
       ? { tradeable: JSON.parse(params.tradeable) }

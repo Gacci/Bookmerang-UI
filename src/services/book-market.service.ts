@@ -78,16 +78,16 @@ export class BookMarketService {
       );
   }
 
-  likeBookPost(body: any) {
-    return this.http.post('http://127.0.0.1:3000/books/markets/favorites', body)
+  likeBookPost(bookOfferId: any) {
+    return this.http.post('http://127.0.0.1:3000/books/markets/favorites', { bookOfferId })
     .pipe(
       delay(3000)
     );
   }
 
-  unlikeBookPost(bookOfferId: number) {
+  unlikeBookPost(savedBookOfferId: number) {
     return this.http.delete(
-      `http://127.0.0.1:3000/books/markets/favorites/${bookOfferId}`
+      `http://127.0.0.1:3000/books/markets/favorites/${savedBookOfferId}`
     ).pipe(
       delay(3000)
     );

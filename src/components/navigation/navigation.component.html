@@ -171,7 +171,6 @@
 
                   <a
                     class="block text-slate-800 font-medium ml-2"
-                    [queryParams]="{ scope: this.auth.getPrimaryScope() }"
                     [routerLink]="['books', 'favorites', user.userId]"
                     (click)="menu.hide()"
                   >
@@ -217,7 +216,6 @@
 
                   <a
                     class="block text-slate-800 font-medium ml-2"
-                    [queryParams]="{ scope: this.auth.getPrimaryScope() }"
                     [routerLink]="['books', 'inventories', user.userId]"
                     (click)="menu.hide()"
                   >
@@ -412,7 +410,6 @@
               class="relative block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:px-12 md:py-3 md:text-gray-400 md:hover:bg-gray-100"
               aria-current="page"
               ngxTippy="Inventory"
-              [queryParams]="{ scope: this.auth.getPrimaryScope() }"
               [routerLinkActive]="[
                 'content-space',
                 'before:absolute',
@@ -445,7 +442,6 @@
               aria-current="page"
               ngxTippy="Favorites"
               [tippyProps]="{ placement: 'bottom' }"
-              [queryParams]="{ scope: this.auth.getPrimaryScope() }"
               [routerLinkActive]="[
                 'content-space',
                 'before:absolute',
@@ -458,7 +454,6 @@
               ]"
               [routerLinkActiveOptions]="{ exact: true }"
               [routerLink]="['books', 'favorites', user.userId]"
-              [queryParams]="{ scope: auth.getPrimaryScope() }"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

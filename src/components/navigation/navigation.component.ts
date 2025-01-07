@@ -78,43 +78,24 @@ export class NavigationComponent
 
     if (json?.isValid) {
       console.log('Searching by isbn', {
-        scope: this.auth.getPrimaryScope(),
         isbn13: <string>json.isbn13
       });
       this.router
         .navigate(['books', 'markets'], {
           queryParams: {
-            isbn13: <string>json.isbn13,
-            scope: this.auth.getPrimaryScope()
+            isbn13: <string>json.isbn13
           }
         })
-        .then(response => {
-          // 9780387981307
-          console.log(response);
-          this.lastHashedKeyword = '';
-        })
-        .catch(error => {
-          console.log(error);
-          this.lastHashedKeyword = '';
-        });
+        .finally(() => this.lastHashedKeyword = '');
     } else {
       console.log('Searching by title or author');
       this.router
         .navigate(['books', 'collections'], {
           queryParams: {
-            keyword: value,
-            scope: this.auth.getPrimaryScope()
+            keyword: value
           }
         })
-        .then(response => {
-          // 9780387981307
-          console.log(response);
-          this.lastHashedKeyword = '';
-        })
-        .catch(error => {
-          console.log(error);
-          this.lastHashedKeyword = '';
-        });
+        .finally(() => this.lastHashedKeyword = '')
     }
   }
 

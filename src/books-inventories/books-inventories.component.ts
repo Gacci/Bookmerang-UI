@@ -7,7 +7,13 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { combineLatest, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
+
+import {
+  CreateHotToastRef,
+  HotToastClose,
+  HotToastService
+} from '@ngneat/hot-toast';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
@@ -22,11 +28,7 @@ import {
 
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
-import {
-  CreateHotToastRef,
-  HotToastClose,
-  HotToastService
-} from '@ngneat/hot-toast';
+
 
 @Component({
   selector: 'books-inventory',
@@ -61,11 +63,10 @@ export class BooksInventoriesComponent
 
   ngOnInit(): void {
     this.pageNumber += 1;
-    combineLatest([this.route.params, this.route.queryParams])
+    this.route.params
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(([params, query]) => {
+      .subscribe(params => {
         this.params = {
-          institutionId: query['scope'],
           userId: params['userId']
         };
       });

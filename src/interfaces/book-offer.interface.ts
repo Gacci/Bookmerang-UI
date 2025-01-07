@@ -2,8 +2,10 @@ import { Binding, Cover, Extras, Markings, Pages, State } from "../enums/book-of
 import { Book } from "./book.interface";
 import { User } from "./user";
 
+
 export interface BookOffer {
     bookOfferId: number;
+    institutionId: number;
     userId: number;
     isbn13: string;
     notes?: string; 
@@ -24,6 +26,6 @@ export interface BookOffer {
     user: User;
 }
 
-export interface BookOfferState {
+export interface Likeable {
     isProcessingLike: boolean;
 }

@@ -44,7 +44,7 @@ export class SignInComponent extends Unsubscribable {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: async jwt => {
-          if (this.auth.isAuthenticated() && this.auth.getPrimaryScope()) {
+          if (this.auth.isAuthenticated() && this.auth.getAuthScopeId()) {
             this.router.navigateByUrl('home');
           } else {
             this.router.navigateByUrl('settings');

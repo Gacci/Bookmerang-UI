@@ -13,11 +13,14 @@ import { Data } from '@angular/router';
 
 import { Credentials } from '../interfaces/credentials.interface';
 import { EmailOnly } from '../interfaces/email-only.interface';
+import { Institution } from '../interfaces/institution.interface';
 import { Registration } from '../interfaces/registration.interface';
-import { Scope } from '../interfaces/scope.interface';
 import { User } from '../interfaces/user';
 
 import * as JWT from 'jwt-decode';
+
+
+type JwtPayloadPlus = JWT.JwtPayload & { scope?: number };
 
 const JWT_TOKEN = '__tcn';
 
@@ -25,9 +28,9 @@ const JWT_TOKEN = '__tcn';
   providedIn: 'root'
 })
 export class AuthService {
-  private scoping: Scope[] = [];
+  private institution!: Institution;
 
-  private authTokenSubject = new BehaviorSubject<JWT.JwtPayload | null>(null);
+  private authTokenSubject = new BehaviorSubject<JwtPayloadPlus | null>(null);
 
   private userProfileSubject = new BehaviorSubject<User | null>(null);
 
@@ -47,11 +50,13 @@ export class AuthService {
     }
 
     if (this.isAuthenticated()) {
-      this.scoping = await firstValueFrom(this.fetchAuthScope());
+      this.institution = await firstValueFrom(this.fetchAuthInstitution());
       this.userProfileSubject.next(
         await firstValueFrom(this.fetchAuthProfile())
       );
     }
+
+    console.log('JWT: ', this.authTokenSubject.value);
   }
 
   /**************************************** AUTHENTICATION ***************************************/
@@ -68,10 +73,12 @@ export class AuthService {
         );
       }),
       switchMap(login =>
-        combineLatest([this.fetchAuthProfile(), this.fetchAuthScope()]).pipe(
-          tap(([user, scoping]: [User, Scope[]]) => {
-            // console.log('Auth.user', user, '\nScope: ', scoping);
-            this.scoping = scoping;
+        combineLatest([
+          this.fetchAuthProfile(), 
+          this.fetchAuthInstitution()
+        ]).pipe(
+          tap(([user, institution]: [User, Institution]) => {
+            this.institution = institution;
             this.userProfileSubject.next(user);
           }),
           map(() => this.authTokenSubject.value)
@@ -157,14 +164,14 @@ export class AuthService {
   /******************************************* PROFILE *******************************************/
   updateAuthProfile(update: Partial<User>) {
     return this.http.put(
-      `http://127.0.0.1:3000/auth/${this.getAuthId()}`,
+      'http://127.0.0.1:3000/auth',
       update
     );
   }
 
   fetchAuthProfile() {
     return this.http
-      .get<User>(`http://127.0.0.1:3000/auth/${this.getAuthId()}`)
+      .get<User>('http://127.0.0.1:3000/auth')
       .pipe(
         map((user: User) => ({
           ...user,
@@ -178,37 +185,21 @@ export class AuthService {
   }
 
   /******************************************* SCOPING *******************************************/
-  addAuthInstitution(data: any) {
-    return this.http.post('http://127.0.0.1:3000/auth/scoping', data);
-  }
-
-  fetchAuthScope() {
-    return this.http.get<Scope[]>('http://127.0.0.1:3000/auth/scoping');
-  }
-
-  updateAuthInstitutions(id: number, data: any) {
-    return this.http.post(`http://127.0.0.1:3000/auth/scoping/${id}`, data);
-  }
-
-  deleteAuthInstitution(id: number) {
-    return this.http.delete(`http://127.0.0.1:3000/auth/scoping/${id}`);
+  fetchAuthInstitution() {
+    return this.http.get<Institution>('http://127.0.0.1:3000/auth/institution');
   }
 
   /*************************************** LOCAL METHODS *****************************************/
-  getAuthCampuses() {
-    return this.scoping ?? [];
-  }
-
   getAuthScope() {
-    return this.scoping.map((e: Scope) => e.institutionId);
-  }
-
-  getPrimaryScope() {
-    return this.scoping?.find((e: Scope) => e.isPrimary)?.institutionId ?? 0;
+    return this.institution;
   }
 
   getAuthProfile() {
     return <User>this.userProfileSubject.value;
+  }
+
+  getAuthScopeId() {
+    return this.authTokenSubject.value?.scope;
   }
 
   getAuthId() {

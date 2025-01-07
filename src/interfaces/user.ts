@@ -7,6 +7,9 @@ export interface User {
   gender?: string;
   mobile?: string;
   verified?: boolean;
+  majorId?: number;
+  minorId?: number;
+  institutionId?: number;
   profilePictureUrl?: string;
   status?: string;
   roles?: string;

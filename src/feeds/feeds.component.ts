@@ -63,7 +63,7 @@ export class FeedsComponent extends InfiniteScrollView<any> {
 
   ngOnInit(): void {
     // this.pageNumber += 1;
-    this.params = { scope: <number>this.auth.getPrimaryScope() };
+    this.params = { scope: this.auth.getAuthScopeId() };
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(isLoadingNext => (this.isLoadingNext = isLoadingNext));

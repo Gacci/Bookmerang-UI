@@ -25,13 +25,14 @@ import { SurveyService } from '../services/survey.service';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
+import { BookOffer, Likeable } from '../interfaces/book-offer.interface';
 import { Scope } from '../interfaces/scope.interface';
 
 import { ISBN13Pipe } from '../pipes/isbn13.pipe';
 
-import * as ISBN from 'isbn3';
 import * as Hash from 'crypto-hash';
-import { BookOffer, BookOfferState } from '../interfaces/book-offer.interface';
+import * as ISBN from 'isbn3';
+
 
 type BookMarketsFilters = {
   tradeable: FormControl;
@@ -124,7 +125,7 @@ export class BooksMarketsComponent
       .subscribe((resolved: any) => {
         this.book = resolved.book;
         this.data = resolved.posts;
-        this.institutions = this.auth.getAuthCampuses();
+        this.institutions = [] //this.auth.getAuthCampuses();
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
       });
@@ -245,7 +246,7 @@ export class BooksMarketsComponent
     });
   }
 
-  onActionClicked(event: BookPostEvent, item: BookOffer & BookOfferState) {
+  onActionClicked(event: BookPostEvent, item: BookOffer & Likeable) {
     if (ActionEvent.Like === event.type) {
       this.onLikeBookPost(item);
     } else if (ActionEvent.Unlike === event.type) {
@@ -253,13 +254,10 @@ export class BooksMarketsComponent
     }
   }
 
-  onLikeBookPost(item: BookOffer & BookOfferState) {
+  onLikeBookPost(item: BookOffer & Likeable) {
     item.isProcessingLike = true;
     this.bookMarketService
-      .likeBookPost({
-        bookOfferId: +item.bookOfferId,
-        institutionId: +this.filters.value.scope
-      })
+      .likeBookPost(+item.bookOfferId)
       .pipe(
         takeUntil(this.unsubscribe$),
         finalize(() => {
@@ -273,7 +271,7 @@ export class BooksMarketsComponent
       });
   }
 
-  onUnlikeBookPost(item: BookOffer & BookOfferState) {
+  onUnlikeBookPost(item: BookOffer & Likeable) {
     this.bookMarketService
       .unlikeBookPost(<number>item.userRefSavedBookOfferId)
       .pipe(

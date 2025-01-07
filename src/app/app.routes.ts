@@ -22,7 +22,6 @@ import { inventoryResolver } from '../resolvers/inventory.resolver';
 import { userResolver } from '../resolvers/user.resolver';
 
 import { bookExistsGuard } from '../guards/book-exists.guard';
-import { isCollegeEnrolledGuard } from '../guards/is-college-enrolled.guard';
 import { isISBNGuard } from '../guards/is-isbn.guard';
 import { isLoggedGuard } from '../guards/is-logged.guard';
 import { isNotLoggedGuard } from '../guards/is-not-logged.guard';
@@ -61,7 +60,6 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isCollegeEnrolledGuard,
       isCollegeScopeSetGuard
     ],
     component: BooksCollectionsComponent,
@@ -75,7 +73,6 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isCollegeEnrolledGuard,
       isCollegeScopeSetGuard
     ],
     component: BooksInventoriesComponent,
@@ -88,7 +85,6 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isCollegeEnrolledGuard,
       isCollegeScopeSetGuard
     ],
     component: BooksFavoritesComponent,
@@ -100,7 +96,6 @@ export const routes: Routes = [
   {
     canActivate: [
       isLoggedGuard,
-      isCollegeEnrolledGuard,
       isCollegeScopeSetGuard,
       isISBNGuard,
       bookExistsGuard

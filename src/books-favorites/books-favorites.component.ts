@@ -1,13 +1,14 @@
 import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 import {
   CreateHotToastRef,
   HotToastClose,
   HotToastService
 } from '@ngneat/hot-toast';
+
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import {
@@ -16,11 +17,17 @@ import {
   PostTileEvent
 } from '../components/post-tile-card/post-tile-card.component';
 
-import { LoadingOverlayService } from '../services/loading-overlay.service';
+import { BookOffer, Likeable } from '../interfaces/book-offer.interface';
+
+import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
+import { LoadingOverlayService } from '../services/loading-overlay.service';
+
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
+
+/*
 interface BookOffer {
   bookOfferId: number;
   userId: number;
@@ -28,28 +35,12 @@ interface BookOffer {
   notes: string | null;
   tradeable: boolean;
   price: number;
-  state: 'NEW' | 'LIKE NEW' | 'VERY GOOD' | 'GOOD' | 'ACCEPTABLE';
-  binding: 'BROKEN' | 'DAMAGED' | 'INTACT' | 'WEAK';
-  cover:
-    | 'CREASED'
-    | 'CUT'
-    | 'DISCOLORED'
-    | 'FADED'
-    | 'INTACT'
-    | 'RIPPED'
-    | 'SCRATCHED'
-    | 'STAINED';
-  pages:
-    | 'CREASED'
-    | 'FOLDED'
-    | 'INTACT'
-    | 'MARKED'
-    | 'STAINED'
-    | 'TORN'
-    | 'WARPED'
-    | 'YELLOWED';
-  markings: 'EXTENSIVE' | 'HIGHLIGHTER' | 'MINIMAL' | 'NONE' | 'PEN' | 'PENCIL';
-  extras: 'ACCESS_CODE' | 'CD';
+  state: State;
+  binding: Binding;
+  cover: Cover;
+  pages: Pages;
+  markings: Markings;
+  extras: Extras;
   postedOn: Date;
   updatedOn: Date;
 }
@@ -57,7 +48,7 @@ interface BookOffer {
 interface Likeable {
   userRefSavedBookOfferId: number;
 }
-
+*/
 @Component({
   selector: 'books-favorites',
   standalone: true,
@@ -68,6 +59,8 @@ interface Likeable {
 export class BooksFavoritesComponent extends InfiniteScrollView<any> {
   @ViewChild('undoRemoveLikeTemplate')
   private undoRemoveLikeTemplate!: TemplateRef<any>;
+
+  private readonly auth = inject(AuthService);
 
   private readonly route = inject(ActivatedRoute);
 
@@ -81,13 +74,11 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
 
   ngOnInit() {
     this.pageNumber += 1;
-
-    combineLatest([this.route.params, this.route.queryParams])
+    this.route.params
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(([params, query]) => {
+      .subscribe(params => {
         this.params = {
-          scope: +query['scope'],
-          userId: +params['userId']
+          userId: this.auth.getAuthScopeId()
         };
       });
 

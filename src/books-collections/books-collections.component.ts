@@ -8,24 +8,22 @@ import { combineLatest, takeUntil } from 'rxjs';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { BookTileCardComponent } from '../components/book-tile-card/book-tile-card.component';
-
-import { InfiniteScrollView } from '../classes/infinite-scroll-view';
-
-import { LoadingOverlayService } from '../services/loading-overlay.service';
-import { BookMarketService } from '../services/book-market.service';
-
 import {
   AccordionComponent,
   AccordionViewComponent
 } from '../components/accordion/accordion.component';
+
+import { InfiniteScrollView } from '../classes/infinite-scroll-view';
+
 import { AuthService } from '../services/auth.service';
-import { Scope } from '../interfaces/scope.interface';
+import { BookMarketService } from '../services/book-market.service';
+import { LoadingOverlayService } from '../services/loading-overlay.service';
 
 import * as Hash from 'crypto-hash';
 
+
 type BookCollectionFilter = {
   keyword: FormControl<string | null>;
-  scope: FormControl<number | null>;
   sorting: FormControl<string | null>;
 };
 
@@ -58,11 +56,8 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
 
   protected filtersHashedValue!: string;
 
-  protected institutions: Scope[] = [];
-
   protected filters = new FormGroup<BookCollectionFilter>({
     keyword: new FormControl(null),
-    scope: new FormControl(null),
     sorting: new FormControl(null)
   });
 
@@ -79,10 +74,8 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
 
-        this.institutions = this.auth.getAuthCampuses();
         this.filters.patchValue({
           ...(query.keyword ? { keyword: query.keyword } : {}),
-          ...(query.scope ? { scope: +query.scope } : {}),
           ...(['price:asc'].includes(query.sorting)
             ? { sorting: query.sorting }
             : { sorting: 'price:asc' })
@@ -112,9 +105,8 @@ export class BooksCollectionsComponent extends InfiniteScrollView<any> {
     }
 
     const params = {
-      institutionId: this.filters.value.scope,
-      keyword: this.filters.value.keyword,
-      sorting: this.filters.value.sorting,
+      ...this.filters.value,
+      institutionId: this.auth.getAuthScopeId(),
       pageNumber: this.pageNumber,
       pageSize: this.pageSize
     };

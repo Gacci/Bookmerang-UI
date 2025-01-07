@@ -22,7 +22,6 @@ import { StringService } from '../services/string.service';
 import { Unsubscribable } from '../classes/unsubscribable';
 
 import { HttpRequest } from '../interfaces/http-request.interface';
-import { Scope } from '../interfaces/scope.interface';
 
 type FileBox = {
   base64: string;
@@ -55,13 +54,10 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
 
   protected images: FileBox[] = [];
 
-  protected scoping: Scope[] = [];
-
   protected offerRequestState: HttpRequest = {};
 
   protected payload = new FormGroup({
     userId: new FormControl(),
-    scope: new FormArray([], withMinSelections(1)),
     price: new FormControl(null, [
       Validators.required,
       Validators.min(0.01),
@@ -97,12 +93,6 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
           isbn13: book.isbn13,
           userId: this.auth.getAuthId()
         });
-
-        const scope = <FormArray>this.payload.get('scope');
-        this.scoping = this.auth.getAuthCampuses();
-        this.scoping.forEach((institution: Scope) =>
-          scope.push(new FormControl(institution.institutionId))
-        );
       });
   }
 
@@ -148,8 +138,7 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
     this.bookMarketService
       .create({
         ...this.payload.value,
-        price: +(this.payload.value?.price ?? 0),
-        scope: this.payload.value.scope?.filter(Boolean)
+        price: +(this.payload.value?.price ?? 0)
       })
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
