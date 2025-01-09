@@ -7,13 +7,19 @@ import { takeUntil } from 'rxjs';
 
 import { AuthService } from '../../services/auth.service';
 
-import { Credentials } from '../../interfaces/credentials.interface';
+import { AuthCredentials } from '../../interfaces/auth-credentials.interface';
 import { HttpRequest } from '../../interfaces/http-request.interface';
+
+
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
-import { signInGroup } from '../form-groups';
-// import { PasswordStrengthComponent } from '../../components/password-strength/password-strength.component';
 import { Unsubscribable } from '../../classes/unsubscribable';
+
+import { signInGroup } from '../form-groups';
+
+
+
+
 
 @Component({
   imports: [
@@ -40,7 +46,7 @@ export class SignInComponent extends Unsubscribable {
   handleSignIn() {
     this.request = { sent: true };
     this.auth
-      .login(<Credentials>this.signInGroup.value)
+      .login(<AuthCredentials>this.signInGroup.value)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: async jwt => {

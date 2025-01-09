@@ -7,7 +7,7 @@ import {
   Validators
 } from '@angular/forms';
 
-import { takeUntil } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs';
 
 import { AcademicProgramService } from '../services/academic-program.service';
 import { AuthService } from '../services/auth.service';
@@ -20,6 +20,7 @@ import { Institution } from '../interfaces/institution.interface';
 // import * as Hash from 'crypto-hash';
 import { User } from '../interfaces/user';
 import { passwordMatchValidator } from '../validators/password-match.validator';
+import { PasswordCredentials } from '../interfaces/password-credentials.interface';
 
 @Component({
   selector: 'profile-settings',
@@ -50,33 +51,35 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
   protected securityHashedValue!: string;
 
   protected information = new FormGroup({
-    alternativeEmail: new FormControl<string | null>(null, [Validators.email]),
-    firstName: new FormControl<string | null>(null, [
+    alternativeEmail: new FormControl<string>('', [Validators.email]),
+    firstName: new FormControl<string>('', [
       Validators.minLength(2),
       Validators.pattern(/^[A-Z]+$/i)
     ]),
-    gender: new FormControl<string | null>(null, []),
-    lastName: new FormControl<string | null>(null, [
+    gender: new FormControl<string>('', []),
+    lastName: new FormControl<string>('', [
       Validators.minLength(2),
       Validators.pattern(/^[A-Z\-]+$/i)
     ]),
-    mobile: new FormControl<string | null>(null, [
+    mobile: new FormControl<string>('', [
       Validators.pattern(/^(\+1|1)?[0-9]{10}$/)
-    ]),
+    ])
+  });
 
-    confirmed: new FormControl<string | null>(null, [
+  protected security = new FormGroup({
+    confirmed: new FormControl<string>('', [
       passwordMatchValidator('password', 'confirmed')
     ]),
     oldPassword: new FormControl(null, []),
-    password: new FormControl<string | null>(null, [
+    password: new FormControl<string>('', [
       passwordMatchValidator('password', 'confirmed')
     ])
   });
 
   protected academics = new FormGroup({
-    major: new FormControl<number | null>(null, []),
-    scope: new FormControl<number | null>(null, [Validators.required]),
-    isPrimary: new FormControl<boolean | null>(null)
+    majorId: new FormControl<number>(0, []),
+    minorId: new FormControl<number>(0, []),
+    institutionId: new FormControl<number>(0, [Validators.required, Validators.min(1)])
   });
 
   ngOnInit(): void {
@@ -87,24 +90,23 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     this.programs
       .dump()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe({
-        next: (programs: any[]) => {
-          this.academicProgramsList = [
-            { name: 'Select your major/minor', academicProgramId: 0 }
-          ].concat(programs);
-        }
-      });
+      .subscribe((programs: any[]) => this.academicProgramsList = programs);
 
     const user = this.auth.getAuthProfile();
     this.instServ
       .search({
         website: user.email.replace(/^.+@/gi, '').split('.').slice(-2).join('.')
       })
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        finalize(() => {
+
+        })
+      )
       .subscribe(({ data }) => {
         this.institutions = data;
         this.academics.patchValue({
-          scope: this.auth.getAuthScopeId()
+          institutionId: this.auth.getAuthScopeId()
         });
       });
   }
@@ -118,25 +120,51 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     }
 
     this.auth
-      .updateAuthProfile(<Partial<User>>{
-        ...this.information.value,
-        ...(this.information.value?.password
-          ? { password: this.information.value?.password }
-          : {})
-      })
-      .pipe(takeUntil(this.unsubscribe$))
+      .updateAuthProfile(<Partial<User>>this.information.value)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        finalize(() => {
+
+        })
+      )
       .subscribe(response => {});
   }
 
+  onSecurityInfoSubmit() {
+    if (this.security.invalid) {
+      return;
+    }
+
+    // this.auth.updateAuthPassword(this.security.value)
+    //   .pipe(
+    //     takeUntil(this.unsubscribe$),
+    //     finalize(() => {
+
+    //     })
+    //   )
+    //   .subscribe(response => {});
+
+  }
+
   onAcademicInfoSubmit() {
-    this.academics.markAllAsTouched();
     console.log(this.academics.invalid);
 
     if (this.academics.invalid) {
       return;
     }
+
+    // this.auth.updateAuthAcademics(this.academics.value)
+    //   .pipe(
+    //     takeUntil(this.unsubscribe$),
+    //     finalize(() => {
+
+    //     })
+    //   )
+    //   .subscribe(response => {});
+
   }
 
+  
   onInputChange(e: Event) {
     const target = <HTMLInputElement>e.target;
     if (!target.files) {

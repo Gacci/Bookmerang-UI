@@ -17,33 +17,33 @@ export const startPasswordRecoveryGroup = () =>
 
 export const verifyRequestTokenGroup = () =>
   new FormGroup({
-    token: new FormControl(null, token)
+    token: new FormControl('', token)
   });
 
 export const changePasswordGroup = () =>
   new FormGroup({
-    password: new FormControl(null, password),
-    confirmed: new FormControl(null, password),
-    token: new FormControl(null, token),
-    email: new FormControl(null, email)
+    password: new FormControl('', password),
+    confirmed: new FormControl('', password),
+    token: new FormControl('', token),
+    email: new FormControl('', email)
   });
 
 export const signInGroup = () =>
   new FormGroup({
-    email: new FormControl(null, email),
-    password: new FormControl(null, password)
+    email: new FormControl('', email),
+    password: new FormControl('', password)
     // remember: new FormControl(false, []),
   });
 
 export const signUpGroup = () =>
   new FormGroup({
-    email: new FormControl(null, email),
-    password: new FormControl(null, password),
-    confirmed: new FormControl(null, password)
+    email: new FormControl('', email),
+    password: new FormControl('', password),
+    confirmed: new FormControl('', password)
     // agree: new FormControl(false, [Validators.required, Validators.requiredTrue]),
   });
 
 export const verifyRegisterCodeGroup = () =>
   new FormGroup({
-    token: new FormControl(null, token)
+    token: new FormControl('', token)
   });

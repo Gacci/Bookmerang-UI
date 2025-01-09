@@ -13,16 +13,18 @@ import { SwiperContainer } from 'swiper/element';
 import { SwiperOptions } from 'swiper/types';
 
 import { AuthService } from '../../services/auth.service';
-import { EmailOnly } from '../../interfaces/email-only.interface';
-import { HttpRequest } from '../../interfaces/http-request.interface';
-import { Registration } from '../../interfaces/registration.interface';
 
-// import { PasswordCheckerComponent } from '../../components/password-checker/password-checker.component';
+import { AuthCredentials } from '../../interfaces/auth-credentials.interface';
+import { Email } from '../../interfaces/email.interface';
+import { HttpRequest } from '../../interfaces/http-request.interface';
+import { PasswordCredentials } from '../../interfaces/password-credentials.interface';
+
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 import { passwordMatchValidator } from '../../validators/password-match.validator';
-
 import { signUpGroup, verifyRegisterCodeGroup } from '../form-groups';
+
+
 
 @Component({
   selector: 'sign-up',
@@ -80,7 +82,7 @@ export class SignUpComponent {
 
   handleSignUp() {
     this.createAccountRequest = { sent: true };
-    this.auth.register(<Registration>this.signUpGroup.value).subscribe({
+    this.auth.register(<AuthCredentials & PasswordCredentials>this.signUpGroup.value).subscribe({
       next: () => {
         this.startExpiresInCountdown();
       },
@@ -95,7 +97,7 @@ export class SignUpComponent {
 
   handleResendVerifyRegisterCode() {
     this.auth
-      .resendCreateAccountCode(<EmailOnly>{ email: this.email.value })
+      .resendCreateAccountCode(<Email>{ email: this.email.value })
       .subscribe({
         next: () => {
           this.startExpiresInCountdown();

@@ -11,13 +11,17 @@ import {
 } from 'rxjs';
 import { Data } from '@angular/router';
 
-import { Credentials } from '../interfaces/credentials.interface';
-import { EmailOnly } from '../interfaces/email-only.interface';
+
+import { AuthCredentials } from '../interfaces/auth-credentials.interface';
+import { Email } from '../interfaces/email.interface';
 import { Institution } from '../interfaces/institution.interface';
-import { Registration } from '../interfaces/registration.interface';
+import { PasswordCredentials } from '../interfaces/password-credentials.interface';
 import { User } from '../interfaces/user';
 
+
+
 import * as JWT from 'jwt-decode';
+import { AuthAcademics } from '../interfaces/auth-academics.interface';
 
 
 type JwtPayloadPlus = JWT.JwtPayload & { scope?: number };
@@ -60,11 +64,11 @@ export class AuthService {
   }
 
   /**************************************** AUTHENTICATION ***************************************/
-  register(payload: Registration) {
+  register(payload: AuthCredentials & PasswordCredentials) {
     return this.http.post('http://127.0.0.1:3000/auth/register', payload);
   }
 
-  login(payload: Credentials) {
+  login(payload: AuthCredentials) {
     return this.http.post('http://127.0.0.1:3000/auth/login', payload).pipe(
       tap((login: any) => {
         localStorage.setItem(JWT_TOKEN, login.access_token);
@@ -126,7 +130,7 @@ export class AuthService {
     );
   }
 
-  startPasswordRecovery(payload: EmailOnly) {
+  startPasswordRecovery(payload: Email) {
     return this.http.post(
       'http://127.0.0.1:3000/auth/passwords/recovery/start',
       payload
@@ -164,7 +168,21 @@ export class AuthService {
   /******************************************* PROFILE *******************************************/
   updateAuthProfile(update: Partial<User>) {
     return this.http.put(
-      'http://127.0.0.1:3000/auth',
+      'http://127.0.0.1:3000/auth/profile',
+      update
+    );
+  }
+
+  updateAuthPassword(update: PasswordCredentials) {
+    return this.http.put(
+      'http://127.0.0.1:3000/auth/password',
+      update
+    );
+  }
+
+  updateAuthAcademics(update: Partial<AuthAcademics>) {
+    return this.http.put(
+      'http://127.0.0.1:3000/auth/academics',
       update
     );
   }
@@ -219,6 +237,6 @@ export class AuthService {
   }
 
   getJwtToken() {
-    return <JWT.JwtPayload>this.authTokenSubject.value;
+    return <JwtPayloadPlus>this.authTokenSubject.value;
   }
 }

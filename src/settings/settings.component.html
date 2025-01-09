@@ -1,41 +1,42 @@
-<div class="container mx-auto px-10 py-8 max-w-2xl">
+
+<div class="container mx-auto px-10 py-8 max-w-xl">
+  <!-- Profile Header -->
+  <div class="flex items-center mb-6" *ngIf="!!user">
+    <img
+      [src]="user.profilePictureUrl"
+      alt="Profile Picture"
+      class="rounded-full h-24 w-24 border"
+    />
+    <div class="ml-6">
+      <h1 class="text-2xl font-bold">
+        {{ user.firstName }} {{ user.lastName }}
+      </h1>
+      <label for="picture">
+        <input
+          type="file"
+          class="hidden"
+          id="picture"
+          #fileInput
+          (change)="onInputChange($event)"
+        />
+        <span class="text-blue-500 text-sm cursor-pointer">
+          Change Profile Picture
+        </span>
+      </label>
+    </div>
+  </div>
+
   <form
     autocomplete="off"
-    class="space-y-12"
+    class="space-y-2"
     [formGroup]="information"
     (ngSubmit)="onBasicInfoSubmit()"
   >
-    <!-- Profile Header -->
-    <div class="flex items-center mb-6" *ngIf="!!user">
-      <img
-        [src]="user.profilePictureUrl"
-        alt="Profile Picture"
-        class="rounded-full h-24 w-24 border"
-      />
-      <div class="ml-6">
-        <h1 class="text-2xl font-bold">
-          {{ user.firstName }} {{ user.lastName }}
-        </h1>
-        <label for="picture">
-          <input
-            type="file"
-            class="hidden"
-            id="picture"
-            #fileInput
-            (change)="onInputChange($event)"
-          />
-          <span class="text-blue-500 text-sm cursor-pointer">
-            Change Profile Picture
-          </span>
-        </label>
-      </div>
-    </div>
-
     <!-- Section 1: Personal Information -->
     <div>
       <h2 class="text-lg font-semibold">Personal Information</h2>
       <div class="grid grid-cols-2 gap-4">
-        <div class="col-span-1">
+        <div class="col-span-2 sm:col-span-1">
           <label class="block text-sm font-medium text-gray-700">
             First Name
           </label>
@@ -58,7 +59,8 @@
             "
           ></span>
         </div>
-        <div class="col-span-1">
+
+        <div class="col-span-2 sm:col-span-1">
           <label class="block text-sm font-medium text-gray-700">
             Last Name
           </label>
@@ -81,7 +83,8 @@
             "
           ></span>
         </div>
-        <div class="col-span-1 w-full">
+
+        <div class="col-span-2 sm:col-span-1">
           <label class="block text-sm font-medium text-gray-700">
             Cell Phone Number
           </label>
@@ -101,7 +104,8 @@
             "
           ></span>
         </div>
-        <div class="col-span-1">
+
+        <div class="col-span-2 sm:col-span-1">
           <label class="block text-sm font-medium text-gray-700">
             Alternative Email
           </label>
@@ -126,10 +130,10 @@
           <label class="block text-sm font-medium text-gray-700 mb-2">
             Gender
           </label>
-          <ul class="w-full flex flex-col sm:flex-row">
+          <ul class="grid grid-cols-1 sm:grid-cols-2 w-full border rounded-lg overflow-hidden">
             <!-- Male -->
             <li
-              class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
+              class="inline-flex items-center py-3 px-4 text-sm font-medium bg-white text-gray-800 border-b sm:border-r"
             >
               <div class="relative flex items-start w-full">
                 <div class="flex items-center h-5">
@@ -150,10 +154,10 @@
                 </label>
               </div>
             </li>
-
+          
             <!-- Female -->
             <li
-              class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
+              class="inline-flex items-center py-3 px-4 text-sm font-medium bg-white text-gray-800 border-b"
             >
               <div class="relative flex items-start w-full">
                 <div class="flex items-center h-5">
@@ -174,10 +178,10 @@
                 </label>
               </div>
             </li>
-
+          
             <!-- Other -->
             <li
-              class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
+              class="inline-flex items-center py-3 px-4 text-sm font-medium bg-white text-gray-800 border-b sm:border-b-0 sm:border-r"
             >
               <div class="relative flex items-start w-full">
                 <div class="flex items-center h-5">
@@ -198,10 +202,10 @@
                 </label>
               </div>
             </li>
-
-            <!-- Other -->
+          
+            <!-- Unspecified -->
             <li
-              class="w-1/2 inline-flex items-center gap-x-2.5 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg sm:-ms-px sm:mt-0 sm:first:rounded-se-none sm:first:rounded-es-lg sm:last:rounded-es-none sm:last:rounded-se-lg"
+              class="inline-flex items-center py-3 px-4 text-sm font-medium bg-white text-gray-800"
             >
               <div class="relative flex items-start w-full">
                 <div class="flex items-center h-5">
@@ -223,6 +227,7 @@
               </div>
             </li>
           </ul>
+          
 
           <span
             class="text-xs text-red-500"
@@ -252,11 +257,29 @@
       </div>
     </div>
 
+    <!-- Save Button -->
+    <!-- [disabled]="form.invalid" -->
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+      >
+        Save Changes
+      </button>
+    </div>
+  </form>
+
+
+  <form
+    class="space-y-2 my-8"
+    [formGroup]="security"
+    (ngSubmit)="onSecurityInfoSubmit()"
+  >
     <!-- Section 2: Password Management -->
     <div>
       <h2 class="text-lg font-semibold">Password Management</h2>
-      <div class="space-y-4">
-        <div class="input-box mb-4 w-full md:w-2/3">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="col-span-2 sm:col-span-1">
           <label class="block text-sm font-medium text-gray-700">
             Choose Password
           </label>
@@ -271,15 +294,15 @@
           <span
             class="text-xs text-red-500"
             [innerHTML]="
-              information.controls.password.value &&
-              information.controls.password.hasError('passwordMismatch')
+              security.controls.password.value &&
+              security.controls.password.hasError('passwordMismatch')
                 ? '* Passwords don\'t match'
                 : '&nbsp;'
             "
           ></span>
         </div>
 
-        <div class="input-box w-full md:w-2/3">
+        <div class="col-span-2 sm:col-span-1">
           <label class="block text-sm font-medium text-gray-700">
             Confirm Password
           </label>
@@ -294,8 +317,8 @@
           <span
             class="text-xs text-red-500"
             [innerHTML]="
-              information.controls.confirmed.value &&
-              information.controls.confirmed.hasError('passwordMismatch')
+              security.controls.confirmed.value &&
+              security.controls.confirmed.hasError('passwordMismatch')
                 ? '* Passwords don\'t match'
                 : '&nbsp;'
             "
@@ -304,20 +327,21 @@
       </div>
     </div>
 
-    <!-- Save Button -->
     <!-- [disabled]="form.invalid" -->
     <div class="flex justify-end">
       <button
         type="submit"
         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        [disabled]="security.invalid"
       >
         Save Changes
       </button>
     </div>
   </form>
 
+
   <form
-    class="space-y-12 my-8"
+    class="space-y-2 my-8"
     [formGroup]="academics"
     (ngSubmit)="onAcademicInfoSubmit()"
   >
@@ -341,33 +365,58 @@
       </div>
 
       <h2 class="text-lg font-semibold">Education Info</h2>
-      <div class="grid grid-cols-2 gap-6">
-        <div class="col-span-1">
-          <label class="block text-sm font-medium text-gray-700">
-            College Campus
-          </label>
-          <select class="select bg-white w-full" formControlName="scope">
+      <div class="col-span-1">
+        <label class="block text-sm font-medium text-gray-700">
+          College Campus
+        </label>
+        <select class="select bg-white w-full" formControlName="institutionId">
+          <option
+            *ngFor="let institution of institutions"
+            [value]="institution.institutionId"
+          >
+            {{ institution.locationName }}
+          </option>
+        </select>
+        <span
+          class="text-xs text-red-500"
+          [innerHTML]="
+            academics.controls.institutionId.invalid &&
+            academics.controls.institutionId.touched &&
+            academics.controls.institutionId.errors?.['required']
+              ? '* Select your campus'
+              : '&nbsp;'
+          "
+        ></span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6">        
+        <div class="col-span-2 sm:col-span-1">
+          <label class="block text-sm font-medium text-gray-700">Major</label>
+          <select class="select bg-white w-full" formControlName="majorId">
             <option
-              *ngFor="let institution of institutions"
-              [value]="institution.institutionId"
+              *ngFor="let program of academicProgramsList"
+              [disabled]="!program.academicProgramId"
+              [value]="program.academicProgramId"
             >
-              {{ institution.locationName }}
+              {{ program.name }}
             </option>
           </select>
+
           <span
             class="text-xs text-red-500"
             [innerHTML]="
-              academics.controls.scope.invalid &&
-              academics.controls.scope.touched &&
-              academics.controls.scope.errors?.['required']
-                ? '* Select your campus'
+              academics.controls.majorId.invalid &&
+              academics.controls.majorId.touched &&
+              academics.controls.majorId.errors?.['required']
+                ? '* Select your major'
                 : '&nbsp;'
             "
           ></span>
         </div>
-        <div class="col-span-1">
-          <label class="block text-sm font-medium text-gray-700">Major</label>
-          <select class="select bg-white w-full" formControlName="major">
+
+        <div class="col-span-2 sm:col-span-1">
+          <label class="block text-sm font-medium text-gray-700">Minor</label>
+          <select class="select bg-white w-full" formControlName="minorId">
             <option
               *ngFor="let program of academicProgramsList"
               [disabled]="!program.academicProgramId"
@@ -378,21 +427,6 @@
           </select>
         </div>
       </div>
-
-      <label class="inline-flex items-center cursor-pointer">
-        <input
-          type="checkbox"
-          value=""
-          class="sr-only peer"
-          formControlName="isPrimary"
-        />
-        <div
-          class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
-        ></div>
-        <span class="ms-3 text-sm text-gray-900">
-          Make this campus my primary campus
-        </span>
-      </label>
     </div>
 
     <!-- Save Button -->
@@ -401,6 +435,7 @@
       <button
         type="submit"
         class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        [disabled]="academics.invalid"
       >
         Save Changes
       </button>
