@@ -344,6 +344,29 @@
               "
             ></p>
           </div>
+
+          <!-- Extras -->
+          <div class="mb-8">
+            <label class="block text-gray-700 font-medium mb-2">Extras</label>
+            <select class="select bg-white w-full" formControlName="extras">
+              <option disabled value>-- Select --</option>
+              <option value="ACCESS_CODE">
+                Access Code - Provides access to online resources or digital content
+              </option>
+              <option value="CD">CD - Includes media with additional content or resources</option>
+              <option value="NONE">None - Book does include extras</option>
+            </select>
+
+            <p
+            class="text-xs text-red-500 mb-2"
+            [innerHTML]="
+              payload.controls.extras.touched &&
+              payload.controls.extras.getError('required')
+                ? '* Select the option best describes your included extras'
+                : '&nbsp;'
+            "
+          ></p>
+          </div>
         </div>
       </section>
 

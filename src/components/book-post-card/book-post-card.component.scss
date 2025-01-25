@@ -65,7 +65,7 @@
   .post-card-sell,
   .post-card-save,
   .post-card-share {
-    @apply p-2 mx-1 bg-gray-100 rounded-full align-middle;
+    @apply mx-1 bg-gray-100 rounded-full align-middle;
 
     &:not(:disabled) {
       @apply cursor-pointer;
@@ -74,10 +74,20 @@
     &:hover:not(:disabled) {
       @apply bg-gray-200;
     }
+
+    svg {
+      @apply m-2;
+    }
+  }
+  .post-card-save {
+    @apply relative;
   }
   .post-card-footer {
     @apply px-8 py-4 border-t;
   }
   .post-card-desc {
     @apply text-gray-500;
+  }
+  .post-card-date-time{
+    @apply text-sm;
   }

@@ -113,16 +113,16 @@
           isSelfOwned
         "
         (click)="onToggleLikeBookPost($event)"
-      >
+      >      
+
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
           class="size-6"
           [ngClass]="{
-            'text-slate-400': !_post.userRefSavedBookOfferId,
             'text-red-600': isProcessingLike || !!_post.userRefSavedBookOfferId,
-            'animate-pulse': isProcessingLike
+            'text-slate-400': !_post.userRefSavedBookOfferId
           }"
         >
           <path
@@ -131,6 +131,18 @@
             clip-rule="evenodd"
           />
         </svg>
+
+
+        <div *ngIf="isProcessingLike" class="absolute w-full h-full top-0 left-0 bg-white rounded-full flex items-center justify-center" role="status" >
+          <div class="inline-flex items-center gap-px animate-pulse">
+              <div class="mx-px h-1.5 w-1.5 rounded-full bg-indigo-700"></div>
+              <div class="mx-px h-1.5 w-1.5 rounded-full bg-indigo-700"></div>
+              <div class="mx-px h-1.5 w-1.5 rounded-full bg-indigo-700"></div>
+          </div>
+
+          <span class="sr-only">Loading...</span>
+        </div>
+
       </button>
     </div>
     <div class="post-card-info-middle">

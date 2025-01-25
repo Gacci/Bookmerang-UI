@@ -134,8 +134,8 @@ export class BooksMarketsComponent
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(async (query: any) => {
         this.pricingQueryParams = {
-          scope: query.scope,
-          isbn13: query.isbn13
+          isbn13: query.isbn13,
+          ...(query.scope ? { scope: query.scope } : {})
         };
 
         this.filters.patchValue({
@@ -272,6 +272,7 @@ export class BooksMarketsComponent
   }
 
   onUnlikeBookPost(item: BookOffer & Likeable) {
+    item.isProcessingLike = true;
     this.bookMarketService
       .unlikeBookPost(<number>item.userRefSavedBookOfferId)
       .pipe(

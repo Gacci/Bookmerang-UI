@@ -11,7 +11,8 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { takeUntil } from 'rxjs';
+
+import { finalize, takeUntil } from 'rxjs';
 
 import { BookMarketService } from '../../services/book-market.service';
 
@@ -60,9 +61,18 @@ export class BooksPricingComponent
     this.loading = true;
     this.data = {};
 
+    console.log(this.scope)
     this.bookMarketService
-      .metrics({ scope: this.scope, isbn13: ISBN.asIsbn13(this.isbn13) })
-      .pipe(takeUntil(this.unsubscribe$))
+      .metrics({  
+        isbn13: ISBN.asIsbn13(this.isbn13),
+        ...(this.scope ? { scope: this.scope } : {})
+       })
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        finalize(() => {
+          this.loading = false;
+        })
+      )
       .subscribe(([data]) => {
         if (data) {
           const minPrice = Math.min(
@@ -103,7 +113,6 @@ export class BooksPricingComponent
           };
         }
 
-        this.loading = false;
         this.loaded.emit(data);
       });
   }

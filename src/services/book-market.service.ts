@@ -62,7 +62,7 @@ export class BookMarketService {
 
   metrics(params: any) {
     return this.http.get<any[]>('http://127.0.0.1:3000/books/markets/metrics', {
-      params: { institutionId: params.scope, isbn13: params.isbn13 }
+      params
     });
   }
 

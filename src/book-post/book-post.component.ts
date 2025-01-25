@@ -69,6 +69,7 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
     cover: new FormControl(null, [Validators.required]),
     pages: new FormControl(null, [Validators.required]),
     markings: new FormControl(null, [Validators.required]),
+    extras: new FormControl(null, [ Validators.required ]),
     notes: new FormControl(null, [Validators.required]),
     isbn13: new FormControl(null)
   });
