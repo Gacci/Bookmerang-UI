@@ -196,14 +196,14 @@
         </p>
 
         <p
-          class="animation overflow-hidden whitespace-nowrap text-ellipsis"
+          class="text-sm animation overflow-hidden whitespace-nowrap text-ellipsis"
           [ngClass]="{ hidden: _post.isNotesOpen }"
         >
           {{ _post.notes }}
         </p>
         <span
           *ngIf="!_post.isNotesOpen"
-          class="whitespace-nowrap text-blue-600 cursor-pointer hover:underline"
+          class="text-sm whitespace-nowrap text-blue-600 cursor-pointer hover:underline"
           (click)="_post.isNotesOpen = !_post.isNotesOpen"
         >
           See more
