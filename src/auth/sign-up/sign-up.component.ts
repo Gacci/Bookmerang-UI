@@ -24,8 +24,6 @@ import { SpinnerComponent } from '../../components/spinner/spinner.component';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 import { signUpGroup, verifyRegisterCodeGroup } from '../form-groups';
 
-
-
 @Component({
   selector: 'sign-up',
   standalone: true,
@@ -82,17 +80,19 @@ export class SignUpComponent {
 
   handleSignUp() {
     this.createAccountRequest = { sent: true };
-    this.auth.register(<AuthCredentials & PasswordCredentials>this.signUpGroup.value).subscribe({
-      next: () => {
-        this.startExpiresInCountdown();
-      },
-      error: () => {
-        this.createAccountRequest.done = true;
-      },
-      complete: () => {
-        this.createAccountRequest.done = true;
-      }
-    });
+    this.auth
+      .register(<AuthCredentials & PasswordCredentials>this.signUpGroup.value)
+      .subscribe({
+        next: () => {
+          this.startExpiresInCountdown();
+        },
+        error: () => {
+          this.createAccountRequest.done = true;
+        },
+        complete: () => {
+          this.createAccountRequest.done = true;
+        }
+      });
   }
 
   handleResendVerifyRegisterCode() {

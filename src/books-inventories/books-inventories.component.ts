@@ -29,7 +29,6 @@ import {
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 
-
 @Component({
   selector: 'books-inventory',
   standalone: true,
@@ -63,13 +62,11 @@ export class BooksInventoriesComponent
 
   ngOnInit(): void {
     this.pageNumber += 1;
-    this.route.params
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(params => {
-        this.params = {
-          userId: params['userId']
-        };
-      });
+    this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
+      this.params = {
+        userId: params['userId']
+      };
+    });
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))

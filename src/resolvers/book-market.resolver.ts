@@ -7,10 +7,7 @@ import { AuthService } from '../services/auth.service';
 
 export const bookMarketResolver: ResolveFn<any> = (route, state) => {
   const params: any = route.queryParams;
-  console.log(
-    inject(AuthService)
-      .getAuthScopeId()
-  );
+  console.log(inject(AuthService).getAuthScopeId());
 
   return inject(BookMarketService).search({
     ...(params.institutionId ? { institutionId: params.institutionId } : {}),

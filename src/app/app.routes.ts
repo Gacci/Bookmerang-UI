@@ -58,10 +58,7 @@ export const routes: Routes = [
     component: AboutComponent
   },
   {
-    canActivate: [
-      isLoggedGuard,
-      isCollegeScopeSetGuard
-    ],
+    canActivate: [isLoggedGuard, isCollegeScopeSetGuard],
     component: BooksCollectionsComponent,
     path: 'books/collections',
     resolve: {
@@ -71,10 +68,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange'
   },
   {
-    canActivate: [
-      isLoggedGuard,
-      isCollegeScopeSetGuard
-    ],
+    canActivate: [isLoggedGuard, isCollegeScopeSetGuard],
     component: BooksInventoriesComponent,
     path: 'books/inventories/:userId',
     resolve: {
@@ -83,10 +77,7 @@ export const routes: Routes = [
     }
   },
   {
-    canActivate: [
-      isLoggedGuard,
-      isCollegeScopeSetGuard
-    ],
+    canActivate: [isLoggedGuard, isCollegeScopeSetGuard],
     component: BooksFavoritesComponent,
     path: 'books/favorites/:userId',
     resolve: {

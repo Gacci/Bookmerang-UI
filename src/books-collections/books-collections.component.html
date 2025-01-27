@@ -1,103 +1,65 @@
-<div class="flex flex-row" *ngIf="!!data.length">
-  <form class="w-1/6" [formGroup]="filters" (ngSubmit)="onSubmit($event)">
-    <accordion>
-      <accordion-view title="Sort by" [isOpen]="true">
-        <ul class="pl-2 pb-3 w-full">
-          <li>
-            <input
-              class="sr-only peer"
-              type="radio"
-              id="price-asc"
-              value="price:asc"
-              formControlName="sorting"
-            />
-
-            <label
-              class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-              for="price-asc"
-            >
-              Price: Lowest to Highest
-            </label>
-          </li>
-          <li>
-            <input
-              class="sr-only peer"
-              type="radio"
-              id="price-desc"
-              value="price:desc"
-              formControlName="sorting"
-            />
-            <label
-              class="flex items-center w-full font-light text-sm cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-              for="price-desc"
-            >
-              Price: Highest to Lowest
-            </label>
-          </li>
-          <li>
-            <input
-              class="sr-only peer"
-              type="radio"
-              id="posted-on"
-              value="posted-on"
-              formControlName="sorting"
-            />
-            <label
-              class="flex items-center w-full font-light text-sm cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-              for="posted-on"
-            >
-              Most Recently Listed
-            </label>
-          </li>
-          <li>
-            <input
-              class="sr-only peer"
-              type="radio"
-              id="authors-asc"
-              value="authors:asc"
-              formControlName="sorting"
-            />
-
-            <label
-              class="flex items-center w-full font-light text-sm cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-              for="authors-asc"
-            >
-              Authors: A - Z
-            </label>
-          </li>
-          <li>
-            <input
-              class="sr-only peer"
-              type="radio"
-              id="authors-desc"
-              value="authors:desc"
-              formControlName="sorting"
-            />
-            <label
-              class="flex items-center w-full font-light text-sm cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-              for="authors-desc"
-            >
-              Authors: Z - A
-            </label>
-          </li>
-        </ul>
-      </accordion-view>
-    </accordion>
-
-    <input type="hidden" formControlName="keyword" />
-    <div class="mt-6">
-      <button
-        class="relative w-full btn btn-blue-600 mt-8"
-        type="submit"
-        [disabled]="!filtersHashChanged"
+<div class="relative sticky top-0 py-3 z-10">
+  <div class="flex flex-row justify-between items-center">
+    <!-- <div class="flex flex-row space-x-1 items-center">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-5 h-5 p-0.5 border border-gray-500 rounded-full"
       >
-        Apply Filters
-      </button>
-    </div>
-  </form>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 13.5V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5"
+        />
+      </svg>
+      <label class="text-xs">Filter</label>
+    </div> -->
 
+    <div class="flex-1">
+      <strong class="text-xs text-red-800">Keyword:&nbsp;</strong>
+      <strong class="text-xs">"{{ params.keyword }}"</strong>
+    </div>
+
+    <button
+      class="inline-flex flex-row space-x-1 z-10"
+      [popper]="menu"
+      [popperAppendTo]="'body'"
+      [popperApplyArrowClass]="'hidden'"
+      [popperApplyClass]="'bg-white'"
+      [popperHideOnScroll]="true"
+      [popperHideOnClickOutside]="true"
+      [popperPlacement]="placement"
+      [popperStyles]="{ border: 'none' }"
+    >
+      <label class="text-xs">Sort by:</label>
+      <label class="text-xs">{{ sortByText }}</label>
+    </button>
+
+    <popper-content #menu class="bg-white">
+      <ul class="pl-2 pb-3 w-full">
+        <li *ngFor="let sort of sorting">
+          <a
+            class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 hover:text-blue-500 hover:no-underline"
+            [routerLink]="['/', 'books', 'collections']"
+            [routerLinkActive]="['opacity-50']"
+            [routerLinkActiveOptions]="{ exact: true }"
+            [queryParams]="{ keyword: params.keyword, sorting: sort.key }"
+            (click)="menu.hide()"
+          >
+            {{ sort.value }}
+          </a>
+        </li>
+      </ul>
+    </popper-content>
+  </div>
+</div>
+
+<div class="relative flex flex-row" *ngIf="!!data.length">
   <div
-    class="flex-1 bg-white mx-auto max-w-2xl px-4 sm:w-auto sm:px-6 lg:max-w-7xl lg:px-8"
+    class="flex-1 bg-white mx-auto"
     infiniteScroll
     [infiniteScrollUpDistance]="1"
     [infiniteScrollDistance]="1.0"
@@ -129,7 +91,7 @@
   class="bg-gray-100 flex items-center justify-center min-h-screen"
   *ngIf="!data?.length"
 >
-  <div class="text-center max-w-md px-4">
+  <div class="text-center max-w-md">
     <!-- Optional illustration -->
     <div class="mb-8">
       <!-- <img

@@ -1,24 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterModule
-} from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { takeUntil } from 'rxjs';
 
+import { NgxPopperjsModule, NgxPopperjsPlacements } from 'ngx-popperjs';
 import { NgxTippyModule } from 'ngx-tippy-wrapper';
 
 import { AuthService } from '../../services/auth.service';
-
-import { DropdownDirective } from '../../directives/dropdown.directive';
 
 import { Unsubscribable } from '../../classes/unsubscribable';
 
 import * as Hash from 'crypto-hash';
 import * as ISBN from 'isbn3';
-import { NgxPopperjsModule } from 'ngx-popperjs';
 
 type SearchEvent = {
   type: 'isbn' | 'keyword';
@@ -36,11 +29,11 @@ export class NavigationComponent
   extends Unsubscribable
   implements OnInit, OnDestroy
 {
-  private readonly route = inject(ActivatedRoute);
-
   private readonly router = inject(Router);
 
   protected readonly auth = inject(AuthService);
+
+  protected readonly placement = NgxPopperjsPlacements.BOTTOMEND;
 
   protected isRegisterOrLoginPage!: boolean;
 
@@ -86,7 +79,7 @@ export class NavigationComponent
             isbn13: <string>json.isbn13
           }
         })
-        .finally(() => this.lastHashedKeyword = '');
+        .finally(() => (this.lastHashedKeyword = ''));
     } else {
       console.log('Searching by title or author');
       this.router
@@ -95,7 +88,7 @@ export class NavigationComponent
             keyword: value
           }
         })
-        .finally(() => this.lastHashedKeyword = '')
+        .finally(() => (this.lastHashedKeyword = ''));
     }
   }
 

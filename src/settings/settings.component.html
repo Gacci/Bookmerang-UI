@@ -1,5 +1,4 @@
-
-<div class="container mx-auto px-10 py-8 max-w-xl">
+<div class="container mx-auto px-10 py-24 pb-8 max-w-xl">
   <!-- Profile Header -->
   <div class="flex items-center mb-6" *ngIf="!!user">
     <img
@@ -130,7 +129,9 @@
           <label class="block text-sm font-medium text-gray-700 mb-2">
             Gender
           </label>
-          <ul class="grid grid-cols-1 sm:grid-cols-2 w-full border rounded-lg overflow-hidden">
+          <ul
+            class="grid grid-cols-1 sm:grid-cols-2 w-full border rounded-lg overflow-hidden"
+          >
             <!-- Male -->
             <li
               class="inline-flex items-center py-3 px-4 text-sm font-medium bg-white text-gray-800 border-b sm:border-r"
@@ -154,7 +155,7 @@
                 </label>
               </div>
             </li>
-          
+
             <!-- Female -->
             <li
               class="inline-flex items-center py-3 px-4 text-sm font-medium bg-white text-gray-800 border-b"
@@ -178,7 +179,7 @@
                 </label>
               </div>
             </li>
-          
+
             <!-- Other -->
             <li
               class="inline-flex items-center py-3 px-4 text-sm font-medium bg-white text-gray-800 border-b sm:border-b-0 sm:border-r"
@@ -202,7 +203,7 @@
                 </label>
               </div>
             </li>
-          
+
             <!-- Unspecified -->
             <li
               class="inline-flex items-center py-3 px-4 text-sm font-medium bg-white text-gray-800"
@@ -227,7 +228,6 @@
               </div>
             </li>
           </ul>
-          
 
           <span
             class="text-xs text-red-500"
@@ -268,7 +268,6 @@
       </button>
     </div>
   </form>
-
 
   <form
     class="space-y-2 my-8"
@@ -339,7 +338,6 @@
     </div>
   </form>
 
-
   <form
     class="space-y-2 my-8"
     [formGroup]="academics"
@@ -389,7 +387,7 @@
         ></span>
       </div>
 
-      <div class="grid grid-cols-2 gap-6">        
+      <div class="grid grid-cols-2 gap-6">
         <div class="col-span-2 sm:col-span-1">
           <label class="block text-sm font-medium text-gray-700">Major</label>
           <select class="select bg-white w-full" formControlName="majorId">

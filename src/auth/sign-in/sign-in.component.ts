@@ -10,16 +10,11 @@ import { AuthService } from '../../services/auth.service';
 import { AuthCredentials } from '../../interfaces/auth-credentials.interface';
 import { HttpRequest } from '../../interfaces/http-request.interface';
 
-
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
 import { Unsubscribable } from '../../classes/unsubscribable';
 
 import { signInGroup } from '../form-groups';
-
-
-
-
 
 @Component({
   imports: [

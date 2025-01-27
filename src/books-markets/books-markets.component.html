@@ -1,5 +1,5 @@
 <aside
-  class="sticky top-[56px] flex-1 bg-white z-0 transition-transform -translate-x-full translate-x-0 h-[calc(100%-68px)]"
+  class="sticky top-[56px] border-r border-gray-200 bg-white z-0 transition-transform -translate-x-full translate-x-0 w-96 h-[calc(100%-68px)]"
   aria-label="Sidebar"
 >
   <form class="m-8" [formGroup]="filters" (ngSubmit)="onSubmit($event)">
@@ -77,7 +77,11 @@
         </ul>
       </accordion-view>
 
-      <accordion-view title="Book Condition" formGroupName="state" [isOpen]="true">
+      <accordion-view
+        title="Book Condition"
+        formGroupName="state"
+        [isOpen]="true"
+      >
         <ul class="pl-2 pb-3 w-full">
           <li>
             <input
@@ -158,59 +162,6 @@
       </accordion-view>
     </accordion>
 
-    <accordion-view title="Sort by" [isOpen]="true">
-      <ul class="pl-2 pb-3 w-full">
-        <li>
-          <input
-            class="sr-only peer"
-            type="radio"
-            id="price-asc"
-            value="price:asc"
-            formControlName="sorting"
-          />
-
-          <label
-            class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-            for="price-asc"
-          >
-            Price: Lowest to Highest
-          </label>
-        </li>
-        <li>
-          <input
-            class="sr-only peer"
-            type="radio"
-            id="price-desc"
-            value="price:desc"
-            formControlName="sorting"
-          />
-
-          <label
-            class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-            for="price-desc"
-          >
-            Price: Highest to Lowest
-          </label>
-        </li>
-        <li>
-          <input
-            class="sr-only peer"
-            type="radio"
-            id="posted-on"
-            value="posted-on"
-            formControlName="sorting"
-          />
-
-          <label
-            class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 peer-checked:bg-gray-100 peer-checked:text-blue-500"
-            for="posted-on"
-          >
-            Most Recently Listed
-          </label>
-        </li>
-      </ul>
-    </accordion-view>
-
     <div class="mt-6">
       <button
         class="relative w-full btn btn-blue-600 mt-8"
@@ -224,7 +175,7 @@
 </aside>
 
 <div
-  class="border-x max-w-xl mx-auto mt-10 p-6 lg:max-w-2xl xl:max-w-4xl"
+  class="max-w-5xl mx-auto mt-10 p-6 lg:max-w-6xl xl:max-w-7xl"
   infiniteScroll
   [infiniteScrollUpDistance]="1"
   [infiniteScrollDistance]="1.0"
@@ -238,7 +189,7 @@
   <div class="my-12">
     <div class="flex flex-col md:flex-row">
       <!-- Book Cover -->
-      <div class="md:w-1/3 max-w-48 mb-4 md:mb-0">
+      <div class="md:w-1/2 max-w-56 mb-4 md:mb-0">
         <img
           class="w-full rounded-lg shadow-md"
           [alt]="book.title"
@@ -255,30 +206,38 @@
         </div>
       </div>
 
-      <!-- Book Information -->
-      <div class="md:w-2/3 md:pl-8">
-        <h1 class="text-2xl font-semibold text-gray-800 leading-7">
-          {{ book.title }} {{ book.subtitle ?? '' }}
-        </h1>
-        <p
-          class="text-md text-gray-600 font-medium mt-1"
-          *ngIf="book.authors?.length"
-        >
-          {{ book.authors.join(', ') }}
-        </p>
-        <span class="block my-2"></span>
-        <div class="text-sm text-gray-500 mt-2" *ngIf="book.publishers?.length">
-          <span>{{ book.publishers }}</span>
-          <span *ngIf="book.edition">; {{ book.edition }}</span>
-          <span *ngIf="book.published">
-            ({{ book.published | date: 'MMMM dd, YYYY' }})
-          </span>
+      <div class="md:pl-8 grow">
+        <!-- Book Information -->
+        <div class="mb-6">
+          <h1 class="text-2xl font-semibold text-gray-800 leading-7">
+            {{ book.title }} {{ book.subtitle ?? '' }}
+          </h1>
+          <p
+            class="text-md text-gray-600 font-medium mt-1"
+            *ngIf="book.authors?.length"
+          >
+            {{ book.authors?.join(', ') }}
+          </p>
+          <span class="block my-2"></span>
+          <div
+            class="text-sm text-gray-500 mt-2"
+            *ngIf="book.publishers?.length"
+          >
+            <span>{{ book.publishers }}</span>
+            <span *ngIf="book.edition">; {{ book.edition }}</span>
+            <span *ngIf="book.published">
+              ({{ book.published | date: 'MMMM dd, YYYY' }})
+            </span>
+          </div>
+          <div class="text-sm text-gray-500">
+            <span *ngIf="book.isbn13">ISBN 13: {{ book.isbn13 | isbn13 }}</span>
+            <span *ngIf="book.isbn10 && book.isbn13" class="mx-1">/</span>
+            <span *ngIf="book.isbn10">ISBN 10: {{ book.isbn10 }}</span>
+          </div>
         </div>
-        <div class="text-sm text-gray-500">
-          <span *ngIf="book.isbn13">ISBN 13: {{ book.isbn13 | isbn13 }}</span>
-          <span *ngIf="book.isbn10 && book.isbn13" class="mx-1">/</span>
-          <span *ngIf="book.isbn10">ISBN 10: {{ book.isbn10 }}</span>
-        </div>
+
+        <!-- Metrics -->
+        <book-offers-metrics class="block max-w-2xl" *ngIf="params.isbn13" [isbn13]="params.isbn13"></book-offers-metrics>
       </div>
     </div>
 
@@ -462,6 +421,20 @@
               {{ book.publishers }}
             </span>
           </li>
+          <li
+            class="w-44 flex-shrink-0 border-l px-1"
+            *ngIf="book.edition"
+          >
+            <span class="text-xs">Edition</span>
+            <svg class="size-1/4 block mx-auto mt-3 mb-1"
+            width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 4L7 20M17 4L14 20M5 8H20M4 16H19" stroke="#000000" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+
+            <span class="inline-block text-xs font-bold">
+              {{ book.edition }}
+            </span>
+          </li>
           <li class="w-44 flex-shrink-0 border-l px-1" *ngIf="book.published">
             <span class="text-xs">Publication date</span>
             <svg
@@ -607,25 +580,69 @@
     (selection)="onSurveySelection($event)"
   ></confirm-dialog> -->
   <!-- {{ pricingQueryParams | json }} -->
-  <book-post-card
-    *ngFor="let post of data; trackBy: trackBy"
-    (action)="onActionClicked($event, post)"
-    [isProcessingLike]="post.isProcessingLike"
-    [post]="post"
-    [userRouterLink]="['/', 'books', 'inventories', post.userId]"
-    [userQueryParams]="{ scope: filters.controls.scope.value }"
-  ></book-post-card>
-</div>
 
-<!-- Main modal -->
-<div
-  class="sticky top-[75px] flex-1 bg-white overflow-x-auto overflow-y-hidden transition h-[calc(100%-68px)]"
-  aria-hidden="true"
-  tabindex="-1"
->
-  <books-pricing
-    [isbn13]="pricingQueryParams.isbn13"
-    [scope]="pricingQueryParams.scope"
-    (visibility)="pricingViewState = !pricingViewState"
-  ></books-pricing>
+  <div>
+    <div class="relative sticky top-0 py-3 z-10">
+      <div class="flex flex-row justify-between items-center">
+        <div class="flex flex-row space-x-1 items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5 p-0.5 border border-gray-500 rounded-full"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 13.5V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5"
+            />
+          </svg>
+          <label class="text-xs">Filter</label>
+        </div>
+
+        <button
+          class="inline-flex flex-row space-x-1 z-10"
+          [popper]="menu"
+          [popperAppendTo]="'body'"
+          [popperApplyArrowClass]="'hidden'"
+          [popperApplyClass]="'bg-white'"
+          [popperHideOnScroll]="true"
+          [popperHideOnClickOutside]="true"
+          [popperPlacement]="ngxPopperPlacement"
+          [popperStyles]="{ border: 'none' }"
+        >
+          <label class="text-xs">Sort by:</label>
+          <label class="text-xs">{{ sortByText }}</label>
+        </button>
+
+        <popper-content #menu class="bg-white">
+          <ul class="pl-2 pb-3 w-full">
+            <li *ngFor="let sort of sorting">
+              <a
+                class="flex items-center w-full font-light text-sm text-gray-700 cursor-pointer p-2 my-0.5 hover:text-blue-500 hover:no-underline"
+                [routerLink]="['/', 'books', 'collections']"
+                [routerLinkActive]="['opacity-50']"
+                [routerLinkActiveOptions]="{ exact: true }"
+                [queryParams]="{ keyword: params.keyword, sorting: sort.key }"
+                (click)="menu.hide()"
+              >
+                {{ sort.value }}
+              </a>
+            </li>
+          </ul>
+        </popper-content>
+      </div>
+    </div>
+
+    <book-post-card
+      *ngFor="let post of data; trackBy: trackBy"
+      (action)="onActionClicked($event, post)"
+      [isProcessingLike]="post.isProcessingLike"
+      [post]="post"
+      [userRouterLink]="['/', 'books', 'inventories', post.userId]"
+      [userQueryParams]="{}"
+    ></book-post-card>
+  </div>
 </div>

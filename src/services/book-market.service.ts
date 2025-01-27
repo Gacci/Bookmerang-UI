@@ -61,9 +61,26 @@ export class BookMarketService {
   }
 
   metrics(params: any) {
-    return this.http.get<any[]>('http://127.0.0.1:3000/books/markets/metrics', {
-      params
-    });
+    return this.http
+      .get<any[]>('http://127.0.0.1:3000/books/markets/metrics', {
+        params
+      })
+      .pipe(
+        map(([data]: any) => {
+          return {
+            ...data,
+            metrics: data.metrics.map((stat: any) => ({
+              ...stat,
+              ...(stat.minPrice || stat.maxPrice
+                ? {
+                    range: '$' +
+                      [...new Set([stat.minPrice, stat.maxPrice])].join(' - $')
+                  }
+                : {})
+            }))
+          };
+        })
+      );
   }
 
   collections(params: Data) {
@@ -79,18 +96,17 @@ export class BookMarketService {
   }
 
   likeBookPost(bookOfferId: any) {
-    return this.http.post('http://127.0.0.1:3000/books/markets/favorites', { bookOfferId })
-    .pipe(
-      delay(3000)
-    );
+    return this.http
+      .post('http://127.0.0.1:3000/books/markets/favorites', { bookOfferId })
+      .pipe(delay(3000));
   }
 
   unlikeBookPost(savedBookOfferId: number) {
-    return this.http.delete(
-      `http://127.0.0.1:3000/books/markets/favorites/${savedBookOfferId}`
-    ).pipe(
-      delay(3000)
-    );
+    return this.http
+      .delete(
+        `http://127.0.0.1:3000/books/markets/favorites/${savedBookOfferId}`
+      )
+      .pipe(delay(3000));
   }
 
   favorites(params: Data) {

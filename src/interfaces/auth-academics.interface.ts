@@ -1,5 +1,5 @@
 export interface AuthAcademics {
-    institutionId: number;
-    majorId: number;
-    minorId: number;
+  institutionId: number;
+  majorId: number;
+  minorId: number;
 }

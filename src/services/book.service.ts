@@ -10,6 +10,8 @@ export class BookService {
   constructor() {}
 
   populate(book: any) {
+    const json = book.isbn13 && !book.language ? ISBN.parse(book.isbn13) : undefined;
+    console.log(ISBN.parse(book.isbn13));
     const haystack =
       (book.title ?? '') + (book.subtitle ?? '') + (book.notes ?? '');
     return {
@@ -33,7 +35,11 @@ export class BookService {
             language:
               ISO6391.getName(book.language) ?? book.language?.toUpperCase()
           }
-        : {}),
+        : json?.groupname 
+          ? { 
+              language: json.groupname
+            }
+          : {}),
       ...(!book.thumbnail
         ? { thumbnail: './assets/images/book-cover-unavailable.jpeg' }
         : { thumbnail: 'http://localhost:3000/' + book.thumbnail })

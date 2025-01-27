@@ -2,7 +2,6 @@ import { Component, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
-  FormArray,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -12,8 +11,6 @@ import {
 import { takeUntil } from 'rxjs';
 import { NgxTippyModule } from 'ngx-tippy-wrapper';
 
-import { withMinSelections } from '../validators/with-min-selections.validator';
-
 import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
 import { ImageManagerService } from '../services/image-manager.service';
@@ -22,6 +19,7 @@ import { StringService } from '../services/string.service';
 import { Unsubscribable } from '../classes/unsubscribable';
 
 import { HttpRequest } from '../interfaces/http-request.interface';
+import { BookOffersMetricsComponent } from '../components/book-offers-metrics/book-offers-metrics.component';
 
 type FileBox = {
   base64: string;
@@ -34,7 +32,7 @@ type FileBox = {
 @Component({
   selector: 'book-post',
   standalone: true,
-  imports: [CommonModule, NgxTippyModule, ReactiveFormsModule, RouterModule],
+  imports: [BookOffersMetricsComponent, CommonModule, NgxTippyModule, ReactiveFormsModule, RouterModule],
   templateUrl: './book-post.component.html',
   styleUrl: './book-post.component.scss'
 })
@@ -69,7 +67,7 @@ export class BookPostComponent extends Unsubscribable implements OnDestroy {
     cover: new FormControl(null, [Validators.required]),
     pages: new FormControl(null, [Validators.required]),
     markings: new FormControl(null, [Validators.required]),
-    extras: new FormControl(null, [ Validators.required ]),
+    extras: new FormControl(null, [Validators.required]),
     notes: new FormControl(null, [Validators.required]),
     isbn13: new FormControl(null)
   });

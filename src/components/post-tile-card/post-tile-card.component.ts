@@ -12,11 +12,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+import { NgxPopperjsModule, NgxPopperjsPlacements } from 'ngx-popperjs';
+
 import { Unsubscribable } from '../../classes/unsubscribable';
 
 import { AuthService } from '../../services/auth.service';
 
-import { DropdownDirective } from '../../directives/dropdown.directive';
 import { ISBN13Pipe } from '../../pipes/isbn13.pipe';
 
 export enum ActionEvent {
@@ -40,7 +41,7 @@ export interface PostTileEvent {
 @Component({
   selector: 'post-tile-card',
   standalone: true,
-  imports: [CommonModule, RouterModule, DropdownDirective, ISBN13Pipe],
+  imports: [CommonModule, RouterModule, NgxPopperjsModule, ISBN13Pipe],
   templateUrl: './post-tile-card.component.html',
   styleUrl: './post-tile-card.component.scss'
 })
@@ -82,6 +83,8 @@ export class PostTileCardComponent
   action: EventEmitter<PostTileEvent> = new EventEmitter<PostTileEvent>();
 
   private readonly auth = inject(AuthService);
+
+  protected placement = NgxPopperjsPlacements.BOTTOMEND;
 
   protected isSelfOwned!: boolean;
 

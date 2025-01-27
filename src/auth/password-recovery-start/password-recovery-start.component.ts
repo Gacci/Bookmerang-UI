@@ -29,7 +29,6 @@ import { Swiper, SwiperOptions } from 'swiper/types';
 import { SwiperContainer } from 'swiper/element';
 import { PasswordCredentials } from '../../interfaces/password-credentials.interface';
 
-
 @Component({
   selector: 'password-recovery-start',
   standalone: true,
@@ -114,9 +113,7 @@ export class PasswordRecoveryStartComponent implements AfterViewInit {
   handleResendRecoveryCode() {
     this.resendPasswordRequest = { sent: true };
     this.auth
-      .resendPasswordRecoveryCode(
-        <Email>this.startPasswordRecoveryGroup.value
-      )
+      .resendPasswordRecoveryCode(<Email>this.startPasswordRecoveryGroup.value)
       .subscribe({
         next: () => {
           this.startExpiresInCountdown();

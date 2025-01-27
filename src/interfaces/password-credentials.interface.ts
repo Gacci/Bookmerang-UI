@@ -1,4 +1,4 @@
 export interface PasswordCredentials {
-    password: string;
-    confirmed: string;
+  password: string;
+  confirmed: string;
 }

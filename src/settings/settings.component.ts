@@ -79,7 +79,10 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
   protected academics = new FormGroup({
     majorId: new FormControl<number>(0, []),
     minorId: new FormControl<number>(0, []),
-    institutionId: new FormControl<number>(0, [Validators.required, Validators.min(1)])
+    institutionId: new FormControl<number>(0, [
+      Validators.required,
+      Validators.min(1)
+    ])
   });
 
   ngOnInit(): void {
@@ -90,7 +93,7 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     this.programs
       .dump()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((programs: any[]) => this.academicProgramsList = programs);
+      .subscribe((programs: any[]) => (this.academicProgramsList = programs));
 
     const user = this.auth.getAuthProfile();
     this.instServ
@@ -99,9 +102,7 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
       })
       .pipe(
         takeUntil(this.unsubscribe$),
-        finalize(() => {
-
-        })
+        finalize(() => {})
       )
       .subscribe(({ data }) => {
         this.institutions = data;
@@ -123,9 +124,7 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
       .updateAuthProfile(<Partial<User>>this.information.value)
       .pipe(
         takeUntil(this.unsubscribe$),
-        finalize(() => {
-
-        })
+        finalize(() => {})
       )
       .subscribe(response => {});
   }
@@ -143,7 +142,6 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     //     })
     //   )
     //   .subscribe(response => {});
-
   }
 
   onAcademicInfoSubmit() {
@@ -161,10 +159,8 @@ export class SettingsComponent extends Unsubscribable implements OnInit {
     //     })
     //   )
     //   .subscribe(response => {});
-
   }
 
-  
   onInputChange(e: Event) {
     const target = <HTMLInputElement>e.target;
     if (!target.files) {

@@ -5,6 +5,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { finalize, takeUntil } from 'rxjs';
 
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+import { NgxPopperjsModule, NgxPopperjsPlacements } from 'ngx-popperjs';
 
 import {
   ActionEvent,
@@ -12,11 +13,12 @@ import {
   BookPostEvent
 } from '../components/book-post-card/book-post-card.component';
 
+import { BookOffersMetricsComponent } from "../components/book-offers-metrics/book-offers-metrics.component";
+
 import {
   AccordionComponent,
   AccordionViewComponent
 } from '../components/accordion/accordion.component';
-import { BooksPricingComponent } from '../components/books-pricing/books-pricing.component';
 
 import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
@@ -25,6 +27,7 @@ import { SurveyService } from '../services/survey.service';
 
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
 
+import { Book } from '../interfaces/book.interface';
 import { BookOffer, Likeable } from '../interfaces/book-offer.interface';
 import { Scope } from '../interfaces/scope.interface';
 
@@ -34,9 +37,10 @@ import * as Hash from 'crypto-hash';
 import * as ISBN from 'isbn3';
 
 
+
+
 type BookMarketsFilters = {
   tradeable: FormControl;
-  sorting: FormControl;
   scope: FormControl;
   state: FormGroup<{
     new: FormControl;
@@ -52,17 +56,17 @@ type BookMarketsFilters = {
   standalone: true,
   imports: [
     CommonModule,
-
     AccordionComponent,
     AccordionViewComponent,
     BookPostCardComponent,
-    BooksPricingComponent,
-
+    // BooksPricingComponent,
     ISBN13Pipe,
+    NgxPopperjsModule,
     ReactiveFormsModule,
     RouterModule,
-    InfiniteScrollDirective
-  ],
+    InfiniteScrollDirective,
+    BookOffersMetricsComponent
+],
   templateUrl: './books-markets.component.html',
   styleUrl: './books-markets.component.scss'
 })
@@ -84,6 +88,8 @@ export class BooksMarketsComponent
 
   private filtersHashedValue!: string;
 
+  protected book!: Book;
+
   protected filtersHashChanged!: boolean;
 
   protected isLoadingMetrics!: boolean;
@@ -92,18 +98,32 @@ export class BooksMarketsComponent
 
   protected metrics!: any;
 
-  protected book!: any;
+  protected ngxPopperPlacement = NgxPopperjsPlacements.BOTTOMSTART;
 
   protected pricingViewState!: boolean;
 
-  protected pricingQueryParams: any = {};
+  protected sortByText!: string;
+
+  protected sorting = [
+    {
+      key: 'price:asc',
+      value: 'Price: Lowest to Highest'
+    },
+    {
+      key: 'price:desc',
+      value: 'Price: Highest to Lowest'
+    },
+    {
+      key: 'posted-on',
+      value: 'Most Recently Listed'
+    }
+  ];
 
   protected survey!: any;
 
   protected filters: FormGroup<BookMarketsFilters> =
     new FormGroup<BookMarketsFilters>({
       tradeable: new FormControl<string>('all'),
-      sorting: new FormControl<string>('price:desc'),
       scope: new FormControl<number>(0),
       state: new FormGroup({
         new: new FormControl<boolean>(false),
@@ -125,15 +145,17 @@ export class BooksMarketsComponent
       .subscribe((resolved: any) => {
         this.book = resolved.book;
         this.data = resolved.posts;
-        this.institutions = [] //this.auth.getAuthCampuses();
+        this.institutions = []; //this.auth.getAuthCampuses();
         this.hasNextPage =
           !!this.data?.length && !(this.data?.length % this.pageSize);
       });
 
     this.route.queryParams
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        takeUntil(this.unsubscribe$),
+      )
       .subscribe(async (query: any) => {
-        this.pricingQueryParams = {
+        this.params = {
           isbn13: query.isbn13,
           ...(query.scope ? { scope: query.scope } : {})
         };
@@ -182,17 +204,17 @@ export class BooksMarketsComponent
       return;
     }
 
-    const { state, tradeable, sorting, scope } = this.filters.value;
+    const { state, tradeable, scope } = this.filters.value;
     const params = {
       institutionId: scope,
       isbn13: ISBN.asIsbn13(this.book.isbn13),
       ...(tradeable && ['true', 'false'].includes(tradeable)
         ? { tradeable }
         : {}),
-      ...(sorting &&
-      ['posted-on', 'review', 'price:asc', 'price:desc'].includes(sorting)
-        ? { sorting }
-        : {}),
+      // ...(sorting &&
+      // ['posted-on', 'review', 'price:asc', 'price:desc'].includes(sorting)
+      //   ? { sorting }
+      //   : {}),
       ...(state?.new ||
       state?.likeNew ||
       state?.veryGood ||
@@ -227,7 +249,7 @@ export class BooksMarketsComponent
   }
 
   protected onSubmit(e: Event) {
-    const { state, tradeable, sorting, scope } = this.filters.value;
+    const { state, tradeable, scope } = this.filters.value;
     const encoded =
       (state?.new ? 1 : 0) +
       (state?.likeNew ? 2 : 0) +
@@ -240,8 +262,8 @@ export class BooksMarketsComponent
         scope,
         isbn13: this.book.isbn13,
         ...(encoded ? { state: encoded } : {}),
-        tradeable,
-        sorting
+        tradeable
+        // sorting
       }
     });
   }

@@ -11,18 +11,14 @@ import {
 } from 'rxjs';
 import { Data } from '@angular/router';
 
-
 import { AuthCredentials } from '../interfaces/auth-credentials.interface';
 import { Email } from '../interfaces/email.interface';
 import { Institution } from '../interfaces/institution.interface';
 import { PasswordCredentials } from '../interfaces/password-credentials.interface';
 import { User } from '../interfaces/user';
 
-
-
 import * as JWT from 'jwt-decode';
 import { AuthAcademics } from '../interfaces/auth-academics.interface';
-
 
 type JwtPayloadPlus = JWT.JwtPayload & { scope?: number };
 
@@ -78,7 +74,7 @@ export class AuthService {
       }),
       switchMap(login =>
         combineLatest([
-          this.fetchAuthProfile(), 
+          this.fetchAuthProfile(),
           this.fetchAuthInstitution()
         ]).pipe(
           tap(([user, institution]: [User, Institution]) => {
@@ -167,39 +163,28 @@ export class AuthService {
 
   /******************************************* PROFILE *******************************************/
   updateAuthProfile(update: Partial<User>) {
-    return this.http.put(
-      'http://127.0.0.1:3000/auth/profile',
-      update
-    );
+    return this.http.put('http://127.0.0.1:3000/auth/profile', update);
   }
 
   updateAuthPassword(update: PasswordCredentials) {
-    return this.http.put(
-      'http://127.0.0.1:3000/auth/password',
-      update
-    );
+    return this.http.put('http://127.0.0.1:3000/auth/password', update);
   }
 
   updateAuthAcademics(update: Partial<AuthAcademics>) {
-    return this.http.put(
-      'http://127.0.0.1:3000/auth/academics',
-      update
-    );
+    return this.http.put('http://127.0.0.1:3000/auth/academics', update);
   }
 
   fetchAuthProfile() {
-    return this.http
-      .get<User>('http://127.0.0.1:3000/auth')
-      .pipe(
-        map((user: User) => ({
-          ...user,
-          ...(!user.profilePictureUrl
-            ? {
-                profilePictureUrl: './assets/images/user-image-unavailable.png'
-              }
-            : {})
-        }))
-      );
+    return this.http.get<User>('http://127.0.0.1:3000/auth').pipe(
+      map((user: User) => ({
+        ...user,
+        ...(!user.profilePictureUrl
+          ? {
+              profilePictureUrl: './assets/images/user-image-unavailable.png'
+            }
+          : {})
+      }))
+    );
   }
 
   /******************************************* SCOPING *******************************************/

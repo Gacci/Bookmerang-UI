@@ -1,4 +1,4 @@
-<div class="w-full max-w-3xl bg-white mx-auto p-16">
+<div class="w-full max-w-4xl bg-white mx-auto p-16">
   <ng-container *ngIf="!offerRequestState.sent && !offerRequestState.done">
     <div
       class="flex flex-row space-x-2 max-w-4xl mx-auto mt-2 mb-8 pb-6 border-b overflow-hidden"
@@ -80,6 +80,8 @@
             </label>
           </div>
         </div>
+
+        <book-offers-metrics *ngIf="payload.value.isbn13" [isbn13]="payload.value.isbn13"></book-offers-metrics>
       </section>
 
       <!-- State -->
@@ -163,7 +165,7 @@
           <li
             class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg"
           >
-            <div class="relative flex items-start w-full">
+            <div class="flex items-start w-full">
               <div class="flex items-center h-5">
                 <input
                   class="border-gray-200 rounded-full disabled:opacity-50"
@@ -351,21 +353,24 @@
             <select class="select bg-white w-full" formControlName="extras">
               <option disabled value>-- Select --</option>
               <option value="ACCESS_CODE">
-                Access Code - Provides access to online resources or digital content
+                Access Code - Provides access to online resources or digital
+                content
               </option>
-              <option value="CD">CD - Includes media with additional content or resources</option>
+              <option value="CD">
+                CD - Includes media with additional content or resources
+              </option>
               <option value="NONE">None - Book does include extras</option>
             </select>
 
             <p
-            class="text-xs text-red-500 mb-2"
-            [innerHTML]="
-              payload.controls.extras.touched &&
-              payload.controls.extras.getError('required')
-                ? '* Select the option best describes your included extras'
-                : '&nbsp;'
-            "
-          ></p>
+              class="text-xs text-red-500 mb-2"
+              [innerHTML]="
+                payload.controls.extras.touched &&
+                payload.controls.extras.getError('required')
+                  ? '* Select the option best describes your included extras'
+                  : '&nbsp;'
+              "
+            ></p>
           </div>
         </div>
       </section>

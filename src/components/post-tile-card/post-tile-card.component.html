@@ -37,7 +37,13 @@
   <button
     type="button"
     class="w-10 h-10 p-1 text-center"
-    [tcnDropdown]="menuDropdownContent"
+    [popper]="menu"
+    [popperPlacement]="placement"
+    [popperApplyArrowClass]="'hidden'"
+    [popperApplyClass]="'bg-white'"
+    [popperHideOnScroll]="true"
+    [popperHideOnClickOutside]="true"
+    [popperStyles]="{ border: 'none' }"
   >
     <svg
       class="size-6 mx-auto"
@@ -60,58 +66,56 @@
     </svg>
   </button>
 
-  <ul
-    #menuDropdownContent
-    role="menu"
-    class="absolute z-10 min-w-[180px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg shadow-sm focus:outline-none"
-  >
-    <!-- <hr class="my-2 border-slate-200" role="menuitem" /> -->
-    <li role="menuitem" *ngIf="editPostEnabled">
-      <button
-        type="button"
-        class="flex w-full items-center space-x-1 text-sm p-3 cursor-pointer text-slate-800 rounded-md transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
-        [disabled]="isProcessingDelete || isProcessingEdit || !isSelfOwned"
-        (click)="onEditBookPost($event)"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="w-5 h-5 text-slate-400"
+  <popper-content #menu class="bg-white">
+    <ul role="menu" class="bg-white p-1.5">
+      <!-- <hr class="my-2 border-slate-200" role="menuitem" /> -->
+      <li role="menuitem" *ngIf="editPostEnabled">
+        <button
+          type="button"
+          class="flex w-full items-center space-x-2 text-sm px-3 py-2 cursor-pointer text-slate-800 rounded-md transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+          [disabled]="isProcessingDelete || isProcessingEdit || !isSelfOwned"
+          (click)="onEditBookPost($event)"
         >
-          <path
-            d="M15.232 3.232a3 3 0 0 1 4.24 4.24l-1.792 1.792-4.24-4.24 1.792-1.792Zm-2.414 2.414L5.5 13.964V16.5h2.536l7.318-7.318-2.536-2.536Z"
-          />
-        </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-5 h-5 text-slate-400"
+          >
+            <path
+              d="M15.232 3.232a3 3 0 0 1 4.24 4.24l-1.792 1.792-4.24-4.24 1.792-1.792Zm-2.414 2.414L5.5 13.964V16.5h2.536l7.318-7.318-2.536-2.536Z"
+            />
+          </svg>
 
-        <span>Edit</span>
-      </button>
-    </li>
+          <span>Edit</span>
+        </button>
+      </li>
 
-    <li role="menuitem" *ngIf="deletePostEnabled">
-      <button
-        type="button"
-        class="flex w-full items-center space-x-1 text-sm p-3 cursor-pointer text-slate-800 rounded-md transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
-        [disabled]="isProcessingDelete || isProcessingEdit || !isSelfOwned"
-        (click)="onDeleteBookPost($event)"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="w-5 h-5 text-slate-400"
+      <li role="menuitem" *ngIf="deletePostEnabled">
+        <button
+          type="button"
+          class="flex w-full items-center space-x-2 text-sm px-3 py-2 cursor-pointer text-slate-800 rounded-md transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+          [disabled]="isProcessingDelete || isProcessingEdit || !isSelfOwned"
+          (click)="onDeleteBookPost($event)"
         >
-          <path
-            fill-rule="evenodd"
-            d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h4a1 1 0 0 1 0 2h-1.317l-1.45 13.978A2 2 0 0 1 17.333 24H6.667a2 2 0 0 1-1.999-1.878L3.217 8H2a1 1 0 0 1 0-2h4V4zm2 0v2h8V4H8zm-1 6a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1z"
-            clip-rule="evenodd"
-          />
-        </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-5 h-5 text-slate-400"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M6 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2h4a1 1 0 0 1 0 2h-1.317l-1.45 13.978A2 2 0 0 1 17.333 24H6.667a2 2 0 0 1-1.999-1.878L3.217 8H2a1 1 0 0 1 0-2h4V4zm2 0v2h8V4H8zm-1 6a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2h-8a1 1 0 0 1-1-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
 
-        <span>Delete</span>
-      </button>
-    </li>
-  </ul>
+          <span>Delete</span>
+        </button>
+      </li>
+    </ul>
+  </popper-content>
 </div>
 
 <div

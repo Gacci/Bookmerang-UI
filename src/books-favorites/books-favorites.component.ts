@@ -23,9 +23,7 @@ import { AuthService } from '../services/auth.service';
 import { BookMarketService } from '../services/book-market.service';
 import { LoadingOverlayService } from '../services/loading-overlay.service';
 
-
 import { InfiniteScrollView } from '../classes/infinite-scroll-view';
-
 
 /*
 interface BookOffer {
@@ -74,13 +72,11 @@ export class BooksFavoritesComponent extends InfiniteScrollView<any> {
 
   ngOnInit() {
     this.pageNumber += 1;
-    this.route.params
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(params => {
-        this.params = {
-          userId: this.auth.getAuthScopeId()
-        };
-      });
+    this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
+      this.params = {
+        userId: this.auth.getAuthScopeId()
+      };
+    });
 
     this.loadingOverlayService.$isLoading
       .pipe(takeUntil(this.unsubscribe$))
